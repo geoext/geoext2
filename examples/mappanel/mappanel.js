@@ -6,7 +6,11 @@ Ext.Loader.setConfig({
     }
 });
 
-Ext.require(['Ext.container.Viewport','Ext.window.MessageBox','GeoExt.panel.Map']);
+Ext.require([
+    'Ext.container.Viewport',
+    'Ext.window.MessageBox',
+    'GeoExt.panel.Map'
+]);
 
 Ext.application({
     name: 'HelloGeoExt2',
