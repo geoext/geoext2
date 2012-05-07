@@ -1,7 +1,8 @@
 Ext.require([
     'Ext.container.Viewport',
     'Ext.window.MessageBox',
-    'GeoExt.panel.Map'
+    'GeoExt.panel.Map',
+    'GeoExt.Action'
 ]);
 
 Ext.application({
@@ -25,19 +26,19 @@ Ext.application({
         var ctrl, toolbarItems = [], action, actions = {};
         
         // ZoomToMaxExtent control, a "button" control
-        action = {
+        action = new GeoExt.Action({
             control: new OpenLayers.Control.ZoomToMaxExtent(),
             map: map,
             text: "max extent",
             tooltip: "zoom to max extent"
-        };
+        });
         actions["max_extent"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // Navigation control and DrawFeature controls
         // in the same toggle group
-        action = {
+        action = new GeoExt.Action({
             text: "nav",
             control: new OpenLayers.Control.Navigation(),
             map: map,
@@ -49,11 +50,11 @@ Ext.application({
             // check item options
             group: "draw",
             checked: true
-        };
+        });
         actions["nav"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = {
+        action = new GeoExt.Action({
             text: "draw poly",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Polygon),
             map: map,
@@ -63,11 +64,11 @@ Ext.application({
             tooltip: "draw polygon",
             // check item options
             group: "draw"
-        };
+        });
         actions["draw_poly"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = {
+        action = new GeoExt.Action({
             text: "draw line",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Path),
             map: map,
@@ -77,13 +78,13 @@ Ext.application({
             tooltip: "draw line",
             // check item options
             group: "draw"
-        };
+        });
         actions["draw_line"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // SelectFeature control, a "toggle" control
-        action = {
+        action = new GeoExt.Action({
             text: "select",
             control: new OpenLayers.Control.SelectFeature(vector, {
                 type: OpenLayers.Control.TYPE_TOGGLE,
@@ -93,7 +94,7 @@ Ext.application({
             // button options
             enableToggle: true,
             tooltip: "select feature"
-        };
+        });
         actions["select"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
@@ -102,21 +103,21 @@ Ext.application({
         ctrl = new OpenLayers.Control.NavigationHistory();
         map.addControl(ctrl);
         
-        action = {
+        action = new GeoExt.Action({
             text: "previous",
             control: ctrl.previous,
             disabled: true,
             tooltip: "previous in history"
-        };
+        });
         actions["previous"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = {
+        action = new GeoExt.Action({
             text: "next",
             control: ctrl.next,
             disabled: true,
             tooltip: "next in history"
-        };
+        });
         actions["next"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("->");
