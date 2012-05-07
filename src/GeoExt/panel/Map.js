@@ -151,49 +151,42 @@ Ext.define('GeoExt.panel.Map', {
         
         me.addEvents(
             /**
-             * @name aftermapmove
              * @event
              * Fires after the map is moved.
              */
             "aftermapmove",
 
             /**
-             * @name aftervisibilitychange
              * @event
              * Fires after a layer changed visibility.
              */
             "afterlayervisibilitychange",
 
             /**
-             * @name afterlayeropacitychange
              * @event
              * Fires after a layer changed opacity.
              */
             "afterlayeropacitychange",
 
             /**
-             * @name afterlayerorderchange
              * @event
              * Fires after a layer order changed.
              */
             "afterlayerorderchange",
 
             /**
-             * @name afterlayernamechange
              * @event
              * Fires after a layer name changed.
              */
             "afterlayernamechange",
 
             /**
-             * @name afterlayeradd
              * @event
              * Fires after a layer added to the map.
              */
             "afterlayeradd",
 
             /**
-             * @name afterlayerremove
              * @event
              * Fires after a layer removed from the map.
              */
