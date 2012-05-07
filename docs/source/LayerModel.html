@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='GeoExt-data-LayerModel'>/**
+</span> * @class GeoExt.data.LayerModel
+ * @borrows Ext.data.Model
+ * 
+ *  Class defines a model for records containing an OpenLayers layer object.
+ *  Usually this class is not instantiated directly, but referenced by its mtype 'gx_layer' 
+ *  or name 'GeoExt.data.model.Layer' as string representation as a config option within creation of a superior component, 
+ *  such as a store.
+ */
+Ext.define('GeoExt.data.LayerModel', {
+    extend: 'Ext.data.Model',
+    alias: ['gx_layer'],
+    fields: [
+        {name: 'title', mapping: 'name'},
+        {name: 'name', mapping: 'metadata.name'},
+        'id'
+    ],
+<span id='GeoExt-data-LayerModel-method-getLayer'>/**
+</span> * Returns the {OpenLayers.Layer} layer object used in this model instance
+ */
+    getLayer: function() {
+        return this.raw;
+    }
+});
+
+</pre>
+</body>
+</html>

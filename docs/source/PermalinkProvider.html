@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('GeoExt.state.PermalinkProvider', {
+    extend : 'Ext.state.Provider',
+    requires : [
+    //    'GeoExt.data.LayerStore'
+    ],
+    alias : 'widget.gx_permalinkprovider',
+    //    alternateClassName : 'GeoExt.MapPanel',
+    constructor: function(config){
+        this.callParent(arguments);
+        config = config || {};
+
+        var url = config.url;
+        delete config.url;
+
+        Ext.apply(this, config);
+
+        this.state = this.readURL(url);
+    
+    },
+<span id='global-property-'>    /** api: config[encodeType]
+</span>   *  ``Boolean`` Specifies whether type of state values should be encoded
+   *  and decoded. Set it to false if you work with components that don't
+   *  require encoding types, and want pretty permalinks. Defaults to true.
+   */
+<span id='global-property-encodeType'>    /** private: property[encodeType]
+</span>   *  ``Boolean``
+   */
+    encodeType: true,
+    
+    initComponent: function(){
+        var me = this;
+            
+        me.callParent(arguments);
+    },
+        
+<span id='global-method-readURL'>    /** private: method[readURL]
+</span>     *  :param url: ``String`` The URL to get the state from.
+     *  :return: ``Object`` The state object.
+     *
+     *  Create a state object from a URL.
+     */
+    readURL: function(url) {
+        var state = {};
+        var params = OpenLayers.Util.getParameters(url);
+        var k, split, stateId;
+        for(k in params) {
+            if(params.hasOwnProperty(k)) {
+                split = k.split(&quot;_&quot;);
+                if(split.length &gt; 1) {
+                    stateId = split[0];
+                    state[stateId] = state[stateId] || {};
+                    state[stateId][split.slice(1).join(&quot;_&quot;)] = this.encodeType ?
+                    this.decodeValue(params[k]) : params[k];
+                }
+            }
+        }
+        return state;
+    },
+
+<span id='global-method-getLink'>    /** api: method[getLink]
+</span>     *  :param base: ``String`` The base URL, optional.
+     *  :return: ``String`` The permalink.
+     *
+     *  Return the permalink corresponding to the current state.
+     */
+    getLink: function(base) {
+        base = base || document.location.href;
+
+        var params = {};
+
+        var id, k, state = this.state;
+        for(id in state) {
+            if(state.hasOwnProperty(id)) {
+                for(k in state[id]) {
+                    params[id + &quot;_&quot; + k] = this.encodeType ?
+                    unescape(this.encodeValue(state[id][k])) : state[id][k];
+                }
+            }
+        }
+
+        // merge params in the URL into the state params
+        OpenLayers.Util.applyDefaults(
+            params, OpenLayers.Util.getParameters(base));
+
+        var paramsStr = OpenLayers.Util.getParameterString(params);
+
+        var qMark = base.indexOf(&quot;?&quot;);
+        if(qMark &gt; 0) {
+            base = base.substring(0, qMark);
+        }
+
+        return Ext.urlAppend(base, paramsStr);
+    }
+    
+    
+});
+
+
+
+
+
+
+</pre>
+</body>
+</html>

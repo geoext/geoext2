@@ -1,0 +1,7 @@
+{
+    "--title": "GeoExt 2 Docs",
+    "-o": "docs",
+    "--": [
+        "src"
+    ]
+}
