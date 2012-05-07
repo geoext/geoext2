@@ -12,13 +12,21 @@
  *  Display a layer legend in a panel.
  */
 
+Ext.Loader.setConfig({
+    enabled: true,
+    disableCaching: false,
+    paths: {
+        GeoExt: "../../src/GeoExt"
+    }
+});
 
 var mappanel, legendPanel;
+
+Ext.require(['GeoExt.panel.Map', 'GeoExt.legend.WMSLayer', 'GeoExt.panel.Legend']);
 
 Ext.application({
     name: 'LegendPanel GeoExt2',
     launch: function() {
-        
         var map = new OpenLayers.Map({
             allOverlays: true
         });

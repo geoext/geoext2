@@ -6,7 +6,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
     alias : 'widget.gx_wmslegend',
     requires: ['GeoExt.legend.Image'],
     alternateClassName : 'GeoExt.WMSLegend',
-    
+
     statics : {
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
@@ -201,6 +201,6 @@ Ext.define('GeoExt.legend.WMSLayer', {
         }
         this.callParent();
     }
+}, function() {
+    GeoExt.legend.Layer.types["gx_wmslegend"] = GeoExt.legend.WMSLayer;
 });
-
-GeoExt.legend.Layer.types["gx_wmslegend"] = GeoExt.legend.WMSLayer;
