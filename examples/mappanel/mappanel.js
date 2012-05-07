@@ -1,5 +1,13 @@
+Ext.Loader.setConfig({
+    enabled: true,
+    paths: {
+        GeoExt: '../../src/GeoExt'
+    }
+});
+
 Ext.require('Ext.container.Viewport');
 Ext.require('Ext.window.MessageBox');
+Ext.require('GeoExt.panel.Map');
 
 
 
