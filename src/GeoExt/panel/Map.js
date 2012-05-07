@@ -349,7 +349,7 @@ Ext.define('GeoExt.panel.Map', {
         me.layers.each(function(modelInstance) {
             layer = modelInstance.getLayer();
             layerId = this.prettyStateKeys 
-                   ? modelInstance.get('name') 
+                   ? modelInstance.get('title') 
                    : modelInstance.get('id');
             state = me.addPropertyToState(state, "visibility_" + layerId, 
                 layer.getVisibility());
