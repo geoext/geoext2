@@ -324,7 +324,7 @@ Ext.define('GeoExt.panel.Map', {
     getState: function() {
         var me = this,
             map = me.getMap(),
-            state = me.callParent(arguments),
+            state = me.callParent(arguments) || {},
             layer;
 
         // Ext delays the call to getState when a state event
@@ -339,12 +339,11 @@ Ext.define('GeoExt.panel.Map', {
         var center = map.getCenter();
         // map may not be centered yet, because it may still have zero
         // dimensions or no layers
-        
-        if (center)  {
-            state = me.addPropertyToState(state, 'x', center.lon);
-            state = me.addPropertyToState(state, 'y', center.lat);
-            state = me.addPropertyToState(state, 'zoom', map.getZoom());
-        }
+        center && Ext.applyIf(state, {
+            "x": center.lon,
+            "y": center.lat,
+            "zoom": map.getZoom()
+        });
         
         me.layers.each(function(modelInstance) {
             layer = modelInstance.getLayer();
