@@ -24,15 +24,12 @@ Ext.application({
         
         map.addLayers([wms]);
         
-        var mappanel = Ext.create('GeoExt.panel.Map', {
+        mappanel = Ext.create('GeoExt.panel.Map', {
             title: 'The GeoExt.panel.Map-class'
             ,map: map
-//            ,layers: [ol_wms.clone()]
-            ,stateful: true
-            ,stateId: 'mappanel'
-            //,mapCenter: '12.3046875,51.48193359375'
-            //,mapZoom: 8
-            ,mapExtent: '7,51,8,52'
+            ,center: '12.3046875,51.48193359375'
+            ,zoom: 6
+//            ,extent: '12.87,52.35,13.96,52.66' 
             ,dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
