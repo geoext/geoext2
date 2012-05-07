@@ -80,63 +80,63 @@ Ext.define('GeoExt.window.Popup', {
      *  is set to true and the map cannot be derived from the ``location``'s
      *  layer.
      */
-    map: null,	
+    map: null,
     
     config: {
     
-	    /** api: config[anchored]
-	     *  ``Boolean``  The popup begins anchored to its location.  Default is
-	     *  ``true``.
-	     */
-	    anchored: true,
-	
-	    /** api: config[panIn]
-	     *  ``Boolean`` The popup should pan the map so that the popup is
-	     *  fully in view when it is rendered.  Default is ``true``.
-	     */
-	    panIn: true,
-	
-	    /** api: config[unpinnable]
-	     *  ``Boolean`` The popup should have a "unpin" tool that unanchors it from
-	     *  its location.  Default is ``true``.
-	     */
-	    unpinnable: true,
-	
-	    /** api: config[location]
-	     *  ``OpenLayers.Feature.Vector`` or ``OpenLayers.LonLat`` or
-	     *  ``OpenLayers.Pixel`` or ``OpenLayers.Geometry`` A location for this 
-	     *  popup's anchor.
-	     */
-	    
-	    /** private: property[location]
-	     *  ``OpenLayers.LonLat``
-	     */
-	    location: null,
-	
-	    /**
-	     * Some Ext.Window defaults need to be overriden here
-	     * because some Ext.Window behavior is not currently supported.
-	     */    
-	
-	    /** api: config[popupCls]
-	     *  ``String`` CSS class name for the popup DOM elements.  Default is
-	     *  "gx-popup".
-	     */
-	    popupCls: "gx-popup",
-	
-	    /** api: config[ancCls]
-	     *  ``String``  CSS class name for the popup's anchor.
-	     */
-	    ancCls: null,
-	    
-	    /** api: config[anchorPosition]
-	     *  ``String``  Controls the anchor position for the popup. If set to
-	     *  ``auto``, the anchor will be positioned on the top or the bottom of
-	     *  the window, minimizing map movement. Supported values are ``bottom-left``,
-	     *  ``bottom-right``, ``top-left``, ``top-right`` or ``auto``.
-	     *  Defaults to ``auto``.
-	     */
-	    anchorPosition: "auto",
+        /** api: config[anchored]
+         *  ``Boolean``  The popup begins anchored to its location.  Default is
+         *  ``true``.
+         */
+        anchored: true,
+    
+        /** api: config[panIn]
+         *  ``Boolean`` The popup should pan the map so that the popup is
+         *  fully in view when it is rendered.  Default is ``true``.
+         */
+        panIn: true,
+    
+        /** api: config[unpinnable]
+         *  ``Boolean`` The popup should have a "unpin" tool that unanchors it from
+         *  its location.  Default is ``true``.
+         */
+        unpinnable: true,
+    
+        /** api: config[location]
+         *  ``OpenLayers.Feature.Vector`` or ``OpenLayers.LonLat`` or
+         *  ``OpenLayers.Pixel`` or ``OpenLayers.Geometry`` A location for this 
+         *  popup's anchor.
+         */
+        
+        /** private: property[location]
+         *  ``OpenLayers.LonLat``
+         */
+        location: null,
+    
+        /**
+         * Some Ext.Window defaults need to be overriden here
+         * because some Ext.Window behavior is not currently supported.
+         */    
+    
+        /** api: config[popupCls]
+         *  ``String`` CSS class name for the popup DOM elements.  Default is
+         *  "gx-popup".
+         */
+        popupCls: "gx-popup",
+    
+        /** api: config[ancCls]
+         *  ``String``  CSS class name for the popup's anchor.
+         */
+        ancCls: null,
+        
+        /** api: config[anchorPosition]
+         *  ``String``  Controls the anchor position for the popup. If set to
+         *  ``auto``, the anchor will be positioned on the top or the bottom of
+         *  the window, minimizing map movement. Supported values are ``bottom-left``,
+         *  ``bottom-right``, ``top-left``, ``top-right`` or ``auto``.
+         *  Defaults to ``auto``.
+         */
+        anchorPosition: "auto",
     },
     
     /** private: method[initComponent]
@@ -159,7 +159,7 @@ Ext.define('GeoExt.window.Popup', {
             }
             this.setLocation(this.getLocation().getBounds().getCenterLonLat());
         } else if (this.getLocation() instanceof OpenLayers.Pixel) {
-        	this.setLocation(this.map.getLonLatFromViewPortPx(this.getLocation()));
+            this.setLocation(this.map.getLonLatFromViewPortPx(this.getLocation()));
         } else {
             this.setAnchored(false);
         }
@@ -192,16 +192,16 @@ Ext.define('GeoExt.window.Popup', {
         //create anchor dom element.
         //this.createElement("anc", this.el.dom);
         var dh = Ext.core.DomHelper; // create shorthand alias
-		// specification the anchor div
-		var spec = {
-		    tag: 'div',
-		    cls: this.getAncCls()
-		};
-		
-		var ancDiv = dh.append(
-		    this.el.dom, // the context element 'my-div' can either be the id or the actual node
-		    spec      // the specification object
-		);
+        // specification the anchor div
+        var spec = {
+            tag: 'div',
+            cls: this.getAncCls()
+        };
+        
+        var ancDiv = dh.append(
+            this.el.dom, // the context element 'my-div' can either be the id or the actual node
+            spec      // the specification object
+        );
         this.anc = Ext.get(ancDiv);
     },
 
@@ -301,8 +301,8 @@ Ext.define('GeoExt.window.Popup', {
                 // position the anchor
                 var popupHeight = this.getHeight();
                 if (isNaN(popupHeight) === false) {
-        			this.anc.setTop((popupHeight-1) + "px");
-        		}
+                    this.anc.setTop((popupHeight-1) + "px");
+                }
                 
                 top -= elSize.height + ancSize.height;
                 
