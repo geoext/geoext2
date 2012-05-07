@@ -323,7 +323,7 @@ Ext.define('GeoExt.panel.Map', {
     getState: function() {
         var me = this,
             map = me.getMap(),
-            state = me.callParent(arguments),
+            state = me.callParent(arguments) || {},
             layer;
 
         // Ext delays the call to getState when a state event
