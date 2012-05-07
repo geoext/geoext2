@@ -1,6 +1,6 @@
 Ext.define('GeoExt.data.store.Layer', {
     extend: 'Ext.data.Store',
-    model: 'gx_layer',
+    model: 'GeoExt.data.model.Layer',
     proxy: {
         type: 'memory',
         reader: {
