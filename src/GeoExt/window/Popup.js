@@ -231,7 +231,6 @@ Ext.define('GeoExt.window.Popup', {
      * @private
      * Override.
      */
-    Override.
     maximize: function() {
         if(!this.maximized && this.anc) {
             this.unanchorPopup();
