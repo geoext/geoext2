@@ -1,67 +1,44 @@
 Ext.define('GeoExt.panel.Legend', {
     extend : 'Ext.panel.Panel',
-    requires : [
-    //    'GeoExt.data.LayerStore'
-    ],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
-    
-    statics : {
-        guess : function() {
-            var candidates = Ext.ComponentQuery.query("gx_legendpanel");
-            return ((candidates && candidates.length > 0) 
-                ? candidates[0] 
-                : null);
+    config: {
+        /**
+         * @cfg {Boolean} dynamic
+         * If false the LegendPanel will not listen to the add, remove and change 
+         * events of the LayerStore. So it will load with the initial state of
+         * the LayerStore and not change anymore. 
+         */
+        dynamic: true,
+
+        /**
+         * @cfg {Ext.data.Store} layerStore
+         * The layer store containing layers to be displayed in the legend 
+         * container. If not provided it will be taken from the MapPanel.
+         */
+        layerStore: null,
+
+        /**
+         * @cfg {Array}
+         * An array of preferred legend types.
+         */
+        preferredTypes: null,
+
+        /**
+         * @cfg {Function}
+         *  A function, called in the scope of the legend panel, with a layer record
+         *  as argument. Is expected to return true for layers to be displayed, false
+         *  otherwise. By default, all layers will be displayed.
+         */
+        filter: function(record) {
+            return true;
         }
-    },
-    
-    /** api: config[dynamic]
-     *  ``Boolean``
-     *  If false the LegendPanel will not listen to the add, remove and change 
-     *  events of the LayerStore. So it will load with the initial state of
-     *  the LayerStore and not change anymore. 
-     */
-    dynamic: true,
-    
-    /** api: config[layerStore]
-     *  ``GeoExt.data.LayerStore``
-     *  The layer store containing layers to be displayed in the legend 
-     *  container. If not provided it will be taken from the MapPanel.
-     */
-    layerStore: null,
-    
-    /** api: config[preferredTypes]
-     *  ``Array(String)`` An array of preferred legend types.
-     */
-    
-    /** private: property[preferredTypes]
-     */
-    preferredTypes: null,
-    
-    initComponent: function(){
-        var me = this;
-//        console.log('initComponent Legend');
-        me.callParent(arguments);
-           
-    },
-    /** api: config[filter]
-     *  ``Function``
-     *  A function, called in the scope of the legend panel, with a layer record
-     *  as argument. Is expected to return true for layers to be displayed, false
-     *  otherwise. By default, all layers will be displayed.
-     *
-     *  .. code-block:: javascript
-     *
-     *      filter: function(record) {
-     *          return record.getLayer().isBaseLayer;
-     *      }
-     */
-    filter: function(record) {
-        return true;
-    }, 
-    /** private: method[onRender]
-     *  Private method called when the legend panel is being rendered.
-     */
+    },    
+
+    /**
+     * Private method called when the legend panel is being rendered.
+     * @private
+     */    
     onRender: function() {
         this.callParent(arguments);
     
@@ -81,13 +58,12 @@ Ext.define('GeoExt.panel.Legend', {
         }
     },
 
-    /** private: method[recordIndexToPanelIndex]
-     *  Private method to get the panel index for a layer represented by a
-     *  record.
-     *
-     *  :param index ``Integer`` The index of the record in the store.
-     *
-     *  :return: ``Integer`` The index of the sub panel in this panel.
+    /** 
+     * Private method to get the panel index for a layer represented by a
+     * record.
+     * @private
+     * @param {Integer} index The index of the record in the store.
+     * @return {Integer} The index of the sub panel in this panel.
      */
     recordIndexToPanelIndex: function(index) {
         var store = this.layerStore;
@@ -98,7 +74,6 @@ Ext.define('GeoExt.panel.Legend', {
         for(var i=count-1; i>=0; --i) {
             record = store.getAt(i);
             layer = record.getLayer();
-//            console.log(i);
             var types = GeoExt.legend.Layer.getTypes(record);
             if(layer.displayInLayerSwitcher && types.length > 0 &&
                 (store.getAt(i).get("hideInLegend") !== true)) {
@@ -111,24 +86,24 @@ Ext.define('GeoExt.panel.Legend', {
         return panelIndex;
     },
     
-    /** private: method[getIdForLayer]
-     *  :arg layer: ``OpenLayers.Layer``
-     *  :returns: ``String``
-     *
-     *  Generate an element id that is unique to this panel/layer combo.
+    /**
+     * Generate an element id that is unique to this panel/layer combo.
+     * @private
+     * @param {OpenLayers.Layer} layer
+     * @returns {String}
      */
     getIdForLayer: function(layer) {
         return this.id + "-" + layer.id;
     },
 
-    /** private: method[onStoreAdd]
-     *  Private method called when a layer is added to the store.
-     *
-     *  :param store: ``Ext.data.Store`` The store to which the record(s) was 
-     *      added.
-     *  :param record: ``Ext.data.Record`` The record object(s) corresponding
-     *      to the added layers.
-     *  :param index: ``Integer`` The index of the inserted record.
+    /** 
+     * Private method called when a layer is added to the store.
+     * @private
+     * @param {Ext.data.Store} store The store to which the record(s) was 
+     * added.
+     * @param {Ext.data.Record} record The record object(s) corresponding
+     * to the added layers.
+     * @param {Integer} index The index of the inserted record.
      */
     onStoreAdd: function(store, records, index) {
         var panelIndex = this.recordIndexToPanelIndex(index+records.length-1);
@@ -138,23 +113,24 @@ Ext.define('GeoExt.panel.Legend', {
         this.doLayout();
     },
 
-    /** private: method[onStoreRemove]
-     *  Private method called when a layer is removed from the store.
-     *
-     *  :param store: ``Ext.data.Store`` The store from which the record(s) was
-     *      removed.
-     *  :param record: ``Ext.data.Record`` The record object(s) corresponding
-     *      to the removed layers.
-     *  :param index: ``Integer`` The index of the removed record.
+    /** 
+     * Private method called when a layer is removed from the store.
+     * @private
+     * @param {Ext.data.Store} store The store from which the record(s) was
+     * removed.
+     * @param {Ext.data.Record} record The record object(s) corresponding
+     * to the removed layers.
+     * @param {Integer} index The index of the removed record.
      */
     onStoreRemove: function(store, record, index) {
         this.removeLegend(record);            
     },
 
-    /** private: method[removeLegend]
-     *  Remove the legend of a layer.
-     *  :param record: ``Ext.data.Record`` The record object from the layer 
-     *      store to remove.
+    /** 
+     * Remove the legend of a layer.
+     * @private
+     * @param {Ext.data.Record} record The record object from the layer 
+     * store to remove.
      */
     removeLegend: function(record) {
         if (this.items) {
@@ -166,29 +142,30 @@ Ext.define('GeoExt.panel.Legend', {
         }
     },
 
-    /** private: method[onStoreClear]
-     *  Private method called when a layer store is cleared.
-     *
-     *  :param store: ``Ext.data.Store`` The store from which was cleared.
+    /** 
+     * Private method called when a layer store is cleared.
+     * @private
+     * @param {Ext.data.Store} store The store from which was cleared.
      */
     onStoreClear: function(store) {
         this.removeAllLegends();
     },
 
-    /** private: method[removeAllLegends]
-     *  Remove all legends from this legend panel.
+    /**
+     * Remove all legends from this legend panel.
+     * @private
      */
     removeAllLegends: function() {
         this.removeAll(true);
         this.doLayout();
     },
 
-    /** private: method[addLegend]
-     *  Add a legend for the layer.
-     *
-     *  :param record: ``Ext.data.Record`` The record object from the layer 
-     *      store.
-     *  :param index: ``Integer`` The position at which to add the legend.
+    /**
+     * Add a legend for the layer.
+     * @private
+     * @param {Ext.data.Record} record The record object from the layer 
+     * store.
+     * @param {Integer} index The position at which to add the legend.
      */
     addLegend: function(record, index) {
         if (this.filter(record) === true) {
@@ -196,7 +173,6 @@ Ext.define('GeoExt.panel.Legend', {
             index = index || 0;
             var legend;
             var types = GeoExt.legend.Layer.getTypes(record, this.preferredTypes);
-//            console.log(types[0]);
             if(layer.displayInLayerSwitcher && !record.get('hideInLegend') && types.length > 0) {
                 this.insert(index,       {
                     xtype: types[0],
@@ -205,23 +181,13 @@ Ext.define('GeoExt.panel.Legend', {
                     hidden: !((!layer.map && layer.visibility) ||
                         (layer.getVisibility() && layer.calculateInRange()))
                 });
-        
-                /*
-      {
-          xtype: types[0],
-          id: this.getIdForLayer(layer),
-          layerRecord: record,
-          hidden: !((!layer.map && layer.visibility) ||
-            (layer.getVisibility() && layer.calculateInRange()))
-        }
-              */
-//                console.log(this);
             }
         }
     },
 
-    /** private: method[onDestroy]
-     *  Private method called during the destroy sequence.
+    /**
+     * Private method called during the destroy sequence.
+     * @private
      */
     onDestroy: function() {
         if(this.layerStore) {
@@ -230,8 +196,6 @@ Ext.define('GeoExt.panel.Legend', {
             this.layerStore.un("clear", this.onStoreClear, this);
         }
         this.callParent(arguments);
-    }    
-    
+    }
  
 });
-
