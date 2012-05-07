@@ -40,67 +40,26 @@
  *      accordingly when the map is panned or zoomed.
  */
 
-
+/**
+ * @class GeoExt.window.Popup
+ */
 Ext.define('GeoExt.window.Popup', {
     extend: 'Ext.window.Window',
     alias: 'widget.gx_popup',
     alternateClassName : 'GeoExt.Popup',
     
-    
-    /** api: config[anchored]
-     *  ``Boolean``  The popup begins anchored to its location.  Default is
-     *  ``true``.
-     */
-    anchored: true,
-
-    /** api: config[map]
-     *  ``OpenLayers.Map`` or :class:`GeoExt.MapPanel`
-     *  The map this popup will be anchored to (only required if ``anchored``
-     *  is set to true and the map cannot be derived from the ``location``'s
-     *  layer.
-     */
-    map: null,
-
-    /** api: config[panIn]
-     *  ``Boolean`` The popup should pan the map so that the popup is
-     *  fully in view when it is rendered.  Default is ``true``.
-     */
-    panIn: true,
-
-    /** api: config[unpinnable]
-     *  ``Boolean`` The popup should have a "unpin" tool that unanchors it from
-     *  its location.  Default is ``true``.
-     */
-    unpinnable: true,
-
-    /** api: config[location]
-     *  ``OpenLayers.Feature.Vector`` or ``OpenLayers.LonLat`` or
-     *  ``OpenLayers.Pixel`` or ``OpenLayers.Geometry`` A location for this 
-     *  popup's anchor.
-     */
-    
-    /** private: property[location]
-     *  ``OpenLayers.LonLat``
-     */
-    location: null,
-
     /** private: property[insideViewport]
      *  ``Boolean`` Wether the popup is currently inside the map viewport.
      */
     insideViewport: null,
-
-    /**
-     * Some Ext.Window defaults need to be overriden here
-     * because some Ext.Window behavior is not currently supported.
-     */    
-
+    
     /** private: config[animCollapse]
      *  ``Boolean`` Animate the transition when the panel is collapsed.
      *  Default is ``false``.  Collapsing animation is not supported yet for
      *  popups.
      */
     animCollapse: false,
-
+    
     /** private: config[draggable]
      *  ``Boolean`` Enable dragging of this Panel.  Defaults to ``false``
      *  because the popup defaults to being anchored, and anchored popups
@@ -114,17 +73,71 @@ Ext.define('GeoExt.window.Popup', {
      *  not look good with the anchor).
      */
     shadow: false,
-
-    /** api: config[popupCls]
-     *  ``String`` CSS class name for the popup DOM elements.  Default is
-     *  "gx-popup".
+    
+    /** api: config[unpinnable]
+     *  ``Boolean`` The popup should have a "unpin" tool that unanchors it from
+     *  its location.  Default is ``true``.
      */
-    popupCls: "gx-popup",
-
-    /** api: config[ancCls]
-     *  ``String``  CSS class name for the popup's anchor.
+    unpinnable: true,
+    
+    /** api: config[map]
+     *  ``OpenLayers.Map`` or :class:`GeoExt.MapPanel`
+     *  The map this popup will be anchored to (only required if ``anchored``
+     *  is set to true and the map cannot be derived from the ``location``'s
+     *  layer.
      */
-    ancCls: null,
+    map: null,
+    
+    config: {
+    
+        /** api: config[anchored]
+         *  ``Boolean``  The popup begins anchored to its location.  Default is
+         *  ``true``.
+         */
+        anchored: true,
+    
+        /** api: config[panIn]
+         *  ``Boolean`` The popup should pan the map so that the popup is
+         *  fully in view when it is rendered.  Default is ``true``.
+         */
+        panIn: true,
+    
+        /** api: config[location]
+         *  ``OpenLayers.Feature.Vector`` or ``OpenLayers.LonLat`` or
+         *  ``OpenLayers.Pixel`` or ``OpenLayers.Geometry`` A location for this 
+         *  popup's anchor.
+         */
+        
+        /** private: property[location]
+         *  ``OpenLayers.LonLat``
+         */
+        location: null,
+    
+        /**
+         * Some Ext.Window defaults need to be overriden here
+         * because some Ext.Window behavior is not currently supported.
+         */    
+    
+        /** api: config[popupCls]
+         *  ``String`` CSS class name for the popup DOM elements.  Default is
+         *  "gx-popup".
+         */
+        popupCls: "gx-popup",
+    
+        /** api: config[ancCls]
+         *  ``String``  CSS class name for the popup's anchor.
+         */
+        ancCls: null,
+        
+        /** api: config[anchorPosition]
+         *  ``String``  Controls the anchor position for the popup. If set to
+         *  ``auto``, the anchor will be positioned on the top or the bottom of
+         *  the window, minimizing map movement. Supported values are ``bottom-left``,
+         *  ``bottom-right``, ``top-left``, ``top-right`` or ``auto``.
+         *  Defaults to ``auto``.
+         */
+        anchorPosition: "auto",
+    },
     
     /** private: method[initComponent]
      *  Initializes the popup.
@@ -133,60 +146,59 @@ Ext.define('GeoExt.window.Popup', {
         if(this.map instanceof GeoExt.MapPanel) {
             this.map = this.map.map;
         }
-        if(!this.map && this.location instanceof OpenLayers.Feature.Vector &&
-                                                        this.location.layer) {
-            this.map = this.location.layer.map;
+        if(!this.map && this.getLocation() instanceof OpenLayers.Feature.Vector &&
+                                                        this.getLocation().layer) {
+            this.map = this.getLocation().layer.map;
         }
-        if (this.location instanceof OpenLayers.Feature.Vector) {
-            this.location = this.location.geometry;
+        if (this.getLocation() instanceof OpenLayers.Feature.Vector) {
+            this.setLocation(this.getLocation().geometry);
         }
-        if (this.location instanceof OpenLayers.Geometry) {
-            if (typeof this.location.getCentroid == "function") {
-                this.location = this.location.getCentroid();
+        if (this.getLocation() instanceof OpenLayers.Geometry) {
+            if (typeof this.getLocation().getCentroid == "function") {
+                this.setLocation(this.getLocation().getCentroid());
             }
-            this.location = this.location.getBounds().getCenterLonLat();
-        } else if (this.location instanceof OpenLayers.Pixel) {
-            this.location = this.map.getLonLatFromViewPortPx(this.location);
+            this.setLocation(this.getLocation().getBounds().getCenterLonLat());
+        } else if (this.getLocation() instanceof OpenLayers.Pixel) {
+            this.setLocation(this.map.getLonLatFromViewPortPx(this.getLocation()));
+        } else {
+            this.setAnchored(false);
         }
 
         var mapExtent =  this.map.getExtent();
-        if (mapExtent && this.location) {
-            this.insideViewport = mapExtent.containsLonLat(this.location);
+        if (mapExtent && this.getLocation()) {
+            this.insideViewport = mapExtent.containsLonLat(this.getLocation());
         }
 
-        if(this.anchored) {
+        if(this.getAnchored()) {
             this.addAnchorEvents();
         }
 
-        this.baseCls = this.popupCls + " " + this.baseCls;
-
+        this.baseCls = this.getPopupCls() + " " + this.baseCls;
         this.elements += ',anc';
-
+        
         this.callParent(arguments);
-        // GeoExt.Popup.superclass.initComponent.call(this);
     },
 
     /** private: method[onRender]
      *  Executes when the popup is rendered.
      */
     onRender: function(ct, position) {
-        // GeoExt.Popup.superclass.onRender.call(this, ct, position);
         this.callParent(arguments);
-        this.ancCls = this.popupCls + "-anc";
-
+        this.setAncCls(this.getPopupCls() + "-anc");
+        
         //create anchor dom element.
         //this.createElement("anc", this.el.dom);
         var dh = Ext.core.DomHelper; // create shorthand alias
-// specification object
-var spec = {
-    id: 'anc',
-    tag: 'div',
-    cls: this.ancCls
-};
-var ancDiv = dh.insertAfter(
-    this.el.dom, // the context element 'my-div' can either be the id or the actual node
-    spec      // the specification object
-);
+        // specification the anchor div
+        var spec = {
+            tag: 'div',
+            cls: this.getAncCls()
+        };
+        
+        var ancDiv = dh.append(
+            this.el.dom, // the context element 'my-div' can either be the id or the actual node
+            spec      // the specification object
+        );
         this.anc = Ext.get(ancDiv);
     },
 
@@ -196,13 +208,15 @@ var ancDiv = dh.insertAfter(
      */
     initTools : function() {
         if(this.unpinnable) {
-//            this.addTool({
-//                id: 'unpin',
-//                handler: Ext.Function.bind(this.unanchorPopup, this, [])// this.unanchorPopup.createDelegate(this, [])
-//            });
+            if (!this.tools) {
+                this.tools = [];
+            }
+            this.tools.push({
+                type:'unpin',
+                handler: Ext.bind(this.unanchorPopup, this, [])
+            });
         }
         this.callParent(arguments);
-//        GeoExt.Popup.superclass.initTools.call(this);
     },
 
     /** private: method[show]
@@ -210,10 +224,9 @@ var ancDiv = dh.insertAfter(
      */
     show: function() {
         this.callParent(arguments);
-//        GeoExt.Popup.superclass.show.apply(this, arguments);
-        if(this.anchored) {
+        if(this.getAnchored()) {
             this.position();
-            if(this.panIn && !this._mapMove) {
+            if(this.getPanIn() && !this._mapMove) {
                 this.panIntoView();
             }
         }
@@ -227,7 +240,6 @@ var ancDiv = dh.insertAfter(
             this.unanchorPopup();
         }
         this.callParent(arguments);
-        // GeoExt.Popup.superclass.maximize.apply(this, arguments);
     },
     
     /** api: method[setSize]
@@ -237,23 +249,17 @@ var ancDiv = dh.insertAfter(
      *  Sets the size of the popup, taking into account the size of the anchor.
      */
     setSize: function(w, h) {
-        console.log('w,h (roh)' , w, h);   
         if(this.anc) {
             var ancSize = this.anc.getSize();
             
-            console.log(ancSize)
             if(typeof w == 'object') {
                 h = w.height - ancSize.height;
                 w = w.width;
             } else if(!isNaN(h)){
                 h = h - ancSize.height;
-            } else {
-                h = 5;
             }
         }
-        console.log('w,h (adjusted)' , w, h);                 
         this.callParent([w,h]);
-        // GeoExt.Popup.superclass.setSize.call(this, w, h);
     },
 
     /** private: method[position]
@@ -261,29 +267,57 @@ var ancDiv = dh.insertAfter(
      */
     position: function() {
         if(this._mapMove === true) {
-            this.insideViewport = this.map.getExtent().containsLonLat(this.location);
+            this.insideViewport = this.map.getExtent().containsLonLat(this.getLocation());
             if(this.insideViewport !== this.isVisible()) {
                 this.setVisible(this.insideViewport);
-
             }
         }
 
         if(this.isVisible()) {
-            var centerPx = this.map.getViewPortPxFromLonLat(this.location);
-            var mapBox = Ext.fly(this.map.div).getBox(); 
-    
-            //This works for positioning with the anchor on the bottom.
+            var locationPx = this.map.getPixelFromLonLat(this.getLocation()),
+                mapBox = Ext.fly(this.map.div).getBox(true),
+                top = locationPx.y + mapBox.y,
+                left = locationPx.x + mapBox.x,
+                elSize = this.el.getSize(),
+                ancSize = this.anc.getSize(),
+                ancPos = this.getAnchorPosition();
             
-            var anc = this.anc;
-            var dx = anc.getLeft(true) + anc.getWidth() / 2;
-            var dy = this.el.getHeight();
-    
-            //Assuming for now that the map viewport takes up
-            //the entire area of the MapPanel
-            this.setPosition(centerPx.x + mapBox.x - dx, centerPx.y + mapBox.y - dy);
+            if (ancPos.indexOf("right") > -1 || locationPx.x > mapBox.width / 2) {
+                // right
+                this.anc.addCls("right");
+                var ancRight = this.el.getX(true) + elSize.width -
+                               this.anc.getX(true) - ancSize.width;
+                left -= elSize.width - ancRight - ancSize.width / 2;
+            } else {
+                // left
+                this.anc.removeCls("right");
+                var ancLeft = this.anc.getLeft(true);
+                left -= ancLeft + ancSize.width / 2;
+            }
+
+            if (ancPos.indexOf("bottom") > -1 || locationPx.y > mapBox.height / 2) {
+                // bottom
+                this.anc.removeCls("top");
+                // position the anchor
+                var popupHeight = this.getHeight();
+                if (isNaN(popupHeight) === false) {
+                    this.anc.setTop((popupHeight-1) + "px");
+                }
+                
+                top -= elSize.height + ancSize.height;
+                
+            } else {
+                // top
+                this.anc.addCls("top");
+                // remove eventually set top property (bottom-case) 
+                this.anc.setTop("");
+                top += ancSize.height; // ok
+            }
+
+            this.setPosition(left, top);
         }
     },
-
+    
     /** private: method[unanchorPopup]
      *  Unanchors a popup from its location.  This removes the popup from its
      *  MapPanel and adds it to the page body.
@@ -293,9 +327,13 @@ var ancDiv = dh.insertAfter(
         
         //make the window draggable
         this.draggable = true;
-        this.header.addClass("x-window-draggable");
-        this.dd = new Ext.Window.DD(this);
-
+        this.header.addCls("x-window-header-draggable");
+        var ddConfig = Ext.applyIf({
+            el: this.el,
+            delegate: '#' + Ext.escapeId(this.header.id)
+        }, this.draggable);
+        this.dd = new Ext.util.ComponentDragger(this, ddConfig);
+        
         //remove anchor
         this.anc.remove();
         this.anc = null;
@@ -310,7 +348,7 @@ var ancDiv = dh.insertAfter(
      *  padding.
      */ 
     panIntoView: function() {
-        var mapBox = Ext.fly(this.map.div).getBox(); 
+        var mapBox = Ext.fly(this.map.div).getBox(true); 
 
         //assumed viewport takes up whole body element of map panel
         var popupPos =  this.getPosition(true);
@@ -384,19 +422,16 @@ var ancDiv = dh.insertAfter(
         this.un("resize", this.position, this);
         this.un("collapse", this.position, this);
         this.un("expand", this.position, this);
-
     },
 
     /** private: method[beforeDestroy]
      *  Cleanup events before destroying the popup.
      */
     beforeDestroy: function() {
-        if(this.anchored) {
+        if(this.getAnchored()) {
             this.removeAnchorEvents();
         }
         this.callParent(arguments);
-//        GeoExt.Popup.superclass.beforeDestroy.call(this);
     }
-
 
 });
