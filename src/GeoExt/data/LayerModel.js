@@ -1,5 +1,5 @@
 /**
- * @class GeoExt.data.model.Layer
+ * @class GeoExt.data.LayerModel
  * @borrows Ext.data.Model
  * 
  *  Class defines a model for records containing an OpenLayers layer object.
@@ -7,7 +7,7 @@
  *  or name 'GeoExt.data.model.Layer' as string representation as a config option within creation of a superior component, 
  *  such as a store.
  */
-Ext.define('GeoExt.data.model.Layer', {
+Ext.define('GeoExt.data.LayerModel', {
     extend: 'Ext.data.Model',
     alias: ['gx_layer'],
     fields: [
