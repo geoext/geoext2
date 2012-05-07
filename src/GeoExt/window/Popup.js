@@ -74,6 +74,12 @@ Ext.define('GeoExt.window.Popup', {
      */
     shadow: false,
     
+    /** api: config[unpinnable]
+     *  ``Boolean`` The popup should have a "unpin" tool that unanchors it from
+     *  its location.  Default is ``true``.
+     */
+    unpinnable: true,
+    
     /** api: config[map]
      *  ``OpenLayers.Map`` or :class:`GeoExt.MapPanel`
      *  The map this popup will be anchored to (only required if ``anchored``
@@ -95,12 +101,6 @@ Ext.define('GeoExt.window.Popup', {
          *  fully in view when it is rendered.  Default is ``true``.
          */
         panIn: true,
-    
-        /** api: config[unpinnable]
-         *  ``Boolean`` The popup should have a "unpin" tool that unanchors it from
-         *  its location.  Default is ``true``.
-         */
-        unpinnable: true,
     
         /** api: config[location]
          *  ``OpenLayers.Feature.Vector`` or ``OpenLayers.LonLat`` or
@@ -174,12 +174,9 @@ Ext.define('GeoExt.window.Popup', {
         }
 
         this.baseCls = this.getPopupCls() + " " + this.baseCls;
-
         this.elements += ',anc';
-
-        this.callParent(arguments);
         
-        window.a = this;
+        this.callParent(arguments);
     },
 
     /** private: method[onRender]
@@ -210,12 +207,15 @@ Ext.define('GeoExt.window.Popup', {
      *  it adds the 'unpin' tool if the popup is unpinnable.
      */
     initTools : function() {
-//        if(this.getUnpinnable()) {
-//            this.addTool({
-//                id: 'unpin',
-//                handler: this.unanchorPopup.createDelegate(this, [])
-//            });
-//        }
+        if(this.unpinnable) {
+            if (!this.tools) {
+                this.tools = [];
+            }
+            this.tools.push({
+                type:'unpin',
+                handler: Ext.bind(this.unanchorPopup, this, [])
+            });
+        }
         this.callParent(arguments);
     },
 
@@ -327,9 +327,13 @@ Ext.define('GeoExt.window.Popup', {
         
         //make the window draggable
         this.draggable = true;
-        this.header.addCls("x-window-draggable");
-        this.dd = new Ext.Window.DD(this);
-
+        this.header.addCls("x-window-header-draggable");
+        var ddConfig = Ext.applyIf({
+            el: this.el,
+            delegate: '#' + Ext.escapeId(this.header.id)
+        }, this.draggable);
+        this.dd = new Ext.util.ComponentDragger(this, ddConfig);
+        
         //remove anchor
         this.anc.remove();
         this.anc = null;
