@@ -4,6 +4,7 @@
 Ext.define('GeoExt.legend.WMSLayer', {
     extend : 'GeoExt.legend.Layer',
     alias : 'widget.gx_wmslegend',
+    requires: ['GeoExt.legend.Image'],
     alternateClassName : 'GeoExt.WMSLegend',
     
     statics : {

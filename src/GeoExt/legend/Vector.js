@@ -4,6 +4,7 @@
 Ext.define('GeoExt.legend.VectorLayer', {
     extend : 'GeoExt.legend.Layer',
     alias : 'widget.gx_vectorlegend',
+    requires: ['GeoExt.FeatureRenderer'],
     alternateClassName : 'GeoExt.VectorLegend',
     
     statics : {

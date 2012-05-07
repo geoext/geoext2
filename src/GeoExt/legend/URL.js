@@ -3,6 +3,7 @@
  */
 Ext.define('GeoExt.legend.URL', {
     extend : 'GeoExt.legend.Layer',
+    requires: ['GeoExt.legend.Image'],
     alias : 'widget.gx_urllegend',
     alternateClassName : 'GeoExt.URLLegend',
     
