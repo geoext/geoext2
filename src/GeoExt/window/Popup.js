@@ -125,7 +125,7 @@ Ext.define('GeoExt.window.Popup', {
          *  ``bottom-right``, ``top-left``, ``top-right`` or ``auto``.
          *  Defaults to ``auto``.
          */
-        anchorPosition: "auto",
+        anchorPosition: "auto"
     },
     
     /**
