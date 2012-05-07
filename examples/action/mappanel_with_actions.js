@@ -1,8 +1,6 @@
 Ext.require('Ext.container.Viewport');
 Ext.require('Ext.window.MessageBox');
 
-
-
 Ext.application({
     name: 'HelloGeoExt2 - Action',
     launch: function(){
@@ -12,32 +10,14 @@ Ext.application({
         
         var map = new OpenLayers.Map({});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
-        var wms = new OpenLayers.Layer.WMS('OSM', 'http://intranet.terrestris.de:8010/mapproxy1.2/service?', {
-            layers: 'Shaded_Relief',
-            format: 'image/jpeg',
-            transparent: 'false'
-        }, {
-            isBaseLayer: true,
-            displayInLayerSwitcher: true,
-            singleTile: false
-        }); 
+        var wms = new OpenLayers.Layer.WMS(
+                "OpenLayers WMS",
+                "http://vmap0.tiles.osgeo.org/wms/vmap0?",
+                {layers: 'basic'}
+        ); 
         
-        var reisewarnungen = new OpenLayers.Layer.WMS('Reisewarnungen SOS', 'http://intranet.terrestris.de:8011/geoserver/sos/wms', {
-            layers: 'sos:reisehinweise',
-            format: 'image/png',
-            style: 'sos-gold',
-            transparent: true
-        }, {
-            isBaseLayer: false,
-            displayInLayerSwitcher: true,
-            singleTile: true
-        });
-        
-        // 
-        // 
-		
 		var vector = new OpenLayers.Layer.Vector("vector");
-    	map.addLayers([wms, reisewarnungen, vector]);
+    	map.addLayers([wms, vector]);
         
         var ctrl, toolbarItems = [], action, actions = {};
         
@@ -142,16 +122,19 @@ Ext.application({
         // as menu items
         toolbarItems.push({
             text: "menu",
-            menu: new Ext.menu.Menu({
-                items: [                // ZoomToMaxExtent
-                actions["max_extent"],                // Nav
-                new Ext.menu.CheckItem(actions["nav"]),                // Draw poly
-                new Ext.menu.CheckItem(actions["draw_poly"]),                // Draw line
-                new Ext.menu.CheckItem(actions["draw_line"]),                // Select control
-                new Ext.menu.CheckItem(actions["select"]),                // Navigation history control
-                actions["previous"], actions["next"]]
+            menu: Ext.create('Ext.menu.Menu', {
+                items: [
+	                actions["max_extent"],							// ZoomToMaxExtent
+	                new Ext.menu.CheckItem(actions["nav"]),			// Nav                
+	                new Ext.menu.CheckItem(actions["draw_poly"]),	// Draw poly
+	                new Ext.menu.CheckItem(actions["draw_line"]),	// Draw line
+	                new Ext.menu.CheckItem(actions["select"]),		// Select control
+	                actions["previous"], 							// Navigation history control
+	                actions["next"]
+	            ]
             })
         });
+        
         
         var mappanel = Ext.create('GeoExt.panel.Map', {
             title: 'The GeoExt.panel.Map-class',
