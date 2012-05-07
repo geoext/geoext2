@@ -186,7 +186,6 @@ Ext.define('GeoExt.renderer.Feature', {
         if(!this.renderer || !this.renderer.supported()) {  
             this.assignRenderer();
         }
-        console.log('fksnfkjk');
         // monkey-patch renderer so we always get a resolution
         this.renderer.map = {
             //            getResolution: (function() {
@@ -196,9 +195,7 @@ Ext.define('GeoExt.renderer.Feature', {
                 return this.resolution;
             }, this)
         };
-        console.log('fksnfkjk2');
         this.callParent(arguments);
-console.log('fksnfkjk3');
         this.drawFeature();
     },
 
@@ -255,8 +252,6 @@ console.log('fksnfkjk3');
      */
     assignRenderer: function()  {
 
-        console.log(this.el);
-        console.log('this.rendererOptions', this.rendererOptions);
 //        return true;
         this.renderer = new OpenLayers.Renderer.SVG(this.el, this.rendererOptions)
 //        for(var i=0, len=this.renderers.length; i<len; ++i) {

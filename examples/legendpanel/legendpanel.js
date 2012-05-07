@@ -49,27 +49,23 @@ Ext.application({
                 {
                     singleTile: true
                 })
-//                ,
-//            new OpenLayers.Layer.Vector('Polygons', {
-//                styleMap: new OpenLayers.StyleMap({
-//                    "default": new OpenLayers.Style({
-//                        pointRadius: 8,
-//                        fillColor: "#00ffee",
-//                        strokeColor: "#000000",
-//                        strokeWidth: 2
-//                    })
-//                })
-//            })
+                ,
+            new OpenLayers.Layer.Vector('Polygons', {
+                styleMap: new OpenLayers.StyleMap({
+                    "default": new OpenLayers.Style({
+                        pointRadius: 8,
+                        fillColor: "#00ffee",
+                        strokeColor: "#000000",
+                        strokeWidth: 2
+                    })
+                })
+            })
             ]);
-//        map.layers[2].addFeatures([
-//            new OpenLayers.Feature.Vector(OpenLayers.Geometry.fromWKT(
-//                "POLYGON(146.1 -41, 146.2 -41, 146.2 -41.1, 146.1 -41.1)"))
-//            ]);
+        map.layers[2].addFeatures([
+            new OpenLayers.Feature.Vector(OpenLayers.Geometry.fromWKT(
+                "POLYGON(146.1 -41, 146.2 -41, 146.2 -41.1, 146.1 -41.1)"))
+            ]);
 
-
-        //        map.addControl(new OpenLayers.Control.LayerSwitcher());
-    
-    
         mappanel = Ext.create('GeoExt.panel.Map', {
             region: 'center',
             height: 400,
