@@ -86,14 +86,14 @@ Ext.define('GeoExt.legend.Image', {
         }
         this.callParent();
     },
-    
+
     /**
      * Private method called if the legend image fails loading.
      * @private
      */
     onImageLoadError: function() {
         var el = this.getEl();
-        el.addClass(this.noImgCls);
+        this.addCls(this.noImgCls);
         el.dom.src = this.defaultImgSrc;
     },
 
@@ -104,7 +104,7 @@ Ext.define('GeoExt.legend.Image', {
     onImageLoad: function() {
         var el = this.getEl();
         if (!OpenLayers.Util.isEquivalentUrl(el.dom.src, this.defaultImgSrc)) {
-            el.removeClass(this.noImgCls);
+            this.removeCls(this.noImgCls);
         }
     }
 
