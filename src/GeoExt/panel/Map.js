@@ -340,20 +340,20 @@ Ext.define('GeoExt.panel.Map', {
         // dimensions or no layers
         
         if (center)  {
-            state.x = center.lon;
-            state.y = center.lat;
-            state.zoom = map.getZoom();
+            state = me.addPropertyToState(state, 'x', center.lon);
+            state = me.addPropertyToState(state, 'y', center.lat);
+            state = me.addPropertyToState(state, 'zoom', map.getZoom());
         }
         
         me.layers.each(function(modelInstance) {
-           layer = modelInstance.getLayer();
-           layerId = this.prettyStateKeys 
+            layer = modelInstance.getLayer();
+            layerId = this.prettyStateKeys 
                    ? modelInstance.get('name') 
                    : modelInstance.get('id');
-           state["visibility_" + layerId] = layer.getVisibility();
-           state["opacity_" + layerId] = (layer.opacity === null) 
-                                       ? 1 
-                                       : layer.opacity;
+            state = me.addPropertyToState(state, "visibility_" + layerId, 
+                layer.getVisibility());
+            state = me.addPropertyToState(state, "opacity_" + layerId, 
+                (layer.opacity === null) ? 1 : layer.opacity);
         }, me);
         
         return state;  
