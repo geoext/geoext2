@@ -1,7 +1,12 @@
-Ext.require('Ext.container.Viewport');
-Ext.require('Ext.window.MessageBox');
+Ext.Loader.setConfig({
+    enabled: true,
+    disableCaching: false,
+    paths: {
+        GeoExt: "../../src/GeoExt"
+    }
+});
 
-
+Ext.require(['Ext.container.Viewport','Ext.window.MessageBox','GeoExt.panel.Map']);
 
 Ext.application({
     name: 'HelloGeoExt2',
