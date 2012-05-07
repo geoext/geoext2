@@ -93,7 +93,7 @@ Ext.define('GeoExt.legend.Image', {
      */
     onImageLoadError: function() {
         var el = this.getEl();
-        el.addClass(this.noImgCls);
+        el.addCls(this.noImgCls);
         el.dom.src = this.defaultImgSrc;
     },
 
@@ -104,7 +104,7 @@ Ext.define('GeoExt.legend.Image', {
     onImageLoad: function() {
         var el = this.getEl();
         if (!OpenLayers.Util.isEquivalentUrl(el.dom.src, this.defaultImgSrc)) {
-            el.removeClass(this.noImgCls);
+            el.removeCls(this.noImgCls);
         }
     }
 
