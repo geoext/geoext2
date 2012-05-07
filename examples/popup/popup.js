@@ -12,6 +12,12 @@
  *  Display a popup with feature information.
  */
 
+Ext.require([
+    'Ext.Window', // useless in fact, since we're using ext-all.js in the example
+    'GeoExt.panel.Map',
+    'GeoExt.window.Popup'
+]);
+
 var mapPanel, popup;
 
 Ext.onReady(function() {
@@ -32,8 +38,9 @@ Ext.onReady(function() {
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit." +
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
+    
     function createPopup(feature) {
-        popup = Ext.create('GeoExt.window.Popup',{
+        popup = Ext.create('GeoExt.window.Popup', {
             title: 'My Popup',
             location: feature,
             width:200,
@@ -73,6 +80,7 @@ Ext.onReady(function() {
         y: 100,
         items: {
             xtype: "gx_mappanel",
+            border: false,
             region: "center",
             layers: [
                 new OpenLayers.Layer.WMS( 
