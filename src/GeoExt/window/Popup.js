@@ -237,11 +237,9 @@ var ancDiv = dh.insertAfter(
      *  Sets the size of the popup, taking into account the size of the anchor.
      */
     setSize: function(w, h) {
-        console.log('w,h (roh)' , w, h);   
         if(this.anc) {
             var ancSize = this.anc.getSize();
             
-            console.log(ancSize)
             if(typeof w == 'object') {
                 h = w.height - ancSize.height;
                 w = w.width;
@@ -251,9 +249,7 @@ var ancDiv = dh.insertAfter(
                 h = 5;
             }
         }
-        console.log('w,h (adjusted)' , w, h);                 
         this.callParent([w,h]);
-        // GeoExt.Popup.superclass.setSize.call(this, w, h);
     },
 
     /** private: method[position]
