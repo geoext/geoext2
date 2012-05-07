@@ -5,7 +5,7 @@ Ext.define('GeoExt.legend.URL', {
     
     statics : {
         supports: function(layerRecord) {
-            return layerRecord.get("legendURL") != null;
+            return layerRecord.get("legendURL") == null ? 0 : 10;
         }
     },
 

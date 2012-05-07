@@ -17,16 +17,29 @@ Ext.define('GeoExt.legend.Layer', {
          * the provided layerRecord.
          */
         getTypes: function(layerRecord, preferredTypes) {
-            var types = (preferredTypes || []).concat();
-            var goodTypes = [];
-            for(var type in GeoExt.legend.Layer.types) {
-                if(GeoExt.legend.Layer.types[type].supports(layerRecord)) {
-                    // add to goodTypes if not preferred
-                    types.indexOf(type) == -1 && goodTypes.push(type);
+            var types = (preferredTypes || []).concat(),
+                scoredTypes = [], score, type;
+            for (type in GeoExt.LayerLegend.types) {
+                score = GeoExt.LayerLegend.types[type].supports(layerRecord);
+                if(score > 0) {
+                    // add to scoredTypes if not preferred
+                    if (types.indexOf(type) == -1) {
+                        scoredTypes.push({
+                            type: type,
+                            score: score
+                        });
+                    }
                 } else {
                     // preferred, but not supported
-                    Ext.Array.remove(types, type);
+                    types.remove(type);
                 }
+            }
+            scoredTypes.sort(function(a, b) {
+                return a.score < b.score ? 1 : (a.score == b.score ? 0 : -1);
+            });
+            var len = scoredTypes.length, goodTypes = new Array(len);
+            for (var i=0; i<len; ++i) {
+                goodTypes[i] = scoredTypes[i].type;
             }
             // take the remaining preferred types, and add other good types 
             return types.concat(goodTypes);
@@ -89,14 +102,54 @@ Ext.define('GeoExt.legend.Layer', {
         me.autoEl = {};
         me.add({
             xtype: "label",
-            text: this.getLayerTitle(this.layerRecord),
+            html: this.getLayerTitle(this.layerRecord),
             cls: 'x-form-item x-form-item-label' +
             (this.labelCls ? ' ' + this.labelCls : '')
         });
         if (me.layerRecord && me.layerRecord.store) {
             me.layerStore = me.layerRecord.store;
             me.layerStore.on("update", me.onStoreUpdate, me);
+            me.layerStore.on("add", me.onStoreAdd, me);
+            me.layerStore.on("remove", me.onStoreRemove, me);
         }
+    },
+
+    /**
+     * Get the label text of the legend.
+     * @private
+     * @return {String}
+     */
+    getLabel: function() {
+        var label = this.items.get(0);
+        return label.rendered ? label.el.dom.innerHTML : label.html;
+    },
+
+    /** 
+     * Handler for remove event of the layerStore
+     * @private
+     * @param {Ext.data.Store} store The store from which the record was
+     * removed.
+     * @param {Ext.data.Record} record The record object corresponding
+     * to the removed layer.
+     * @param {Integer} index The index in the store at which the record
+     * was remvoed.
+     */
+    onStoreRemove: function(store, record, index) {
+        // to be implemented by subclasses if needed
+    },
+
+    /** 
+     * Handler for add event of the layerStore
+     * @private
+     * @param {Ext.data.Store} store The store to which the record was
+     * added.
+     * @param {Ext.data.Record} record The record object corresponding
+     * to the added layer.
+     * @param {Index} index The index in the store at which the record
+     * was added.
+     */
+    onStoreAdd: function(store, record, index) {
+        // to be implemented by subclasses if needed
     },
     
     /**
@@ -130,9 +183,9 @@ Ext.define('GeoExt.legend.Layer', {
     update: function() {
         var title = this.getLayerTitle(this.layerRecord);
         var item = this.items.get(0);
-        if (item instanceof Ext.form.Label && item.text !== title) {
+        if (item instanceof Ext.form.Label && this.getLabel() !== title) {
             // we need to update the title
-            item.setText(title);
+            item.setText(title, false);
         }
     },
     
@@ -155,9 +208,12 @@ Ext.define('GeoExt.legend.Layer', {
     },
     
     beforeDestroy: function() {
-        this.layerStore &&
-        this.layerStore.un("update", this.onStoreUpdate, this);
-        this.callParent(arguments);
+        if (this.layerStore) {
+            this.layerStore.un("update", this.onStoreUpdate, this);
+            this.layerStore.un("remove", this.onStoreRemove, this);
+            this.layerStore.un("add", this.onStoreAdd, this);
+        }
+        this.callParent();
     },
 
     onDestroy: function() {

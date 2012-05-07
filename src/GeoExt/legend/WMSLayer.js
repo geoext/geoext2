@@ -5,7 +5,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
     
     statics : {
         supports: function(layerRecord) {
-            return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS;
+            return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }
     },
 
@@ -111,12 +111,19 @@ Ext.define('GeoExt.legend.WMSLayer', {
                 STYLE: (styleName !== '') ? styleName: null,
                 STYLES: null,
                 SRS: null,
-                FORMAT: null
+                FORMAT: null,
+                TIME: null
             });
         }
+        var params = Ext.apply({}, this.baseParams);
+        if (layer.params._OLSALT) {
+            // update legend after a forced layer redraw
+            params._OLSALT = layer.params._OLSALT;
+        }
+        url = Ext.urlAppend(url, Ext.urlEncode(params));
         if (url.toLowerCase().indexOf("request=getlegendgraphic") != -1) {
             if (url.toLowerCase().indexOf("format=") == -1) {
-                url = Ext.urlAppend(url, "FORMAT=image/gif");
+                url = Ext.urlAppend(url, "FORMAT=image%2Fgif");
             }
             // add scale parameter - also if we have the url from the record's
             // styles data field and it is actually a GetLegendGraphic request.
@@ -125,13 +132,6 @@ Ext.define('GeoExt.legend.WMSLayer', {
                 url = Ext.urlAppend(url, "SCALE=" + scale);
             }
         }
-        var params = Ext.apply({}, this.baseParams);
-        if (layer.params._OLSALT) {
-            // update legend after a forced layer redraw
-            params._OLSALT = layer.params._OLSALT;
-        }
-        url = Ext.urlAppend(url, Ext.urlEncode(params));
-        
         return url;
     },
 

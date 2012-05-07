@@ -5,7 +5,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
     
     statics : {
         supports: function(layerRecord) {
-            return layerRecord.getLayer() instanceof OpenLayers.Layer.Vector;
+            return layerRecord.getLayer() instanceof OpenLayers.Layer.Vector ? 1 : 0;
         }
     },
 
@@ -113,6 +113,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         if (this.layerRecord) {
             this.layer = this.layerRecord.getLayer();
             if (this.layer.map) {
+                this.map = this.layer.map;
                 this.currentScaleDenominator = this.layer.map.getScale();
                 this.layer.map.events.on({
                     "zoomend": this.onMapZoom,
@@ -606,9 +607,55 @@ Ext.define('GeoExt.legend.VectorLayer', {
             }
         }
         delete this.layer;
+        delete this.map;
         delete this.rules;
         this.callParent(arguments);
+    },
+
+    /**
+     * Handler for remove event of the layerStore
+     * @private
+     * @param {Ext.data.Store} store The store from which the record was
+     * removed.
+     * @param {Ext.data.Record} record The record object corresponding
+     * to the removed layer.
+     * @param {Integer} index The index in the store.
+     */
+    onStoreRemove: function(store, record, index) {
+        if (record.getLayer() === this.layer) {
+            if (this.map && this.map.events) {
+                this.map.events.un({
+                    "zoomend": this.onMapZoom,
+                    scope: this
+                });
+            }
+        }
+    },
+
+    /** 
+     * Handler for add event of the layerStore
+     * @private
+     * @param {Ext.data.Store} store The store to which the record was
+     * added.
+     * @param {Ext.data.Record[]} records The record object(s) corresponding
+     * to the added layer(s).
+     * @param {Integer} index The index in the store at which the record
+     * was added.
+     */
+    onStoreAdd: function(store, records, index) {
+        for (var i=0, len=records.length; i<len; i++) {
+            var record = records[i];
+            if (record.getLayer() === this.layer) {
+                if (this.layer.map && this.layer.map.events) {
+                    this.layer.map.events.on({
+                        "zoomend": this.onMapZoom,
+                        scope: this
+                    });
+                }
+            }
+       }
     }
+
 });
 
 GeoExt.legend.Layer.types["gx_vectorlegend"] = GeoExt.legend.VectorLayer;
