@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="../../../../ext-4.0.2a/resources/css/ext-all.css">
-    <script type="text/javascript" src="http://openlayers.org/api/2.11/OpenLayers.js"></script>
-    <script type="text/javascript" src="../../../../ext-4.0.2a/ext-all.js"></script>
-    <script type="text/javascript" src="../../../src/GeoExt.js"></script>
-    <script type="text/javascript" src="../../../src/data/models/Layer.js"></script>
-    <script type="text/javascript" src="../../../src/data/store/Layer.js"></script>
-    <script type="text/javascript" src="../../../src/panel/Map.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all.js" ></script>
+    <!--script src="<PATH_TO_EXT>/4.1.0/ext-debug.js"></script-->
+
+    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
     <script type="text/javascript">
+        Ext.Loader.setConfig({
+            disableCaching: false,
+            enabled: true,
+            paths: {
+                //Ext: '<PATH_TO_EXT>/4.1.0/src',
+                GeoExt: '../../src/GeoExt'
+            }
+        });
+
+        Ext.require('GeoExt.panel.Map');
     
         // the hidden span element that contains the test iframe
         var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
@@ -498,17 +506,18 @@
 
             var getState, mapPanel, log;
 
-            getState = GeoExt.MapPanel.prototype.getState;
-            GeoExt.MapPanel.prototype.getState = function(state) {
+            getState = GeoExt.panel.Map.prototype.getState;
+            GeoExt.panel.Map.prototype.getState = function(state) {
                 log = true;
             };
 
-            mapPanel = new GeoExt.MapPanel({
+            mapPanel = new GeoExt.panel.Map({
                 renderTo: "mappanel",
                 layers: [
                     new OpenLayers.Layer("foo"),
                     new OpenLayers.Layer("bar")
                 ],
+                stateful: true,
                 stateId: "map",
                 height: 400,
                 width: 600
@@ -571,7 +580,7 @@
 
                 // tear down
 
-                GeoExt.MapPanel.prototype.getState = getState;
+                GeoExt.panel.Map.prototype.getState = getState;
                 mapPanel.destroy();
             });
         }

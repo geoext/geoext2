@@ -4,6 +4,7 @@
 Ext.define('GeoExt.legend.VectorLayer', {
     extend : 'GeoExt.legend.Layer',
     alias : 'widget.gx_vectorlegend',
+    requires: ['GeoExt.renderer.Feature'],
     alternateClassName : 'GeoExt.VectorLegend',
     
     statics : {
@@ -659,6 +660,6 @@ Ext.define('GeoExt.legend.VectorLayer', {
        }
     }
 
+}, function() {
+    GeoExt.legend.Layer.types["gx_vectorlegend"] = GeoExt.legend.VectorLayer;
 });
-
-GeoExt.legend.Layer.types["gx_vectorlegend"] = GeoExt.legend.VectorLayer;

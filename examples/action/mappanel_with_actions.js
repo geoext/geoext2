@@ -1,7 +1,9 @@
-Ext.require('Ext.container.Viewport');
-Ext.require('Ext.window.MessageBox');
-
-
+Ext.require([
+    'Ext.container.Viewport',
+    'Ext.window.MessageBox',
+    'GeoExt.panel.Map',
+    'GeoExt.Action'
+]);
 
 Ext.application({
     name: 'HelloGeoExt2 - Action',
@@ -12,32 +14,14 @@ Ext.application({
         
         var map = new OpenLayers.Map({});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
-        var wms = new OpenLayers.Layer.WMS('OSM', 'http://intranet.terrestris.de:8010/mapproxy1.2/service?', {
-            layers: 'Shaded_Relief',
-            format: 'image/jpeg',
-            transparent: 'false'
-        }, {
-            isBaseLayer: true,
-            displayInLayerSwitcher: true,
-            singleTile: false
-        }); 
-        
-        var reisewarnungen = new OpenLayers.Layer.WMS('Reisewarnungen SOS', 'http://intranet.terrestris.de:8011/geoserver/sos/wms', {
-            layers: 'sos:reisehinweise',
-            format: 'image/png',
-            style: 'sos-gold',
-            transparent: true
-        }, {
-            isBaseLayer: false,
-            displayInLayerSwitcher: true,
-            singleTile: true
-        });
-        
-        // 
-        // 
+        var wms = new OpenLayers.Layer.WMS(
+            "OpenLayers WMS",
+            "http://vmap0.tiles.osgeo.org/wms/vmap0?",
+            {layers: 'basic'}
+        );
 		
 		var vector = new OpenLayers.Layer.Vector("vector");
-    	map.addLayers([wms, reisewarnungen, vector]);
+    	map.addLayers([wms, vector]);
         
         var ctrl, toolbarItems = [], action, actions = {};
         

@@ -12,11 +12,20 @@
  *  Display a permalink each time the map changes position.
  */
 
-Ext.require('Ext.container.Viewport');
-Ext.require('Ext.window.MessageBox');
+Ext.Loader.setConfig({
+    enabled: true,
+    disableCaching: false,
+    paths: {
+        GeoExt: "../../src/GeoExt"
+    }
+});
+
+Ext.require([
+    'Ext.container.Viewport',
+    'GeoExt.state.PermalinkProvider'
+]);
 
 var permalinkProvider;
-
 
 Ext.application({
     name: 'HelloGeoExt2',
