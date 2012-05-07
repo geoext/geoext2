@@ -1,7 +1,8 @@
-Ext.require('Ext.container.Viewport');
-Ext.require('Ext.window.MessageBox');
-
-
+Ext.require([
+    'Ext.container.Viewport',
+    'Ext.window.MessageBox',
+    'GeoExt.panel.Map'
+]);
 
 Ext.application({
     name: 'HelloGeoExt2 - Action',
@@ -12,49 +13,31 @@ Ext.application({
         
         var map = new OpenLayers.Map({});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
-        var wms = new OpenLayers.Layer.WMS('OSM', 'http://intranet.terrestris.de:8010/mapproxy1.2/service?', {
-            layers: 'Shaded_Relief',
-            format: 'image/jpeg',
-            transparent: 'false'
-        }, {
-            isBaseLayer: true,
-            displayInLayerSwitcher: true,
-            singleTile: false
-        }); 
-        
-        var reisewarnungen = new OpenLayers.Layer.WMS('Reisewarnungen SOS', 'http://intranet.terrestris.de:8011/geoserver/sos/wms', {
-            layers: 'sos:reisehinweise',
-            format: 'image/png',
-            style: 'sos-gold',
-            transparent: true
-        }, {
-            isBaseLayer: false,
-            displayInLayerSwitcher: true,
-            singleTile: true
-        });
-        
-        // 
-        // 
+        var wms = new OpenLayers.Layer.WMS(
+            "OpenLayers WMS",
+            "http://vmap0.tiles.osgeo.org/wms/vmap0?",
+            {layers: 'basic'}
+        );
 		
 		var vector = new OpenLayers.Layer.Vector("vector");
-    	map.addLayers([wms, reisewarnungen, vector]);
+    	map.addLayers([wms, vector]);
         
         var ctrl, toolbarItems = [], action, actions = {};
         
         // ZoomToMaxExtent control, a "button" control
-        action = new GeoExt.Action({
+        action = {
             control: new OpenLayers.Control.ZoomToMaxExtent(),
             map: map,
             text: "max extent",
             tooltip: "zoom to max extent"
-        });
+        };
         actions["max_extent"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // Navigation control and DrawFeature controls
         // in the same toggle group
-        action = new GeoExt.Action({
+        action = {
             text: "nav",
             control: new OpenLayers.Control.Navigation(),
             map: map,
@@ -66,11 +49,11 @@ Ext.application({
             // check item options
             group: "draw",
             checked: true
-        });
+        };
         actions["nav"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = new GeoExt.Action({
+        action = {
             text: "draw poly",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Polygon),
             map: map,
@@ -80,11 +63,11 @@ Ext.application({
             tooltip: "draw polygon",
             // check item options
             group: "draw"
-        });
+        };
         actions["draw_poly"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = new GeoExt.Action({
+        action = {
             text: "draw line",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Path),
             map: map,
@@ -94,13 +77,13 @@ Ext.application({
             tooltip: "draw line",
             // check item options
             group: "draw"
-        });
+        };
         actions["draw_line"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // SelectFeature control, a "toggle" control
-        action = new GeoExt.Action({
+        action = {
             text: "select",
             control: new OpenLayers.Control.SelectFeature(vector, {
                 type: OpenLayers.Control.TYPE_TOGGLE,
@@ -110,7 +93,7 @@ Ext.application({
             // button options
             enableToggle: true,
             tooltip: "select feature"
-        });
+        };
         actions["select"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
@@ -119,21 +102,21 @@ Ext.application({
         ctrl = new OpenLayers.Control.NavigationHistory();
         map.addControl(ctrl);
         
-        action = new GeoExt.Action({
+        action = {
             text: "previous",
             control: ctrl.previous,
             disabled: true,
             tooltip: "previous in history"
-        });
+        };
         actions["previous"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = new GeoExt.Action({
+        action = {
             text: "next",
             control: ctrl.next,
             disabled: true,
             tooltip: "next in history"
-        });
+        };
         actions["next"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("->");
