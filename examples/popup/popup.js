@@ -28,15 +28,21 @@ Ext.onReady(function() {
     var selectCtrl = new OpenLayers.Control.SelectFeature(vectorLayer);
 
     // define "createPopup" function
-    var bogusMarkup = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
+    var bogusMarkup = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
+    		"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
+    		"Lorem ipsum dolor sit amet, consectetuer adipiscing elit." +
+    		"Lorem ipsum dolor sit amet, consectetuer adipiscing elit." +
+    		"Lorem ipsum dolor sit amet, consectetuer adipiscing elit." +
+    		"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
     function createPopup(feature) {
-        popup = new GeoExt.Popup({
+        popup = Ext.create('GeoExt.window.Popup',{
             title: 'My Popup',
             location: feature,
             width:200,
             html: bogusMarkup,
             maximizable: true,
-            collapsible: true
+            collapsible: true,
+            anchorPosition: 'auto'
         });
         // unselect feature when the popup
         // is closed
