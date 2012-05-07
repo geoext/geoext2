@@ -71,8 +71,8 @@ Ext.application({
             height: 400,
             width: 600,
             map: map,
-            mapCenter: new OpenLayers.LonLat(146.4, -41.6),
-            mapZoom: 7
+            center: new OpenLayers.LonLat(146.4, -41.6),
+            zoom: 7
         });
         var layerRec0 = mappanel.layers.getAt(0);
         layerRec0.set("legendURL", "http://demo.opengeo.org/geoserver/wms?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_state_boundaries");
