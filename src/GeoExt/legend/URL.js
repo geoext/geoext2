@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.legend.URL
+ */
 Ext.define('GeoExt.legend.URL', {
     extend : 'GeoExt.legend.Layer',
     alias : 'widget.gx_urllegend',

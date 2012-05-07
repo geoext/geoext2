@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.legend.VectorLayer
+ */
 Ext.define('GeoExt.legend.VectorLayer', {
     extend : 'GeoExt.legend.Layer',
     alias : 'widget.gx_vectorlegend',

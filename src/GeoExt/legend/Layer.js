@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.legend.Layer
+ */
 Ext.define('GeoExt.legend.Layer', {
     extend : 'Ext.container.Container',
     alias : 'widget.gx_layerlegend',

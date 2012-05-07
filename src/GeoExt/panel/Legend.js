@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.panel.Legend
+ */
 Ext.define('GeoExt.panel.Legend', {
     extend : 'Ext.panel.Panel',
     requires: ['GeoExt.legend.Layer'],

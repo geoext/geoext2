@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.legend.Image
+ */
 Ext.define('GeoExt.legend.Image', {
     extend : 'Ext.Component',
     alias : 'widget.gx_legendimage',

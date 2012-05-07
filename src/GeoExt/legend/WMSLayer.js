@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.legend.WMSLayer
+ */
 Ext.define('GeoExt.legend.WMSLayer', {
     extend : 'GeoExt.legend.Layer',
     alias : 'widget.gx_wmslegend',
