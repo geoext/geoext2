@@ -62,8 +62,10 @@ Ext.define('GeoExt.Action', {
          */
         uToggleHandler: null,
         
-        /** private: property[uCheckHandler]
-         *  ``Function`` References the function the user passes through
+        /**
+         * @private
+         * @cfg {Function}
+         *  References the function the user passes through
          *  the "checkHandler" property.
          */
         uCheckHandler: null
@@ -114,8 +116,9 @@ Ext.define('GeoExt.Action', {
 		this.callParent(arguments);
     },
     
-    /** private: method[pHandler]
-     *  :param cmp: ``Ext.Component`` The component that triggers the handler.
+    /**
+     * @private
+     * @param {Ext.Component} The component that triggers the handler.
      *
      *  The private handler.
      */
@@ -130,9 +133,10 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[pTogleHandler]
-     *  :param cmp: ``Ext.Component`` The component that triggers the toggle handler.
-     *  :param state: ``Boolean`` The state of the toggle.
+    /**
+     * @private
+     * @param {Ext.Component} cmp The component that triggers the toggle handler.
+     * @param {Boolean} state The state of the toggle.
      *
      *  The private toggle handler.
      */
@@ -143,9 +147,10 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[pCheckHandler]
-     *  :param cmp: ``Ext.Component`` The component that triggers the check handler.
-     *  :param state: ``Boolean`` The state of the toggle.
+    /**
+     * @private
+     * @param {Ext.Component} cmp The component that triggers the check handler.
+     * @param {Boolean} state The state of the toggle.
      *
      *  The private check handler.
      */
@@ -156,8 +161,9 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[changeControlState]
-     *  :param state: ``Boolean`` The state of the toggle.
+    /**
+     * @private
+     * @param {Boolean} state The state of the toggle.
      *
      *  Change the control state depending on the state boolean.
      */
@@ -178,7 +184,8 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[onCtrlActivate]
+    /**
+     * @private
      *
      *  Called when this action's control is activated.
      */
@@ -195,7 +202,8 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[onCtrlDeactivate]
+    /**
+     * @private
      *
      *  Called when this action's control is deactivated.
      */
@@ -212,7 +220,8 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[safeCallEach]
+    /**
+     * @private
      *
      */
     safeCallEach: function(fnName, args){
