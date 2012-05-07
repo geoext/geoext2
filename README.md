@@ -1,4 +1,8 @@
 GeoExt 2
 ========
 
-Nothing to see here. Please come back later.
+To generate the jsduck documentation:
+
+* install jsduck: https://github.com/senchalabs/jsduck
+* run `jsduck --config jsduck.json`
+

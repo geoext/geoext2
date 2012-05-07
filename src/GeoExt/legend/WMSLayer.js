@@ -1,79 +1,64 @@
 Ext.define('GeoExt.legend.WMSLayer', {
     extend : 'GeoExt.legend.Layer',
-    requires : [
-    //    'GeoExt.data.LayerStore'
-    ],
     alias : 'widget.gx_wmslegend',
     alternateClassName : 'GeoExt.WMSLegend',
     
     statics : {
-        guess : function() {
-            var candidates = Ext.ComponentQuery.query("gx_wmslegend");
-            return ((candidates && candidates.length > 0) 
-                ? candidates[0] 
-                : null);
-        },
         supports: function(layerRecord) {
-            return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS;
+            return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }
     },
-    
-          
-    /** api: config[defaultStyleIsFirst]
-     *  ``Boolean``
-     *  The WMS spec does not say if the first style advertised for a layer in
-     *  a Capabilities document is the default style that the layer is
-     *  rendered with. We make this assumption by default. To be strictly WMS
-     *  compliant, set this to false, but make sure to configure a STYLES
-     *  param with your WMS layers, otherwise LegendURLs advertised in the
-     *  GetCapabilities document cannot be used.
-     */
-    defaultStyleIsFirst: true,
 
-    /** api: config[useScaleParameter]
-     *  ``Boolean``
-     *  Should we use the optional SCALE parameter in the SLD WMS
-     *  GetLegendGraphic request? Defaults to true.
-     */
-    useScaleParameter: true,
+    config: {
+        /** @cfg {Boolean}
+         * The WMS spec does not say if the first style advertised for a layer in
+         * a Capabilities document is the default style that the layer is
+         * rendered with. We make this assumption by default. To be strictly WMS
+         * compliant, set this to false, but make sure to configure a STYLES
+         * param with your WMS layers, otherwise LegendURLs advertised in the
+         * GetCapabilities document cannot be used.
+         */
+        defaultStyleIsFirst: true,
 
-    /** api: config[baseParams]
-     * ``Object``
-     *  Optional parameters to add to the legend url, this can e.g. be used to
-     *  support vendor-specific parameters in a SLD WMS GetLegendGraphic
-     *  request. To override the default MIME type of image/gif use the
-     *  FORMAT parameter in baseParams.
-     *     
-     *  .. code-block:: javascript
-     *     
-     *      var legendPanel = new GeoExt.LegendPanel({
-     *          map: map,
-     *          title: 'Legend Panel',
-     *          defaults: {
-     *              style: 'padding:5px',
-     *              baseParams: {
-     *                  FORMAT: 'image/png',
-     *                  LEGEND_OPTIONS: 'forceLabels:on'
-     *              }
-     *          }
-     *      });   
-     */
-    baseParams: null,
-    
+        /** @cfg {Boolean}
+         * Should we use the optional SCALE parameter in the SLD WMS
+         * GetLegendGraphic request? Defaults to true.
+         */
+        useScaleParameter: true,
+
+        /** @cfg {Object}
+         * Optional parameters to add to the legend url, this can e.g. be used to
+         * support vendor-specific parameters in a SLD WMS GetLegendGraphic
+         * request. To override the default MIME type of image/gif use the
+         * FORMAT parameter in baseParams.
+         *     
+         * var legendPanel = new GeoExt.LegendPanel({
+         *     map: map,
+         *     title: 'Legend Panel',
+         *     defaults: {
+         *         style: 'padding:5px',
+         *         baseParams: {
+         *             FORMAT: 'image/png',
+         *             LEGEND_OPTIONS: 'forceLabels:on'
+         *         }
+         *     }
+         * });   
+         */
+        baseParams: null
+    },
+
     initComponent: function(){
         var me = this;
-        
-        me.callParent(arguments);
-
+        me.callParent();
         var layer = me.layerRecord.getLayer();
         me._noMap = !layer.map;
         layer.events.register("moveend", me, me.onLayerMoveend);
         me.update();
- 
     },
     
-    /** private: method[onLayerMoveend]
-     *  :param e: ``Object``
+    /**
+     * @private
+     * @param {Object} e
      */
     onLayerMoveend: function(e) {
         if ((e.zoomChanged === true && this.useScaleParameter === true) ||
@@ -83,13 +68,13 @@ Ext.define('GeoExt.legend.WMSLayer', {
         }
     },
 
-    /** private: method[getLegendUrl]
-     *  :param layerName: ``String`` A sublayer.
-     *  :param layerNames: ``Array(String)`` The array of sublayers,
-     *      read from this.layerRecord if not provided.
-     *  :return: ``String`` The legend URL.
-     *
-     *  Get the legend URL of a sublayer.
+    /** 
+     * Get the legend URL of a sublayer.
+     * @private
+     * @param {String} layerName A sublayer.
+     * @param {Array} layerNames The array of sublayers,
+     * read from this.layerRecord if not provided.
+     * @return {String} The legend URL.
      */
     getLegendUrl: function(layerName, layerNames) {
         var rec = this.layerRecord;
@@ -126,12 +111,19 @@ Ext.define('GeoExt.legend.WMSLayer', {
                 STYLE: (styleName !== '') ? styleName: null,
                 STYLES: null,
                 SRS: null,
-                FORMAT: null
+                FORMAT: null,
+                TIME: null
             });
         }
+        var params = Ext.apply({}, this.baseParams);
+        if (layer.params._OLSALT) {
+            // update legend after a forced layer redraw
+            params._OLSALT = layer.params._OLSALT;
+        }
+        url = Ext.urlAppend(url, Ext.urlEncode(params));
         if (url.toLowerCase().indexOf("request=getlegendgraphic") != -1) {
             if (url.toLowerCase().indexOf("format=") == -1) {
-                url = Ext.urlAppend(url, "FORMAT=image/gif");
+                url = Ext.urlAppend(url, "FORMAT=image%2Fgif");
             }
             // add scale parameter - also if we have the url from the record's
             // styles data field and it is actually a GetLegendGraphic request.
@@ -140,19 +132,13 @@ Ext.define('GeoExt.legend.WMSLayer', {
                 url = Ext.urlAppend(url, "SCALE=" + scale);
             }
         }
-        var params = Ext.apply({}, this.baseParams);
-        if (layer.params._OLSALT) {
-            // update legend after a forced layer redraw
-            params._OLSALT = layer.params._OLSALT;
-        }
-        url = Ext.urlAppend(url, Ext.urlEncode(params));
-        
         return url;
     },
 
-    /** private: method[update]
-     *  Update the legend, adding, removing or updating
-     *  the per-sublayer box component.
+    /** 
+     * Update the legend, adding, removing or updating
+     * the per-sublayer box component.
+     * @private
      */
     update: function() {
         var layer = this.layerRecord.getLayer();
@@ -162,7 +148,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
         if(!(layer && layer.map)) {
             return;
         }
-        this.callParent(arguments);
+        this.callParent();
         
         var layerNames, layerName, i, len;
 
@@ -203,17 +189,14 @@ Ext.define('GeoExt.legend.WMSLayer', {
         this.doLayout();
     },
 
-    /** private: method[beforeDestroy]
-     */
     beforeDestroy: function() {
         if (this.useScaleParameter === true) {
             var layer = this.layerRecord.getLayer();
             layer && layer.events &&
             layer.events.unregister("moveend", this, this.onLayerMoveend);
         }
-        this.callParent(arguments);
+        this.callParent();
     }
 });
 
-// TODO:
 GeoExt.legend.Layer.types["gx_wmslegend"] = GeoExt.legend.WMSLayer;

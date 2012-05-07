@@ -5,76 +5,79 @@
  * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
  * of the license.
  */
-/** api: (define)
- *  module = GeoExt
- *  class = Action
- *  base_link = `Ext.Action <http://dev.sencha.com/deploy/dev/docs/?class=Ext.Action>`_
- */
-/** api: example
+/**
+ *
  *  Sample code to create a toolbar with an OpenLayers control into it.
+ *  Base class is [Ext.Action](http://dev.sencha.com/deploy/dev/docs/?class=Ext.Action)
  *
- *  .. code-block:: javascript
- *
+ *      @example
  *      var action = new GeoExt.Action({
  *          text: "max extent",
  *          control: new OpenLayers.Control.ZoomToMaxExtent(),
  *          map: map
  *      });
  *      var toolbar = new Ext.Toolbar([action]);
- */
-/** api: constructor
- *  .. class:: Action(config)
  *
- *      Create a GeoExt.Action instance. A GeoExt.Action is created
- *      to insert an OpenLayers control in a toolbar as a button or
- *      in a menu as a menu item. A GeoExt.Action instance can be
- *      used like a regular Ext.Action, look at the Ext.Action API
- *      doc for more detail.
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
 	alias : 'widget.gx_action',
     config: {
     
-        /** api: config[control]
-         *  ``OpenLayers.Control`` The OpenLayers control wrapped in this action.
+        /**
+         * @cfg {OpenLayers.Control}
+         * The OpenLayers control wrapped in this action.
          */
         control: null,
         
-        /** api: config[map]
-         *  ``OpenLayers.Map`` The OpenLayers map that the control should be added
+        /**
+         * @cfg {OpenLayers.Map}
+         *  The OpenLayers map that the control should be added
          *  to.  For controls that don't need to be added to a map or have already
          *  been added to one, this config property may be omitted.
          */
         map: null,
         
-        /** private: property[uScope]
-         *  ``Object`` The user-provided scope, used when calling uHandler,
+        /**
+         * @private
+         * @cfg {Object}
+         *  The user-provided scope, used when calling uHandler,
          *  uToggleHandler, and uCheckHandler.
          */
         uScope: null,
         
-        /** private: property[uHandler]
-         *  ``Function`` References the function the user passes through
+        /**
+         * @private
+         * @cfg {Function}
+         *  References the function the user passes through
          *  the "handler" property.
          */
         uHandler: null,
         
-        /** private: property[uToggleHandler]
-         *  ``Function`` References the function the user passes through
+        /**
+         * @private
+         * @cfg {Function}
+         *  References the function the user passes through
          *  the "toggleHandler" property.
          */
         uToggleHandler: null,
         
-        /** private: property[uCheckHandler]
-         *  ``Function`` References the function the user passes through
+        /**
+         * @private
+         * @cfg {Function}
+         *  References the function the user passes through
          *  the "checkHandler" property.
          */
         uCheckHandler: null
     
     },
     
-    /** private */
+    /** 
+     * Create a GeoExt.Action instance. A GeoExt.Action is created to insert
+     * an OpenLayers control in a toolbar as a button or in a menu as a menu
+     * item. A GeoExt.Action instance can be used like a regular Ext.Action,
+     * look at the Ext.Action API doc for more detail.
+     */
     constructor: function(config){
         // store the user scope and handlers
         this.uScope = config.scope;
@@ -113,8 +116,9 @@ Ext.define('GeoExt.Action', {
 		this.callParent(arguments);
     },
     
-    /** private: method[pHandler]
-     *  :param cmp: ``Ext.Component`` The component that triggers the handler.
+    /**
+     * @private
+     * @param {Ext.Component} The component that triggers the handler.
      *
      *  The private handler.
      */
@@ -129,9 +133,10 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[pTogleHandler]
-     *  :param cmp: ``Ext.Component`` The component that triggers the toggle handler.
-     *  :param state: ``Boolean`` The state of the toggle.
+    /**
+     * @private
+     * @param {Ext.Component} cmp The component that triggers the toggle handler.
+     * @param {Boolean} state The state of the toggle.
      *
      *  The private toggle handler.
      */
@@ -142,9 +147,10 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[pCheckHandler]
-     *  :param cmp: ``Ext.Component`` The component that triggers the check handler.
-     *  :param state: ``Boolean`` The state of the toggle.
+    /**
+     * @private
+     * @param {Ext.Component} cmp The component that triggers the check handler.
+     * @param {Boolean} state The state of the toggle.
      *
      *  The private check handler.
      */
@@ -155,8 +161,9 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[changeControlState]
-     *  :param state: ``Boolean`` The state of the toggle.
+    /**
+     * @private
+     * @param {Boolean} state The state of the toggle.
      *
      *  Change the control state depending on the state boolean.
      */
@@ -177,7 +184,8 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[onCtrlActivate]
+    /**
+     * @private
      *
      *  Called when this action's control is activated.
      */
@@ -194,7 +202,8 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[onCtrlDeactivate]
+    /**
+     * @private
      *
      *  Called when this action's control is deactivated.
      */
@@ -211,7 +220,8 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /** private: method[safeCallEach]
+    /**
+     * @private
      *
      */
     safeCallEach: function(fnName, args){
