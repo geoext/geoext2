@@ -1,7 +1,12 @@
-Ext.require('Ext.container.Viewport');
-Ext.require('Ext.window.MessageBox');
+Ext.Loader.setConfig({
+    enabled: true,
+    disableCaching: false,
+    paths: {
+        GeoExt: "../../src/GeoExt"
+    }
+});
 
-
+Ext.require(['Ext.container.Viewport','Ext.window.MessageBox','GeoExt.panel.Map']);
 
 Ext.application({
     name: 'HelloGeoExt2',
@@ -22,9 +27,9 @@ Ext.application({
         mappanel = Ext.create('GeoExt.panel.Map', {
             title: 'The GeoExt.panel.Map-class'
             ,map: map
-//            ,center: '12.3046875,51.48193359375'
-//            ,zoom: 6
-            ,extent: '12.87,52.35,13.96,52.66' 
+            ,center: '12.3046875,51.48193359375'
+            ,zoom: 6
+//            ,extent: '12.87,52.35,13.96,52.66' 
             ,dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',

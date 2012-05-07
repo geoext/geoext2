@@ -3,9 +3,7 @@
  */
 Ext.define('GeoExt.panel.Map', {
     extend : 'Ext.panel.Panel',
-    requires : [
-    //    'GeoExt.data.LayerStore'
-    ],
+    requires : ['GeoExt.data.LayerStore'],
     alias : 'widget.gx_mappanel',
     alternateClassName : 'GeoExt.MapPanel',
     
@@ -54,7 +52,7 @@ Ext.define('GeoExt.panel.Map', {
          */
         
         /**
-         * @property {GeoExt.data.store.layer} layers
+         * @property {GeoExt.data.layerStore} layers
          * A store containing gx_layer-model instances.
          */
         layers: null,
@@ -117,7 +115,7 @@ Ext.define('GeoExt.panel.Map', {
         }
 
         // create a layerstore with the current maps layers
-        me.layers = Ext.create('GeoExt.data.store.Layer', {
+        me.layers = Ext.create('GeoExt.data.LayerStore', {
             data: me.map.layers
         });
         

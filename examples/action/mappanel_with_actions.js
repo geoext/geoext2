@@ -49,7 +49,7 @@ Ext.application({
             tooltip: "zoom to max extent"
         });
         actions["max_extent"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // Navigation control and DrawFeature controls
@@ -68,7 +68,7 @@ Ext.application({
             checked: true
         });
         actions["nav"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         
         action = new GeoExt.Action({
             text: "draw poly",
@@ -82,7 +82,7 @@ Ext.application({
             group: "draw"
         });
         actions["draw_poly"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         
         action = new GeoExt.Action({
             text: "draw line",
@@ -96,7 +96,7 @@ Ext.application({
             group: "draw"
         });
         actions["draw_line"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // SelectFeature control, a "toggle" control
@@ -112,7 +112,7 @@ Ext.application({
             tooltip: "select feature"
         });
         actions["select"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
         
         // Navigation history - two "button" controls
@@ -126,7 +126,7 @@ Ext.application({
             tooltip: "previous in history"
         });
         actions["previous"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         
         action = new GeoExt.Action({
             text: "next",
@@ -135,21 +135,29 @@ Ext.application({
             tooltip: "next in history"
         });
         actions["next"] = action;
-        toolbarItems.push(action);
+        toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("->");
         
         // Reuse the GeoExt.Action objects created above
         // as menu items
         toolbarItems.push({
             text: "menu",
-            menu: new Ext.menu.Menu({
-                items: [                // ZoomToMaxExtent
-                actions["max_extent"],                // Nav
-                new Ext.menu.CheckItem(actions["nav"]),                // Draw poly
-                new Ext.menu.CheckItem(actions["draw_poly"]),                // Draw line
-                new Ext.menu.CheckItem(actions["draw_line"]),                // Select control
-                new Ext.menu.CheckItem(actions["select"]),                // Navigation history control
-                actions["previous"], actions["next"]]
+            menu: Ext.create('Ext.menu.Menu', {
+                items: [
+                    // ZoomToMaxExtent
+                    Ext.create('Ext.button.Button', actions["max_extent"]),
+                    // Nav
+                    Ext.create('Ext.menu.CheckItem', actions["nav"]),
+                    // Draw poly
+                    Ext.create('Ext.menu.CheckItem', actions["draw_poly"]),
+                    // Draw line
+                    Ext.create('Ext.menu.CheckItem', actions["draw_line"]),
+                    // Select control
+                    Ext.create('Ext.menu.CheckItem', actions["select"]),
+                    // Navigation history control
+                    Ext.create('Ext.button.Button', actions["previous"]), 
+                    Ext.create('Ext.button.Button', actions["next"])
+                ]
             })
         });
         

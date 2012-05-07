@@ -1,11 +1,11 @@
 /**
- * @requires GeoExt/data/model/Layer.js
+ * @requires GeoExt/data/LayerModel.js
  */
 
-Ext.define('GeoExt.data.store.Layer', {
-    require: ['GeoExt.data.model.Layer'],
+Ext.define('GeoExt.data.LayerStore', {
+    require: ['GeoExt.data.LayerModel'],
     extend: 'Ext.data.Store',
-    model: 'GeoExt.data.model.Layer',
+    model: 'GeoExt.data.LayerModel',
     proxy: {
         type: 'memory',
         reader: {
