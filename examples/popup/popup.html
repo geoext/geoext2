@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>GeoExt Popup Example</title>
+
+            <link rel="stylesheet" type="text/css" href="../../../ext-4.0.2a/resources/css/ext-all.css">
+    <script type="text/javascript" src="../../../ext-4.0.2a/ext-all-debug-w-comments.js"></script>
+    
+    <!-- You should definitely consider using a custom single-file version of OpenLayers -->
+    <script type="text/javascript" src="../../../OpenLayers/trunk/lib/OpenLayers.js"></script>
+    
+    <script type="text/javascript" src="../../src/GeoExt.js"></script>
+    <script type="text/javascript" src="../../src/data/models/Layer.js"></script>
+    <script type="text/javascript" src="../../src/data/store/Layer.js"></script>
+    <script type="text/javascript" src="../../src/panel/Map.js"></script>
+    <script type="text/javascript" src="../../src/window/Popup.js"></script>
+        
+        <script type="text/javascript" src="popup.js"></script>
+    
+        <style type="text/css">
+            div#map {
+               width: 650px;
+               height: 400px;
+               position: relative;
+            }
+            .gx-popup-anc {
+                width: 5px;
+                height: 10px;
+                border: 1px solid red;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <h1>Popup Example</h1>
+        <p>Click on the point in the map panel to open a popup.
+        The js is not minified so it is readable. See <a href="popup.js">popup.js</a>.</p>
+        <div id="container"></div>
+    </body>
+</html>
