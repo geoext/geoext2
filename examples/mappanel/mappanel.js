@@ -10,26 +10,14 @@ Ext.application({
             expires: new Date(new Date().getTime()+(1000*60*60*24*7)) //7 days from now
         }));
         var map = new OpenLayers.Map({});
-        var ol_wms = new OpenLayers.Layer.WMS(
-            "terrestris OWS", 
-            "http://intranet.terrestris.de:8010/cgi-bin/qgis_mapserv", 
-            {
-                layers: [
-                    'Shaded_Relief',
-                    'Populated_Places',
-                    'Level_1_Admin_Boundaries',
-                    'Urban_Areas',
-                    'Marine_Geography',
-                    'Centerlines_Rivers_Lake'
-                ],
-                map: '/var/data/geodata/world/projects/natural_earth.qgs'
-            },
-            {
-                attribution: '&copy; <a href="http://terrestris.de/">terrestris</a> freier OWS-Dienst, Datasource <a href="http://www.naturalearthdata.com/">Natural Earth</a> (<acronym title="Public Domain">PD</acronym>)'
-            }
+        
+        var wms = new OpenLayers.Layer.WMS(
+            "OpenLayers WMS",
+            "http://vmap0.tiles.osgeo.org/wms/vmap0?",
+            {layers: 'basic'}
         );
         
-        map.addLayers([ol_wms]);
+        map.addLayers([wms]);
         
         var mappanel = Ext.create('GeoExt.panel.Map', {
             title: 'The GeoExt.panel.Map-class'
@@ -37,9 +25,9 @@ Ext.application({
 //            ,layers: [ol_wms.clone()]
             ,stateful: true
             ,stateId: 'mappanel'
-            ,mapCenter: '2.648274,39.567489'
-            ,mapZoom: 7
-            //,mapExtent: '7,51,8,52'
+            //,mapCenter: '12.3046875,51.48193359375'
+            //,mapZoom: 8
+            ,mapExtent: '7,51,8,52'
             ,dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
