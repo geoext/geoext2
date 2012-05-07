@@ -1,5 +1,6 @@
 Ext.define('GeoExt.panel.Legend', {
     extend : 'Ext.panel.Panel',
+    requires: ['GeoExt.legend.Layer'],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
     config: {
