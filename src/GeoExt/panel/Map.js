@@ -17,6 +17,27 @@ Ext.define('GeoExt.panel.Map', {
                 : null);
         }
     },
+    /** @cfg {OpenLayers.LonLat/Number[]/String} center
+     * A location for the initial map center.  If an array is provided, the
+     * first two items should represent x & y coordinates. If a string is
+     * provided, it should consist of a x & y coordinate seperated by a 
+     * comma.
+     */
+    center: null,
+    
+    /**
+     * @cfg {Number} zoom
+     * An initial zoom level for the map.
+     */
+    zoom: null,
+    
+    /**
+     * @cfg {OpenLayers.Bounds/Number[]} extent
+     * An initial extent for the map (used if center and zoom are not
+     * provided.  If an array, the first four items should be minx, miny,
+     * maxx, maxy.
+     */
+    extent: null,
     
     config: {
         /**
@@ -37,28 +58,6 @@ Ext.define('GeoExt.panel.Map', {
          * A store containing gx_layer-model instances.
          */
         layers: null,
-        
-        /** @cfg {OpenLayers.LonLat/Number[]/String} center
-         * A location for the initial map center.  If an array is provided, the
-         * first two items should represent x & y coordinates. If a string is
-         * provided, it should consist of a x & y coordinate seperated by a 
-         * comma.
-         */
-        center: null,
-        
-        /**
-         * @cfg {Number} zoom
-         * An initial zoom level for the map.
-         */
-        zoom: null,
-        
-        /**
-         * @cfg {OpenLayers.Bounds/Number[]} extent
-         * An initial extent for the map (used if center and zoom are not
-         * provided.  If an array, the first four items should be minx, miny,
-         * maxx, maxy.
-         */
-        extent: null,
         
         /** 
          * @cfg {Boolean} prettyStateKeys
