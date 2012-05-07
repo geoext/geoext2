@@ -9,7 +9,7 @@
  */
 Ext.define('GeoExt.data.model.Layer', {
     extend: 'Ext.data.Model',
-    alias: ['model.gx_layer'],
+    alias: ['gx_layer'],
     fields: [
         {name: 'title', mapping: 'name'},
         {name: 'name', mapping: 'metadata.name'},
