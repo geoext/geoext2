@@ -15,6 +15,27 @@ Ext.define('GeoExt.panel.Map', {
                 : null);
         }
     },
+    /** @cfg {OpenLayers.LonLat/Number[]/String} center
+     * A location for the initial map center.  If an array is provided, the
+     * first two items should represent x & y coordinates. If a string is
+     * provided, it should consist of a x & y coordinate seperated by a 
+     * comma.
+     */
+    center: null,
+    
+    /**
+     * @cfg {Number} zoom
+     * An initial zoom level for the map.
+     */
+    zoom: null,
+    
+    /**
+     * @cfg {OpenLayers.Bounds/Number[]} extent
+     * An initial extent for the map (used if center and zoom are not
+     * provided.  If an array, the first four items should be minx, miny,
+     * maxx, maxy.
+     */
+    extent: null,
     
     config: {
         /**
@@ -35,28 +56,6 @@ Ext.define('GeoExt.panel.Map', {
          * A store containing gx_layer-model instances.
          */
         layers: null,
-        
-        /** @cfg {OpenLayers.LonLat/Number[]/String} mapCenter
-         * A location for the initial map center.  If an array is provided, the
-         * first two items should represent x & y coordinates. If a string is
-         * provided, it should consist of a x & y coordinate seperated by a 
-         * comma.
-         */
-        mapCenter: null,
-        
-        /**
-         * @cfg {Number} mapZoom
-         * An initial zoom level for the map.
-         */
-        mapZoom: null,
-        
-        /**
-         * @cfg {OpenLayers.Bounds/Number[]} mapExtent
-         * An initial extent for the map (used if center and zoom are not
-         * provided.  If an array, the first four items should be minx, miny,
-         * maxx, maxy.
-         */
-        mapExtent: null,
         
         /** 
          * @cfg {Boolean} prettyStateKeys
@@ -130,19 +129,19 @@ Ext.define('GeoExt.panel.Map', {
         }
         
         // check config-property center
-        if ( Ext.isString(me.mapCenter) ) {
-            me.mapCenter = OpenLayers.LonLat.fromString(me.mapCenter);
-        } else if(Ext.isArray(me.mapCenter)) {
+        if ( Ext.isString(me.center) ) {
+            me.center = OpenLayers.LonLat.fromString(me.center);
+        } else if(Ext.isArray(me.center)) {
             // see: http://trac.osgeo.org/openlayers/ticket/3433
             // me.center = OpenLayers.LonLat.fromArray(me.center);
-            me.mapCenter = new OpenLayers.LonLat(me.mapCenter[0], me.mapCenter[1]); 
+            me.center = new OpenLayers.LonLat(me.center[0], me.center[1]); 
         } 
         
         // check config-property bounds
-        if ( Ext.isString(me.mapExtent) ) {
-            me.mapExtent = OpenLayers.Bounds.fromString(me.mapExtent);
-        } else if(Ext.isArray(me.mapExtent)) {
-            me.mapExtent = OpenLayers.Bounds.fromArray(me.mapExtent);
+        if ( Ext.isString(me.extent) ) {
+            me.extent = OpenLayers.Bounds.fromString(me.extent);
+        } else if(Ext.isArray(me.extent)) {
+            me.extent = OpenLayers.Bounds.fromArray(me.extent);
         }
         
         me.callParent(arguments);
@@ -240,12 +239,12 @@ Ext.define('GeoExt.panel.Map', {
             map = me.getMap();
         // Adjust the geographic position according to the passed config-options 
         if (!map.getCenter()) {
-            if (me.getMapCenter() || me.getMapZoom() ) {
+            if (me.center || me.zoom ) {
                 // center and/or zoom?
-                map.setCenter(me.getMapCenter(), me.getMapZoom());
-            } else if (me.getMapExtent() instanceof OpenLayers.Bounds) {
+                map.setCenter(me.center, me.zoom);
+            } else if (me.extent instanceof OpenLayers.Bounds) {
                 // extent
-                map.zoomToExtent(me.getMapExtent(), true);
+                map.zoomToExtent(me.extent, true);
             }else { 
                 map.zoomToMaxExtent();
             }    
@@ -372,8 +371,8 @@ Ext.define('GeoExt.panel.Map', {
         // if we get strings for state.x, state.y or state.zoom
         // OpenLayers will take care of converting them to the
         // appropriate types so we don't bother with that
-        me.mapCenter = new OpenLayers.LonLat(state.x, state.y);
-        me.mapZoom = state.zoom;
+        me.center = new OpenLayers.LonLat(state.x, state.y);
+        me.zoom = state.zoom;
         
         // TODO refactor with me.layers.each
         // set layer visibility and opacity
