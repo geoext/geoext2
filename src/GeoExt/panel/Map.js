@@ -288,8 +288,8 @@ Ext.define('GeoExt.panel.Map', {
      * @private
      * The "moveend" listener bound to the {@link map}.
      */
-    onMoveend: function() {
-        this.fireEvent("aftermapmove");
+    onMoveend: function(e) {
+        this.fireEvent("aftermapmove", this, this.getMap(), e);
     },
 
     /**
@@ -298,16 +298,17 @@ Ext.define('GeoExt.panel.Map', {
      * The "changelayer" listener bound to the {@link map}.
      */
     onChangelayer: function(e) {
-        var me = this;
-        if(e.property) {
-            if(e.property === "visibility") {
-                me.fireEvent("afterlayervisibilitychange");
-            } else if(e.property === "order") {
-                me.fireEvent("afterlayerorderchange");
-            } else if(e.property === "name") {
-                me.fireEvent("afterlayernamechange");
-            } else if(e.property === "opacity") {
-                me.fireEvent("afterlayeropacitychange");
+        var me = this,
+            map = me.getMap();
+        if (e.property) {
+            if (e.property === "visibility") {
+                me.fireEvent("afterlayervisibilitychange", this, map, e);
+            } else if (e.property === "order") {
+                me.fireEvent("afterlayerorderchange", this, map, e);
+            } else if (e.property === "name") {
+                me.fireEvent("afterlayernamechange", this, map, e);
+            } else if (e.property === "opacity") {
+                me.fireEvent("afterlayeropacitychange", this, map, e);
             }
         }
     },
@@ -316,18 +317,18 @@ Ext.define('GeoExt.panel.Map', {
      * @private
      * The "addlayer" listener bound to the {@link map}.
      */
-    onAddlayer: function() {
+    onAddlayer: function(e) {
         this.layers.load();
-        this.fireEvent("afterlayeradd");
+        this.fireEvent("afterlayeradd", this, this.getMap(), e);
     },
 
     /**
      * @private
      * The "removelayer" listener bound to the {@link map}.
      */
-    onRemovelayer: function() {
+    onRemovelayer: function(e) {
         this.layers.load();
-        this.fireEvent("afterlayerremove");
+        this.fireEvent("afterlayerremove", this, this.getMap(), e);
     },
     
     getState: function() {
