@@ -31,7 +31,7 @@ Ext.define('GeoExt.legend.Layer', {
                     }
                 } else {
                     // preferred, but not supported
-                    types.remove(type);
+                    Ext.Array.remove(types, type);
                 }
             }
             scoredTypes.sort(function(a, b) {
