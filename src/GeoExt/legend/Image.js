@@ -21,7 +21,14 @@ Ext.define('GeoExt.legend.Image', {
          * @cfg {String} imgCls
          * Optional css class to apply to img tag
          */
-        imgCls: null
+        imgCls: null,
+
+        /**
+         * @cfg {String}
+         * CSS class applied to img tag when no image is available or
+         * the default image was loaded.
+         */
+        noImgCls: "gx-legend-noimage"
     },
 
     initComponent: function(){
@@ -32,7 +39,7 @@ Ext.define('GeoExt.legend.Image', {
         }
         this.autoEl = {
             tag: "img",
-            "class": (this.imgCls ? this.imgCls : ""),
+            "class": (this.imgCls ? this.imgCls + " " + this.noImgCls : this.noImgCls),
             src: this.defaultImgSrc
         };
     },
@@ -45,6 +52,8 @@ Ext.define('GeoExt.legend.Image', {
         this.url = url;
         var el = this.getEl();
         if (el) {
+            el.un("load", this.onImageLoad, this);
+            el.on("load", this.onImageLoad, this, {single: true});
             el.un("error", this.onImageLoadError, this);
             el.on("error", this.onImageLoadError, this, {
                 single: true
@@ -72,6 +81,7 @@ Ext.define('GeoExt.legend.Image', {
     onDestroy: function() {
         var el = this.getEl();
         if(el) {
+            el.un("load", this.onImageLoad, this);
             el.un("error", this.onImageLoadError, this);
         }
         this.callParent();
@@ -82,6 +92,20 @@ Ext.define('GeoExt.legend.Image', {
      * @private
      */
     onImageLoadError: function() {
-        this.getEl().dom.src = this.defaultImgSrc;
+        var el = this.getEl();
+        el.addClass(this.noImgCls);
+        el.dom.src = this.defaultImgSrc;
+    },
+
+    /**
+     * Private method called after the legend image finished loading.
+     * @private
+     */
+    onImageLoad: function() {
+        var el = this.getEl();
+        if (!OpenLayers.Util.isEquivalentUrl(el.dom.src, this.defaultImgSrc)) {
+            el.removeClass(this.noImgCls);
+        }
     }
+
 });

@@ -1,3 +1,6 @@
+/**
+ * @class GeoExt.panel.Map
+ */
 Ext.define('GeoExt.panel.Map', {
     extend : 'Ext.panel.Panel',
     requires : [
@@ -16,62 +19,62 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     config: {
-        /** api: config[map]
-         * 
-         * ``OpenLayers.Map or Object``  A configured map or a configuration 
-         * object for the map constructor.  A configured map will be available
-         * after construction through the :attr:`map` property.
+        /**
+         * @cfg {OpenLayers.Map/Object} map
+         * A configured map or a configuration object for the map constructor.
+         * A configured map will be available after construction through the
+         * {@link #map} property.
          */
         map: null,
         
-        /** api: config[layers]
-         * 
-         *  ``Array(OpenLayers.Layer)``
-         *  The layers provided here will be added to this MapPanel's map.
+        /**
+         * @cfg {OpenLayers.Layer[]}
+         * The layers provided here will be added to this MapPanel's map.
          */
         
-        /** api: property[layers]
-         * 
-         *  :class:`GeoExt.data.store.Layer`  A store containing gx_layer-model 
-         *  instances.
+        /**
+         * @property {GeoExt.data.store.layer} layers
+         * A store containing gx_layer-model instances.
          */
         layers: null,
         
-        /** api: config[mapCenter]
-         * 
-         * ``OpenLayers.LonLat, Array(Number) or String``  A location for the 
-         * initial map center.  If an array is provided, the first two items 
-         * should represent x & y coordinates. If a string is provided, it 
-         * should consist of a x & y coordinate seperated by a comma.
+        /** @cfg {OpenLayers.LonLat/Number[]/String} mapCenter
+         * A location for the initial map center.  If an array is provided, the
+         * first two items should represent x & y coordinates. If a string is
+         * provided, it should consist of a x & y coordinate seperated by a 
+         * comma.
          */
         mapCenter: null,
         
-        /** api: config[mapZoom]
-         * 
-         * ``Number``  An initial zoom level for the map.
+        /**
+         * @cfg {Number} mapZoom
+         * An initial zoom level for the map.
          */
         mapZoom: null,
         
-        /** api: config[mapExtent]
-         * 
-         * ``OpenLayers.Bounds or Array(Number)``  An initial extent for the map 
-         * (used if center and zoom are not provided.  If an array, the first 
-         * four items should be minx, miny, maxx, maxy.
+        /**
+         * @cfg {OpenLayers.Bounds/Number[]} mapExtent
+         * An initial extent for the map (used if center and zoom are not
+         * provided.  If an array, the first four items should be minx, miny,
+         * maxx, maxy.
          */
         mapExtent: null,
         
-        /** api: config[prettyStateKeys]
-         *  ``Boolean`` Set this to true if you want pretty strings in the MapPanel's
-         *  state keys. More specifically, layer.name instead of layer.id will be used
-         *  in the state keys if this option is set to true. But in that case you have
-         *  to make sure you don't have two layers with the same name. Defaults to 
-         *  false.
+        /** 
+         * @cfg {Boolean} prettyStateKeys
+         * Set this to true if you want pretty strings in the MapPanel's state
+         * keys. More specifically, layer.name instead of layer.id will be used
+         * in the state keys if this option is set to true. But in that case
+         * you have to make sure you don't have two layers with the same name.
+         * Defaults to false.
          */
         prettyStateKeys: false
     },
     
-    /** private: property[stateEvents]
-     *  ``Array(String)`` Array of state events
+    /**
+     * @property {String[]} stateEvents
+     * @private
+     * Array of state events
      */
     stateEvents: ["aftermapmove",
                   "afterlayervisibilitychange",
@@ -147,45 +150,52 @@ Ext.define('GeoExt.panel.Map', {
         me.callParent(arguments);
         
         me.addEvents(
-            /** private: event[aftermapmove]
-             * 
-             *  Fires after the map is moved.
+            /**
+             * @name aftermapmove
+             * @event
+             * Fires after the map is moved.
              */
             "aftermapmove",
 
-            /** private: event[afterlayervisibilitychange]
-             * 
-             *  Fires after a layer changed visibility.
+            /**
+             * @name aftervisibilitychange
+             * @event
+             * Fires after a layer changed visibility.
              */
             "afterlayervisibilitychange",
 
-            /** private: event[afterlayeropacitychange]
-             * 
-             *  Fires after a layer changed opacity.
+            /**
+             * @name afterlayeropacitychange
+             * @event
+             * Fires after a layer changed opacity.
              */
             "afterlayeropacitychange",
 
-            /** private: event[afterlayerorderchange]
-             * 
-             *  Fires after a layer order changed.
+            /**
+             * @name afterlayerorderchange
+             * @event
+             * Fires after a layer order changed.
              */
             "afterlayerorderchange",
 
-            /** private: event[afterlayernamechange]
-             * 
-             *  Fires after a layer name changed.
+            /**
+             * @name afterlayernamechange
+             * @event
+             * Fires after a layer name changed.
              */
             "afterlayernamechange",
 
-            /** private: event[afterlayeradd]
-             * 
-             *  Fires after a layer added to the map.
+            /**
+             * @name afterlayeradd
+             * @event
+             * Fires after a layer added to the map.
              */
             "afterlayeradd",
 
-            /** private: event[afterlayerremove]
-             * 
-             *  Fires after a layer removed from the map.
+            /**
+             * @name afterlayerremove
+             * @event
+             * Fires after a layer removed from the map.
              */
             "afterlayerremove"
         );
@@ -201,8 +211,8 @@ Ext.define('GeoExt.panel.Map', {
         
     },
     
-    /** private: method[getDefaultControls]
-     * 
+    /**
+     * @private
      */
     getDefaultControls: function() {
         var olc = OpenLayers.Control;
@@ -274,50 +284,51 @@ Ext.define('GeoExt.panel.Map', {
         
     },
     
-    /** private: method[onMoveend]
-     *
-     *  The "moveend" listener bound to the :attr:`map`.
+    /**
+     * @private
+     * The "moveend" listener bound to the {@link map}.
      */
-    onMoveend: function() {
-        this.fireEvent("aftermapmove");
+    onMoveend: function(e) {
+        this.fireEvent("aftermapmove", this, this.getMap(), e);
     },
 
-    /** private: method[onChangelayer]
-     *  :param e: ``Object``
-     *
-     *  The "changelayer" listener bound to the :attr:`map`.
+    /**
+     * @private
+     * @param {Object} e
+     * The "changelayer" listener bound to the {@link map}.
      */
     onChangelayer: function(e) {
-        var me = this;
-        if(e.property) {
-            if(e.property === "visibility") {
-                me.fireEvent("afterlayervisibilitychange");
-            } else if(e.property === "order") {
-                me.fireEvent("afterlayerorderchange");
-            } else if(e.property === "name") {
-                me.fireEvent("afterlayernamechange");
-            } else if(e.property === "opacity") {
-                me.fireEvent("afterlayeropacitychange");
+        var me = this,
+            map = me.getMap();
+        if (e.property) {
+            if (e.property === "visibility") {
+                me.fireEvent("afterlayervisibilitychange", this, map, e);
+            } else if (e.property === "order") {
+                me.fireEvent("afterlayerorderchange", this, map, e);
+            } else if (e.property === "name") {
+                me.fireEvent("afterlayernamechange", this, map, e);
+            } else if (e.property === "opacity") {
+                me.fireEvent("afterlayeropacitychange", this, map, e);
             }
         }
     },
 
-    /** private: method[onAddlayer]
-     * 
-     *  The "addlayer" listener bound to the :attr:`map`.
+    /**
+     * @private
+     * The "addlayer" listener bound to the {@link map}.
      */
-    onAddlayer: function() {
+    onAddlayer: function(e) {
         this.layers.load();
-        this.fireEvent("afterlayeradd");
+        this.fireEvent("afterlayeradd", this, this.getMap(), e);
     },
 
-    /** private: method[onRemovelayer]
-     * 
-     *  The "removelayer" listener bound to the :attr:`map`.
+    /**
+     * @private
+     * The "removelayer" listener bound to the {@link map}.
      */
-    onRemovelayer: function() {
+    onRemovelayer: function(e) {
         this.layers.load();
-        this.fireEvent("afterlayerremove");
+        this.fireEvent("afterlayerremove", this, this.getMap(), e);
     },
     
     getState: function() {
@@ -359,10 +370,10 @@ Ext.define('GeoExt.panel.Map', {
         return state;  
     },
     
-    /** private: method[applyState]
-     *  :param state: ``Object`` The state to apply.
-     *
-     *  Apply the state provided as an argument.
+    /**
+     * @private
+     * @param {Object} state The state to apply.
+     * Apply the state provided as an argument.
      */
     applyState: function(state) {
         var me = this;
@@ -400,8 +411,9 @@ Ext.define('GeoExt.panel.Map', {
     },
 
     
-    /** private: method[beforeDestroy]
-     *  Private method called during the destroy sequence.
+    /**
+     * @private
+     * Private method called during the destroy sequence.
      */
     beforeDestroy: function() {
         me = this;
