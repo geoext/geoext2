@@ -8,7 +8,7 @@
  * layer store holding {@link GeoExt.data.LayerModel} instances.
  */
 Ext.define('GeoExt.data.LayerStore', {
-    require: ['GeoExt.data.LayerModel'],
+    requires: ['GeoExt.data.LayerModel'],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.LayerModel',
     
