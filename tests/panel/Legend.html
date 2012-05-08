@@ -11,6 +11,7 @@
             disableCaching: false,
             enabled: true,
             paths: {
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
@@ -174,7 +175,7 @@
         function test_unsupported(t) {
             
             t.plan(1);
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
                 renderTo: "mappanel",
                 height: 400,
@@ -260,7 +261,7 @@
             layer = new OpenLayers.Layer.WMS("test2", '/ows', {layers: 'b'}, {isBaseLayer: false});
             map.addLayer(layer);
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 map: map,
                 id: "map-panel",
                 title: "GeoExt MapPanel",
