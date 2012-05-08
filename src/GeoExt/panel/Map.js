@@ -244,6 +244,17 @@ Ext.define('GeoExt.panel.Map', {
          * Fires after a layer removed from the map.
          */
         
+        //TODO This should be handled by a LayoutManager
+        this.on("afterlayout", function() {
+            //TODO remove function check when we require OpenLayers > 2.11
+            if (typeof this.map.getViewport === "function") {
+                this.items.each(function(cmp) {
+                    if (typeof cmp.addToMapPanel === "function") {
+                        cmp.getEl().appendTo(this.map.getViewport());
+                    }
+                }, this);
+            }
+        }, this);
     },
     
     /**
@@ -394,6 +405,19 @@ Ext.define('GeoExt.panel.Map', {
         this.layers.load();
         this.fireEvent("afterlayerremove", this, this.map, e);
     },
+    
+    /**
+     * @private
+     * Check if an added item has to take separate actions
+     * to be added to the map.
+     * See e.g. the {@link GeoExt.slider.Zoom}
+     */
+    onBeforeAdd: function(item) {
+    	if(Ext.isFunction(item.addToMapPanel)) {
+    		item.addToMapPanel(this);
+    	}
+		this.callParent(arguments)
+	},
     
     /**
      * @private
