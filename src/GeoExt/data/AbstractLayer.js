@@ -5,8 +5,7 @@ Ext.define('GeoExt.data.AbstractLayer',{
                 {name: 'zIndex',      type: 'int'},
                 {name: 'isBaseLayer', type: 'bool'},
                 {name: 'visibility',  type: 'bool'},
-                {name: 'attribution', type: 'string'},
-                'params'
+                {name: 'attribution', type: 'string'}
             ],
     /**
      * Returns the {OpenLayers.Layer} layer object used in this model instance
@@ -52,7 +51,7 @@ Ext.define('GeoExt.data.AbstractLayer',{
     
     //inherit docs
     get: function(field){
-        var nativeFunc = this.findNativeAccessor('get',field);
+        var nativeFunc = this.findNativeAccessor('get',field.name || field);
         if(nativeFunc){
             nativeFunc(this.data.field);
         } else {
@@ -65,7 +64,8 @@ Ext.define('GeoExt.data.AbstractLayer',{
      * @private
      */
     findNativeAccessor: function(operation,property){
-        var nativeProp = this.fields.get(property) || property;
+        var layer = this.raw;
+        var nativeProp = (this.fields.get(property) && this.fields.get(property).mapping) || property;
         var nativeFunc = layer[operation+nativeProp[0].toUpperCase()+nativeProp.slice(1)];
         return nativeFunc | null;
     }
