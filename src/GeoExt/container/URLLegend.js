@@ -1,9 +1,9 @@
 /**
- * @class GeoExt.legend.URL
+ * @class GeoExt.container.URLLegend
  */
-Ext.define('GeoExt.legend.URL', {
-    extend : 'GeoExt.legend.Layer',
-    requires: ['GeoExt.legend.Image'],
+Ext.define('GeoExt.container.URLLegend', {
+    extend : 'GeoExt.container.LayerLegend',
+    requires: ['GeoExt.LegendImage'],
     alias : 'widget.gx_urllegend',
     alternateClassName : 'GeoExt.URLLegend',
     
@@ -54,7 +54,7 @@ Ext.define('GeoExt.legend.URL', {
     initComponent: function(){
         var me = this;
         me.callParent(arguments);
-        this.add(Ext.create('GeoExt.legend.Image', {
+        this.add(Ext.create('GeoExt.LegendImage', {
             url: this.layerRecord.get("legendURL")
         }));
     },
@@ -69,5 +69,5 @@ Ext.define('GeoExt.legend.URL', {
         this.items.get(1).setUrl(this.layerRecord.get("legendURL"));
     }  
 }, function() {
-    GeoExt.legend.Layer.types["gx_urllegend"] = GeoExt.legend.URL;
+    GeoExt.container.LayerLegend.types["gx_urllegend"] = GeoExt.container.URLLegend;
 });

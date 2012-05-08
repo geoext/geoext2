@@ -3,7 +3,7 @@
  */
 Ext.define('GeoExt.panel.Legend', {
     extend : 'Ext.panel.Panel',
-    requires: ['GeoExt.legend.Layer'],
+    requires: ['GeoExt.container.LayerLegend'],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
     config: {
@@ -78,7 +78,7 @@ Ext.define('GeoExt.panel.Legend', {
         for(var i=count-1; i>=0; --i) {
             record = store.getAt(i);
             layer = record.getLayer();
-            var types = GeoExt.legend.Layer.getTypes(record);
+            var types = GeoExt.container.LayerLegend.getTypes(record);
             if(layer.displayInLayerSwitcher && types.length > 0 &&
                 (store.getAt(i).get("hideInLegend") !== true)) {
                 ++panelIndex;
@@ -176,7 +176,7 @@ Ext.define('GeoExt.panel.Legend', {
             var layer = record.getLayer();
             index = index || 0;
             var legend;
-            var types = GeoExt.legend.Layer.getTypes(record, this.preferredTypes);
+            var types = GeoExt.container.LayerLegend.getTypes(record, this.preferredTypes);
             if(layer.displayInLayerSwitcher && !record.get('hideInLegend') && types.length > 0) {
                 this.insert(index,       {
                     xtype: types[0],

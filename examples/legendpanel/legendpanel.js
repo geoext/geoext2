@@ -18,8 +18,8 @@ Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
     'GeoExt.panel.Map', 
-    'GeoExt.legend.WMSLayer', 
-    'GeoExt.legend.VectorLayer',
+    'GeoExt.container.WMSLegend', 
+    'GeoExt.container.VectorLegend',
     'GeoExt.panel.Legend'
 ]);
 
