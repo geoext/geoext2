@@ -6,12 +6,9 @@ Ext.require([
 ]);
 
 Ext.application({
-    name: 'HelloGeoExt2 - Action',
+    name: 'ActionExample',
     launch: function(){
-        Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
-            expires: new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 7)) //7 days from now
-        }));
-        
+
         var map = new OpenLayers.Map({});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         var wms = new OpenLayers.Layer.WMS(
@@ -19,9 +16,9 @@ Ext.application({
             "http://vmap0.tiles.osgeo.org/wms/vmap0?",
             {layers: 'basic'}
         );
-		
-		var vector = new OpenLayers.Layer.Vector("vector");
-    	map.addLayers([wms, vector]);
+
+        var vector = new OpenLayers.Layer.Vector("vector");
+        map.addLayers([wms, vector]);
         
         var ctrl, toolbarItems = [], action, actions = {};
         
