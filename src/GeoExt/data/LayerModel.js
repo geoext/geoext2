@@ -24,9 +24,9 @@ Ext.define('GeoExt.data.LayerModel', {
         }
     },
 
-/**
- * Returns the {OpenLayers.Layer} layer object used in this model instance
- */
+    /**
+     * Returns the {OpenLayers.Layer} layer object used in this model instance
+     */
     getLayer: function() {
         return this.raw;
     }
