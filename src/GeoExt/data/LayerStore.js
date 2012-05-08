@@ -51,7 +51,7 @@ Ext.define('GeoExt.data.LayerStore', {
         config = Ext.apply({}, config);
 
         // "map" option
-        var map = config.map instanceof GeoExt.MapPanel ?
+        var map = (GeoExt.MapPanel && config.map instanceof GeoExt.MapPanel) ?
             config.map.map : config.map;
         delete config.map;
 
