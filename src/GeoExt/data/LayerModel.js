@@ -8,6 +8,7 @@
  *  such as a store.
  */
 Ext.define('GeoExt.data.LayerModel', {
+    alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'Ext.data.Model',
     alias: ['gx_layer'],
     fields: [
