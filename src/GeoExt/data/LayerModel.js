@@ -15,6 +15,7 @@ Ext.define('GeoExt.data.LayerModel', {
         {name: 'title', mapping: 'name'},
         {name: 'name', mapping: 'metadata.name'},
         {name: 'legendURL', mapping: 'metadata.legendURL'},
+        {name: 'hideTitle', mapping: 'metadata.hideTitle'},
         'id'
     ],
     proxy: {
