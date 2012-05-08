@@ -129,9 +129,7 @@ Ext.define('GeoExt.panel.Map', {
         "afterlayervisibilitychange",
         "afterlayeropacitychange",
         "afterlayerorderchange",
-        "afterlayernamechange",
-        "afterlayeradd",
-        "afterlayerremove"
+        "afterlayernamechange"
     ],
     
     /**
@@ -234,14 +232,6 @@ Ext.define('GeoExt.panel.Map', {
         /**
          * @event afterlayernamechange
          * Fires after a layer name changed.
-         */
-        /**
-         * @event afterlayeradd
-         * Fires after a layer added to the map.
-         */
-        /**
-         * @event afterlayerremove
-         * Fires after a layer removed from the map.
          */
         
     },
@@ -377,24 +367,6 @@ Ext.define('GeoExt.panel.Map', {
         }
     },
 
-    /**
-     * @private
-     * The "addlayer" listener bound to the {@link map}.
-     */
-    onAddlayer: function(e) {
-        this.layers.load();
-        this.fireEvent("afterlayeradd", this, this.map, e);
-    },
-
-    /**
-     * @private
-     * The "removelayer" listener bound to the {@link map}.
-     */
-    onRemovelayer: function(e) {
-        this.layers.load();
-        this.fireEvent("afterlayerremove", this, this.map, e);
-    },
-    
     /**
      * @private
      * @return {Object} 

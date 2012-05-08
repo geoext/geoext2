@@ -73,14 +73,6 @@ Ext.application({
             )
         ]);
 
-        function addRemoveLayer() {
-            if(map.layers.indexOf(water) == -1) {
-                map.addLayer(water);
-            } else {
-                map.removeLayer(water);
-            }
-        }
-        
         mapPanel = Ext.create('GeoExt.panel.Map', {
             region: 'center',
             height: 400,
@@ -108,6 +100,13 @@ Ext.application({
         
         // functions for interacting with the map's layers to show how the
         // legend instantly reflects changes
+        function addRemoveLayer() {
+            if(map.layers.indexOf(water) == -1) {
+                map.addLayer(water);
+            } else {
+                map.removeLayer(water);
+            }
+        }        
         function moveLayer() {
             var layer = layerRec0.getLayer();
             var idx = map.layers.indexOf(layer) === 0 ?
