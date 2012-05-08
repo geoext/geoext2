@@ -234,6 +234,17 @@ Ext.define('GeoExt.panel.Map', {
          * Fires after a layer name changed.
          */
         
+        //TODO This should be handled by a LayoutManager
+        this.on("afterlayout", function() {
+            //TODO remove function check when we require OpenLayers > 2.11
+            if (typeof this.map.getViewport === "function") {
+                this.items.each(function(cmp) {
+                    if (typeof cmp.addToMapPanel === "function") {
+                        cmp.getEl().appendTo(this.map.getViewport());
+                    }
+                }, this);
+            }
+        }, this);
     },
     
     /**

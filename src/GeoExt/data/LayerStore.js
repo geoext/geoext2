@@ -231,7 +231,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 if(!this._removing) {
                     var layer = evt.layer;
                     this._removing = true;
-                    this.remove(this.getById(layer.id));
+                    this.remove(this.getByLayer(layer));
                     delete this._removing;
                 }
             } else {
