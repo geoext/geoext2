@@ -73,8 +73,6 @@ Ext.define('GeoExt.data.LayerStore', {
         if(map) {
             this.bind(map, options);
         }
-
-        me.callParent(config);
     },
 
     /**
