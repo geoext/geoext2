@@ -2,6 +2,20 @@
  * @class GeoExt.slider.Tip
  * 
  * Create a slider tip displaying ``Ext.slider.SingleSlider`` values over slider thumbs.
+ * 
+ *     @example
+ *     var slider = Ext.create('GeoExt.ZoomSlider', {
+ *         map: panel.map,
+ *         aggressive: true,                                                                                                                                                   
+ *         width: 200,
+ *         plugins: new GeoExt.SliderTip({
+ *             getText: function(thumb) {
+ *                 return Ext.String.format('<div>Scale: 1:{0}</div>', thumb.slider.getScale());
+ *             }
+ *         }),
+ *         renderTo: document.body
+ *     });
+ * 
  */
 Ext.define('GeoExt.slider.Tip', {
     extend : 'Ext.slider.Tip',
@@ -43,6 +57,7 @@ Ext.define('GeoExt.slider.Tip', {
         if (this.hover) {
             slider.on("render", this.registerThumbListeners, this);
         }
+        
         this.slider = slider;
     },
     
