@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html debug="true">
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+    <script type="text/javascript" src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    <script type="text/javascript" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js"></script>
+
+    <script type="text/javascript">
+
+        Ext.Loader.setConfig({
+            enabled:true,
+            disableCaching: false,
+            paths: {
+                "GeoExt": "../../src/GeoExt"
+            }
+        });
+
+        function createMap() {
+            var map = new OpenLayers.Map({div: 'mappanel'});
+            var layer1 = new OpenLayers.Layer("test1");
+            var layer2 = new OpenLayers.Layer("test2");
+            var layer3 = new OpenLayers.Layer("test3");
+            map.addLayers([layer1, layer2, layer3]);
+
+            return map;
+        }
+
+        function test_createLayerStore(t) {
+            t.plan(2)
+
+            var olMap = createMap();
+
+            var myStore = Ext.create('GeoExt.data.LayerStore'
+            );
+
+            t.eq(myStore.getCount(), 3, "Exactly 3 layers in the store");
+            t.eq(myStore.getAt(2).getLayer().name, "test3", "Third layer is called: layer3");
+            
+            // since we created the map, we destroy it
+            olMap.destroy();
+            
+            myStore.destroy();
+        }
+
+        function teeest_removeFromMap(t) {
+            t.plan(3)
+
+            var olMap = createMap();
+
+            var myStore = Ext.create('GeoExt.data.LayerStore', {
+                proxy: {
+                    type: 'gx_map'
+                }
+            });
+            myStore.proxy.setMap(olMap);
+            myStore.read();
+
+            t.eq(myStore.getCount(), 3, "Exactly 3 layers in the store");
+
+            var layer = olMap.getLayer(1);
+            olMap.removeLayer(layer)
+
+            t.eq(olMap.getNumLayers(), 2, "Exactly 2 layers in the OpenLayers map object");
+            t.eq(myStore.getCount(), 2, "Exactly 2 layers in store object");
+            
+            // since we created the map, we destroy it
+            olMap.destroy();
+            
+            myStore.destroy();
+        }
+
+        function teeest_removeFromStore(t) {
+            t.plan(3)
+
+            var olMap = createMap();
+
+            var myStore = Ext.create('GeoExt.data.LayerStore', {
+                proxy: {
+                    type: 'gx_map'
+                }
+            });
+            myStore.proxy.setMap(olMap);
+            myStore.read();
+
+            t.eq(myStore.getCount(), 3, "Exactly 3 layers in the store");
+
+            var layer = olMap.getLayer(1);
+            olMap.removeLayer(layer)
+
+            t.eq(olMap.getNumLayers(), 2, "Exactly 2 layers in the OpenLayers map object");
+            t.eq(myStore.getCount(), 2, "Exactly 2 layers in store object");
+            
+            // since we created the map, we destroy it
+            olMap.destroy();
+            
+            myStore.destroy();
+        }
+    </script>
+  </head>
+  <body onLoad="init()">
+    <div id="mappanel"></div>
+  </body>
+</html>
