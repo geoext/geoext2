@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <script type="text/javascript" src="../../../../../openlayers/lib/OpenLayers.js"></script>
-    <script type="text/javascript" src="../../../../../ext/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="../../../../../ext/ext-all-debug.js"></script>
-    <script type="text/javascript" src="../../../../lib/GeoExt.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
+
+    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
     <script type="text/javascript">
+        Ext.Loader.setConfig({
+            disableCaching: false,
+            enabled: true,
+            paths: {
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
+                GeoExt: '../../src/GeoExt'
+            }
+        });
+
+        Ext.require([
+            'GeoExt.panel.Map',
+            'GeoExt.slider.Zoom'
+        ]);
        
         function test_zoomslider(t) {
             t.plan(7);
