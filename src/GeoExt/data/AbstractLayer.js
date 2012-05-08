@@ -1,13 +1,12 @@
 Ext.define('GeoExt.data.AbstractLayer',{
     extend: 'Ext.data.Model',
     fields: [   
-                //{name: 'projection',  type: 'string', mapping: 'projection.projCode'},
                 {name: 'opacity',     type: 'float'},
                 {name: 'zIndex',      type: 'int'},
                 {name: 'isBaseLayer', type: 'bool'},
                 {name: 'visibility',  type: 'bool'},
                 {name: 'attribution', type: 'string'},
-                "projection", "units", "minExtent", "maxExtent", "extent"
+                'params'
             ],
     /**
      * Returns the {OpenLayers.Layer} layer object used in this model instance
