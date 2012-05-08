@@ -118,11 +118,10 @@
             store.destroy();
             store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer.WMS(null, {metadata: {legendURL: "foo"}})
+                    new OpenLayers.Layer.WMS(null, null, null, {metadata: {legendURL: "foo"}})
                 ]
             });
             rec = store.getAt(0);
-
             t.eq(GeoExt.LayerLegend.getTypes(rec), ["gx_urllegend","gx_wmslegend"], "a layer record with WMS layer and legendURL is supported by gx_urllegend and gx_wmslegend, with a higher priority of gx_urllegend.");
             t.eq(GeoExt.LayerLegend.getTypes(rec, ["gx_wmslegend"]), ["gx_wmslegend","gx_urllegend"], "a layer record with WMS layer and legendURL and gx_wmslegend as preferred type lists  gx_wmslegend first, then gx_urllegend.");
             store.destroy();
