@@ -1,13 +1,14 @@
 Ext.require([
     'Ext.container.Viewport',
-    'Ext.window.MessageBox',
+    'Ext.state.Manager',
+    'Ext.state.CookieProvider',
     'GeoExt.panel.Map'
 ]);
 
 Ext.application({
     name: 'HelloGeoExt2',
     launch: function() {
-        Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
+        Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider', {
             expires: new Date(new Date().getTime()+(1000*60*60*24*7)) //7 days from now
         }));
         var map = new OpenLayers.Map({});
