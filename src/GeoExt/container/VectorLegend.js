@@ -4,7 +4,7 @@
 Ext.define('GeoExt.container.VectorLegend', {
     extend : 'GeoExt.container.LayerLegend',
     alias : 'widget.gx_vectorlegend',
-    requires: ['Ext.layout.container.Column', 'GeoExt.renderer.Feature'],
+    requires: ['Ext.layout.container.Column', 'GeoExt.FeatureRenderer'],
     alternateClassName : 'GeoExt.VectorLegend',
     
     statics : {

@@ -1,10 +1,6 @@
-Ext.define('GeoExt.renderer.Feature', {
+Ext.define('GeoExt.FeatureRenderer', {
     extend : 'Ext.Component',
-    requires : [
-    //    'GeoExt.data.LayerStore'
-    ],
     alias : 'widget.gx_renderer',
-    alternateClassName : 'GeoExt.FeatureRenderer',
     
     statics : {
         guess : function() {
@@ -253,7 +249,7 @@ Ext.define('GeoExt.renderer.Feature', {
     assignRenderer: function()  {
 
 //        return true;
-        this.renderer = new OpenLayers.Renderer.SVG(this.el, this.rendererOptions)
+        this.renderer = new OpenLayers.Renderer.SVG(this.el, this.rendererOptions);
 //        for(var i=0, len=this.renderers.length; i<len; ++i) {
 //            var Renderer = OpenLayers.Renderer[this.renderers[i]];
 //            if(Renderer && Renderer.prototype.supported()) {
