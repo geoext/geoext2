@@ -122,18 +122,16 @@ Ext.define('GeoExt.window.Popup', {
      */
     ancCls: null,
     
-    config: {
+    /** 
+     * @cfg {String} anchorPosition
+     * Controls the anchor position for the popup. If set to
+     *  `auto`, the anchor will be positioned on the top or the bottom of
+     *  the window, minimizing map movement. Supported values are `bottom-left`,
+     *  `bottom-right`, `top-left`, `top-right` or `auto`.
+     */
+    anchorPosition: "auto",
     
-        /** 
-         * @cfg {String} anchorPosition
-         * Controls the anchor position for the popup. If set to
-         *  `auto`, the anchor will be positioned on the top or the bottom of
-         *  the window, minimizing map movement. Supported values are `bottom-left`,
-         *  `bottom-right`, `top-left`, `top-right` or `auto`.
-         */
-        anchorPosition: "auto"
-    },
-    
+
     initComponent: function() {
         if(this.map instanceof GeoExt.MapPanel) {
             this.map = this.map.map;
@@ -169,6 +167,8 @@ Ext.define('GeoExt.window.Popup', {
         this.elements += ',anc';
         
         this.callParent(arguments);
+        
+        window.a = this;
     },
 
     /**
@@ -192,7 +192,7 @@ Ext.define('GeoExt.window.Popup', {
         };
         
         var ancDiv = dh.append(
-            this.el.dom, // the context element 'my-div' can either be the id or the actual node
+            this.el.dom, // the context element
             spec      // the specification object
         );
         this.anc = Ext.get(ancDiv);
@@ -280,7 +280,7 @@ Ext.define('GeoExt.window.Popup', {
                 left = locationPx.x + mapBox.x,
                 elSize = this.el.getSize(),
                 ancSize = this.anc.getSize(),
-                ancPos = this.getAnchorPosition();
+                ancPos = this.anchorPosition;
             
             if (ancPos.indexOf("right") > -1 || locationPx.x > mapBox.width / 2) {
                 // right
