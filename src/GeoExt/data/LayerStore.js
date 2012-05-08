@@ -4,6 +4,8 @@
 
 /**
  * @class GeoExt.data.LayerStore
+ * A store that synchronizes a layers array of an OpenLayers.Map with a
+ * layer store holding {@link GeoExt.data.LayerModel} instances.
  */
 Ext.define('GeoExt.data.LayerStore', {
     require: ['GeoExt.data.LayerModel'],
@@ -11,10 +13,26 @@ Ext.define('GeoExt.data.LayerStore', {
     model: 'GeoExt.data.LayerModel',
     
     statics: {
+        /**
+         * @static
+         * @property {Number} MAP_TO_STORE
+         */
         MAP_TO_STORE: 1,
+        /**
+         * @static
+         * @property {Number} STORE_TO_MAP
+         */
         STORE_TO_MAP: 2 
     },
 
+    /**
+     * @event bind
+     * Fires when the store is bound to a map.
+     *
+     * @param {GeoExt.data.LayerStore} store
+     * @param {OpenLayers.Map} map
+     */
+        
     /**
      * @cfg {OpenLayers.Map/GeoExt.panel.Map/Object} map
      * Map that this store will be in sync with. If not provided, the
@@ -37,8 +55,8 @@ Ext.define('GeoExt.data.LayerStore', {
      * @cfg {Number} initDir
      * Bitfields specifying the direction to use for the initial sync between
      * the map and the store, if set to 0 then no initial sync is done.
-     * Defaults to GeoExt.data.LayerStore.MAP_TO_STORE |
-     * GeoExt.data.LayerStore.STORE_TO_MAP.
+     * Defaults to {@link #MAP_TO_STORE} |
+     * {@link #STORE_TO_MAP}.
      */
 
     /** 
@@ -67,15 +85,6 @@ Ext.define('GeoExt.data.LayerStore', {
 
         me.callParent([config]);
 
-        /**
-         * @event bind
-         * Fires when the store is bound to a map.
-         *
-         * Listener arguments:
-         * * :class:`GeoExt.data.LayerStore`
-         * * ``OpenLayers.Map``
-         */
-            
         if(map) {
             this.bind(map, options);
         }
@@ -85,8 +94,8 @@ Ext.define('GeoExt.data.LayerStore', {
      * Bind this store to a map instance, once bound the store
      * is synchronized with the map and vice-versa.
      *
-     * @param map: ``OpenLayers.Map`` The map instance.
-     * @param options: ``Object``  
+     * @param {OpenLayers.Map} map The map instance.
+     * @param {Object} options  
      */
     bind: function(map, options) {
         var me = this;
@@ -138,7 +147,6 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * api: method[unbind]
      * Unbind this store from the map it is currently bound.
      */
     unbind: function() {
@@ -162,11 +170,11 @@ Ext.define('GeoExt.data.LayerStore', {
         }
     },
         
-        /** private: method[onChangeLayer]
-         * :param evt: ``Object``
-         * 
+        /**
          * Handler for layer changes.  When layer order changes, this moves the
          * appropriate record within the store.
+         * @private
+         * @param {Object} evt
          */
         onChangeLayer: function(evt) {
             var layer = evt.layer;
@@ -195,10 +203,10 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
        
-        /** private: method[onAddLayer]
-         * :param evt: ``Object``
-         * 
+        /**
          * Handler for a map's addlayer event
+         * @private
+         * @param {Object} evt
          */
         onAddLayer: function(evt) {
             var me = this;
@@ -210,10 +218,10 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
         
-        /** private: method[onRemoveLayer]
-         * :param evt: ``Object``
-         * 
+        /**
          * Handler for a map's removelayer event
+         * @private
+         * @param {Object} evt
          */
         onRemoveLayer: function(evt){
             //TODO replace the check for undloadDestroy with a listener for the
@@ -231,12 +239,12 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
         
-        /** private: method[onLoad]
-         * :param store: ``Ext.data.Store``
-         * :param records: ``Array(Ext.data.Record)``
-         * :param options: ``Object``
-         * 
+        /**
          * Handler for a store's load event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model[]} records
+         * @param {Object} options
          */
         onLoad: function(store, records, options) {
             if (!Ext.isArray(records)) {
@@ -263,10 +271,10 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
         
-        /** private: method[onClear]
-         * :param store: ``Ext.data.Store``
-         * 
+        /**
          * Handler for a store's clear event
+         * @private
+         * @param {Ext.data.Store} store
          */
         onClear: function(store) {
             this._removing = true;
@@ -276,12 +284,12 @@ Ext.define('GeoExt.data.LayerStore', {
             delete this._removing;
         },
         
-        /** private: method[onAdd]
-         * :param store: ``Ext.data.Store``
-         * :param records: ``Array(Ext.data.Record)``
-         * :param index: ``Number``
-         * 
+        /**
          * Handler for a store's add event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model[]} records
+         * @param {Number} index
          */
         onAdd: function(store, records, index) {
             if(!this._adding) {
@@ -298,12 +306,12 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
         
-        /** private: method[onRemove]
-         * :param store: ``Ext.data.Store``
-         * :param record: ``Ext.data.Record``
-         * :param index: ``Number``
-         * 
+        /**
          * Handler for a store's remove event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model} record
+         * @param {Number} index
          */
         onRemove: function(store, record, index){
             if(!this._removing) {
@@ -316,12 +324,12 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
         
-        /** private: method[onUpdate]
-         * :param store: ``Ext.data.Store``
-         * :param record: ``Ext.data.Record``
-         * :param operation: ``Number``
-         * 
+        /**
          * Handler for a store's update event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model} record
+         * @param {Number} operation
          */
         onUpdate: function(store, record, operation) {
             if(operation === Ext.data.Record.EDIT) {
@@ -335,33 +343,32 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
 
-        /** private: method[removeMapLayer]
-         * :param record: ``Ext.data.Record``
-         * 
+        /**
          * Removes a record's layer from the bound map.
+         * @private
+         * @param {Ext.data.Record} record
          */
         removeMapLayer: function(record){
             this.map.removeLayer(record.getLayer());
         },
 
-        /** private: method[onReplace]
-         * :param key: ``String``
-         * :param oldRecord: ``Object`` In this case, a record that has been
-         *     replaced.
-         * :param newRecord: ``Object`` In this case, a record that is replacing
-         *     oldRecord.
-
+        /**
          * Handler for a store's data collections' replace event
+         * @private
+         * @param {String} key
+         * @param {Ext.data.Model} oldRecord In this case, a record that has
+         *     been replaced.
+         * @param {Ext.data.Model} newRecord In this case, a record that is
+         *     replacing oldRecord.
          */
         onReplace: function(key, oldRecord, newRecord){
             this.removeMapLayer(oldRecord);
         },
         
-        /** api: method[getByLayer]
-         * :param layer: ``OpenLayers.Layer``
-         * :return: :class:`GeoExt.data.LayerRecord` or undefined if not found
-         * 
+        /**
          * Get the record for the specified layer
+         * @param {OpenLayers.Layer} layer
+         * @returns {Ext.data.Model} or undefined if not found
          */
         getByLayer: function(layer) {
             var index = this.findBy(function(r) {
@@ -372,7 +379,8 @@ Ext.define('GeoExt.data.LayerStore', {
             }
         },
         
-        /** private: method[destroy]
+        /**
+         * @private
          */
         destroy: function() {
             var me = this;
