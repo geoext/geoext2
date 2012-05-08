@@ -40,7 +40,7 @@ Ext.application({
                 items: [{
                     text: 'Current center of the map',
                     handler: function(){
-                        var c = GeoExt.panel.Map.guess().getMap().getCenter();
+                        var c = GeoExt.panel.Map.guess().map.getCenter();
                         Ext.Msg.alert(this.getText(), c.toString());
                     }
                 }]
