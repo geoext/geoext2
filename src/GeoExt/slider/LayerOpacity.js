@@ -39,6 +39,7 @@
  *      });
  */
 Ext.define('GeoExt.slider.LayerOpacity', {
+    alternateClassName: "GeoExt.LayerOpacitySlider",
     extend : 'Ext.slider.Single',
     alias : 'widget.gx_opacityslider',
 
