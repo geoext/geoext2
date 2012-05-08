@@ -48,7 +48,7 @@
             };
 
             moveToCnt = 0;
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 // panel options
                 id: "map-panel",
                 title: "GeoExt MapPanel",
@@ -63,7 +63,7 @@
             t.eq(moveToCnt, 1, "map.moveTo called exactly once");
             t.eq(mapPanel.map.getCenter().toString(), "lon=5,lat=45", "Map center set correctly");
             t.eq(mapPanel.map.getZoom(), 4, "Zoom set correctly");
-            t.eq(GeoExt.MapPanel.guess().id, mapPanel.id, "MapPanel guessed correctly");
+            t.eq(GeoExt.panel.Map.guess().id, mapPanel.id, "MapPanel guessed correctly");
             
             // since we created the map, we destroy it
             map.destroy();
@@ -84,7 +84,7 @@
             var map, panel;
             
             map = new OpenLayers.Map();
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 map: map
             });
             t.eq(panel.map.allOverlays, false, "allOverlays is not set if map is provided to panel");
@@ -92,12 +92,12 @@
             map.destroy();
             panel.destroy();
             
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
             });
             t.eq(panel.map.allOverlays, true, "allOverlays set to true if no map is provided to panel");
             panel.destroy();
             
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 map: {
                     units: "meters"
                 }
@@ -116,7 +116,7 @@
             // (hidden again at the end of the test)
             hiddenSpan.style.display = "";
 
-            var panel = new GeoExt.MapPanel({
+            var panel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
                 renderTo: "mappanel",
                 height: 400,
@@ -146,7 +146,7 @@
             map.zoomToExtent = function(extent) {
                 log.extent = extent;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -163,7 +163,7 @@
             map.zoomToExtent = function(extent) {
                 log.extent = extent;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -179,7 +179,7 @@
             map.zoomToExtent = function(extent) {
                 log.extent = extent;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -197,7 +197,7 @@
                 layout: "fit",
                 width: 0,
                 height: 0,
-                items: [new GeoExt.MapPanel({
+                items: [Ext.create('GeoExt.panel.Map', {
                     map: map,
                     extent: new OpenLayers.Bounds(1, 2, 3, 4)
                 })]
@@ -211,7 +211,7 @@
             map.destroy();
             panel.destroy();
             
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: createMap(), //TODO: revisit the mappanel tests, to check 
                                   // why we need map here
@@ -240,7 +240,7 @@
             map.setCenter = function(center) {
                 log.center = center;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -257,7 +257,7 @@
             map.setCenter = function(center) {
                 log.center = center;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -274,7 +274,7 @@
             map.setCenter = function(center) {
                 log.center = center;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -307,7 +307,7 @@
             // (hidden again at the end of the test)
             hiddenSpan.style.display = "";
             
-            var panel = new GeoExt.MapPanel({
+            var panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 layers: [
                     new OpenLayers.Layer("test")
@@ -399,8 +399,8 @@
             provider.state.map = {};
             Ext.state.Manager.setProvider(provider);
 
-            applyState = GeoExt.MapPanel.prototype.applyState;
-            GeoExt.MapPanel.prototype.applyState = function(state) {
+            applyState = GeoExt.panel.Map.prototype.applyState;
+            GeoExt.panel.Map.prototype.applyState = function(state) {
                 log = true;
             };
 
@@ -409,7 +409,7 @@
             // test that applyState gets called when the MapPanel is created
             // 1 test
             log = false;
-            mapPanel = new GeoExt.MapPanel({
+            mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 stateful: true,
                 stateId: "map",
@@ -422,7 +422,7 @@
 
             // tear down
 
-            GeoExt.MapPanel.prototype.applyState = applyState;
+            GeoExt.panel.Map.prototype.applyState = applyState;
             mapPanel.destroy();
             hiddenSpan.style.display = "none";
         }
@@ -445,7 +445,7 @@
             ];
             layers[0].id = "fooid";
             layers[1].id = "barid";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 stateId: "map",
                 prettyStateKeys: true,
@@ -568,7 +568,7 @@
                 log = true;
             };
 
-            mapPanel = new GeoExt.panel.Map({
+            mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 layers: [
                     new OpenLayers.Layer("foo"),
@@ -665,7 +665,7 @@
             ];
             layers[0].id = "fooid";
             layers[1].id = "barid";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 prettyStateKeys: true,
                 stateId: "map",
@@ -701,7 +701,7 @@
             ];
             layers[0].id = "fooid";
             layers[1].id = "barid";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 prettyStateKeys: false,
                 stateId: "map",
