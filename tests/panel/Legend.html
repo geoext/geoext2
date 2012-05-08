@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <script type="text/javascript" src="../../../../../openlayers/lib/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/GeoExt.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/data/model/Layer.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/data/LayerStore.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/legend/Layer.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/legend/WMSLayer.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/legend/URL.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/legend/Vector.js"></script>
-    <script type="text/javascript" src="../../src/GeoExt/legend/Image.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
 
-    <script type="text/javascript" src="../../src/GeoExt/renderer/Feature.js"></script>
-
-    <script type="text/javascript" src="../../src/GeoExt/panel/Map.js"></script>
-
-    <script type="text/javascript" src="../../src/GeoExt/panel/Legend.js"></script>
+    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
     <script type="text/javascript">
+        Ext.Loader.setConfig({
+            disableCaching: false,
+            enabled: true,
+            paths: {
+                GeoExt: '../../src/GeoExt'
+            }
+        });
+
+        Ext.require([
+            'GeoExt.panel.Map',
+            'GeoExt.legend.URL',
+            'GeoExt.legend.WMSLayer',
+            'GeoExt.legend.VectorLayer',
+            'GeoExt.panel.Legend'
+        ]);
 
         function loadMapPanel(mapOptions) {
             mapPanel = Ext.create("GeoExt.panel.Map", {
@@ -46,13 +49,12 @@
             mapPanel.layers.getAt(0).set("legendURL", "foo");
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
 
             var newUrl = "http://trac.geoext.org/chrome/site/img/GeoExt.png";
             mapPanel.layers.getAt(0).set("legendURL", newUrl);
 
             var item = lp.getComponent(lp.getIdForLayer(mapPanel.map.layers[0]));
-            t.ok(item instanceof GeoExt.UrlLegend, "If legendURL is found in layerRecord, UrlLegend is chosen.")
+            t.ok(item instanceof GeoExt.URLLegend, "If legendURL is found in layerRecord, UrlLegend is chosen.")
             var url = item.items.get(1).getEl().dom.src;
             t.eq(url, newUrl, "Update the image with the provided legendURL");
 
@@ -77,7 +79,6 @@
             var mapPanel = loadMapPanel();
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
 
             mapPanel.map.layers[0].setVisibility(false);
             var id = lp.getIdForLayer(mapPanel.layers.getAt(0).getLayer());
@@ -101,7 +102,6 @@
                     }
                 },
                 renderTo: 'legendpanel'});
-            lp.render();
             var id = lp.getIdForLayer(mapPanel.layers.getAt(0).getLayer());
             t.eq(lp.getComponent(id).isVisible(), true, "Layer is visible because our beforehide listener returns false");
 
@@ -118,7 +118,6 @@
             var mapPanel = loadMapPanel();
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
 
             mapPanel.layers.getAt(0).set("hideInLegend", true);
             var id = lp.getIdForLayer(mapPanel.layers.getAt(0).getLayer());
@@ -134,7 +133,6 @@
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 dynamic: false,
                 renderTo: 'legendpanel'});
-            lp.render();
 
             var layer;
             layer = new OpenLayers.Layer.WMS("test2", '/ows', {layers: 'b', format: 'image/png', transparent: 'TRUE'});
@@ -151,7 +149,6 @@
             var mapPanel = loadMapPanel();
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
             t.eq(lp.items.length, 1, "Same number of layers in legend panel and in map");
 
             var item = lp.getComponent(lp.getIdForLayer(mapPanel.map.layers[0]));
@@ -193,7 +190,6 @@
             var legendPanel = Ext.create("GeoExt.panel.Legend", {
                 renderTo: "legendpanel"
             });
-            legendPanel.render();
             
             var map = mapPanel.map;
             var layer = map.layers[1];
@@ -215,7 +211,6 @@
             var mapPanel = loadMapPanel();
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
             t.eq(lp.items.length, 1, "Same number of layers in legend panel and in layerstore");
 
             mapPanel.layers.removeAll();
@@ -230,7 +225,6 @@
             var mapPanel = loadMapPanel();
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
 
             var layer = mapPanel.map.layers[0];
             var cmp = lp.getComponent(lp.getIdForLayer(layer));
@@ -247,7 +241,6 @@
                     showTitle: false
                 },
                 renderTo: 'legendpanel'});
-            lp.render();
 
             layer.setName("My new new name");
             var cmp = lp.getComponent(lp.getIdForLayer(layer));
@@ -279,7 +272,6 @@
             var lp = Ext.create("GeoExt.panel.Legend", {
                 filter: function(record) { return !record.getLayer().isBaseLayer; },
                 renderTo: 'legendpanel'});
-            lp.render();
 
             t.eq(lp.items.length, 1, "Using the filter function only the non base layers will be shown in the legend");
 
@@ -287,7 +279,6 @@
 
             var lp = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
 
             t.eq(lp.items.length, 2, "With no filter both layers are drawn");
 
@@ -328,7 +319,6 @@
                 {minResolution: 3, maxResolution: 4, isBaseLayer: false}));
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
-            lp.render();
 
             var id0 = lp.getIdForLayer(mapPanel.layers.getAt(0).getLayer());
             var id1 = lp.getIdForLayer(mapPanel.layers.getAt(1).getLayer());

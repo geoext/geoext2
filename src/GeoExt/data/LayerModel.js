@@ -15,6 +15,13 @@ Ext.define('GeoExt.data.LayerModel', {
         {name: 'name', mapping: 'metadata.name'},
         'id'
     ],
+    proxy: {
+        type: 'memory',
+        reader: {
+            type: 'json'
+        }
+    },
+
 /**
  * Returns the {OpenLayers.Layer} layer object used in this model instance
  */

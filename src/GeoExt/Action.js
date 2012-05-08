@@ -21,7 +21,7 @@
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
-	alias : 'widget.gx_action',
+    alias : 'widget.gx_action',
     config: {
     
         /**
@@ -113,7 +113,7 @@ Ext.define('GeoExt.Action', {
             });
         }
         
-		this.callParent(arguments);
+        this.callParent(arguments);
     },
     
     /**
@@ -227,9 +227,9 @@ Ext.define('GeoExt.Action', {
     safeCallEach: function(fnName, args){
         var cs = this.items;
         for (var i = 0, len = cs.length; i < len; i++) {
-			if (cs[i][fnName]) {
+            if (cs[i][fnName]) {
                 cs[i].rendered ? cs[i][fnName].apply(cs[i], args) : cs[i].on({
-					"render": cs[i][fnName].bind(cs[i][fnName], cs.scope, args, false),
+                    "render": cs[i][fnName].bind(cs[i][fnName], cs.scope, args, false),
                     single: true
                 });
             }
