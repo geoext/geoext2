@@ -47,7 +47,7 @@ Ext.define('GeoExt.panel.Legend', {
         this.callParent(arguments);
     
         if(!this.layerStore) {
-            this.layerStore = GeoExt.panel.Map.guess().getLayers();
+            this.layerStore = GeoExt.panel.Map.guess().layers;
         }
         this.layerStore.each(function(record) {
             this.addLegend(record);
