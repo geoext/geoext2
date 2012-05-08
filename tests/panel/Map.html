@@ -2,8 +2,7 @@
 <html debug="true">
   <head>
     <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all.js" ></script>
-    <!--script src="<PATH_TO_EXT>/4.1.0/ext-debug.js"></script-->
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
 
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
@@ -12,12 +11,12 @@
             disableCaching: false,
             enabled: true,
             paths: {
-                //Ext: '<PATH_TO_EXT>/4.1.0/src',
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
 
-        Ext.require('GeoExt.panel.Map');
+        Ext.require(['Ext.layout.container.Border', 'GeoExt.panel.Map']);
     
         // the hidden span element that contains the test iframe
         var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
@@ -35,6 +34,11 @@
         function test_mappanel(t) {
             t.plan(4)
 
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
+
             var moveToCnt;
 
             var map = createMap();
@@ -44,7 +48,7 @@
             };
 
             moveToCnt = 0;
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 // panel options
                 id: "map-panel",
                 title: "GeoExt MapPanel",
@@ -59,20 +63,28 @@
             t.eq(moveToCnt, 1, "map.moveTo called exactly once");
             t.eq(mapPanel.map.getCenter().toString(), "lon=5,lat=45", "Map center set correctly");
             t.eq(mapPanel.map.getZoom(), 4, "Zoom set correctly");
-            t.eq(GeoExt.MapPanel.guess().id, mapPanel.id, "MapPanel guessed correctly");
+            t.eq(GeoExt.panel.Map.guess().id, mapPanel.id, "MapPanel guessed correctly");
             
             // since we created the map, we destroy it
             map.destroy();
             
             mapPanel.destroy();
+
+            hiddenSpan.style.display = "none";
         }
         
         function test_allOverlays(t) {
             t.plan(3);
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
+
             var map, panel;
             
             map = new OpenLayers.Map();
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 map: map
             });
             t.eq(panel.map.allOverlays, false, "allOverlays is not set if map is provided to panel");
@@ -80,26 +92,31 @@
             map.destroy();
             panel.destroy();
             
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
             });
             t.eq(panel.map.allOverlays, true, "allOverlays set to true if no map is provided to panel");
             panel.destroy();
             
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 map: {
                     units: "meters"
                 }
             });
             t.eq(panel.map.allOverlays, true, "allOverlays set to true if map config is provided to panel");
             panel.destroy();
-            
+
+            hiddenSpan.style.display = "none";
         }
 
         function test_zoom(t) {
-            
             t.plan(1);
-            
-            var panel = new GeoExt.MapPanel({
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
+
+            var panel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
                 renderTo: "mappanel",
                 height: 400,
@@ -111,18 +128,25 @@
             t.eq(panel.map.zoom, 4, "zoom correctly set");
             
             panel.destroy();
+
+            hiddenSpan.style.display = "none";
         }
 
         function test_extent(t) {
-            
             t.plan(6);
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
+
             var map, panel, log = {};
             
             map = createMap();
             map.zoomToExtent = function(extent) {
                 log.extent = extent;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -139,7 +163,7 @@
             map.zoomToExtent = function(extent) {
                 log.extent = extent;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -155,7 +179,7 @@
             map.zoomToExtent = function(extent) {
                 log.extent = extent;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -173,26 +197,21 @@
                 layout: "fit",
                 width: 0,
                 height: 0,
-                items: [new GeoExt.MapPanel({
+                items: [Ext.create('GeoExt.panel.Map', {
                     map: map,
                     extent: new OpenLayers.Bounds(1, 2, 3, 4)
                 })]
             });
             
             t.eq(map.getExtent(), null, "no map extent set for a zero dimension map");
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // The span will be hidden again in test_layout.
-            hiddenSpan.style.display = "";
             container.setSize(100, 100);
             container.doLayout();
             t.ok(map.getExtent(), "map extent set when layout is finished");
             // since we created the map, we destroy it
             map.destroy();
             panel.destroy();
-
             
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: createMap(), //TODO: revisit the mappanel tests, to check 
                                   // why we need map here
@@ -203,18 +222,25 @@
             panel.map.addLayer(new OpenLayers.Layer());
             t.ok(panel.map.getExtent(), "map has an extent after layer is added");
             panel.destroy();
+
+            hiddenSpan.style.display = "none";
         }
         
         function test_center(t) {
-
             t.plan(3);
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
+
             var map, panel, log = {};
             
             map = createMap();
             map.setCenter = function(center) {
                 log.center = center;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -231,7 +257,7 @@
             map.setCenter = function(center) {
                 log.center = center;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -248,7 +274,7 @@
             map.setCenter = function(center) {
                 log.center = center;
             };
-            panel = new GeoExt.MapPanel({
+            panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 map: map,
                 height: 400,
@@ -261,6 +287,7 @@
             map.destroy();
             panel.destroy();
 
+            hiddenSpan.style.display = "none";
         }
         
         function test_destroy(t) {
@@ -272,15 +299,20 @@
              * creates the OpenLayers.Map instance, and the panel destroys the
              * map in its destroy sequence.
              */
-            
+
             t.plan(3);
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
             
-            var panel = new GeoExt.MapPanel({
+            var panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 layers: [
                     new OpenLayers.Layer("test")
                 ],
-                mapZoom: 1
+                zoom: 1
             });
             
             t.ok(panel.map instanceof OpenLayers.Map, "panel creates a map");
@@ -297,11 +329,17 @@
                 t.fail("panel.destroy causes problems: " + err);
             }
             t.ok(!panel.map, "panel has no reference to a map");
-            
+
+            hiddenSpan.style.display = "none";
         }
 
         function test_layout(t) {
             t.plan(1);
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
 
             var map, panel, layout = 0;
 
@@ -341,6 +379,8 @@
 
             map.destroy();
             panel.destroy();
+
+            hiddenSpan.style.display = "none";
         }
 
         function test_applyState_called(t) {
@@ -348,14 +388,19 @@
 
             // set up
 
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
+
             var provider, applyState, mapPanel, log;
 
             provider = new Ext.state.Provider();
             provider.state.map = {};
             Ext.state.Manager.setProvider(provider);
 
-            applyState = GeoExt.MapPanel.prototype.applyState;
-            GeoExt.MapPanel.prototype.applyState = function(state) {
+            applyState = GeoExt.panel.Map.prototype.applyState;
+            GeoExt.panel.Map.prototype.applyState = function(state) {
                 log = true;
             };
 
@@ -364,7 +409,7 @@
             // test that applyState gets called when the MapPanel is created
             // 1 test
             log = false;
-            mapPanel = new GeoExt.MapPanel({
+            mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 stateful: true,
                 stateId: "map",
@@ -377,14 +422,20 @@
 
             // tear down
 
-            GeoExt.MapPanel.prototype.applyState = applyState;
+            GeoExt.panel.Map.prototype.applyState = applyState;
             mapPanel.destroy();
+            hiddenSpan.style.display = "none";
         }
 
         function test_applyState(t) {
             t.plan(21);
 
             // set up
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
 
             var state;
 
@@ -394,7 +445,7 @@
             ];
             layers[0].id = "fooid";
             layers[1].id = "barid";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 stateId: "map",
                 prettyStateKeys: true,
@@ -497,12 +548,18 @@
             // tear down
 
             mapPanel.destroy();
+            hiddenSpan.style.display = "none";
         }
 
         function test_getState_called(t) {
             t.plan(6);
 
             // set up
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
 
             var getState, mapPanel, log;
 
@@ -511,7 +568,7 @@
                 log = true;
             };
 
-            mapPanel = new GeoExt.panel.Map({
+            mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 layers: [
                     new OpenLayers.Layer("foo"),
@@ -583,12 +640,19 @@
                 GeoExt.panel.Map.prototype.getState = getState;
                 mapPanel.destroy();
             });
+
+            hiddenSpan.style.display = "none";
         }
 
         function test_getState(t) {
             t.plan(14);
 
             // set up
+
+            // make the hidden span element visible, because setSize does not
+            // work in iframes that are inside a hidden container in FF and IE.
+            // (hidden again at the end of the test)
+            hiddenSpan.style.display = "";
 
             var state;
 
@@ -601,7 +665,7 @@
             ];
             layers[0].id = "fooid";
             layers[1].id = "barid";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 prettyStateKeys: true,
                 stateId: "map",
@@ -637,7 +701,7 @@
             ];
             layers[0].id = "fooid";
             layers[1].id = "barid";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 prettyStateKeys: false,
                 stateId: "map",
@@ -665,7 +729,9 @@
                  "state.opacity_fooid correctly set");
             t.eq(state.opacity_barid, 1,
                  "state.opacity_barid correctly set");
+
             mapPanel.destroy();
+            hiddenSpan.style.display = "none";
         }
     </script>
   </head>

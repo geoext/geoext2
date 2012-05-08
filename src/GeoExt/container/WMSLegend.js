@@ -1,10 +1,10 @@
 /**
- * @class GeoExt.legend.WMSLayer
+ * @class GeoExt.container.WMSLegend
  */
-Ext.define('GeoExt.legend.WMSLayer', {
-    extend : 'GeoExt.legend.Layer',
+Ext.define('GeoExt.container.WMSLegend', {
+    extend : 'GeoExt.container.LayerLegend',
     alias : 'widget.gx_wmslegend',
-    requires: ['GeoExt.legend.Image'],
+    requires: ['GeoExt.LegendImage'],
     alternateClassName : 'GeoExt.WMSLegend',
 
     statics : {
@@ -202,5 +202,5 @@ Ext.define('GeoExt.legend.WMSLayer', {
         this.callParent();
     }
 }, function() {
-    GeoExt.legend.Layer.types["gx_wmslegend"] = GeoExt.legend.WMSLayer;
+    GeoExt.container.LayerLegend.types["gx_wmslegend"] = GeoExt.container.WMSLegend;
 });
