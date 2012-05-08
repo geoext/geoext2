@@ -12,13 +12,14 @@
  *  Display a layer legend in a panel.
  */
 
-var mappanel, legendPanel;
+var mapPanel, legendPanel;
 
 Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
     'GeoExt.panel.Map', 
-    'GeoExt.container.WMSLegend', 
+    'GeoExt.container.WMSLegend',
+    'GeoExt.container.URLLegend',
     'GeoExt.container.VectorLegend',
     'GeoExt.panel.Legend'
 ]);
@@ -53,8 +54,7 @@ Ext.application({
 
                 {
                     singleTile: true
-                })
-                ,
+                }),
             new OpenLayers.Layer.Vector('Polygons', {
                 styleMap: new OpenLayers.StyleMap({
                     "default": new OpenLayers.Style({
@@ -74,7 +74,7 @@ Ext.application({
             )
         ]);
 
-        mappanel = Ext.create('GeoExt.panel.Map', {
+        mapPanel = Ext.create('GeoExt.panel.Map', {
             region: 'center',
             height: 400,
             width: 600,
@@ -83,7 +83,9 @@ Ext.application({
             zoom: 7
         });
 
-        var layerRec0 = mappanel.layers.getAt(0);
+        // give the record of the 1st layer a legendURL, which will cause
+        // UrlLegend instead of WMSLegend to be used
+        var layerRec0 = mapPanel.layers.getAt(0);
         layerRec0.set("legendURL", "http://demo.opengeo.org/geoserver/wms?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_state_boundaries");
         
         legendPanel = Ext.create('GeoExt.panel.Legend', {
@@ -97,9 +99,58 @@ Ext.application({
             region: 'west'
         });
         
-        Ext.create('Ext.container.Viewport', {
+        // functions for interacting with the map's layers to show how the
+        // legend instantly reflects changes
+        function addRemoveLayer() {
+            if(map.layers.indexOf(water) == -1) {
+                map.addLayer(water);
+            } else {
+                map.removeLayer(water);
+            }
+        }        
+        function moveLayer() {
+            var layer = layerRec0.getLayer();
+            var idx = map.layers.indexOf(layer) === 0 ?
+                map.layers.length : 0;
+            map.setLayerIndex(layerRec0.getLayer(), idx);
+        }
+        function toggleVisibility() {
+            var layer = layerRec1.getLayer();
+            layer.setVisibility(!layer.getVisibility());
+        }
+        function updateHideInLegend() {
+            layerRec0.set("hideInLegend", !layerRec0.get("hideInLegend"));
+        }
+        function updateLegendUrl() {
+            var url = layerRec0.get("legendURL");
+            layerRec0.set("legendURL", otherUrl);
+            otherUrl = url;
+        }
+        // store the layer that we will modify in toggleVis()
+        var layerRec1 = mapPanel.layers.getAt(1);
+        // stores another legendURL for the legendurl button action
+        var otherUrl = "http://www.geoext.org/trac/geoext/chrome/site/img/GeoExt.png";
+        // create another layer for the add/remove button action
+        var water = new OpenLayers.Layer.WMS("Bodies of Water",
+            "http://demo.opengeo.org/geoserver/wms?",
+            {layers: 'topp:tasmania_water_bodies', format: 'image/png', transparent: true},
+            {singleTile: true});
+
+        Ext.create('Ext.panel.Panel', {
             layout: 'border',
-            items: [mappanel, legendPanel]
+            renderTo: 'view',
+            width: 800,
+            height: 400,
+            items: [mapPanel, legendPanel],
+            tbar: new Ext.Toolbar({
+                items: [
+                    {text: 'add/remove', handler: addRemoveLayer},
+                    {text: 'movetop/bottom', handler: moveLayer },
+                    {text: 'togglevis', handler: toggleVisibility},
+                    {text: 'hide/show', handler: updateHideInLegend},
+                    {text: 'legendurl', handler: updateLegendUrl}
+                ]
+            })
         });
     }
 });
