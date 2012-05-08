@@ -129,9 +129,7 @@ Ext.define('GeoExt.panel.Map', {
         "afterlayervisibilitychange",
         "afterlayeropacitychange",
         "afterlayerorderchange",
-        "afterlayernamechange",
-        "afterlayeradd",
-        "afterlayerremove"
+        "afterlayernamechange"
     ],
     
     /**
@@ -176,7 +174,7 @@ Ext.define('GeoExt.panel.Map', {
 
         // create a layerstore with the current maps layers
         me.layers = Ext.create('GeoExt.data.LayerStore', {
-            data: me.map.layers
+            map: me
         });
         
         // check config-property controls
@@ -234,14 +232,6 @@ Ext.define('GeoExt.panel.Map', {
         /**
          * @event afterlayernamechange
          * Fires after a layer name changed.
-         */
-        /**
-         * @event afterlayeradd
-         * Fires after a layer added to the map.
-         */
-        /**
-         * @event afterlayerremove
-         * Fires after a layer removed from the map.
          */
         
         //TODO This should be handled by a LayoutManager
@@ -388,37 +378,6 @@ Ext.define('GeoExt.panel.Map', {
         }
     },
 
-    /**
-     * @private
-     * The "addlayer" listener bound to the {@link map}.
-     */
-    onAddlayer: function(e) {
-        this.layers.load();
-        this.fireEvent("afterlayeradd", this, this.map, e);
-    },
-
-    /**
-     * @private
-     * The "removelayer" listener bound to the {@link map}.
-     */
-    onRemovelayer: function(e) {
-        this.layers.load();
-        this.fireEvent("afterlayerremove", this, this.map, e);
-    },
-    
-    /**
-     * @private
-     * Check if an added item has to take separate actions
-     * to be added to the map.
-     * See e.g. the {@link GeoExt.slider.Zoom}
-     */
-    onBeforeAdd: function(item) {
-    	if(Ext.isFunction(item.addToMapPanel)) {
-    		item.addToMapPanel(this);
-    	}
-		this.callParent(arguments)
-	},
-    
     /**
      * @private
      * @return {Object} 
