@@ -30,8 +30,9 @@
 
             var olMap = createMap();
 
-            var myStore = Ext.create('GeoExt.data.LayerStore'
-            );
+            var myStore = Ext.create('GeoExt.data.LayerStore', {
+                data: olMap.layers
+            });
 
             t.eq(myStore.getCount(), 3, "Exactly 3 layers in the store");
             t.eq(myStore.getAt(2).getLayer().name, "test3", "Third layer is called: layer3");
