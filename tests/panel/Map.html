@@ -53,8 +53,8 @@
                 width: 600,
                 // map panel-specific options
                 map: map,
-                mapCenter: new OpenLayers.LonLat(5, 45),
-                mapZoom: 4
+                center: new OpenLayers.LonLat(5, 45),
+                zoom: 4
             });
             t.eq(moveToCnt, 1, "map.moveTo called exactly once");
             t.eq(mapPanel.map.getCenter().toString(), "lon=5,lat=45", "Map center set correctly");
@@ -105,7 +105,7 @@
                 height: 400,
                 width: 600,
                 layers: [new OpenLayers.Layer()],
-                mapZoom: 4
+                zoom: 4
             });
             
             t.eq(panel.map.zoom, 4, "zoom correctly set");
@@ -127,7 +127,7 @@
                 map: map,
                 height: 400,
                 width: 600,
-                mapExtent: [1, 2, 3, 4]
+                extent: [1, 2, 3, 4]
             });            
             t.eq(log.extent.toArray(), [1, 2, 3, 4], "map extent set with array");
             delete log.extent;
@@ -144,7 +144,7 @@
                 map: map,
                 height: 400,
                 width: 600,
-                mapExtent: "1, 2, 3, 4"
+                extent: "1, 2, 3, 4"
             });
             t.eq(log.extent.toArray(), [1, 2, 3, 4], "map extent set with string");
             // since we created the map, we destroy it
@@ -160,7 +160,7 @@
                 map: map,
                 height: 400,
                 width: 600,
-                mapExtent: new OpenLayers.Bounds(1, 2, 3, 4)
+                extent: new OpenLayers.Bounds(1, 2, 3, 4)
             });
             t.eq(log.extent.toArray(), [1, 2, 3, 4], "map extent set with Bounds");
             // since we created the map, we destroy it
@@ -175,7 +175,7 @@
                 height: 0,
                 items: [new GeoExt.MapPanel({
                     map: map,
-                    mapExtent: new OpenLayers.Bounds(1, 2, 3, 4)
+                    extent: new OpenLayers.Bounds(1, 2, 3, 4)
                 })]
             });
             
@@ -198,7 +198,7 @@
                                   // why we need map here
                 height: 400,
                 width: 600,
-                mapExtent: new OpenLayers.Bounds(1, 2, 3, 4)
+                extent: new OpenLayers.Bounds(1, 2, 3, 4)
             });
             panel.map.addLayer(new OpenLayers.Layer());
             t.ok(panel.map.getExtent(), "map has an extent after layer is added");
@@ -219,7 +219,7 @@
                 map: map,
                 height: 400,
                 width: 600,
-                mapCenter: [1, 2]
+                center: [1, 2]
             });            
             t.eq(log.center.toString(), "lon=1,lat=2", "map center set with array");
             delete log.center;
@@ -236,7 +236,7 @@
                 map: map,
                 height: 400,
                 width: 600,
-                mapCenter: "1, 2"
+                center: "1, 2"
             });            
             t.eq(log.center.toString(), "lon=1,lat=2", "map center set with string");
             delete log.center;
@@ -253,7 +253,7 @@
                 map: map,
                 height: 400,
                 width: 600,
-                mapCenter: new OpenLayers.LonLat(1, 2)
+                center: new OpenLayers.LonLat(1, 2)
             });            
             t.eq(log.center.toString(), "lon=1,lat=2", "map center set with LonLat");
             delete log.center;
@@ -416,11 +416,11 @@
                 opacity_bar: 0.5
             };
             mapPanel.applyState(state);
-            t.eq(mapPanel.getMapCenter().lon, 5,
+            t.eq(mapPanel.center.lon, 5,
                  "mapPanel.center.lon correctly set [0]");
-            t.eq(mapPanel.getMapCenter().lat, 45,
+            t.eq(mapPanel.center.lat, 45,
                  "mapPanel.center.lat correctly set [0]");
-            t.eq(mapPanel.getMapZoom(), 10,
+            t.eq(mapPanel.zoom, 10,
                  "mapPanel.zoom correctly set [0]");
             t.eq(layers[0].getVisibility(), true,
                  "layer foo visibility is correct [0]");
@@ -447,11 +447,11 @@
                 opacity_bar: "0.5"
             };
             mapPanel.applyState(state);
-            t.eq(mapPanel.getMapCenter().lon, 5,
+            t.eq(mapPanel.center.lon, 5,
                  "mapPanel.center.lon correctly set [1]");
-            t.eq(mapPanel.getMapCenter().lat, 45,
+            t.eq(mapPanel.center.lat, 45,
                  "mapPanel.center.lat correctly set [1]");
-            t.eq(mapPanel.getMapZoom(), "10",
+            t.eq(mapPanel.zoom, "10",
                  "mapPanel.zoom correctly set [1]");
             t.eq(layers[0].getVisibility(), true,
                  "layer foo visibility is correct [1]");
@@ -479,11 +479,11 @@
                 opacity_barid: "0.5"
             };
             mapPanel.applyState(state);
-            t.eq(mapPanel.getMapCenter().lon, 5,
+            t.eq(mapPanel.center.lon, 5,
                  "mapPanel.center.lon correctly set [1]");
-            t.eq(mapPanel.getMapCenter().lat, 45,
+            t.eq(mapPanel.center.lat, 45,
                  "mapPanel.center.lat correctly set [1]");
-            t.eq(mapPanel.getMapZoom(), "10",
+            t.eq(mapPanel.zoom, "10",
                  "mapPanel.zoom correctly set [1]");
             t.eq(layers[0].getVisibility(), true,
                  "layer foo visibility is correct [1]");
@@ -608,8 +608,8 @@
                 height: 400,
                 width: 600,
                 layers: layers,
-                mapCenter: [5, 45],
-                mapZoom: 6
+                center: [5, 45],
+                zoom: 6
             });
             layers[0].setOpacity(0.5);
 
@@ -644,8 +644,8 @@
                 height: 400,
                 width: 600,
                 layers: layers,
-                mapCenter: [5, 45],
-                mapZoom: 6
+                center: [5, 45],
+                zoom: 6
             });
             layers[0].setOpacity(0.5);
 
