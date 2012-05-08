@@ -18,7 +18,8 @@ Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
     'GeoExt.panel.Map',
-    'GeoExt.slider.LayerOpacity'
+    'GeoExt.slider.LayerOpacity',
+    'GeoExt.slider.Tip'
 ]);
 
 Ext.application({
@@ -47,9 +48,12 @@ Ext.application({
                 vertical: true,
                 height: 120,
                 x: 10,
-                y: 10
-/*,
-                plugins: new GeoExt.LayerOpacitySliderTip({template: '<div>Opacity: {opacity}%</div>'})*/
+                y: 10,
+                plugins: Ext.create("GeoExt.slider.Tip", {
+                    getText: function(thumb) {
+                        return Ext.String.format('Opacity: {0}%', thumb.value);
+                    }
+                })
             }]
         });
         // create a separate slider bound to the map but displayed elsewhere
@@ -60,8 +64,12 @@ Ext.application({
             isFormField: true,
             inverse: true,
             fieldLabel: "opacity",
-            renderTo: "slider"/*,
-            plugins: new GeoExt.LayerOpacitySliderTip({template: '<div>Transparency: {opacity}%</div>'})*/
+            renderTo: "slider",
+            plugins: Ext.create("GeoExt.slider.Tip", {
+                getText: function(thumb) {
+                    return Ext.String.format('Transparency: {0}%', thumb.value);
+                }
+            })
         });
         
         var clone = wms.clone();
@@ -89,8 +97,12 @@ Ext.application({
                 vertical: true,
                 height: 120,
                 x: 10,
-                y: 10/*,
-                plugins: new GeoExt.LayerOpacitySliderTip()*/
+                y: 10,
+                plugins: Ext.create("GeoExt.slider.Tip", {
+                    getText: function(thumb) {
+                        return Ext.String.format('{0}%', thumb.value);
+                    }
+                })
             }]
         });
     
