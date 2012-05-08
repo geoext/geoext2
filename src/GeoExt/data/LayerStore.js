@@ -39,7 +39,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * @config {Object} Creation parameters
      * @private
      */
-    construction: function(config) {
+    constructor: function(config) {
         var me = this;
 
         config = Ext.apply({}, config);
