@@ -65,7 +65,7 @@ Ext.define('GeoExt.data.LayerStore', {
         var options = {initDir: config.initDir};
         delete config.initDir;
 
-        me.callParent(config);
+        me.callParent([config]);
 
         /**
          * @event bind
@@ -375,7 +375,8 @@ Ext.define('GeoExt.data.LayerStore', {
         /** private: method[destroy]
          */
         destroy: function() {
-            this.unbind();
-            GeoExt.data.LayerStore.superclass.destroy.call(this);
+            var me = this;
+            me.unbind();
+            me.callParent();
         }
 });
