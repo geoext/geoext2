@@ -2,7 +2,7 @@
 <html debug="true">
   <head>
     <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
 
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
@@ -11,6 +11,7 @@
             disableCaching: false,
             enabled: true,
             paths: {
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
@@ -28,7 +29,7 @@
                     new OpenLayers.Layer("foo")
                 ]
             });
-            var legend = new GeoExt.URLLegend({
+            var legend = Ext.create("GeoExt.URLLegend", {
                 layerRecord: store.getAt(0),
                 renderTo: "legend"
             });
@@ -43,7 +44,7 @@
                     new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
                 ]
             });
-            var legend = new GeoExt.URLLegend({
+            var legend = Ext.create("GeoExt.URLLegend", {
                 layerRecord: store.getAt(0),
                 renderTo: "legend"
             });
@@ -60,7 +61,7 @@
                 ]
             });
             var rec = store.getAt(0);
-            var legend = new GeoExt.URLLegend({
+            var legend = Ext.create("GeoExt.URLLegend", {
                 layerRecord: rec,
                 renderTo: "legend"
             });
