@@ -17,6 +17,7 @@ var mappanel, legendPanel;
 Ext.require([
     'GeoExt.panel.Map', 
     'GeoExt.legend.WMSLayer', 
+    'GeoExt.legend.VectorLayer',
     'GeoExt.panel.Legend'
 ]);
 
