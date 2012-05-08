@@ -116,7 +116,7 @@ Ext.define('GeoExt.panel.Map', {
 
         // create a layerstore with the current maps layers
         me.layers = Ext.create('GeoExt.data.LayerStore', {
-            data: me.map.layers
+            map: me
         });
         
         // check config-property controls
