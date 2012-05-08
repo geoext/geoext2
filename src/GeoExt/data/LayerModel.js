@@ -4,15 +4,11 @@ Ext.define('GeoExt.data.LayerModel',{
     requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
     alias: 'model.gx_layer',
     fields: [   
-                'id',
-                {name: 'title',       type: 'string', mapping: 'name'},
-                {name: 'legendURL',   type: 'string', mapping: 'metadata.legendURL'},
-                {name: 'hideTitle',   type: 'bool',   mapping: 'metadata.hideTitle'},
-                {name: 'opacity',     type: 'float'},
-                {name: 'zIndex',      type: 'int'},
-                {name: 'isBaseLayer', type: 'bool'},
-                {name: 'visibility',  type: 'bool'},
-                {name: 'attribution', type: 'string'}
+        'id',
+        {name: 'title', type: 'string', mapping: 'name'},
+        {name: 'legendURL', type: 'string', mapping: 'metadata.legendURL'},
+        {name: 'hideTitle', type: 'bool', mapping: 'metadata.hideTitle'},
+        {name: 'hideInLegend', type: 'bool', mapping: 'metadata.hideInLegend'}
     ],
     proxy: {
         type: 'memory',
