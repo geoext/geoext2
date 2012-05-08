@@ -1,5 +1,35 @@
 /**
  * @class GeoExt.panel.Map
+ * 
+ * Create a panel container for a map. The map contained by this panel
+ * will initially be zoomed to either the center and zoom level configured
+ * by the ``center`` and ``zoom`` configuration options, or the configured
+ * ``extent``, or - if neither are provided - the extent returned by the
+ * map's ``getExtent()`` method.
+ * 
+ *     @example
+ *     var mappanel = Ext.create('GeoExt.panel.Map', {
+ *         title: 'A sample Map',
+ *         map: {
+ *             // ...
+ *             // optional, can be either
+ *             //   - a valid OpenLayers.Map configuration or
+ *             //   - an instance of OpenLayers.Map
+ *         },
+ *         center: '12.31,51.48',
+ *         zoom: 6
+ *     });
+ * 
+ * A Map created with code like above is then ready to use as any other panel. 
+ * To have a fullscrteen map application, you could e.g. add it to a viewport:
+ * 
+ *     @example
+ *     Ext.create('Ext.container.Viewport', {
+ *         layout: 'fit',
+ *         items: [
+ *             mappanel // our variable from above
+ *         ]
+ *      });
  */
 Ext.define('GeoExt.panel.Map', {
     extend : 'Ext.panel.Panel',
@@ -8,6 +38,17 @@ Ext.define('GeoExt.panel.Map', {
     alternateClassName : 'GeoExt.MapPanel',
     
     statics : {
+        /**
+         * @return {GeoExt.panel.Map} 
+         * @static
+         * 
+         * The first map panel found via an  the Ext.ComponentQuery.query 
+         * manager.
+         *  
+         * Convenience function for guessing the map panel of an application. 
+         * This can reliably be used for all applications that just have one map
+         * panel in the viewport.
+         */
         guess : function() {
             var candidates = Ext.ComponentQuery.query("gx_mappanel");
             return ((candidates && candidates.length > 0) 
@@ -15,6 +56,7 @@ Ext.define('GeoExt.panel.Map', {
                 : null);
         }
     },
+    
     /** @cfg {OpenLayers.LonLat/Number[]/String} center
      * A location for the initial map center.  If an array is provided, the
      * first two items should represent x & y coordinates. If a string is
@@ -37,50 +79,68 @@ Ext.define('GeoExt.panel.Map', {
      */
     extent: null,
     
-    config: {
-        /**
-         * @cfg {OpenLayers.Map/Object} map
-         * A configured map or a configuration object for the map constructor.
-         * A configured map will be available after construction through the
-         * {@link #map} property.
-         */
-        map: null,
-        
-        /**
-         * @cfg {OpenLayers.Layer[]}
-         * The layers provided here will be added to this MapPanel's map.
-         */
-        
-        /**
-         * @property {GeoExt.data.layerStore} layers
-         * A store containing gx_layer-model instances.
-         */
-        layers: null,
-        
-        /** 
-         * @cfg {Boolean} prettyStateKeys
-         * Set this to true if you want pretty strings in the MapPanel's state
-         * keys. More specifically, layer.name instead of layer.id will be used
-         * in the state keys if this option is set to true. But in that case
-         * you have to make sure you don't have two layers with the same name.
-         * Defaults to false.
-         */
-        prettyStateKeys: false
-    },
+    /** 
+     * @cfg {Boolean} prettyStateKeys
+     * Set this to true if you want pretty strings in the MapPanel's state
+     * keys. More specifically, layer.name instead of layer.id will be used
+     * in the state keys if this option is set to true. But in that case
+     * you have to make sure you don't have two layers with the same name.
+     * Defaults to false.
+     */
+    /** 
+     * @property {Boolean} prettyStateKeys
+     * Whether we want the state key to be pretty. See 
+     * {@link #cfg-prettyStateKeys the config option prettyStateKeys} for 
+     * details.
+     */
+    prettyStateKeys: false,
+    
+    /**
+     * @cfg {OpenLayers.Map/Object} map
+     * A configured map or a configuration object for the map constructor.
+     * A configured map will be available after construction through the
+     * {@link #property-map} property.
+     */
+    /** 
+     * @property {OpenLayers.Map/Object} map 
+     * A map or map configuration.
+     */
+    map: null,
+    
+    /**
+     * @cfg {GeoExt.data.LayerStore/OpenLayers.Layer[]} layers
+     * The layers provided here will be added to this Map's 
+     * {@link #property-map}.
+     */
+    /**
+     * @property {GeoExt.data.LayerStore} layers
+     * A store containing {@link GeoExt.data.LayerModel gx_layer-model} 
+     * instances.
+     */
+    layers: null,
     
     /**
      * @property {String[]} stateEvents
      * @private
      * Array of state events
      */
-    stateEvents: ["aftermapmove",
-                  "afterlayervisibilitychange",
-                  "afterlayeropacitychange",
-                  "afterlayerorderchange",
-                  "afterlayernamechange",
-                  "afterlayeradd",
-                  "afterlayerremove"],
+    stateEvents: [
+        "aftermapmove",
+        "afterlayervisibilitychange",
+        "afterlayeropacitychange",
+        "afterlayerorderchange",
+        "afterlayernamechange",
+        "afterlayeradd",
+        "afterlayerremove"
+    ],
     
+    /**
+     * Initializes the map panel. Creates an OpenLayers map if
+     * none was provided in the config options passed to the
+     * constructor.
+     * 
+     * @private
+     */
     initComponent: function(){
         var me = this;
         
@@ -146,50 +206,6 @@ Ext.define('GeoExt.panel.Map', {
         
         me.callParent(arguments);
         
-        me.addEvents(
-            /**
-             * @event
-             * Fires after the map is moved.
-             */
-            "aftermapmove",
-
-            /**
-             * @event
-             * Fires after a layer changed visibility.
-             */
-            "afterlayervisibilitychange",
-
-            /**
-             * @event
-             * Fires after a layer changed opacity.
-             */
-            "afterlayeropacitychange",
-
-            /**
-             * @event
-             * Fires after a layer order changed.
-             */
-            "afterlayerorderchange",
-
-            /**
-             * @event
-             * Fires after a layer name changed.
-             */
-            "afterlayernamechange",
-
-            /**
-             * @event
-             * Fires after a layer added to the map.
-             */
-            "afterlayeradd",
-
-            /**
-             * @event
-             * Fires after a layer removed from the map.
-             */
-            "afterlayerremove"
-        );
-        
         // bind various listeners to the corresponding OpenLayers.Map-events
         me.map.events.on({
             "moveend": me.onMoveend,
@@ -199,10 +215,46 @@ Ext.define('GeoExt.panel.Map', {
             scope: me
         });
         
+        /**
+         * @event aftermapmove
+         * Fires after the map is moved.
+         */
+        /**
+         * @event afterlayervisibilitychange
+         * Fires after a layer changed visibility.
+         */
+        /**
+         * @event afterlayeropacitychange
+         * Fires after a layer changed opacity.
+         */
+        /**
+         * @event afterlayerorderchange
+         * Fires after a layer order changed.
+         */
+        /**
+         * @event afterlayernamechange
+         * Fires after a layer name changed.
+         */
+        /**
+         * @event afterlayeradd
+         * Fires after a layer added to the map.
+         */
+        /**
+         * @event afterlayerremove
+         * Fires after a layer removed from the map.
+         */
+        
     },
     
     /**
      * @private
+     * 
+     * Returns the an array of default controls for autocreated OpenLayers.Map
+     * instances. Will give the autocreated controls the following controls:
+     * 
+     * * [OpenLayers.Control.Attribution](http://dev.openlayers.org/releases/OpenLayers-2.11/doc/apidocs/files/OpenLayers/Control/Attribution-js.html)
+     * * [OpenLayers.Control.ArgParser](http://dev.openlayers.org/releases/OpenLayers-2.11/doc/apidocs/files/OpenLayers/Control/ArgParser-js.html)
+     * * [OpenLayers.Control.Navigation](http://dev.openlayers.org/releases/OpenLayers-2.11/doc/apidocs/files/OpenLayers/Control/Navigation-js.html)
      */
     getDefaultControls: function() {
         var olc = OpenLayers.Control;
@@ -213,6 +265,10 @@ Ext.define('GeoExt.panel.Map', {
         ];
     },
     
+    /**
+     * @private
+     * Private method called after the panel has been rendered.
+     */
     afterRender: function(){
         var me = this;
         me.callParent(arguments);
@@ -227,16 +283,25 @@ Ext.define('GeoExt.panel.Map', {
         }
     },
     
+    /**
+     * @private
+     * Tell the map that it needs to recalculate its size and position.
+     */
     updateMapSize: function() {
-        var map = this.getMap();
+        var map = this.map;
         if(map) {
             map.updateSize();
         }
     },
     
+    /**
+     * @private
+     * Adjust the geographic position of the map according to the defined center
+     * and/or zoom, the defined extent or the #map's maxExtent. 
+     */
     adjustGeographicPosition: function(){
         var me = this,
-            map = me.getMap();
+            map = me.map;
         // Adjust the geographic position according to the passed config-options 
         if (!map.getCenter()) {
             if (me.center || me.zoom ) {
@@ -251,15 +316,25 @@ Ext.define('GeoExt.panel.Map', {
         }
     },
     
+    /**
+     * @private
+     * Private method called after the panel has been rendered or after it
+     * has been laid out by its parent's layout.
+     */
     renderMap: function() {
         var me = this,
-            map = me.getMap();
+            map = me.map;
         if (me.hasRenderableSize()) {
             map.render(me.body.dom);
             me.adjustGeographicPosition();
         }
     },
     
+    /**
+     * @private
+     * 
+     * Determines whether we have a size we can render the map into.
+     */
     hasRenderableSize: function() {
         var me = this,
             size = me.getSize(),
@@ -269,7 +344,6 @@ Ext.define('GeoExt.panel.Map', {
             height = (size.height === 0) 
                   ? 0 
                   : size.height - me.body.getBorderWidth("tb");
-        // console.log('w:' + width + ',h:' + height);
         return (width > 0 || height > 0);
         
     },
@@ -279,7 +353,7 @@ Ext.define('GeoExt.panel.Map', {
      * The "moveend" listener bound to the {@link map}.
      */
     onMoveend: function(e) {
-        this.fireEvent("aftermapmove", this, this.getMap(), e);
+        this.fireEvent("aftermapmove", this, this.map, e);
     },
 
     /**
@@ -289,7 +363,7 @@ Ext.define('GeoExt.panel.Map', {
      */
     onChangelayer: function(e) {
         var me = this,
-            map = me.getMap();
+            map = me.map;
         if (e.property) {
             if (e.property === "visibility") {
                 me.fireEvent("afterlayervisibilitychange", this, map, e);
@@ -309,7 +383,7 @@ Ext.define('GeoExt.panel.Map', {
      */
     onAddlayer: function(e) {
         this.layers.load();
-        this.fireEvent("afterlayeradd", this, this.getMap(), e);
+        this.fireEvent("afterlayeradd", this, this.map, e);
     },
 
     /**
@@ -318,12 +392,31 @@ Ext.define('GeoExt.panel.Map', {
      */
     onRemovelayer: function(e) {
         this.layers.load();
-        this.fireEvent("afterlayerremove", this, this.getMap(), e);
+        this.fireEvent("afterlayerremove", this, this.map, e);
     },
     
+    /**
+     * @private
+     * @return {Object} 
+     * Returns a state of the Map as keyed Object. Depending on the point in 
+     * time this methoid is being called, the following keys will be available:
+     * 
+     * * `x`
+     * * `y`
+     * * `zoom`
+     * 
+     * And for all layers present in the map the object will contain the 
+     * following keys
+     * 
+     * * `visibility_<XXX>`
+     * * `opacity_<XXX>`
+     * 
+     * The <XXX> suffix is either the title or id of the layer record, it can be 
+     * influenced by setting #prettyStateKeys to `true` or `false`.
+     */
     getState: function() {
         var me = this,
-            map = me.getMap(),
+            map = me.map,
             state = me.callParent(arguments) || {},
             layer;
 
@@ -366,7 +459,7 @@ Ext.define('GeoExt.panel.Map', {
      */
     applyState: function(state) {
         var me = this;
-            map = me.getMap();
+            map = me.map;
         // if we get strings for state.x, state.y or state.zoom
         // OpenLayers will take care of converting them to the
         // appropriate types so we don't bother with that
