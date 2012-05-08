@@ -10,6 +10,7 @@
 Ext.define('GeoExt.data.LayerModel', {
     alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'GeoExt.data.AbstractLayer',
+    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
     alias: 'gx_layer',
     fields: [
         {name: 'title', mapping: 'name'},
