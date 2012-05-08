@@ -1,11 +1,3 @@
-Ext.Loader.setConfig({
-    enabled: true,
-    disableCaching: false,
-    paths: {
-        GeoExt: "../../src/GeoExt"
-    }
-});
-
 Ext.require([
     'Ext.container.Viewport',
     'Ext.window.MessageBox',
