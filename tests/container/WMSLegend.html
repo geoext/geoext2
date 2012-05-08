@@ -2,7 +2,7 @@
 <html debug="true">
   <head>
     <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
 
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
@@ -11,6 +11,7 @@
             disableCaching: false,
             enabled: true,
             paths: {
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
@@ -22,7 +23,7 @@
 
         function loadMapPanel(render) {
             var renderTo = render === false ? null : "mappanel";
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create("GeoExt.MapPanel", {
                 // panel options
                 id: "map-panel",
                 title: "GeoExt MapPanel",
@@ -47,7 +48,7 @@
             var layer1 = new OpenLayers.Layer.WMS("test", '/ows', {layers: ['a,b', 'c,d']});
             var layer2 = new OpenLayers.Layer.WMS("test", '/ows', {layers: ['x', 'y']});
             mapPanel.map.addLayers([layer1, layer2]);
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(1)
             });
@@ -59,7 +60,7 @@
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy();
 
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(2)
             });
@@ -69,6 +70,7 @@
             expectedUrl = "/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=x&FORMAT=image%2Fgif&SCALE="+scale;
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy();
+            mapPanel.destroy();
         }
 
         function test_legendurl(t) {
@@ -77,7 +79,7 @@
             var l, url, expectedUrl;
             var mapPanel = loadMapPanel(false);
 
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 baseParams: {FORMAT: 'image/png', foo: 'bar bar'},
                 useScaleParameter: false,
@@ -91,7 +93,7 @@
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy()
 
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 useScaleParameter: false,
                 layerRecord: mapPanel.layers.getAt(0)
@@ -102,7 +104,7 @@
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy()
 
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0)
             });
@@ -118,7 +120,7 @@
                 name: "bar",
                 legend: {href: "foo?request=getlegendgraphic&format=image/jpeg"}
             }]);
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0)
             });
@@ -130,7 +132,7 @@
                 name: "bar",
                 legend: {href: "foo?request=getlegendgraphic"}
             }]);
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0)
             });
@@ -142,7 +144,7 @@
                 name: "bar",
                 legend: {href: "foo"}
             }]);
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0)
             });
@@ -152,7 +154,7 @@
 
             mapPanel.map.layers[0].params.STYLES = "";
             
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0),
                 defaultStyleIsFirst: true
@@ -162,7 +164,7 @@
             l.destroy();
 
             mapPanel.map.layers[0].params.SLD = "sld";
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0),
                 defaultStyleIsFirst: true
@@ -174,7 +176,7 @@
             delete mapPanel.map.layers[0].params.SLD;
 
             mapPanel.map.layers[0].params.SLD_BODY = "sld_body";
-            l = new GeoExt.WMSLegend({
+            l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0),
                 defaultStyleIsFirst: true
@@ -204,7 +206,7 @@
 
             var url, expectedUrl, cmp;
 
-            var l = new GeoExt.WMSLegend({
+            var l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: layerRecord
             });
@@ -298,7 +300,8 @@
 
             // tear down
 
-            l.destroy()
+            l.destroy();
+            mapPanel.destroy();
         }
 
 

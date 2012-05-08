@@ -1,6 +1,6 @@
 <html><head>
 <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-<script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+<script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
 
 <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
@@ -9,6 +9,7 @@
         disableCaching: false,
         enabled: true,
         paths: {
+            Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
             GeoExt: '../../src/GeoExt'
         }
     });
@@ -24,13 +25,13 @@
         var legend;
 
         // no config (won't render)
-        legend = new GeoExt.VectorLegend();
+        legend = Ext.create("GeoExt.VectorLegend");
         t.ok(legend instanceof GeoExt.VectorLegend, "instance of VectorLegend");
         t.ok(legend instanceof GeoExt.LayerLegend, "instance of LayerLegend");
         legend.destroy();
         
         // rules & symbolType
-        legend = new GeoExt.VectorLegend({
+        legend = Ext.create("GeoExt.VectorLegend", {
             legendTitle: "my title",
             renderTo: "legendpanel",
             rules: [
@@ -65,7 +66,7 @@
     function test_setCurrentScaleDenominator(t) {
         t.plan(12);
         
-        var legend = new GeoExt.VectorLegend({
+        var legend = Ext.create("GeoExt.VectorLegend", {
             legendTitle: "my title",
             renderTo: "legendpanel",
             rules: [
@@ -110,10 +111,10 @@
         var layer = new OpenLayers.Layer.Vector("old");
         map.addLayer(layer);
 
-        var store = new GeoExt.data.LayerStore();
+        var store = Ext.create("GeoExt.data.LayerStore");
         store.loadRawData(map.layers);
 
-        var legend = new GeoExt.VectorLegend({
+        var legend = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(0),
             renderTo: "legendpanel",
             symbolType: "Point"
@@ -142,9 +143,9 @@
         map.addLayer(layer);
         map.zoomToMaxExtent();
 
-        var store = new GeoExt.data.LayerStore();
+        var store = Ext.create("GeoExt.data.LayerStore");
         store.loadRawData(map.layers);
-        var legend = new GeoExt.VectorLegend({
+        var legend = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(1),
             renderTo: "legendpanel",
             symbolType: "Point"
@@ -178,10 +179,10 @@
         var layer = new OpenLayers.Layer.Vector("old");
         map.addLayer(layer);
 
-        var store = new GeoExt.data.LayerStore();
+        var store = Ext.create("GeoExt.data.LayerStore");
         store.loadRawData(map.layers);
         
-        var legend = new GeoExt.VectorLegend({
+        var legend = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(0),
             renderTo: "legendpanel",
             symbolType: "Point"
@@ -246,7 +247,7 @@
         ];
         
         // [a] test legend with default config
-        legend = new GeoExt.VectorLegend({
+        legend = Ext.create("GeoExt.VectorLegend", {
             renderTo: "legendpanel",
             rules: rules
         });
@@ -256,7 +257,7 @@
         legend.destroy();
         
         // [b] test legend with custom untitledPrefix
-        legend = new GeoExt.VectorLegend({
+        legend = Ext.create("GeoExt.VectorLegend", {
             renderTo: "legendpanel",
             rules: rules,
             untitledPrefix: "foo "
@@ -267,7 +268,7 @@
         legend.destroy();
         
         // [c] test legend with null untitledPrefix
-        legend = new GeoExt.VectorLegend({
+        legend = Ext.create("GeoExt.VectorLegend", {
             renderTo: "legendpanel",
             rules: rules,
             untitledPrefix: null
@@ -283,7 +284,7 @@
         t.plan(2);
         var legend;
         var map = new OpenLayers.Map();
-        var store = new GeoExt.data.LayerStore();
+        var store = Ext.create("GeoExt.data.LayerStore");
         store.loadRawData(map.layers);
 
         // First test with a style without a rule but with a title. The
@@ -304,7 +305,7 @@
             new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(1,1))
         ]);
 
-        var legend1 = new GeoExt.VectorLegend({
+        var legend1 = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(0)
         });
 
@@ -338,7 +339,7 @@
             new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(2,2))
         ]);
         
-        var legend2 = new GeoExt.VectorLegend({
+        var legend2 = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(1)
         });
 

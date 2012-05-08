@@ -11,6 +11,7 @@
             disableCaching: false,
             enabled: true,
             paths: {
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../src/GeoExt'
             }
         });
@@ -25,12 +26,12 @@
             var legend;
             
             // create a legend with the default config
-            legend = new GeoExt.LegendImage();
+            legend = Ext.create("GeoExt.LegendImage");
             t.eq(legend.defaultImgSrc, Ext.BLANK_IMAGE_URL, "defaultImgSrc defaults to Ext.BLANK_IMAGE_URL");
             legend.destroy();
             
             // create a legend with a custom defaultImgSrc
-            legend = new GeoExt.LegendImage({defaultImgSrc: "foo"});
+            legend = Ext.create("GeoExt.LegendImage", {defaultImgSrc: "foo"});
             t.eq(legend.defaultImgSrc, "foo", "defaultImgSrc can be set in config");
             legend.destroy();
             
@@ -42,7 +43,7 @@
             var legend, calls = 0;
 
             // create a legend with a bogus image url (one call to error handler)
-            legend = new GeoExt.LegendImage({
+            legend = Ext.create("GeoExt.LegendImage", {
                 url: "bogus",
                 defaultImgSrc: "also-bogus",
                 renderTo: "legend",
@@ -65,7 +66,7 @@
             t.plan(2);
             
             var calls = 0;
-            var legend = new GeoExt.LegendImage({
+            var legend = Ext.create("GeoExt.LegendImage", {
                 url: Ext.BLANK_IMAGE_URL,
                 defaultImgSrc: "bogus",
                 renderTo: "legend",
