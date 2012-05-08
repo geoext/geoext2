@@ -22,13 +22,6 @@ Ext.define('GeoExt.data.LayerModel', {
         reader: {
             type: 'json'
         }
-    },
-
-    /**
-     * Returns the {OpenLayers.Layer} layer object used in this model instance
-     */
-    getLayer: function() {
-        return this.raw;
     }
 });
 
