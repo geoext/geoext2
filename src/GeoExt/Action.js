@@ -22,61 +22,60 @@
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
     alias : 'widget.gx_action',
-    config: {
     
-        /**
-         * @cfg {OpenLayers.Control}
-         * The OpenLayers control wrapped in this action.
-         */
-        control: null,
-        
-        /**
-         * @cfg {OpenLayers.Map}
-         *  The OpenLayers map that the control should be added
-         *  to.  For controls that don't need to be added to a map or have already
-         *  been added to one, this config property may be omitted.
-         */
-        map: null,
-        
-        /**
-         * @private
-         * @cfg {Object}
-         *  The user-provided scope, used when calling uHandler,
-         *  uToggleHandler, and uCheckHandler.
-         */
-        uScope: null,
-        
-        /**
-         * @private
-         * @cfg {Function}
-         *  References the function the user passes through
-         *  the "handler" property.
-         */
-        uHandler: null,
-        
-        /**
-         * @private
-         * @cfg {Function}
-         *  References the function the user passes through
-         *  the "toggleHandler" property.
-         */
-        uToggleHandler: null,
-        
-        /**
-         * @private
-         * @cfg {Function}
-         *  References the function the user passes through
-         *  the "checkHandler" property.
-         */
-        uCheckHandler: null
+    /**
+     * @cfg {OpenLayers.Control}
+     * The OpenLayers control wrapped in this action.
+     */
+    control: null,
     
-    },
+    /**
+     * @cfg {OpenLayers.Map}
+     *  The OpenLayers map that the control should be added
+     *  to.  For controls that don't need to be added to a map or have already
+     *  been added to one, this config property may be omitted.
+     */
+    map: null,
+    
+    /**
+     * @private
+     * @cfg {Object}
+     *  The user-provided scope, used when calling uHandler,
+     *  uToggleHandler, and uCheckHandler.
+     */
+    uScope: null,
+    
+    /**
+     * @private
+     * @cfg {Function}
+     *  References the function the user passes through
+     *  the "handler" property.
+     */
+    uHandler: null,
+    
+    /**
+     * @private
+     * @cfg {Function}
+     *  References the function the user passes through
+     *  the "toggleHandler" property.
+     */
+    uToggleHandler: null,
+    
+    /**
+     * @private
+     * @cfg {Function}
+     *  References the function the user passes through
+     *  the "checkHandler" property.
+     */
+    uCheckHandler: null,
     
     /** 
      * Create a GeoExt.Action instance. A GeoExt.Action is created to insert
      * an OpenLayers control in a toolbar as a button or in a menu as a menu
      * item. A GeoExt.Action instance can be used like a regular Ext.Action,
      * look at the Ext.Action API doc for more detail.
+     * 
+     * @private
      */
     constructor: function(config){
         // store the user scope and handlers
