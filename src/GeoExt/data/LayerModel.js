@@ -9,11 +9,10 @@
  */
 Ext.define('GeoExt.data.LayerModel', {
     alternateClassName: 'GeoExt.data.LayerRecord',
-    extend: 'Ext.data.Model',
-    alias: ['gx_layer'],
+    extend: 'GeoExt.data.AbstractLayer',
+    alias: 'gx_layer',
     fields: [
         {name: 'title', mapping: 'name'},
-        {name: 'name', mapping: 'metadata.name'},
         {name: 'legendURL', mapping: 'metadata.legendURL'},
         {name: 'hideTitle', mapping: 'metadata.hideTitle'},
         'id'

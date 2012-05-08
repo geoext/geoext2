@@ -2,7 +2,8 @@ Ext.require([
     'Ext.container.Viewport',
     'Ext.state.Manager',
     'Ext.state.CookieProvider',
-    'GeoExt.panel.Map'
+    'GeoExt.panel.Map',
+    'Ext.state.CookieProvider'
 ]);
 
 Ext.application({
