@@ -2,8 +2,7 @@
 <html debug="true">
   <head>
     <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all.js" ></script>
-    <!--script src="<PATH_TO_EXT>/4.1.0/ext-debug.js"></script-->
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
 
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
@@ -12,12 +11,12 @@
             disableCaching: false,
             enabled: true,
             paths: {
-                //Ext: '<PATH_TO_EXT>/4.1.0/src',
+                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
 
-        Ext.require('GeoExt.panel.Map');
+        Ext.require(['Ext.layout.container.Border', 'GeoExt.panel.Map']);
     
         // the hidden span element that contains the test iframe
         var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
@@ -280,7 +279,7 @@
                 layers: [
                     new OpenLayers.Layer("test")
                 ],
-                mapZoom: 1
+                zoom: 1
             });
             
             t.ok(panel.map instanceof OpenLayers.Map, "panel creates a map");
