@@ -21,13 +21,12 @@ Ext.define('GeoExt.data.AttributeModel', {
     requires: ['Ext.data.proxy.Ajax', 'GeoExt.data.reader.Attribute'],
     alias: 'model.gx_attribute',
     fields: [
-        {name: 'name', type: 'string', mapping: 'name'},
-        {name: 'type', type: 'string', mapping: 'type'},
-        {name: 'restriction', mapping: 'restriction'},
-        {name: 'nillable', type: 'bool', mapping: 'nillable'}
-        // No 'value' field by default. 
-        // It gets added by the GeoExt.data.reader.Attribute constructor 
-        // if it is given a feature.
+        {name: 'name', type: 'string'},
+        {name: 'type', type: 'string'},
+        {name: 'restriction'},
+        {name: 'nillable', type: 'bool'}
+        // No 'value' field by default. The 'value' field gets added by the 
+        // GeoExt.data.reader.Attribute constructor if it is given a feature.
     ],
     proxy: {
         type: 'ajax',
