@@ -21,24 +21,11 @@
 
         function test_constructor(t) {
             t.plan(2);
-            var reader = new GeoExt.data.WMSCapabilitiesReader();
-
-            var fields = reader.recordType.prototype.fields;
-
-            // 1 test
-            t.eq(fields.items.length, 25, 'number of default items is correct');
-
-            var reader = new GeoExt.data.WMSCapabilitiesReader({},[
-                {name: "foo"},
-                {name: "bar"}
-            ]);
-
-            var fields = reader.recordType.prototype.fields;
-
-            //1 test
-            t.ok(fields.items[2].name == 'foo' &&
-                 fields.items[3].name == 'bar',
-                 'field values set from configuration are correct');
+            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
+            t.ok(reader.format instanceof OpenLayers.Format.WMSCapabilities, "default format gets created");
+            reader.destroy();
+            reader = Ext.create("GeoExt.data.reader.WmsCapabilities", {format: new OpenLayers.Format.WMSCapabilities.v1_1_1_WMSC()});
+            t.ok(reader.format instanceof OpenLayers.Format.WMSCapabilities.v1_1_1_WMSC, "custom format used");
         }
 
         function test_read_exception(t) {
@@ -54,9 +41,7 @@
         function test_read(t) {
             t.plan(41);
 
-            // test a reader with the only two default LayerRecord fields
-            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities", {});
-
+            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
             var records = reader.read({responseXML: doc});
 
             //1 test
