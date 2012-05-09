@@ -12,9 +12,9 @@
  *  GeoExt.data.WMSCapabilitiesReader). If not provided, a
  *  GetLegendGraphic request will be issued to retrieve the image.
  *
- * @class GeoExt.container.WMSLegend
+ * @class GeoExt.container.WmsLegend
  */
-Ext.define('GeoExt.container.WMSLegend', {
+Ext.define('GeoExt.container.WmsLegend', {
     extend : 'GeoExt.container.LayerLegend',
     alias : 'widget.gx_wmslegend',
     requires: ['GeoExt.LegendImage'],
