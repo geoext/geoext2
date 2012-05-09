@@ -7,6 +7,8 @@
  */
 
 /**
+ * The WMS legend class.
+ *
  * @class GeoExt.container.WMSLegend
  */
 Ext.define('GeoExt.container.WMSLegend', {
