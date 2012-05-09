@@ -1,18 +1,19 @@
 Ext.define('GeoExt.data.WMSCapabilitiesReader', {
     extend: 'Ext.data.reader.Reader',
 
-    /** api: config[attributionCls]
-     *  ``String`` CSS class name for the attribution DOM elements.
-     *  Element class names append "-link", "-image", and "-title" as
-     *  appropriate.  Default is "gx-attribution".
+    /** 
+     * @cfg {String}
+     * CSS class name for the attribution DOM elements.
+     * Element class names append "-link", "-image", and "-title" as
+     * appropriate.  Default is "gx-attribution".
      */
     attributionCls: "gx-attribution",
 
-    /** private: method[read]
-     *  :param request: ``Object`` The XHR object which contains the parsed XML
-     *      document.
-     *  :return: ``Object`` A data block which is used by an ``Ext.data.Store``
-     *      as a cache of ``Ext.data.Record`` objects.
+    /** 
+     * @param {Object} request The XHR object which contains the parsed XML
+     * document.
+     * @return {Object} A data block which is used by an {Ext.data.Store}
+     * as a cache of {Ext.data.Model} objects.
      */
     read: function(request) {
         var data = request.responseXML;
@@ -22,9 +23,10 @@ Ext.define('GeoExt.data.WMSCapabilitiesReader', {
         return this.readRecords(data);
     },
     
-    /** private: method[serviceExceptionFormat]
-     *  :param formats: ``Array`` An array of service exception format strings.
-     *  :return: ``String`` The (supposedly) best service exception format.
+    /**
+     * @private
+     * @param {String[]} formats An array of service exception format strings.
+     * @return {String} The (supposedly) best service exception format.
      */
     serviceExceptionFormat: function(formats) {
         if (OpenLayers.Util.indexOf(formats, 
@@ -38,10 +40,11 @@ Ext.define('GeoExt.data.WMSCapabilitiesReader', {
         return formats[0];
     },
     
-    /** private: method[imageFormat]
-     *  :param layer: ``Object`` The layer's capabilities object.
-     *  :return: ``String`` The (supposedly) best mime type for requesting 
-     *      tiles.
+    /** 
+     * @private
+     * @param {Object} layer The layer's capabilities object.
+     * @return {String} The (supposedly) best mime type for requesting 
+     * tiles.
      */
     imageFormat: function(layer) {
         var formats = layer.formats;
@@ -61,24 +64,25 @@ Ext.define('GeoExt.data.WMSCapabilitiesReader', {
         return formats[0];
     },
 
-    /** private: method[imageTransparent]
-     *  :param layer: ``Object`` The layer's capabilities object.
-     *  :return: ``Boolean`` The TRANSPARENT param.
+    /**
+     * @private
+     * @param {Object} layer The layer's capabilities object.
+     * @return {Boolean} The TRANSPARENT param.
      */
     imageTransparent: function(layer) {
         return layer.opaque == undefined || !layer.opaque;
     },
 
-    /** private: method[readRecords]
-     *  :param data: ``DOMElement | String | Object`` A document element or XHR
-     *      response string.  As an alternative to fetching capabilities data
-     *      from a remote source, an object representing the capabilities can
-     *      be provided given that the structure mirrors that returned from the
-     *      capabilities parser.
-     *  :return: ``Object`` A data block which is used by an ``Ext.data.Store``
-     *      as a cache of ``Ext.data.Record`` objects.
-     *  
-     *  Create a data block containing Ext.data.Records from an XML document.
+    /**
+     * Create a data block containing Ext.data.Records from an XML document.
+     * @private
+     * @param {DOMElement/String/Object} data A document element or XHR
+     * response string.  As an alternative to fetching capabilities data
+     * from a remote source, an object representing the capabilities can
+     * be provided given that the structure mirrors that returned from the
+     * capabilities parser.
+     * @return  {Object} A data block which is used by an {Ext.data.Store}
+     * as a cache of {Ext.data.Model} objects.
      */
     readRecords: function(data) {
         if(typeof data === "string" || data.nodeType) {
@@ -147,14 +151,14 @@ Ext.define('GeoExt.data.WMSCapabilitiesReader', {
 
     },
 
-    /** private: method[attributionMarkup]
-     *  :param attribution: ``Object`` The attribution property of the layer
-     *      object as parsed from a WMS Capabilities document
-     *  :return: ``String`` HTML markup to display attribution
-     *      information.
-     *  
-     *  Generates attribution markup using the Attribution metadata
-     *      from WMS Capabilities
+    /**
+     * Generates attribution markup using the Attribution metadata
+     * from WMS Capabilities
+     * @private
+     * @param {Object} attribution The attribution property of the layer
+     * object as parsed from a WMS Capabilities document
+     * @return {String} HTML markup to display attribution
+     * information.
      */
     attributionMarkup : function(attribution){
         var markup = [];
