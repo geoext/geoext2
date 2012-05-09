@@ -15,8 +15,13 @@
             }
         });
 
+<<<<<<< Updated upstream
         Ext.require(['GeoExt.panel.Map', 'GeoExt.slider.Zoom']);
  
+=======
+        Ext.require(['Ext.layout.container.Border', 'GeoExt.panel.Map', 'GeoExt.slider.Zoom']);
+    
+>>>>>>> Stashed changes
         // the hidden span element that contains the test iframe
         var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
        

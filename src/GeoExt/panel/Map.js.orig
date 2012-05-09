@@ -380,6 +380,40 @@ Ext.define('GeoExt.panel.Map', {
 
     /**
      * @private
+<<<<<<< HEAD
+=======
+     * The "addlayer" listener bound to the {@link map}.
+     */
+    onAddlayer: function(e) {
+        this.layers.load();
+        this.fireEvent("afterlayeradd", this, this.map, e);
+    },
+
+    /**
+     * @private
+     * The "removelayer" listener bound to the {@link map}.
+     */
+    onRemovelayer: function(e) {
+        this.layers.load();
+        this.fireEvent("afterlayerremove", this, this.map, e);
+    },
+    
+    /**
+     * @private
+     * Check if an added item has to take separate actions
+     * to be added to the map.
+     * See e.g. the {@link GeoExt.slider.Zoom}
+     */
+    onBeforeAdd: function(item) {
+    	if(Ext.isFunction(item.addToMapPanel)) {
+    		item.addToMapPanel(this);
+    	}
+		this.callParent(arguments)
+	},
+    
+    /**
+     * @private
+>>>>>>> Readded special handling of items added to mapPanels, e.g. ZoomSlider (also affects #42).
      * @return {Object} 
      * Returns a state of the Map as keyed Object. Depending on the point in 
      * time this methoid is being called, the following keys will be available:

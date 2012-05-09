@@ -22,6 +22,7 @@ Ext.Loader.setConfig({
 
 Ext.require([
     'Ext.container.Viewport',
+    'GeoExt.panel.Map',
     'GeoExt.state.PermalinkProvider'
 ]);
 
