@@ -20,14 +20,14 @@ Ext.define('GeoExt.state.PermalinkProvider', {
         this.state = this.readURL(url);
     
     },
-    /** api: config[encodeType]
-   *  ``Boolean`` Specifies whether type of state values should be encoded
-   *  and decoded. Set it to false if you work with components that don't
-   *  require encoding types, and want pretty permalinks. Defaults to true.
-   */
-    /** private: property[encodeType]
-   *  ``Boolean``
-   */
+
+    /**
+     * @private
+     * @property{Boolean}
+     *  Specifies whether type of state values should be encoded
+     *  and decoded. Set it to false if you work with components that don't
+     *  require encoding types, and want pretty permalinks. Defaults to true.
+     */
     encodeType: true,
     
     initComponent: function(){
@@ -36,9 +36,10 @@ Ext.define('GeoExt.state.PermalinkProvider', {
         me.callParent(arguments);
     },
         
-    /** private: method[readURL]
-     *  :param url: ``String`` The URL to get the state from.
-     *  :return: ``Object`` The state object.
+    /**
+     * @private
+     * @param url {String} The URL to get the state from.
+     * @return {Object} The state object.
      *
      *  Create a state object from a URL.
      */
@@ -60,9 +61,9 @@ Ext.define('GeoExt.state.PermalinkProvider', {
         return state;
     },
 
-    /** api: method[getLink]
-     *  :param base: ``String`` The base URL, optional.
-     *  :return: ``String`` The permalink.
+    /**
+     * @param base {String} The base URL, optional.
+     * @return {String} The permalink.
      *
      *  Return the permalink corresponding to the current state.
      */
