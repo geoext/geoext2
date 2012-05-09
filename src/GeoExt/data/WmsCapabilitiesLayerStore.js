@@ -17,6 +17,7 @@
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
     extend: 'Ext.data.Store',
+    requires: ['GeoExt.data.reader.WmsCapabilities'],
     model: 'GeoExt.data.WmsCapabilitiesLayerModel',
     alternateClassName: ['GeoExt.data.WMSCapabilitiesStore','GeoExt.data.WmsCapabilitiesStore'],
     /**

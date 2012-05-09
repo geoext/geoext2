@@ -12,7 +12,6 @@
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',
-    requires: ['GeoExt.data.reader.WmsCapabilities'],
     alternateClassName: ['GeoExt.data.WMSCapabilitiesModel','GeoExt.data.WmsCapabilitiesModel'],
     alias: 'model.gx_wmscapabilities',
     fields: [
