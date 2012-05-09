@@ -9,11 +9,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     constructor: function(config) {
         this.callParent([config]);
-        // TODO only when not set
-        // TODO should this be in metaData?
-        this.metaData = {
-            format: new OpenLayers.Format.WMSCapabilities()
-        };
+        if (!this.format) {
+            this.format = new OpenLayers.Format.WMSCapabilities();
+        }
     },
 
     /** 
@@ -101,7 +99,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     readRecords: function(data) {
         if(typeof data === "string" || data.nodeType) {
-            data = this.metaData.format.read(data);
+            data = this.format.read(data);
         }
         if (!!data.error) {
             throw new Ext.data.DataReader.Error("invalid-response", data.error);
