@@ -283,14 +283,12 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
     
     /**
-     *  @param symbolizers {Object[]} An array of symbolizers
-     *  @param options {Object}
-     *
      *  Update the symbolizers used to render the feature.
      *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
+     *  @param symbolizers {Object[]} An array of symbolizers
+     *  @param options {Object}
+     *  @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
+     *
      */
     setSymbolizers: function(symbolizers, options) {
         this.symbolizers = symbolizers;
@@ -300,14 +298,12 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
     
     /**
-     * @param type {String} One of the ``symbolType`` strings.
-     * @param options {Object}
-     * 
      *  Create a new feature based on the geometry type and render it.
      *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
+     * @param type {String} One of the ``symbolType`` strings.
+     * @param options {Object}
+     * @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
+     * 
      */
     setSymbolType: function(type, options) {
         this.symbolType = type;
@@ -315,15 +311,13 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
     
     /**
+     *  Update the feature and redraw.
+     *
      * @param feature {OpenLayers.Feature.Vector} The feature to be rendered.  
      *      If none is provided, one will be created based on ``symbolType``.
      * @param options {Object}
+     * @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
      *
-     *  Update the feature and redraw.
-     *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
      */
     setFeature: function(feature, options) {
         this.feature = feature || this[this.symbolType.toLowerCase() + "Feature"];
@@ -333,8 +327,8 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     * @private
      *  Render the feature with the symbolizers.
+     * @private
      */
     drawFeature: function() {
         this.renderer.clear();
@@ -367,17 +361,16 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
     
     /**
-     *  @param options {Object} Object with properties to be updated.
-     * 
      *  Update the ``symbolType`` or ``feature`` and ``symbolizer`` and redraw
      *  the feature.
      *
      *  Valid options:
      *  
-     *  * feature - ``OpenLayers.Feature.Vector`` The new or updated feature.  
+     *  @param options {Object} Object with properties to be updated.
+     *  @param options.feature {OpenLayers.Feature.Vector} The new or updated feature.  
      *      If provided, the feature gets precedence over ``symbolType``.
-     *  * symbolType - ``String`` One of the allowed ``symbolType`` values.
-     *  * symbolizers - ``Array(Object)`` An array of symbolizer objects.
+     *  @param options.symbolType {String} One of the allowed ``symbolType`` values.
+     *  @param options.symbolizers {Object[]} An array of symbolizer objects.
      */
     update: function(options) {
         options = options || {};
@@ -399,8 +392,8 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     * @private
      *  Private method called during the destroy sequence.
+     * @private
      */
     beforeDestroy: function() {
         this.clearCustomEvents();
