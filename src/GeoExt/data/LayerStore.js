@@ -1,8 +1,5 @@
 /**
  * @requires GeoExt/data/LayerModel.js
- */
-
-/**
  * @class GeoExt.data.LayerStore
  * A store that synchronizes a layers array of an OpenLayers.Map with a
  * layer store holding {@link GeoExt.data.LayerModel} instances.
