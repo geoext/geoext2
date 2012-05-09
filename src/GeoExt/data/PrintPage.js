@@ -74,7 +74,7 @@ Ext.define('GeoExt.data.PrintPage', {
         /** 
          * @event change
          * 
- @return {}   * Triggered when any of the page properties have changed
+         * Triggered when any of the page properties have changed
          *  
          * Listener arguments:
          *
