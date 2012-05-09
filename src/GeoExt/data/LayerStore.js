@@ -11,12 +11,14 @@ Ext.define('GeoExt.data.LayerStore', {
     statics: {
         /**
          * @static
-         * @property {Number} MAP_TO_STORE
+         * @property {Number}
+         * Direction: Map to store
          */
         MAP_TO_STORE: 1,
         /**
          * @static
-         * @property {Number} STORE_TO_MAP
+         * @property {Number}
+         * Direction: Store to map
          */
         STORE_TO_MAP: 2 
     },
