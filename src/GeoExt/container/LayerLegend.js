@@ -157,7 +157,7 @@ Ext.define('GeoExt.container.LayerLegend', {
      * added.
      * @param {Ext.data.Record} record The record object corresponding
      * to the added layer.
-     * @param {Index} index The index in the store at which the record
+     * @param {Integer} index The index in the store at which the record
      * was added.
      */
     onStoreAdd: function(store, record, index) {
