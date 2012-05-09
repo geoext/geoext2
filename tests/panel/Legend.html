@@ -94,7 +94,6 @@
         function test_ignoreLayerVisibility(t) {
             t.plan(2);
             var mapPanel = loadMapPanel();
-            mapPanel.map.layers[0].setVisibility(false);
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 defaults: {
                     listeners: {
@@ -102,6 +101,7 @@
                     }
                 },
                 renderTo: 'legendpanel'});
+            mapPanel.map.layers[0].setVisibility(false);
             var id = lp.getIdForLayer(mapPanel.layers.getAt(0).getLayer());
             t.eq(lp.getComponent(id).isVisible(), true, "Layer is visible because our beforehide listener returns false");
 
@@ -111,7 +111,7 @@
 
             lp.destroy();
             mapPanel.destroy();
-        }
+      }
 
         function test_hide(t) {
             t.plan(1);
