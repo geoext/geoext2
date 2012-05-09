@@ -12,6 +12,12 @@
  *  Display a popup with feature information.
  */
 
+Ext.require([
+    'Ext.Window', // useless in fact, since we're using ext-all.js in the example
+    'GeoExt.panel.Map',
+    'GeoExt.window.Popup'
+]);
+
 var mapPanel, popup;
 
 Ext.onReady(function() {
@@ -28,15 +34,20 @@ Ext.onReady(function() {
     var selectCtrl = new OpenLayers.Control.SelectFeature(vectorLayer);
 
     // define "createPopup" function
-    var bogusMarkup = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
+    var bogusMarkup = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
+            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
+            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit." +
+            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
+    
     function createPopup(feature) {
-        popup = new GeoExt.Popup({
+        popup = Ext.create('GeoExt.window.Popup', {
             title: 'My Popup',
             location: feature,
             width:200,
             html: bogusMarkup,
             maximizable: true,
-            collapsible: true
+            collapsible: true,
+            anchorPosition: 'auto'
         });
         // unselect feature when the popup
         // is closed
@@ -59,7 +70,7 @@ Ext.onReady(function() {
     });
 
     // create Ext window including a map panel
-    var mapwin = new Ext.Window({
+    var mapwin = Ext.create('Ext.Window', {
         layout: "fit",
         title: "Map",
         closeAction: "hide",
@@ -69,13 +80,14 @@ Ext.onReady(function() {
         y: 100,
         items: {
             xtype: "gx_mappanel",
+            border: false,
             region: "center",
             layers: [
-//                new OpenLayers.Layer.WMS( 
-//                    "OpenLayers WMS",
-//                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
-//                    {layers: 'basic'} ),
-                new OpenLayers.Layer.Vector('sf',{
+                new OpenLayers.Layer.WMS( 
+                    "OpenLayers WMS",
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} ),
+                new OpenLayers.Layer.Vector('vector',{
                     isBaseLayer: true
                 }),
                 vectorLayer
