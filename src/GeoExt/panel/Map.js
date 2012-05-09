@@ -39,15 +39,15 @@ Ext.define('GeoExt.panel.Map', {
     
     statics : {
         /**
-         * @return {GeoExt.panel.Map} 
-         * @static
-         * 
-         * The first map panel found via an  the Ext.ComponentQuery.query 
+         * The first map panel found via an the Ext.ComponentQuery.query 
          * manager.
          *  
          * Convenience function for guessing the map panel of an application. 
          * This can reliably be used for all applications that just have one map
          * panel in the viewport.
+         *
+         * @return {GeoExt.panel.Map} 
+         * @static         
          */
         guess : function() {
             var candidates = Ext.ComponentQuery.query("gx_mappanel");
