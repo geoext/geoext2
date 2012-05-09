@@ -1,9 +1,6 @@
 /**
- * @include GeoExt/panel/Map.js
- */
-
-/**
  * @class GeoExt.window.Popup
+ * @include GeoExt/panel/Map.js
  * 
  * Popups are a specialized Window that supports anchoring
  * to a particular location in a {@link GeoExt.panel.Map MapPanel}.
@@ -111,7 +108,8 @@ Ext.define('GeoExt.window.Popup', {
     location: null,
     
     /** 
-     * @cfg {String} popupCls
+     * @property {String} popupCls
+     * @private
      * CSS class name for the popup DOM elements.
      */
     popupCls: "gx-popup",
@@ -163,7 +161,6 @@ Ext.define('GeoExt.window.Popup', {
             this.addAnchorEvents();
         }
 
-        this.baseCls = this.popupCls + " " + this.baseCls;
         this.elements += ',anc';
         
         this.callParent(arguments);
@@ -180,6 +177,7 @@ Ext.define('GeoExt.window.Popup', {
      */
     onRender: function(ct, position) {
         this.callParent(arguments);
+        this.addClass(this.popupCls);
         this.ancCls = this.popupCls + "-anc";
         
         //create anchor dom element.
@@ -408,8 +406,6 @@ Ext.define('GeoExt.window.Popup', {
         
         this.on({
             "resize": this.position,
-            "collapse": this.position,
-            "expand": this.position,
             scope: this
         });
     },
@@ -425,8 +421,6 @@ Ext.define('GeoExt.window.Popup', {
         });
 
         this.un("resize", this.position, this);
-        this.un("collapse", this.position, this);
-        this.un("expand", this.position, this);
     },
 
     /**

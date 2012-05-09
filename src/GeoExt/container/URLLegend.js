@@ -1,4 +1,14 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
 /**
+ * Show a legend image in a BoxComponent and make sure load errors are 
+ * dealt with.
  * @class GeoExt.container.URLLegend
  */
 Ext.define('GeoExt.container.URLLegend', {
