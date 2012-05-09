@@ -32,8 +32,7 @@
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
             map.addLayer(layer);
 
-            var mapPanel = new GeoExt.MapPanel(Ext.apply({
-            //var mapPanel = Ext.define('GeoExt.panel.Map', Ext.apply({
+            var mapPanel = Ext.create('GeoExt.panel.Map', Ext.apply({
                 // panel options
                 id: "map-panel",
                 title: "GeoExt MapPanel",
@@ -89,8 +88,7 @@
                 })
             ];
 
-            var mapPanel = new GeoExt.MapPanel({
-            //var mapPanel = Ext.create('GeoExt.panel.Map', {
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 // panel options
                 id: "map-panel2",
                 title: "GeoExt MapPanel",
@@ -127,8 +125,7 @@
         }
 
         function popup(feature, map, options) {
-            return new GeoExt.Popup(Ext.apply({
-            //return Ext.create('GeoExt.window.Popup', Ext.apply({
+            return Ext.create('GeoExt.window.Popup', Ext.apply({
                 title: 'My Popup',
                 location: feature,
                 map: map,
