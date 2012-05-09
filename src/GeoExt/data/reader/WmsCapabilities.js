@@ -2,6 +2,19 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     alternateClassName: ['GeoExt.data.reader.WMSCapabilities', 'GeoExt.data.WMSCapabilitiesReader'],
     extend: 'Ext.data.reader.Reader',
 
+    /**
+     * Creates new Reader.
+     * @param {Object} config (optional) Config object.
+     */
+    constructor: function(config) {
+        this.callParent([config]);
+        // TODO only when not set
+        // TODO should this be in metaData?
+        this.metaData = {
+            format: new OpenLayers.Format.WMSCapabilities()
+        };
+    },
+
     /** 
      * @cfg {String}
      * CSS class name for the attribution DOM elements.
