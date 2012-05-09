@@ -384,5 +384,14 @@ Ext.define('GeoExt.data.LayerStore', {
             var me = this;
             me.unbind();
             me.callParent();
-        }
+        },
+
+    /**
+     * Build layer records out of an array of layers and appends them to the
+     * store.
+     * @param {OpenLayers.Layer[]} layers
+     */
+    addLayers: function(layers) {
+        return this.loadRawData(layers, true);
+    }
 });
