@@ -15,6 +15,10 @@
             }
         });
 
+        Ext.require([
+            'GeoExt.data.reader.WmsCapabilities'
+        ]);
+
         function test_constructor(t) {
             t.plan(2);
             var reader = new GeoExt.data.WMSCapabilitiesReader();
@@ -39,7 +43,7 @@
 
         function test_read_exception(t) {
             t.plan(1);
-            var reader = new GeoExt.data.WMSCapabilitiesReader({}, []);
+            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
             try {
                 var records = reader.read({responseXML: exceptionsDoc});
             } catch(e) {
@@ -51,7 +55,7 @@
             t.plan(41);
 
             // test a reader with the only two default LayerRecord fields
-            var reader = new GeoExt.data.WMSCapabilitiesReader({}, []);
+            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities", {});
 
             var records = reader.read({responseXML: doc});
 

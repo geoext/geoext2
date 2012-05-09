@@ -1,5 +1,5 @@
 Ext.define('GeoExt.data.reader.WmsCapabilities', {
-    alternateClassName: ['GeoExt.data.WMSCapabilitiesReader'],
+    alternateClassName: ['GeoExt.data.reader.WMSCapabilities', 'GeoExt.data.WMSCapabilitiesReader'],
     extend: 'Ext.data.reader.Reader',
 
     /** 
@@ -87,7 +87,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     readRecords: function(data) {
         if(typeof data === "string" || data.nodeType) {
-            data = this.meta.format.read(data);
+            data = this.metaData.format.read(data);
         }
         if (!!data.error) {
             throw new Ext.data.DataReader.Error("invalid-response", data.error);
@@ -123,8 +123,8 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                         minScale: layer.minScale,
                         maxScale: layer.maxScale
                     };
-                    if(this.meta.layerOptions) {
-                        Ext.apply(options, this.meta.layerOptions);
+                    if(this.metaData.layerOptions) {
+                        Ext.apply(options, this.metaData.layerOptions);
                     }
                     params = {
                             layers: layer.name,
@@ -133,8 +133,8 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                             transparent: this.imageTransparent(layer),
                             version: version
                     };
-                    if (this.meta.layerParams) {
-                        Ext.apply(params, this.meta.layerParams);
+                    if (this.metaData.layerParams) {
+                        Ext.apply(params, this.metaData.layerParams);
                     }
                     values.layer = new OpenLayers.Layer.WMS(
                         layer.title || layer.name, url, params, options
