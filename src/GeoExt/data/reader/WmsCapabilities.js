@@ -1,4 +1,4 @@
-Ext.define('GeoExt.data.reader.WMSCapabilities', {
+Ext.define('GeoExt.data.reader.WmsCapabilities', {
     alternateClassName: ['GeoExt.data.WMSCapabilitiesReader'],
     extend: 'Ext.data.reader.Reader',
 
