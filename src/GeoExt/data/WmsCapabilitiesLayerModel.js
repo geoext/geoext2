@@ -18,11 +18,12 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
         {name: "prefix", type: "string", mapping: "metadata.prefix"},
         {name: "attribution", type: "string"},
         {name: "formats", mapping: "metadata.formats"}, // array
+        {name: "infoFormats", mapping: "metadata.infoFormats"}, //array
         {name: "styles", mapping: "metadata.styles"}, // array
         {name: "srs", mapping: "metadata.srs"}, // object
         {name: "dimensions", mapping: "metadata.dimensions"}, // object
         {name: "bbox", mapping: "metadata.bbox"}, // object
-        {name: "llbbox", mapping: "metadata.llbox"}, // array
+        {name: "llbbox", mapping: "metadata.llbbox"}, // array
         {name: "keywords", mapping: "metadata.keywords"}, // array
         {name: "identifiers", mapping: "metadata.identifiers"}, // object
         {name: "authorityURLs", mapping: "metadata.authorityURLs"}, // object
