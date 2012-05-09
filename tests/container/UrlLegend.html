@@ -28,7 +28,7 @@
                     new OpenLayers.Layer("foo")
                 ]
             });
-            var legend = Ext.create("GeoExt.UrlLegend", {
+            var legend = Ext.create("GeoExt.container.UrlLegend", {
                 layerRecord: store.getAt(0),
                 renderTo: "legend"
             });
@@ -79,8 +79,8 @@
                 ]
             });
 
-            t.ok(GeoExt.UrlLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
-            t.eq(GeoExt.UrlLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
+            t.ok(GeoExt.container.UrlLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
+            t.eq(GeoExt.container.UrlLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
         }
 
     </script>
