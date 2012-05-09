@@ -12,8 +12,8 @@
 
 /**
  * @class GeoExt.data.AttributeModel
- * A specific model, which is fit for the records created by the 
- * {@link GeoExt.data.reader.Attribute}'s readRecords method.
+ * <p>A specific model, which is fit for the records created by the 
+ * {@link GeoExt.data.reader.Attribute}'s readRecords method.</p>
  */
 Ext.define('GeoExt.data.AttributeModel', {
     alternateClassName: 'GeoExt.data.AttributeRecord',
