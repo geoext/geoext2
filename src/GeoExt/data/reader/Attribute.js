@@ -121,11 +121,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
             for(var j=0; j<numFields; ++j) {
                 field = fields.items[j];
                 name = field.name;
-                if (field.convert) {
-                    value = field.convert(attr[name]);
-                } else {
-                    value = attr[name];
-                }
+                value = attr[name];
                 if(this.ignoreAttribute(name, value)) {
                     ignore = true;
                     break;
@@ -143,17 +139,10 @@ Ext.define('GeoExt.data.reader.Attribute', {
                 }
             }
             if(!ignore) {
-                records[records.length] = new Model(values);
+                records[records.length] = values;
             }
         }
-
-        return new Ext.data.ResultSet({
-            success: true,
-            records: records,
-            count: records.length,
-            total: records.length,
-            message: ''
-        });
+        return this.callParent([records]);
     },
 
     /** 
