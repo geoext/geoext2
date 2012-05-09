@@ -1,13 +1,17 @@
 Ext.define('GeoExt.data.reader.WmsCapabilities', {
     alternateClassName: ['GeoExt.data.reader.WMSCapabilities', 'GeoExt.data.WMSCapabilitiesReader'],
-    extend: 'Ext.data.reader.Reader',
+    extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wmscapabilities',
+    requires: ['GeoExt.data.WmsCapabilitiesLayerModel'],
 
     /**
      * Creates new Reader.
      * @param {Object} config (optional) Config object.
      */
     constructor: function(config) {
+        if (!this.model) {
+            this.model = 'GeoExt.data.WmsCapabilitiesLayerModel';
+        }
         this.callParent([config]);
         if (!this.format) {
             this.format = new OpenLayers.Format.WMSCapabilities();
@@ -114,7 +118,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         var records = [];
         
         if(url && layers) {
-            var fields = this.recordType.prototype.fields; 
+            var fields = this.getFields();
             var layer, values, options, params, field, v;
 
             for(var i=0, lenI=layers.length; i<lenI; i++){
@@ -122,10 +126,10 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                 if(layer.name) {
                     values = {};
                     for(var j=0, lenJ=fields.length; j<lenJ; j++) {
-                        field = fields.items[j];
+                        field = fields[j];
                         v = layer[field.mapping || field.name] ||
                         field.defaultValue;
-                        v = field.convert(v);
+                        v = field.convert && field.convert(v);
                         values[field.name] = v;
                     }
                     options = {
@@ -135,8 +139,8 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                         minScale: layer.minScale,
                         maxScale: layer.maxScale
                     };
-                    if(this.metaData.layerOptions) {
-                        Ext.apply(options, this.metaData.layerOptions);
+                    if(this.layerOptions) {
+                        Ext.apply(options, this.layerOptions);
                     }
                     params = {
                             layers: layer.name,
@@ -145,13 +149,13 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                             transparent: this.imageTransparent(layer),
                             version: version
                     };
-                    if (this.metaData.layerParams) {
-                        Ext.apply(params, this.metaData.layerParams);
+                    if (this.layerParams) {
+                        Ext.apply(params, this.layerParams);
                     }
                     values.layer = new OpenLayers.Layer.WMS(
                         layer.title || layer.name, url, params, options
                     );
-                    records.push(new this.recordType(values, values.layer.id));
+                    records.push(new this.model(values, values.layer.id));
                 }
             }
         }

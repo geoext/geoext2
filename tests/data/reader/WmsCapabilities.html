@@ -41,9 +41,7 @@
         function test_read(t) {
             t.plan(41);
 
-            // test a reader with the only two default LayerRecord fields
-            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities", {});
-
+            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
             var records = reader.read({responseXML: doc});
 
             //1 test
