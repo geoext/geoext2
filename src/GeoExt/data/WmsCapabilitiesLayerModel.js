@@ -8,8 +8,8 @@
 
 /**
  * @class GeoExt.data.WmsCapabilitiesLayerModel
+ * The model for WMS layers coming from a WMS GetCapabilities document.
  */
-
 Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',
     require: ['GeoExt.data.reader.WmsCapabilitiesReader'],
