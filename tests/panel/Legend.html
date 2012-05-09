@@ -54,7 +54,7 @@
             mapPanel.layers.getAt(0).set("legendURL", newUrl);
 
             var item = lp.getComponent(lp.getIdForLayer(mapPanel.map.layers[0]));
-            t.ok(item instanceof GeoExt.UrlLegend, "If legendURL is found in layerRecord, UrlLegend is chosen.")
+            t.ok(item instanceof GeoExt.container.UrlLegend, "If legendURL is found in layerRecord, UrlLegend is chosen.")
             var url = item.items.get(1).getEl().dom.src;
             t.eq(url, newUrl, "Update the image with the provided legendURL");
 
