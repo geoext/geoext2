@@ -214,5 +214,5 @@ Ext.define('GeoExt.container.WmsLegend', {
         this.callParent();
     }
 }, function() {
-    GeoExt.container.LayerLegend.types["gx_wmslegend"] = GeoExt.container.WMSLegend;
+    GeoExt.container.LayerLegend.types["gx_wmslegend"] = GeoExt.container.WmsLegend;
 });
