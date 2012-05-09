@@ -8,6 +8,8 @@
 
 /**
  * @class GeoExt.data.reader.WmsCapabilities
+ * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]} 
+ * from a WMS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WmsCapabilities', {
     alternateClassName: ['GeoExt.data.reader.WMSCapabilities', 'GeoExt.data.WMSCapabilitiesReader'],
