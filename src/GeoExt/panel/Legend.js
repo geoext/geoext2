@@ -7,6 +7,14 @@
  */
 
 /**
+ *  A panel showing legends of all layers in a layer store.
+ *  Depending on the layer type, a legend renderer will be chosen.
+ *
+ *  The LegendPanel will include legends for all the layers in the
+ *  ``layerStore`` it is configured with, unless the layer is configured with
+ *  ``displayInLayerSwitcher: false``, or a layer record has a
+ *  ``hideInLegend`` field with a value of ``true``. Additional filtering can
+ *  be done by configuring a ``filter`` on the LegendPanel.
  * @class GeoExt.panel.Legend
  */
 Ext.define('GeoExt.panel.Legend', {

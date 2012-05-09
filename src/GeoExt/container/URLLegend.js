@@ -7,6 +7,8 @@
  */
 
 /**
+ * Show a legend image in a BoxComponent and make sure load errors are 
+ * dealt with.
  * @class GeoExt.container.URLLegend
  */
 Ext.define('GeoExt.container.URLLegend', {

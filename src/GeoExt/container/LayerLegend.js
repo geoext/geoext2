@@ -7,6 +7,8 @@
  */
 
 /**
+ * Base class for components of GeoExt.LegendPanel.
+ *
  * @class GeoExt.container.LayerLegend
  */
 Ext.define('GeoExt.container.LayerLegend', {
