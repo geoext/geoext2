@@ -119,25 +119,26 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         
         if(url && layers) {
             var fields = this.getFields();
-            var layer, values, options, params, field, v;
+            var layer, metadata, options, params, field, v;
 
             for(var i=0, lenI=layers.length; i<lenI; i++){
                 layer = layers[i];
                 if(layer.name) {
-                    values = {};
+                    metadata = {};
                     for(var j=0, lenJ=fields.length; j<lenJ; j++) {
                         field = fields[j];
                         v = layer[field.mapping || field.name] ||
                         field.defaultValue;
                         v = field.convert && field.convert(v);
-                        values[field.name] = v;
+                        metadata[field.name] = v;
                     }
                     options = {
                         attribution: layer.attribution ?
                             this.attributionMarkup(layer.attribution) :
                             undefined,
                         minScale: layer.minScale,
-                        maxScale: layer.maxScale
+                        maxScale: layer.maxScale,
+                        metadata: metadata
                     };
                     if(this.layerOptions) {
                         Ext.apply(options, this.layerOptions);
@@ -152,20 +153,14 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                     if (this.layerParams) {
                         Ext.apply(params, this.layerParams);
                     }
-                    values.layer = new OpenLayers.Layer.WMS(
+                    layer = new OpenLayers.Layer.WMS(
                         layer.title || layer.name, url, params, options
                     );
-                    records.push(new this.model(values, values.layer.id));
+                    records.push(layer);
                 }
             }
         }
-        
-        return {
-            totalRecords: records.length,
-            success: true,
-            records: records
-        };
-
+        return this.callParent([records]);
     },
 
     /**
