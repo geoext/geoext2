@@ -1,3 +1,6 @@
+/**
+ * The layer model class used by the stores.
+ */
 Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'Ext.data.Model',

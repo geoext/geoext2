@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
@@ -7,6 +7,8 @@
  */
 
 /**
+ * Base class for components of GeoExt.LegendPanel.
+ *
  * @class GeoExt.container.LayerLegend
  */
 Ext.define('GeoExt.container.LayerLegend', {
@@ -155,7 +157,7 @@ Ext.define('GeoExt.container.LayerLegend', {
      * added.
      * @param {Ext.data.Record} record The record object corresponding
      * to the added layer.
-     * @param {Index} index The index in the store at which the record
+     * @param {Integer} index The index in the store at which the record
      * was added.
      */
     onStoreAdd: function(store, record, index) {
