@@ -7,6 +7,7 @@
  */
 
 /**
+ * The legend image.
  * @class GeoExt.LegendImage
  */
 Ext.define('GeoExt.LegendImage', {

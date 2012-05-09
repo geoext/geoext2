@@ -1,6 +1,7 @@
 {
     "--title": "GeoExt 2 Docs",
     "-o": "docs",
+    "--external": "OpenLayers.Map,OpenLayers.Control,Integer",
     "--": [
         "src",
         "../extjs-4.1.0/src/"

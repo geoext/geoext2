@@ -1,3 +1,6 @@
+/**
+ * The permalink provider.
+ */
 Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
     requires : [

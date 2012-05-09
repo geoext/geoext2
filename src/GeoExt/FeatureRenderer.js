@@ -1,3 +1,6 @@
+/**
+ * The feature renderer.
+ */
 Ext.define('GeoExt.FeatureRenderer', {
     extend : 'Ext.Component',
     alias : 'widget.gx_renderer',
