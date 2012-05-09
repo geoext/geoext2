@@ -1,9 +1,6 @@
 /**
- * @include GeoExt/panel/Map.js
- */
-
-/**
  * @class GeoExt.window.Popup
+ * @include GeoExt/panel/Map.js
  * 
  * Popups are a specialized Window that supports anchoring
  * to a particular location in a {@link GeoExt.panel.Map MapPanel}.
