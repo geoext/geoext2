@@ -151,7 +151,7 @@ Ext.define('GeoExt.window.Popup', {
         } else if (this.location instanceof OpenLayers.Pixel) {
             this.location = this.map.getLonLatFromViewPortPx(this.location);
         } else {
-            this.setAnchored(false);
+            this.anchored = false;
         }
 
         var mapExtent =  this.map.getExtent();
