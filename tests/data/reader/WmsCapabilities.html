@@ -33,7 +33,7 @@
             t.plan(1);
             var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
             try {
-                var records = reader.read({responseXML: exceptionsDoc});
+                var records = reader.read({responseXML: exceptionsDoc, responseText: true});
             } catch(e) {
                 t.ok(true, "Exception thrown when getting a service exception");
             }
@@ -43,7 +43,7 @@
             t.plan(39);
 
             var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
-            var records = reader.read({responseXML: doc});
+            var records = reader.read({responseXML: doc, responseText: true});
             var record = records.records[2];
             t.eq(record.get("name"), "tiger:tiger_roads", "correct layer name");
             reader.destroy();
@@ -57,7 +57,7 @@
                     foo: 'TRUE'
                 }
             });
-            records = reader.read({responseXML: doc});
+            records = reader.read({responseXML: doc, responseText: true});
             t.eq(records.totalRecords, 22, 'readRecords returns correct number of records');
 
             var layer;

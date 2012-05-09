@@ -46,11 +46,6 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
         
         config = Ext.apply({}, config);
         
-        if(config.url){
-            config.proxy = Ext.applyIf(config.proxy || {},
-                {url: config.url, type: 'ajax'}
-            );
-        }
         if(config.fields){
             //save a ref to the extra fields but delete them from the config
             //since a fields property passed in a config object can cause some
@@ -65,6 +60,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
         if(xtraFields){
             me.model.addFields(xtraFields);
         }
+        config.url && me.setUrl(config.url);
     },
     /**
      * @private

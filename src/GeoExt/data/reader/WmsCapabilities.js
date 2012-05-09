@@ -44,7 +44,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      * @return {Object} A data block which is used by an {Ext.data.Store}
      * as a cache of {Ext.data.Model} objects.
      */
-    read: function(request) {
+    getResponseData: function(request) {
         var data = request.responseXML;
         if(!data || !data.documentElement) {
             data = request.responseText;
