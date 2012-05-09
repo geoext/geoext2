@@ -314,7 +314,7 @@ Ext.define('GeoExt.data.PrintProvider', {
                 type: "memory",
                 reader: {
                     type: "json",
-                    root: "scales",
+                    root: "scales"
                 }
             },
             fields: [
@@ -331,7 +331,7 @@ Ext.define('GeoExt.data.PrintProvider', {
                 type: "memory",
                 reader: {
                     type: "json",
-                    root: "dpis",
+                    root: "dpis"
                 }
             },
             fields: [
@@ -345,7 +345,7 @@ Ext.define('GeoExt.data.PrintProvider', {
                 type: "memory",
                 reader: {
                     type: "json",
-                    root: "layouts",
+                    root: "layouts"
                 }
             },
             fields: [
