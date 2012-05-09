@@ -303,7 +303,7 @@ Ext.define('GeoExt.data.PrintProvider', {
             	type: "memory",
                 reader: {
                     type: "json",
-                    root: "scales",
+                    root: "scales"
                 }
             },
             fields: [
