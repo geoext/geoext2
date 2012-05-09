@@ -15,8 +15,8 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='global-property-'>/**
-</span> * Copyright (c) 2008-2010 The Open Source Geospatial Foundation
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2010 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
@@ -133,10 +133,9 @@ Ext.define('GeoExt.Action', {
     },
     
 <span id='GeoExt-Action-method-pHandler'>    /**
-</span>     * @private
+</span>     *  The private handler.
+     * @private
      * @param {Ext.Component} The component that triggers the handler.
-     *
-     *  The private handler.
      */
     pHandler: function(cmp){
         var ctrl = this.control;
@@ -150,11 +149,10 @@ Ext.define('GeoExt.Action', {
     },
     
 <span id='GeoExt-Action-method-pToggleHandler'>    /**
-</span>     * @private
+</span>     *  The private toggle handler.
+     * @private
      * @param {Ext.Component} cmp The component that triggers the toggle handler.
      * @param {Boolean} state The state of the toggle.
-     *
-     *  The private toggle handler.
      */
     pToggleHandler: function(cmp, state){
         this.changeControlState(state);
@@ -164,11 +162,10 @@ Ext.define('GeoExt.Action', {
     },
     
 <span id='GeoExt-Action-method-pCheckHandler'>    /**
-</span>     * @private
+</span>     *  The private check handler.
+     * @private
      * @param {Ext.Component} cmp The component that triggers the check handler.
      * @param {Boolean} state The state of the toggle.
-     *
-     *  The private check handler.
      */
     pCheckHandler: function(cmp, state){
         this.changeControlState(state);
@@ -178,10 +175,9 @@ Ext.define('GeoExt.Action', {
     },
     
 <span id='GeoExt-Action-method-changeControlState'>    /**
-</span>     * @private
+</span>     *  Change the control state depending on the state boolean.
+     * @private
      * @param {Boolean} state The state of the toggle.
-     *
-     *  Change the control state depending on the state boolean.
      */
     changeControlState: function(state){
         if (state) {
@@ -201,9 +197,8 @@ Ext.define('GeoExt.Action', {
     },
     
 <span id='GeoExt-Action-method-onCtrlActivate'>    /**
-</span>     * @private
-     *
-     *  Called when this action's control is activated.
+</span>     *  Called when this action's control is activated.
+     * @private
      */
     onCtrlActivate: function(){
         var ctrl = this.control;
@@ -219,9 +214,8 @@ Ext.define('GeoExt.Action', {
     },
     
 <span id='GeoExt-Action-method-onCtrlDeactivate'>    /**
-</span>     * @private
-     *
-     *  Called when this action's control is deactivated.
+</span>     *  Called when this action's control is deactivated.
+     * @private
      */
     onCtrlDeactivate: function(){
         var ctrl = this.control;

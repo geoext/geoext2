@@ -86,8 +86,8 @@ Ext.define('GeoExt.slider.Zoom', {
     updating: false,
     
 <span id='GeoExt-slider-Zoom-method-initComponent'>    /**
-</span>     * @private
-     * Initialize the component.
+</span>     * Initialize the component.
+     * @private
      */
     initComponent: function(){
         this.callParent(arguments);
@@ -108,8 +108,8 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-onRender'>    /**
-</span>     * @private
-     * Override onRender to set base css class.
+</span>     * Override onRender to set base css class.
+     * @private
      */
     onRender: function() {
         this.callParent(arguments);
@@ -117,9 +117,9 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-afterRender'>    /**
-</span>     * @private
-     * Override afterRender because the render event is fired too early
+</span>     * Override afterRender because the render event is fired too early
      *  to call update.
+     * @private
      */
     afterRender : function(){
         this.callParent(arguments);
@@ -127,10 +127,9 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-addToMapPanel'>    /**
-</span>     * @private
+</span>     * Called by a MapPanel if this component is one of the items in the panel.
+     * @private
      * @param {GeoExt.panel.Map} panel
-     * 
-     * Called by a MapPanel if this component is one of the items in the panel.
      */
     addToMapPanel: function(panel) {
         this.on({
@@ -161,11 +160,9 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-removeFromMapPanel'>    /**
-</span>     * @private
+</span>     * Called by a MapPanel if this component is one of the items in the panel.
+     * @private
      * @param {GeoExt.panel.Map}
-     * 
-     * Called by a MapPanel if this component is one of the items in the panel.
-     * 
      */
     removeFromMapPanel: function(panel) {
         var el = this.getEl();
@@ -205,8 +202,8 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-initZoomValues'>    /**
-</span>     * @private
-     * Set the min/max values for the slider if not set in the config.
+</span>     * Set the min/max values for the slider if not set in the config.
+     * @private
      */
     initZoomValues: function() {
         var layer = this.map.baseLayer;
@@ -220,18 +217,16 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-getZoom'>    /**
-</span>     * @return {Number} The map zoom level.
-     * 
-     * Get the zoom level for the associated map based on the slider value.
+</span>     * Get the zoom level for the associated map based on the slider value.
+     * @return {Number} The map zoom level.
      */
     getZoom: function() {
         return this.getValue();
     },
     
 <span id='GeoExt-slider-Zoom-method-getScale'>    /**
-</span>     * @return {Number} The map scale denominator.
-     * 
-     * Get the scale denominator for the associated map based on the slider value.
+</span>     * Get the scale denominator for the associated map based on the slider value.
+     * @return {Number} The map scale denominator.
      */
     getScale: function() {
         return OpenLayers.Util.getScaleFromResolution(
@@ -241,17 +236,16 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-getResolution'>    /**
-</span>     * @return {Number} The map resolution.
-     * 
-     * Get the resolution for the associated map based on the slider value.
+</span>     * Get the resolution for the associated map based on the slider value.
+     * @return {Number} The map resolution.
      */
     getResolution: function() {
         return this.map.getResolutionForZoom(this.getValue());
     },
     
 <span id='GeoExt-slider-Zoom-method-changeHandler'>    /**
-</span>     * @private
-     * Registered as a listener for slider changecomplete. Zooms the map.
+</span>     * Registered as a listener for slider changecomplete. Zooms the map.
+     * @private
      */
     changeHandler: function() {
         if(this.map &amp;&amp; !this.updating) {
@@ -260,9 +254,9 @@ Ext.define('GeoExt.slider.Zoom', {
     },
     
 <span id='GeoExt-slider-Zoom-method-update'>    /**
-</span>     * @private
-     * Registered as a listener for map zoomend. 
+</span>     * Registered as a listener for map zoomend. 
      * Updates the value of the slider.
+     * @private
      */
     update: function() {
         if(this.rendered &amp;&amp; this.map) {
@@ -271,6 +265,7 @@ Ext.define('GeoExt.slider.Zoom', {
             this.updating = false;
         }
     }
-});</pre>
+});
+</pre>
 </body>
 </html>

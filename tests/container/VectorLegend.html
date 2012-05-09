@@ -103,15 +103,14 @@
     }
     
     function test_update(t) {
-        
+
         t.plan(2);
 
         var map = new OpenLayers.Map();
         var layer = new OpenLayers.Layer.Vector("old");
         map.addLayer(layer);
 
-        var store = Ext.create("GeoExt.data.LayerStore");
-        store.loadRawData(map.layers);
+        var store = Ext.create("GeoExt.data.LayerStore", {map: map});
 
         var legend = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(0),
@@ -124,7 +123,6 @@
 
         // change layer title
         layer.setName("new");
-
         // check title (only works if layer is added to a map)
         t.eq(legend.getComponent(0).getEl().dom.innerHTML, "new", "correct new legend title");
 
@@ -142,8 +140,7 @@
         map.addLayer(layer);
         map.zoomToMaxExtent();
 
-        var store = Ext.create("GeoExt.data.LayerStore");
-        store.loadRawData(map.layers);
+        var store = Ext.create("GeoExt.data.LayerStore", {map: map});
         var legend = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(1),
             renderTo: "legendpanel",
@@ -178,8 +175,7 @@
         var layer = new OpenLayers.Layer.Vector("old");
         map.addLayer(layer);
 
-        var store = Ext.create("GeoExt.data.LayerStore");
-        store.loadRawData(map.layers);
+        var store = Ext.create("GeoExt.data.LayerStore", {map: map});
         
         var legend = Ext.create("GeoExt.VectorLegend", {
             layerRecord: store.getAt(0),
@@ -283,8 +279,7 @@
         t.plan(2);
         var legend;
         var map = new OpenLayers.Map();
-        var store = Ext.create("GeoExt.data.LayerStore");
-        store.loadRawData(map.layers);
+        var store = Ext.create("GeoExt.data.LayerStore", {map: map});
 
         // First test with a style without a rule but with a title. The
         // style title should be shown in the legend

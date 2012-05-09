@@ -1,4 +1,17 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
 /**
+ *  Show a legend image for a WMS layer. The image can be read from the styles
+ *  field of a layer record (if the record comes e.g. from a
+ *  GeoExt.data.WMSCapabilitiesReader). If not provided, a
+ *  GetLegendGraphic request will be issued to retrieve the image.
+ *
  * @class GeoExt.container.WMSLegend
  */
 Ext.define('GeoExt.container.WMSLegend', {
@@ -13,43 +26,42 @@ Ext.define('GeoExt.container.WMSLegend', {
         }
     },
 
-    config: {
-        /** @cfg {Boolean}
-         * The WMS spec does not say if the first style advertised for a layer in
-         * a Capabilities document is the default style that the layer is
-         * rendered with. We make this assumption by default. To be strictly WMS
-         * compliant, set this to false, but make sure to configure a STYLES
-         * param with your WMS layers, otherwise LegendURLs advertised in the
-         * GetCapabilities document cannot be used.
-         */
-        defaultStyleIsFirst: true,
+    /** @cfg {Boolean}
+     * The WMS spec does not say if the first style advertised for a layer in
+     * a Capabilities document is the default style that the layer is
+     * rendered with. We make this assumption by default. To be strictly WMS
+     * compliant, set this to false, but make sure to configure a STYLES
+     * param with your WMS layers, otherwise LegendURLs advertised in the
+     * GetCapabilities document cannot be used.
+     */
+    defaultStyleIsFirst: true,
 
-        /** @cfg {Boolean}
-         * Should we use the optional SCALE parameter in the SLD WMS
-         * GetLegendGraphic request? Defaults to true.
-         */
-        useScaleParameter: true,
+    /** @cfg {Boolean}
+     * Should we use the optional SCALE parameter in the SLD WMS
+     * GetLegendGraphic request? Defaults to true.
+     */
+    useScaleParameter: true,
 
-        /** @cfg {Object}
-         * Optional parameters to add to the legend url, this can e.g. be used to
-         * support vendor-specific parameters in a SLD WMS GetLegendGraphic
-         * request. To override the default MIME type of image/gif use the
-         * FORMAT parameter in baseParams.
-         *     
-         * var legendPanel = new GeoExt.LegendPanel({
-         *     map: map,
-         *     title: 'Legend Panel',
-         *     defaults: {
-         *         style: 'padding:5px',
-         *         baseParams: {
-         *             FORMAT: 'image/png',
-         *             LEGEND_OPTIONS: 'forceLabels:on'
-         *         }
-         *     }
-         * });   
-         */
-        baseParams: null
-    },
+    /** @cfg {Object}
+     * Optional parameters to add to the legend url, this can e.g. be used to
+     * support vendor-specific parameters in a SLD WMS GetLegendGraphic
+     * request. To override the default MIME type of image/gif use the
+     * FORMAT parameter in baseParams.
+     * 
+     * @example    
+     * var legendPanel = new GeoExt.LegendPanel({
+     *     map: map,
+     *     title: 'Legend Panel',
+     *     defaults: {
+     *         style: 'padding:5px',
+     *         baseParams: {
+     *             FORMAT: 'image/png',
+     *             LEGEND_OPTIONS: 'forceLabels:on'
+     *         }
+     *     }
+     * });   
+     */
+    baseParams: null,
 
     initComponent: function(){
         var me = this;

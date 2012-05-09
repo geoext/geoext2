@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='global-property-'>/**
+</span> * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+<span id='GeoExt-data-reader-WmsCapabilities'>/**
+</span> * @class GeoExt.data.reader.WmsCapabilities
+ * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]} 
+ * from a WMS GetCapabilities response.
+ */
+Ext.define('GeoExt.data.reader.WmsCapabilities', {
+    alternateClassName: ['GeoExt.data.reader.WMSCapabilities', 'GeoExt.data.WMSCapabilitiesReader'],
+    extend: 'Ext.data.reader.Json',
+    alias: 'reader.gx_wmscapabilities',
+
+<span id='GeoExt-data-reader-WmsCapabilities-method-constructor'>    /**
+</span>     * Creates new Reader.
+     * @param {Object} config (optional) Config object.
+     */
+    constructor: function(config) {
+        if (!this.model) {
+            this.model = 'GeoExt.data.WmsCapabilitiesLayerModel';
+        }
+        this.callParent([config]);
+        if (!this.format) {
+            this.format = new OpenLayers.Format.WMSCapabilities();
+        }
+    },
+
+<span id='GeoExt-data-reader-WmsCapabilities-cfg-attributionCls'>    /** 
+</span>     * @cfg {String}
+     * CSS class name for the attribution DOM elements.
+     * Element class names append &quot;-link&quot;, &quot;-image&quot;, and &quot;-title&quot; as
+     * appropriate.  Default is &quot;gx-attribution&quot;.
+     */
+    attributionCls: &quot;gx-attribution&quot;,
+
+<span id='GeoExt-data-reader-WmsCapabilities-method-getResponseData'>    /** 
+</span>     * @param {Object} request The XHR object which contains the parsed XML
+     * document.
+     * @return {Object} A data block which is used by an {Ext.data.Store}
+     * as a cache of {Ext.data.Model} objects.
+     */
+    getResponseData: function(request) {
+        var data = request.responseXML;
+        if(!data || !data.documentElement) {
+            data = request.responseText;
+        }
+        return this.readRecords(data);
+    },
+    
+<span id='GeoExt-data-reader-WmsCapabilities-method-serviceExceptionFormat'>    /**
+</span>     * @private
+     * @param {String[]} formats An array of service exception format strings.
+     * @return {String} The (supposedly) best service exception format.
+     */
+    serviceExceptionFormat: function(formats) {
+        if (OpenLayers.Util.indexOf(formats, 
+            &quot;application/vnd.ogc.se_inimage&quot;)&gt;-1) {
+            return &quot;application/vnd.ogc.se_inimage&quot;;
+        }
+        if (OpenLayers.Util.indexOf(formats, 
+            &quot;application/vnd.ogc.se_xml&quot;)&gt;-1) {
+            return &quot;application/vnd.ogc.se_xml&quot;;
+        }
+        return formats[0];
+    },
+    
+<span id='GeoExt-data-reader-WmsCapabilities-method-imageFormat'>    /** 
+</span>     * @private
+     * @param {Object} layer The layer's capabilities object.
+     * @return {String} The (supposedly) best mime type for requesting 
+     * tiles.
+     */
+    imageFormat: function(layer) {
+        var formats = layer.formats;
+        if (layer.opaque &amp;&amp; 
+            OpenLayers.Util.indexOf(formats, &quot;image/jpeg&quot;)&gt;-1) {
+            return &quot;image/jpeg&quot;;
+        }
+        if (OpenLayers.Util.indexOf(formats, &quot;image/png&quot;)&gt;-1) {
+            return &quot;image/png&quot;;
+        }
+        if (OpenLayers.Util.indexOf(formats, &quot;image/png; mode=24bit&quot;)&gt;-1) {
+            return &quot;image/png; mode=24bit&quot;;
+        }
+        if (OpenLayers.Util.indexOf(formats, &quot;image/gif&quot;)&gt;-1) {
+            return &quot;image/gif&quot;;
+        }
+        return formats[0];
+    },
+
+<span id='GeoExt-data-reader-WmsCapabilities-method-imageTransparent'>    /**
+</span>     * @private
+     * @param {Object} layer The layer's capabilities object.
+     * @return {Boolean} The TRANSPARENT param.
+     */
+    imageTransparent: function(layer) {
+        return layer.opaque == undefined || !layer.opaque;
+    },
+
+<span id='GeoExt-data-reader-WmsCapabilities-method-readRecords'>    /**
+</span>     * Create a data block containing Ext.data.Records from an XML document.
+     * @private
+     * @param {DOMElement/String/Object} data A document element or XHR
+     * response string.  As an alternative to fetching capabilities data
+     * from a remote source, an object representing the capabilities can
+     * be provided given that the structure mirrors that returned from the
+     * capabilities parser.
+     * @return  {Object} A data block which is used by an {Ext.data.Store}
+     * as a cache of {Ext.data.Model} objects.
+     */
+    readRecords: function(data) {
+        if(typeof data === &quot;string&quot; || data.nodeType) {
+            data = this.format.read(data);
+        }
+        if (!!data.error) {
+            Ext.Error.raise({msg: &quot;Error parsing WMS GetCapabilities&quot;, arg: data.error});
+        }
+        var version = data.version;
+        var capability = data.capability || {};
+        var url = capability.request &amp;&amp; capability.request.getmap &amp;&amp;
+            capability.request.getmap.href; 
+        var layers = capability.layers; 
+        var formats = capability.exception ? capability.exception.formats : [];
+        var exceptions = this.serviceExceptionFormat(formats);
+        var records = [];
+        
+        if(url &amp;&amp; layers) {
+            var fields = this.getFields();
+            var layer, metadata, options, params, field, v;
+
+            for(var i=0, lenI=layers.length; i&lt;lenI; i++){
+                layer = layers[i];
+                if(layer.name) {
+                    metadata = {};
+                    for(var j=0, lenJ=fields.length; j&lt;lenJ; j++) {
+                        field = fields[j];
+                        metadata[field.name] = layer[field.name];
+                    }
+                    metadata['name'] = layer.name;
+                    options = {
+                        attribution: layer.attribution ?
+                            this.attributionMarkup(layer.attribution) :
+                            undefined,
+                        minScale: layer.minScale,
+                        maxScale: layer.maxScale,
+                        metadata: metadata
+                    };
+                    if(this.layerOptions) {
+                        Ext.apply(options, this.layerOptions);
+                    }
+                    params = {
+                            layers: layer.name,
+                            exceptions: exceptions,
+                            format: this.imageFormat(layer),
+                            transparent: this.imageTransparent(layer),
+                            version: version
+                    };
+                    if (this.layerParams) {
+                        Ext.apply(params, this.layerParams);
+                    }
+                    layer = new OpenLayers.Layer.WMS(
+                        layer.title || layer.name, url, params, options
+                    );
+                    records.push(layer);
+                }
+            }
+        }
+        return this.callParent([records]);
+    },
+
+<span id='GeoExt-data-reader-WmsCapabilities-method-attributionMarkup'>    /**
+</span>     * Generates attribution markup using the Attribution metadata
+     * from WMS Capabilities
+     * @private
+     * @param {Object} attribution The attribution property of the layer
+     * object as parsed from a WMS Capabilities document
+     * @return {String} HTML markup to display attribution
+     * information.
+     */
+    attributionMarkup : function(attribution){
+        var markup = [];
+        
+        if (attribution.logo){
+            markup.push(&quot;&lt;img class='&quot;+this.attributionCls+&quot;-image' &quot;
+                        + &quot;src='&quot; + attribution.logo.href + &quot;' /&gt;&quot;);
+        }
+        
+        if (attribution.title) {
+            markup.push(&quot;&lt;span class='&quot;+ this.attributionCls + &quot;-title'&gt;&quot;
+                        + attribution.title
+                        + &quot;&lt;/span&gt;&quot;);
+        }
+        
+        if(attribution.href){
+            for(var i = 0; i &lt; markup.length; i++){
+                markup[i] = &quot;&lt;a class='&quot;
+              + this.attributionCls + &quot;-link' &quot;
+                    + &quot;href=&quot;
+                    + attribution.href
+                    + &quot;&gt;&quot;
+                    + markup[i]
+                    + &quot;&lt;/a&gt;&quot;;
+            }
+        }
+
+        return markup.join(&quot; &quot;);
+    }
+});
+</pre>
+</body>
+</html>

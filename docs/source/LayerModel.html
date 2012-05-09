@@ -15,7 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('GeoExt.data.LayerModel',{
+  <pre class="prettyprint lang-js"><span id='GeoExt-data-LayerModel'>/**
+</span> * The layer model class used by the stores.
+ */
+Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'Ext.data.Model',
     requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
@@ -33,12 +36,13 @@
             type: 'json'
         }
     },
-<span id='global-method-getLayer'>    /**
+<span id='GeoExt-data-LayerModel-method-getLayer'>    /**
 </span>     * Returns the {OpenLayers.Layer} layer object used in this model instance
      */
     getLayer: function() {
         return this.raw;
     }
-});</pre>
+});
+</pre>
 </body>
 </html>

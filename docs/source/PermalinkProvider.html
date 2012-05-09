@@ -15,7 +15,49 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('GeoExt.state.PermalinkProvider', {
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+<span id='GeoExt-state-PermalinkProvider'>/**
+</span> * @class GeoExt.state.PermalinkProvider
+ *
+ * The permalink provider.
+ *
+ *  Sample code displaying a new permalink each time the map is moved.
+ *
+ *      @example
+ *      // create permalink provider
+ *      var permalinkProvider = new GeoExt.state.PermalinkProvider();
+ *
+ *      // set it in the state manager
+ *      Ext.state.Manager.setProvider(permalinkProvider);
+ *
+ *      // create a map panel, and make it stateful
+ *      var mapPanel = new GeoExt.MapPanel({
+ *          renderTo: &quot;map&quot;,
+ *          layers: [
+ *              new OpenLayers.Layer.WMS(
+ *                  &quot;Global Imagery&quot;,
+ *                  &quot;http://maps.opengeo.org/geowebcache/service/wms&quot;,
+ *                  {layers: &quot;bluemarble&quot;}
+ *              )
+ *          ],
+ *          stateId: &quot;map&quot;,
+ *          prettyStateKeys: true // for pretty permalinks
+ *      });
+ *
+ *      // display permalink each time state is changed
+ *      permalinkProvider.on({
+ *          statechanged: function(provider, name, value) {
+ *              alert(provider.getLink());
+ *          }
+ *      });
+ */
+Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
     requires : [
     //    'GeoExt.data.LayerStore'
@@ -34,14 +76,14 @@
         this.state = this.readURL(url);
     
     },
-<span id='global-property-'>    /** api: config[encodeType]
-</span>   *  ``Boolean`` Specifies whether type of state values should be encoded
-   *  and decoded. Set it to false if you work with components that don't
-   *  require encoding types, and want pretty permalinks. Defaults to true.
-   */
-<span id='global-property-encodeType'>    /** private: property[encodeType]
-</span>   *  ``Boolean``
-   */
+
+<span id='GeoExt-state-PermalinkProvider-property-encodeType'>    /**
+</span>     * @private
+     * @property{Boolean}
+     *  Specifies whether type of state values should be encoded
+     *  and decoded. Set it to false if you work with components that don't
+     *  require encoding types, and want pretty permalinks. Defaults to true.
+     */
     encodeType: true,
     
     initComponent: function(){
@@ -50,11 +92,12 @@
         me.callParent(arguments);
     },
         
-<span id='global-method-readURL'>    /** private: method[readURL]
-</span>     *  :param url: ``String`` The URL to get the state from.
-     *  :return: ``Object`` The state object.
+<span id='GeoExt-state-PermalinkProvider-method-readURL'>    /**
+</span>     * Create a state object from a URL.
      *
-     *  Create a state object from a URL.
+     * @private
+     * @param url {String} The URL to get the state from.
+     * @return {Object} The state object.
      */
     readURL: function(url) {
         var state = {};
@@ -74,11 +117,11 @@
         return state;
     },
 
-<span id='global-method-getLink'>    /** api: method[getLink]
-</span>     *  :param base: ``String`` The base URL, optional.
-     *  :return: ``String`` The permalink.
+<span id='GeoExt-state-PermalinkProvider-method-getLink'>    /**
+</span>     * Returns the permalink corresponding to the current state.
      *
-     *  Return the permalink corresponding to the current state.
+     * @param base {String} The base URL, optional.
+     * @return {String} The permalink.
      */
     getLink: function(base) {
         base = base || document.location.href;

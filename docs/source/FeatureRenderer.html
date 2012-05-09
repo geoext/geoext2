@@ -15,7 +15,10 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('GeoExt.FeatureRenderer', {
+  <pre class="prettyprint lang-js"><span id='GeoExt-FeatureRenderer'>/**
+</span> * The feature renderer.
+ */
+Ext.define('GeoExt.FeatureRenderer', {
     extend : 'Ext.Component',
     alias : 'widget.gx_renderer',
     
@@ -29,16 +32,16 @@
     },
     
           
-<span id='global-property-feature'>    /** api: config[feature]
-</span>     *  ``OpenLayers.Feature.Vector``
+<span id='GeoExt-FeatureRenderer-cfg-feature'>    /**
+</span>     * @cfg {OpenLayers.Feature.Vector}
      *  Optional vector to be drawn.  If not provided, and if ``symbolizers``
      *  is configured with an array of plain symbolizer objects, ``symbolType``
      *  should be configured.
      */
     feature: undefined,
     
-<span id='global-property-symbolizers'>    /** api: config[symbolizers]
-</span>     *  ``Array(Object)``
+<span id='GeoExt-FeatureRenderer-cfg-symbolizers'>    /**
+</span>     * @cfg {Object[]}
      *  An array of ``OpenLayers.Symbolizer`` instances or plain symbolizer
      *  objects (in painters order) for rendering a  feature.  If no
      *  symbolizers are provided, the OpenLayers default will be used. If a
@@ -47,32 +50,36 @@
      */
     symbolizers: [OpenLayers.Feature.Vector.style[&quot;default&quot;]],
 
-<span id='global-property-symbolType'>    /** api: config[symbolType]
-</span>     *  ``String``
+<span id='GeoExt-FeatureRenderer-cfg-symbolType'>    /**
+</span>     * @cfg {String}
      *  One of ``&quot;Point&quot;``, ``&quot;Line&quot;``, or ``&quot;Polygon&quot;``.  Only pertinent if 
      *  OpenLayers.Symbolizer objects are not used.  If ``feature``
      *  is provided, it will be preferred.  The default is &quot;Polygon&quot;.
      */
     symbolType: &quot;Polygon&quot;,
     
-<span id='global-property-resolution'>    /** private: property[resolution]
-</span>     *  ``Number``
+<span id='GeoExt-FeatureRenderer-property-resolution'>    /**
+</span>     * @private
+     * @property {Number}
      *  The resolution for the renderer.
      */
     resolution: 1,
     
-<span id='global-property-minWidth'>    /** private: property[minWidth]
-</span>     *  ``Number``
+<span id='GeoExt-FeatureRenderer-property-minWidth'>    /**
+</span>     * @private
+     * @property {Number}
      */
     minWidth: 20,
 
-<span id='global-property-minHeight'>    /** private: property[minHeight]
-</span>     *  ``Number``
+<span id='GeoExt-FeatureRenderer-property-minHeight'>    /**
+</span>     * @private
+     * @property {Number}
      */
     minHeight: 20,
 
-<span id='global-property-renderers'>    /** private: property[renderers]
-</span>     * ``Array(String)`` 
+<span id='GeoExt-FeatureRenderer-property-renderers'>    /**
+</span>     * @private
+     * @property {String[]}
      *  List of supported Renderer classes. Add to this list to add support for 
      *  additional renderers. The first renderer in the list that returns 
      *  ``true`` for the ``supported`` method will be used, if not defined in 
@@ -80,33 +87,38 @@
      */
     renderers: [&quot;SVG&quot;, &quot;VML&quot;, &quot;Canvas&quot;],
 
-<span id='global-property-rendererOptions'>    /** private: property[rendererOptions]
-</span>     *  ``Object``
+<span id='GeoExt-FeatureRenderer-property-rendererOptions'>    /**
+</span>     * @private
+     * @property {Object}
      *  Options for the renderer. See ``OpenLayers.Renderer`` for supported 
      *  options.
      */
     rendererOptions: null,
     
-<span id='global-property-pointFeature'>    /** private: property[pointFeature]
-</span>     *  ``OpenLayers.Feature.Vector``
+<span id='GeoExt-FeatureRenderer-property-pointFeature'>    /**
+</span>     * @private
+     * @property {OpenLayers.Feature.Vector}
      *  Feature with point geometry.
      */
     pointFeature: undefined,
     
-<span id='global-property-lineFeature'>    /** private: property[lineFeature]
-</span>     *  ``OpenLayers.Feature.Vector`` 
+<span id='GeoExt-FeatureRenderer-property-lineFeature'>    /**
+</span>     * @private
+     * @property {OpenLayers.Feature.Vector}
      *  Feature with LineString geometry.  Default zig-zag is provided.
      */
     lineFeature: undefined,
 
-<span id='global-property-polygonFeature'>    /** private: property[polygonFeature]
-</span>     *  ``OpenLayers.Feature.Vector``
+<span id='GeoExt-FeatureRenderer-property-polygonFeature'>    /**
+</span>     * @private
+     * @property {OpenLayers.Feature.Vector}
      *   Feature with Polygon geometry.  Default is a soft cornered rectangle.
      */
     polygonFeature: undefined,
     
-<span id='global-property-renderer'>    /** private: property[renderer]
-</span>     *  ``OpenLayers.Renderer``
+<span id='GeoExt-FeatureRenderer-property-renderer'>    /**
+</span>     * @private
+     * @property {OpenLayers.Renderer}
      */
     renderer: null,
     
@@ -153,41 +165,46 @@
             });
         }
         this.addEvents(
-<span id='global-property-click'>            /** api: event[click]
-</span>             *  Fires when the feature is clicked on.
+<span id='GeoExt-FeatureRenderer-event-click'>            /**
+</span>             * @event
+             *  Fires when the feature is clicked on.
              *
              *  Listener arguments:
              *  
-             *  * renderer - :class:`GeoExt.FeatureRenderer` This feature renderer.
+             *  * renderer - GeoExt.FeatureRenderer This feature renderer.
              */
             &quot;click&quot;
             );
  
     },
-<span id='global-method-initCustomEvents'>    /** private: method[initCustomEvents]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-initCustomEvents'>    /**
+</span>     * @private
+     */
     initCustomEvents: function() {
         this.clearCustomEvents();
         this.el.on(&quot;click&quot;, this.onClick, this);
         
     },
     
-<span id='global-method-clearCustomEvents'>    /** private: method[clearCustomEvents]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-clearCustomEvents'>    /**
+</span>     * @private
+     */
     clearCustomEvents: function() {
         if (this.el &amp;&amp; this.el.removeAllListeners) {
             this.el.removeAllListeners();            
         }
     },
     
-<span id='global-method-onClick'>    /** private: method[onClick]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-onClick'>    /**
+</span>     * @private
+     */
     onClick: function() {
         this.fireEvent(&quot;click&quot;, this);
     },
 
-<span id='global-method-onRender'>    /** private: method[onRender]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-onRender'>    /**
+</span>     * @private
+     */
     onRender: function(ct, position) {
         
         if(!this.el) {
@@ -212,29 +229,32 @@
         this.drawFeature();
     },
 
-<span id='global-method-afterRender'>    /** private: method[afterRender]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-afterRender'>    /**
+</span>     * @private
+     */
     afterRender: function() {
        
         this.callParent(arguments);
         this.initCustomEvents();
     },
 
-<span id='global-method-onResize'>    /** private: method[onResize]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-onResize'>    /**
+</span>     * @private
+     */
     onResize: function(w, h) {
         this.setRendererDimensions();
         this.callParent(arguments);
     },
     
-<span id='global-method-setRendererDimensions'>    /** private: method[setRendererDimensions]
-</span>     */
+<span id='GeoExt-FeatureRenderer-method-setRendererDimensions'>    /**
+</span>     * @private
+     */
     setRendererDimensions: function() {
         var gb = this.feature.geometry.getBounds();
         var gw = gb.getWidth();
         var gh = gb.getHeight();
-<span id='global-property-resolution'>        /**
-</span>         * Determine resolution based on the following rules:
+        /*
+         * Determine resolution based on the following rules:
          * 1) always use value specified in config
          * 2) if not specified, use max res based on width or height of element
          * 3) if no width or height, assume a resolution of 1
@@ -259,8 +279,9 @@
         this.renderer.setExtent(bounds, true);
     },
 
-<span id='global-method-assignRenderer'>    /** private: method[assignRenderer]
-</span>     *  Iterate through the available renderer implementations and selects 
+<span id='GeoExt-FeatureRenderer-method-assignRenderer'>    /**
+</span>     * @private
+     *  Iterate through the available renderer implementations and selects 
      *  and assign the first one whose ``supported`` method returns ``true``.
      */
     assignRenderer: function()  {
@@ -278,15 +299,13 @@
 //        }  
     },
     
-<span id='global-method-setSymbolizers'>    /** api: method[setSymbolizers]
-</span>     *  :arg symbolizers: ``Array(Object)`` An array of symbolizers
-     *  :arg options: ``Object``
+<span id='GeoExt-FeatureRenderer-method-setSymbolizers'>    /**
+</span>     *  Update the symbolizers used to render the feature.
      *
-     *  Update the symbolizers used to render the feature.
+     *  @param symbolizers {Object[]} An array of symbolizers
+     *  @param options {Object}
+     *  @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
      *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
      */
     setSymbolizers: function(symbolizers, options) {
         this.symbolizers = symbolizers;
@@ -295,31 +314,27 @@
         }
     },
     
-<span id='global-method-setSymbolType'>    /** api: method[setSymbolType]
-</span>     *  :arg type: ``String`` One of the ``symbolType`` strings.
-     *  :arg options: ``Object``
-     * 
-     *  Create a new feature based on the geometry type and render it.
+<span id='GeoExt-FeatureRenderer-method-setSymbolType'>    /**
+</span>     *  Create a new feature based on the geometry type and render it.
      *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
+     * @param type {String} One of the ``symbolType`` strings.
+     * @param options {Object}
+     * @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
+     * 
      */
     setSymbolType: function(type, options) {
         this.symbolType = type;
         this.setFeature(null, options);
     },
     
-<span id='global-method-setFeature'>    /** api: method[setFeature]
-</span>     *  :arg feature: ``OpenLayers.Feature.Vector`` The feature to be rendered.  
+<span id='GeoExt-FeatureRenderer-method-setFeature'>    /**
+</span>     *  Update the feature and redraw.
+     *
+     * @param feature {OpenLayers.Feature.Vector} The feature to be rendered.  
      *      If none is provided, one will be created based on ``symbolType``.
-     *  :arg options: ``Object``
+     * @param options {Object}
+     * @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
      *
-     *  Update the feature and redraw.
-     *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
      */
     setFeature: function(feature, options) {
         this.feature = feature || this[this.symbolType.toLowerCase() + &quot;Feature&quot;];
@@ -328,8 +343,9 @@
         }
     },
 
-<span id='global-method-drawFeature'>    /** private: method[drawFeature]
+<span id='GeoExt-FeatureRenderer-method-drawFeature'>    /**
 </span>     *  Render the feature with the symbolizers.
+     * @private
      */
     drawFeature: function() {
         this.renderer.clear();
@@ -361,18 +377,17 @@
         }
     },
     
-<span id='global-method-update'>    /** api: method[update]
-</span>     *  :arg options: ``Object`` Object with properties to be updated.
-     * 
-     *  Update the ``symbolType`` or ``feature`` and ``symbolizer`` and redraw
+<span id='GeoExt-FeatureRenderer-method-update'>    /**
+</span>     *  Update the ``symbolType`` or ``feature`` and ``symbolizer`` and redraw
      *  the feature.
      *
      *  Valid options:
      *  
-     *  * feature - ``OpenLayers.Feature.Vector`` The new or updated feature.  
+     *  @param options {Object} Object with properties to be updated.
+     *  @param options.feature {OpenLayers.Feature.Vector} The new or updated feature.  
      *      If provided, the feature gets precedence over ``symbolType``.
-     *  * symbolType - ``String`` One of the allowed ``symbolType`` values.
-     *  * symbolizers - ``Array(Object)`` An array of symbolizer objects.
+     *  @param options.symbolType {String} One of the allowed ``symbolType`` values.
+     *  @param options.symbolizers {Object[]} An array of symbolizer objects.
      */
     update: function(options) {
         options = options || {};
@@ -393,8 +408,9 @@
         this.drawFeature();
     },
 
-<span id='global-method-beforeDestroy'>    /** private: method[beforeDestroy]
+<span id='GeoExt-FeatureRenderer-method-beforeDestroy'>    /**
 </span>     *  Private method called during the destroy sequence.
+     * @private
      */
     beforeDestroy: function() {
         this.clearCustomEvents();

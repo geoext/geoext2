@@ -15,45 +15,60 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-panel-Legend'>/**
-</span> * @class GeoExt.panel.Legend
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+<span id='GeoExt-panel-Legend'>/**
+</span> *  A panel showing legends of all layers in a layer store.
+ *  Depending on the layer type, a legend renderer will be chosen.
+ *
+ *  The LegendPanel will include legends for all the layers in the
+ *  ``layerStore`` it is configured with, unless the layer is configured with
+ *  ``displayInLayerSwitcher: false``, or a layer record has a
+ *  ``hideInLegend`` field with a value of ``true``. Additional filtering can
+ *  be done by configuring a ``filter`` on the LegendPanel.
+ * @class GeoExt.panel.Legend
  */
 Ext.define('GeoExt.panel.Legend', {
     extend : 'Ext.panel.Panel',
     requires: ['GeoExt.container.LayerLegend'],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
-    config: {
-<span id='GeoExt-panel-Legend-cfg-dynamic'>        /**
-</span>         * @cfg {Boolean} dynamic
-         * If false the LegendPanel will not listen to the add, remove and change 
-         * events of the LayerStore. So it will load with the initial state of
-         * the LayerStore and not change anymore. 
-         */
-        dynamic: true,
 
-<span id='GeoExt-panel-Legend-cfg-layerStore'>        /**
-</span>         * @cfg {Ext.data.Store} layerStore
-         * The layer store containing layers to be displayed in the legend 
-         * container. If not provided it will be taken from the MapPanel.
-         */
-        layerStore: null,
+<span id='GeoExt-panel-Legend-cfg-dynamic'>    /**
+</span>     * @cfg {Boolean} dynamic
+     * If false the LegendPanel will not listen to the add, remove and change 
+     * events of the LayerStore. So it will load with the initial state of
+     * the LayerStore and not change anymore. 
+     */
+    dynamic: true,
 
-<span id='GeoExt-panel-Legend-cfg-preferredTypes'>        /**
-</span>         * @cfg {Array}
-         * An array of preferred legend types.
-         */
-        preferredTypes: null,
+<span id='GeoExt-panel-Legend-cfg-layerStore'>    /**
+</span>     * @cfg {Ext.data.Store} layerStore
+     * The layer store containing layers to be displayed in the legend 
+     * container. If not provided it will be taken from the MapPanel.
+     */
+    layerStore: null,
 
-<span id='GeoExt-panel-Legend-cfg-filter'>        /**
-</span>         * @cfg {Function}
-         *  A function, called in the scope of the legend panel, with a layer record
-         *  as argument. Is expected to return true for layers to be displayed, false
-         *  otherwise. By default, all layers will be displayed.
-         */
-        filter: function(record) {
-            return true;
-        }
+<span id='GeoExt-panel-Legend-cfg-preferredTypes'>    /**
+</span>     * @cfg {Array}
+     * An array of preferred legend types.
+     */
+    preferredTypes: null,
+
+<span id='GeoExt-panel-Legend-cfg-filter'>    /**
+</span>     * @cfg {Function}
+     * A function, called in the scope of the legend panel, with a layer record
+     * as argument. Is expected to return true for layers to be displayed, false
+     * otherwise. By default, all layers will be displayed.
+     */
+    filter: function(record) {
+        return true;
     },    
 
 <span id='GeoExt-panel-Legend-method-onRender'>    /**
