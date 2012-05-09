@@ -39,17 +39,14 @@
         }
 
         function test_read(t) {
-            t.plan(41);
+            t.plan(40);
 
             var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
             var records = reader.read({responseXML: doc});
 
-            //1 test
-            t.eq(records.records[0].fields.items.length, 2, 'LayerRecord with 2 default fields');
-
             var record = records.records[2];
             //2 tests -- testing the fields of a record
-            t.eq(record.get("title"), "tiger:tiger_roads", "correct layer title");
+            t.eq(record.get("name"), "tiger:tiger_roads", "correct layer name");
             t.eq(record.get("abstract"), undefined, "correct undefined abstract which is not part of fields");
 
             // test a reader with all default fields

@@ -132,6 +132,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                         v = field.convert && field.convert(v);
                         metadata[field.name] = v;
                     }
+                    metadata['name'] = layer.name;
                     options = {
                         attribution: layer.attribution ?
                             this.attributionMarkup(layer.attribution) :
