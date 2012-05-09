@@ -1,9 +1,6 @@
 /**
- * @include GeoExt/panel/Map.js
- */
-
-/**
  * @class GeoExt.window.Popup
+ * @include GeoExt/panel/Map.js
  * 
  * Popups are a specialized Window that supports anchoring
  * to a particular location in a {@link GeoExt.panel.Map MapPanel}.
@@ -111,7 +108,8 @@ Ext.define('GeoExt.window.Popup', {
     location: null,
     
     /** 
-     * @cfg {String} popupCls
+     * @property {String} popupCls
+     * @private
      * CSS class name for the popup DOM elements.
      */
     popupCls: "gx-popup",
@@ -163,7 +161,6 @@ Ext.define('GeoExt.window.Popup', {
             this.addAnchorEvents();
         }
 
-        this.baseCls = this.popupCls + " " + this.baseCls;
         this.elements += ',anc';
         
         this.callParent(arguments);
@@ -172,14 +169,16 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * The "onRender" listener of this component.
+     * Executes when the popup is rendered and creates the anchor div
+     *
      * @private
      * @param {Object} ct
      * @param {Object} position
-     * The "onRender" listener of this component.
-     * Executes when the popup is rendered and creates the anchor div
      */
     onRender: function(ct, position) {
         this.callParent(arguments);
+        this.addClass(this.popupCls);
         this.ancCls = this.popupCls + "-anc";
         
         //create anchor dom element.
@@ -199,9 +198,10 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
-     * @private
      * Initializes the tools on the popup.  In particular
      * it adds the 'unpin' tool if the popup is unpinnable.
+     *
+     * @private     
      */
     initTools : function() {
         if(this.unpinnable) {
@@ -217,8 +217,9 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
-     * @private
      * Override.
+     *
+     * @private     
      */
     show: function() {
         this.callParent(arguments);
@@ -231,8 +232,9 @@ Ext.define('GeoExt.window.Popup', {
     },
     
     /**
-     * @private
      * Override.
+     *
+     * @private
      */
     maximize: function() {
         if(!this.maximized && this.anc) {
@@ -242,10 +244,10 @@ Ext.define('GeoExt.window.Popup', {
     },
     
     /**
+     * Sets the size of the popup, taking into account the size of the anchor.
+     *
      * @param {Integer} w the width to apply.
      * @param {Integer} h the height to apply. 
-     * 
-     * Sets the size of the popup, taking into account the size of the anchor.
      */
     setSize: function(w, h) {
         if(this.anc) {
@@ -262,8 +264,9 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Positions the popup relative to its current location.
+     *
      * @private
-     * Positions the popup relative to its location
      */
     position: function() {
         if(this._mapMove === true) {
@@ -319,9 +322,10 @@ Ext.define('GeoExt.window.Popup', {
     },
     
     /**
-     * @private
      * Unanchors a popup from its location. This removes the popup from its 
      * MapPanel and adds it to the page body.
+     *
+     * @private
      */
     unanchorPopup: function() {
         this.removeAnchorEvents();
@@ -344,10 +348,11 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
-     * @private
      * Pans the MapPanel's map so that an anchored popup can come entirely 
      * into view, with padding specified as per normal OpenLayers.Map popup 
      * padding.
+     *
+     * @private
      */
     panIntoView: function() {
         var mapBox = Ext.fly(this.map.div).getBox(true); 
@@ -408,8 +413,6 @@ Ext.define('GeoExt.window.Popup', {
         
         this.on({
             "resize": this.position,
-            "collapse": this.position,
-            "expand": this.position,
             scope: this
         });
     },
@@ -425,13 +428,12 @@ Ext.define('GeoExt.window.Popup', {
         });
 
         this.un("resize", this.position, this);
-        this.un("collapse", this.position, this);
-        this.un("expand", this.position, this);
     },
 
     /**
-     * @private
      * Cleanup events before destroying the popup.
+     *
+     * @private
      */
     beforeDestroy: function() {
         if(this.anchored) {
