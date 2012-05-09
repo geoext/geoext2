@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html debug="true">
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+    <script type="text/javascript" src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    <script type="text/javascript" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js"></script>
+<!--
+    BEFORE merging, remove the above line in favor of this one: (or tests might fail in IE,
+    see https://github.com/geoext/geoext2/issues/47 )
+    <script type="text/javascript" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js"></script>
+-->
+    <script type="text/javascript">
+        Ext.Loader.setConfig({
+            enabled:true,
+            disableCaching: false,
+            paths: {
+                "Ext": "../../../extjs-4.1.0/src", // BEFORE merging, replace this line with :
+                //"Ext": "../../../<YOUR_EXTJS_PATH>/src",
+                "GeoExt": "../../src/GeoExt"
+            }
+        });
+
+        Ext.require([
+            'Ext.data.proxy.Ajax',
+            'GeoExt.data.AttributeModel',
+            'GeoExt.data.AttributeStore'
+        ]);
+
+        function test_constructor(t) {
+            t.plan(4);
+
+            var store, fieldsCountBefore, fieldsCountAfter;
+
+            fieldsCountBefore = Ext.create('GeoExt.data.AttributeModel').fields.getCount();
+
+            store = Ext.create('GeoExt.data.AttributeStore', {
+                url: '/truite',
+                ignore: {
+                    type: "xsd:string"
+                },
+                fields: ['test']
+            });
+
+            t.ok(store instanceof GeoExt.data.AttributeStore,
+                 "ctor creates a GeoExt.data.AttributeStore instance");
+            t.eq(store.getProxy().url, '/truite',
+                "ctor creates a proxy with the correct url");
+
+            fieldsCountAfter = Ext.create('GeoExt.data.AttributeModel').fields.getCount();
+            t.eq(fieldsCountAfter, fieldsCountBefore + 1,
+                "ctor appends a field to the given model");
+
+            t.eq(store.getProxy().getReader().ignore, {type: "xsd:string"},
+                "ctor sets the correct ignore property in the reader");
+
+            store.destroy();
+        }
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
