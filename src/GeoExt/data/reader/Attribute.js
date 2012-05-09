@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
@@ -6,7 +6,7 @@
  * of the license.
  */
 
-/**
+/*
  * @require OpenLayers/Format/WFSDescribeFeatureType.js
  */
 
