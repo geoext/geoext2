@@ -7,7 +7,10 @@
  */
 
 /**
- * The WMS legend class.
+ *  Show a legend image for a WMS layer. The image can be read from the styles
+ *  field of a layer record (if the record comes e.g. from a
+ *  GeoExt.data.WMSCapabilitiesReader). If not provided, a
+ *  GetLegendGraphic request will be issued to retrieve the image.
  *
  * @class GeoExt.container.WMSLegend
  */

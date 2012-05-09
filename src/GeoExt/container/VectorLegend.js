@@ -7,6 +7,7 @@
  */
 
 /**
+ * Create a vector legend.
  * @class GeoExt.container.VectorLegend
  */
 Ext.define('GeoExt.container.VectorLegend', {
