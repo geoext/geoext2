@@ -12,7 +12,7 @@
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',
-    require: ['GeoExt.data.reader.WmsCapabilitiesReader'],
+    requires: ['GeoExt.data.reader.WmsCapabilities'],
     alternateClassName: ['GeoExt.data.WMSCapabilitiesModel','GeoExt.data.WmsCapabilitiesModel'],
     alias: 'model.gx_wmscapabilities',
     fields: [
@@ -43,7 +43,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     proxy: {
         type: 'ajax',
         reader: {
-            type: 'gx_wmscapabilites'
+            type: 'gx_wmscapabilities'
         }
     }
 });
