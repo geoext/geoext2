@@ -80,12 +80,12 @@ Ext.define('GeoExt.data.reader.Attribute', {
     },
 
     /** 
-     * Function called by the proxy to deserialize a DescribeFeatureType
+     * Function called by the parent to deserialize a DescribeFeatureType
      * response into Model objects.
      * @param {Object} request The XHR object that contains the
      * DescribeFeatureType response.
      */
-    read: function(request) {
+    getResponseData: function(request) {
         var data = request.responseXML;
         if(!data || !data.documentElement) {
             data = request.responseText;

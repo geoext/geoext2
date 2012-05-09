@@ -42,7 +42,7 @@
             model: Model
         });
 
-        var records = reader.read({responseXML : doc});
+        var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
         t.eq(records.totalRecords, 23, 'readRecords returns correct number of records');
@@ -81,7 +81,7 @@
             feature: feature
 
         });
-        records = reader.read({responseXML : doc});
+        records = reader.read({responseXML : doc, responseText: 'foo'});
         record = records.records[2];
         t.eq(record.get("value"), "foo", "[1] correct attribute value");
         record = records.records[1];
@@ -100,7 +100,7 @@
             feature: feature
 
         });
-        records = reader.read({responseXML : doc});
+        records = reader.read({responseXML : doc, responseText: 'foo'});
         record = records.records[2];
         t.eq(record.get("value"), undefined, "[3] correct attribute value");
     }
@@ -120,7 +120,7 @@
             ignore: {type: "xsd:string"}
         });
 
-        var records = reader.read({responseXML : doc});
+        var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
         t.eq(records.totalRecords, 19, 'right number of records are ignored (ignores String)');
@@ -141,7 +141,7 @@
             ignore: {type: ["xsd:double", "gml:MultiSurfacePropertyType"]}
         });
 
-         var records = reader.read({responseXML : doc});
+         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
          //1 test
          t.eq(records.totalRecords, 4, 'right number of records are ignored (ignores Array)');
@@ -162,7 +162,7 @@
             ignore: {name: new RegExp('^S')}
         });
 
-        var records = reader.read({responseXML : doc});
+        var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
         t.eq(records.totalRecords, 17, 'right number of records are ignored (ignores RegExp)');
