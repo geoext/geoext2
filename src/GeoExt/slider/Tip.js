@@ -35,7 +35,7 @@ Ext.define('GeoExt.slider.Tip', {
     minWidth: 10,
     
     /**
-     * @cfg {Array(Number)} offsets
+     * @cfg {Number[]} offsets
      * A two item list that provides x, y offsets for the tip.
      */
     offsets : [0, -10],
@@ -47,10 +47,9 @@ Ext.define('GeoExt.slider.Tip', {
     dragging: false,
     
     /**
+     * Called when the plugin is initialized.
      * @private
      * @param {Ext.slider.SingleSlider} slider
-     * 
-     * Called when the plugin is initialized.
      */
     init: function(slider) {
         this.callParent(arguments);
@@ -62,8 +61,8 @@ Ext.define('GeoExt.slider.Tip', {
     },
     
     /**
-     * @private
      * Set as a listener for 'render' if hover is true.
+     * @private
      */
     registerThumbListeners: function() {
         var thumb, el;
@@ -88,12 +87,11 @@ Ext.define('GeoExt.slider.Tip', {
     },
 
     /**
+     * Listener for dragstart and drag.
      * @private
      * @param {Ext.slider.SingleSlider} slider
      * @param {Object} e
      * @param {Object} thumb
-     * 
-     * Listener for dragstart and drag.
      */
     onSlide: function(slider, e, thumb) {
         this.dragging = true;

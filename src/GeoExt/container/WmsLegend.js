@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
@@ -7,6 +7,11 @@
  */
 
 /**
+ *  Show a legend image for a WMS layer. The image can be read from the styles
+ *  field of a layer record (if the record comes e.g. from a
+ *  GeoExt.data.WMSCapabilitiesReader). If not provided, a
+ *  GetLegendGraphic request will be issued to retrieve the image.
+ *
  * @class GeoExt.container.WMSLegend
  */
 Ext.define('GeoExt.container.WMSLegend', {

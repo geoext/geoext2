@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
@@ -7,6 +7,8 @@
  */
 
 /**
+ * Show a legend image in a BoxComponent and make sure load errors are 
+ * dealt with.
  * @class GeoExt.container.URLLegend
  */
 Ext.define('GeoExt.container.URLLegend', {
