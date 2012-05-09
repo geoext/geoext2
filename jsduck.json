@@ -2,6 +2,7 @@
     "--title": "GeoExt 2 Docs",
     "-o": "docs",
     "--": [
-        "src"
+        "src",
+        "../extjs-4.1.0/src/"
     ]
 }
