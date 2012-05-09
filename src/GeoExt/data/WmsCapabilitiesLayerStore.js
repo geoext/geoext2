@@ -51,14 +51,18 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
             //since a fields property passed in a config object can cause some
             //unexpected behavior
             xtraFields = config.fields;
-            delete conifg.fields;
+            delete config.fields;
         }
         me.callParent([config]);
         
         //post process the extra fields. they will be lost if done before the
         //parent constructor is called
         if(xtraFields){
-            me.model.addFields(xtraFields);
+            var model = me.getModel();
+            var modelFields = model.fields;
+            for (var i=0; i < xtraFields.length; i++) {
+                modelFields.add(new Ext.data.Field(xtraFields[i]));
+            }
         }
         config.url && me.setUrl(config.url);
     },
