@@ -14,35 +14,35 @@ Ext.define('GeoExt.data.PrintPage', {
     printProvider: null,
     
     /** api: property[feature]
-     *  ``OpenLayers.Feature.Vector`` Feature representing the page extent. To
+     *  `OpenLayers.Feature.Vector` Feature representing the page extent. To
      *  get the extent of the print page for a specific map, use
-     *  ``getPrintExtent``.
+     *  `getPrintExtent`.
      *  Read-only.
      */
     feature: null,
     
     /** api: property[center]
-     *  ``OpenLayers.LonLat`` The current center of the page. Read-only.
+     *  `OpenLayers.LonLat` The current center of the page. Read-only.
      */
     center: null,
     
     /** api: property[scale]
-     *  ``Ext.data.Record`` The current scale record of the page. Read-only.
+     *  `Ext.data.Record` The current scale record of the page. Read-only.
      */
     scale: null,
     
     /** api: property[rotation]
-     *  ``Float`` The current rotation of the page. Read-only.
+     *  `Float` The current rotation of the page. Read-only.
      */
     rotation: 0,
     
     /** api:config[customParams]
-     *  ``Object`` Key-value pairs of additional parameters that the
+     *  `Object` Key-value pairs of additional parameters that the
      *  printProvider will send to the print service for this page.
      */
 
     /** api: property[customParams]
-     *  ``Object`` Key-value pairs of additional parameters that the
+     *  `Object` Key-value pairs of additional parameters that the
      *  printProvider will send to the print service for this page.
      */
     customParams: null,
@@ -65,8 +65,8 @@ Ext.define('GeoExt.data.PrintPage', {
              *  Listener arguments:
              *
              *  * printPage - :class:`GeoExt.data.PrintPage` this printPage
-             *  * modifications - ``Object`` Object with one or more of
-             *      ``scale``, ``center`` and ``rotation``, notifying
+             *  * modifications - `Object` Object with one or more of
+             *      `scale`, `center` and `rotation`, notifying
              *      listeners of the changed properties.
              */
             "change"
@@ -103,9 +103,9 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** api: method[getPrintExtent]
-     *  :param map: ``OpenLayers.Map`` or :class:`GeoExt.MapPanel` the map to
+     *  :param map: `OpenLayers.Map` or :class:`GeoExt.MapPanel` the map to
      *      get the print extent for. 
-     *  :returns: ``OpenLayers.Bounds``
+     *  :returns: `OpenLayers.Bounds`
      *
      *  Gets this page's print extent for the provided map.
      */
@@ -115,9 +115,9 @@ Ext.define('GeoExt.data.PrintPage', {
     },
 
     /** api: method[setScale]
-     *  :param scale: ``Ext.data.Record`` The new scale record.
-     *  :param units: ``String`` map units to use for the scale calculation.
-     *      Optional if the ``feature`` is on a layer which is added to a map.
+     *  :param scale: `Ext.data.Record` The new scale record.
+     *  :param units: `String` map units to use for the scale calculation.
+     *      Optional if the `feature` is on a layer which is added to a map.
      *      If not found, "dd" will be assumed.
      * 
      *  Updates the page geometry to match a given scale. Since this takes the
@@ -136,7 +136,7 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** api: method[setCenter]
-     *  :param center: ``OpenLayers.LonLat`` The new center.
+     *  :param center: `OpenLayers.LonLat` The new center.
      * 
      *  Moves the page extent to a new center.
      */
@@ -151,8 +151,8 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** api: method[setRotation]
-     *  :param rotation: ``Float`` The new rotation.
-     *  :param force: ``Boolean`` If set to true, the rotation will also be
+     *  :param rotation: `Float` The new rotation.
+     *  :param force: `Boolean` If set to true, the rotation will also be
      *      set when the layout does not support it. Default is false.
      *  
      *  Sets a new rotation for the page geometry.
@@ -166,20 +166,20 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** api: method[fit]
-     *  :param fitTo: :class:`GeoExt.MapPanel` or ``OpenLayers.Map`` or ``OpenLayers.Feature.Vector``
+     *  :param fitTo: :class:`GeoExt.MapPanel` or `OpenLayers.Map` or `OpenLayers.Feature.Vector`
      *      The map or feature to fit the page to.
-     *  :param options: ``Object`` Additional options to determine how to fit
+     *  :param options: `Object` Additional options to determine how to fit
      *
      *  Fits the page layout to a map or feature extent. If the map extent has
      *  not been centered yet, this will do nothing.
      * 
      *  Available options:
      *
-     *  * mode - ``String`` How to calculate the print extent? If "closest",
+     *  * mode - `String` How to calculate the print extent? If "closest",
      *    the closest matching print extent will be chosen. If "printer", the
      *    chosen print extent will be the closest one that can show the entire
-     *    ``fitTo`` extent on the printer. If "screen", it will be the closest
-     *    one that is entirely visible inside the ``fitTo`` extent. Default is
+     *    `fitTo` extent on the printer. If "screen", it will be the closest
+     *    one that is entirely visible inside the `fitTo` extent. Default is
      *    "printer".
      * 
      */
@@ -241,10 +241,10 @@ Ext.define('GeoExt.data.PrintPage', {
     },
 
     /** private: method[updateFeature]
-     *  :param geometry: ``OpenLayers.Geometry`` New geometry for the feature.
+     *  :param geometry: `OpenLayers.Geometry` New geometry for the feature.
      *      If not provided, the existing geometry will be left unchanged.
-     *  :param mods: ``Object`` An object with one or more of ``scale``,
-     *      ``center`` and ``rotation``, reflecting the page properties to
+     *  :param mods: `Object` An object with one or more of `scale`,
+     *      `center` and `rotation`, reflecting the page properties to
      *      update.
      *      
      *  Updates the page feature with a new geometry and notifies listeners
@@ -273,12 +273,12 @@ Ext.define('GeoExt.data.PrintPage', {
     },    
     
     /** private: method[calculatePageBounds]
-     *  :param scale: ``Ext.data.Record`` Scale record to calculate the page
+     *  :param scale: `Ext.data.Record` Scale record to calculate the page
      *      bounds for.
-     *  :param units: ``String`` Map units to use for the scale calculation.
-     *      Optional if ``feature`` is added to a layer which is added to a
+     *  :param units: `String` Map units to use for the scale calculation.
+     *      Optional if `feature` is added to a layer which is added to a
      *      map. If not provided, "dd" will be assumed.
-     *  :return: ``OpenLayers.Bounds``
+     *  :return: `OpenLayers.Bounds`
      *  
      *  Calculates the page bounds for a given scale.
      */
