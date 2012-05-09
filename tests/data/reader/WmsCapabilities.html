@@ -39,19 +39,16 @@
         }
 
         function test_read(t) {
-            t.plan(40);
+            t.plan(39);
 
             var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
             var records = reader.read({responseXML: doc});
-
             var record = records.records[2];
-            //2 tests -- testing the fields of a record
             t.eq(record.get("name"), "tiger:tiger_roads", "correct layer name");
-            t.eq(record.get("abstract"), undefined, "correct undefined abstract which is not part of fields");
+            reader.destroy();
 
             // test a reader with all default fields
-
-            var reader = new GeoExt.data.WMSCapabilitiesReader({
+            reader = Ext.create("GeoExt.data.reader.WmsCapabilities", {
                 layerOptions: {
                     singleTile: true
                 },
@@ -59,16 +56,13 @@
                     foo: 'TRUE'
                 }
             });
-            var records = reader.read({responseXML: doc});
-
-            //1 test
+            records = reader.read({responseXML: doc});
             t.eq(records.totalRecords, 22, 'readRecords returns correct number of records');
 
-            var record, layer;
+            var layer;
 
-            //1 test -- testing value of record id
             record = records.records[2];
-            t.ok(record.id == record.getLayer().id, "[2] correct record id");
+            t.ok(record.get("id") == record.getLayer().id, "[2] correct record id");
 
             //22 tests -- testing the fields of a record
             record = records.records[2];

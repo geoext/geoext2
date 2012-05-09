@@ -106,7 +106,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
             data = this.format.read(data);
         }
         if (!!data.error) {
-            throw new Ext.data.DataReader.Error("invalid-response", data.error);
+            Ext.Error.raise({msg: "Error parsing WMS GetCapabilities", arg: data.error});
         }
         var version = data.version;
         var capability = data.capability || {};
@@ -127,10 +127,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
                     metadata = {};
                     for(var j=0, lenJ=fields.length; j<lenJ; j++) {
                         field = fields[j];
-                        v = layer[field.mapping || field.name] ||
-                        field.defaultValue;
-                        v = field.convert && field.convert(v);
-                        metadata[field.name] = v;
+                        metadata[field.name] = layer[field.name];
                     }
                     metadata['name'] = layer.name;
                     options = {
