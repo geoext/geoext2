@@ -48,7 +48,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
         
         if(config.url){
             config.proxy = Ext.applyIf(config.proxy || {},
-                {url: config.url}
+                {url: config.url, type: 'ajax'}
             );
         }
         if(config.fields){

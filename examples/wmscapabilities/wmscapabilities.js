@@ -16,6 +16,7 @@
 var store;
 
 Ext.require([
+    'Ext.grid.Panel',
     'GeoExt.data.reader.WmsCapabilities',
     'GeoExt.data.WmsCapabilitiesLayerStore',
     'GeoExt.panel.Map'
@@ -28,7 +29,7 @@ Ext.application({
         // create a new WMS capabilities store
         store = Ext.create('GeoExt.data.WmsCapabilitiesStore', {
             storeId: 'wmscapsStore',
-            url: "data/wmscap.xml",
+            url: "../data/wmscap.xml",
             autoLoad: true
         });
     
