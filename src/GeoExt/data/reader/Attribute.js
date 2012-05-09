@@ -10,37 +10,57 @@
  * @require OpenLayers/Format/WFSDescribeFeatureType.js
  */
 
-/* api: (define)
- *  module = GeoExt.data
- *  class = AttributeReader
- *  base_link = `Ext.data.DataReader <http://dev.sencha.com/deploy/dev/docs/?class=Ext.data.DataReader>`_
+/**
+ * A reader to create model objects from a DescribeFeatureType structure. Uses
+ * `OpenLayers.Format.WFSDescribeFeatureType` internally for the parsing.
+ *
+ * Example:
+<pre><code>
+Ext.define('My.model.Model', {
+    field: ['name', 'type'],
+    proxy: {
+        type: 'ajax',
+        url: 'http://wftgetfeaturetype',
+        reader: {
+            type: 'gx_attribute'
+        }
+    }
+});
+</code></pre> 
+ * `gx_attribute` is the alias to the Attribute reader.
+ *
+ * 
  */
 
 Ext.define('GeoExt.data.reader.Attribute', {
     extend: 'Ext.data.reader.Json',
-    requires: ['Ext.data.reader.Json', 'Ext.data.Field'],
+    requires: ['Ext.data.Field'],
     alternateClassName: 'GeoExt.data.AttributeReader',
     alias: 'reader.gx_attribute',
 
-    /** api: constructor
-     *  .. class:: AttributeReader(meta, recordType)
-     *  
-     *      :arg meta: ``Object`` Reader configuration.
-     *      :arg recordType: ``Array or Ext.data.Record`` An array of field
-     *          configuration objects or a record object.
-     *
-     *      Create a new attributes reader object.
-     *      
-     *      Valid meta properties:
-     *      
-     *      * format - ``OpenLayers.Format`` A parser for transforming the XHR response
-     *        into an array of objects representing attributes.  Defaults to
-     *        an ``OpenLayers.Format.WFSDescribeFeatureType`` parser.
-     *      * ignore - ``Object`` Properties of the ignore object should be field names.
-     *        Values are either arrays or regular expressions.
-     *      * feature - ``OpenLayers.Feature.Vector`` A vector feature. If provided
-     *        records created by the reader will include a field named "value"
-     *        referencing the attribute value as set in the feature.
+    /**
+     * @cfg {OpenLayers.Format} format
+     * A parser for transforming the XHR response
+     * into an array of objects representing attributes.  Defaults to
+     * `OpenLayers.Format.WFSDescribeFeatureType` parser.
+     */
+
+    /**
+     * @cfg {Object} ignore
+     * Properties of the ignore object should be field names.
+     * Values are either arrays or regular expressions.
+     */
+
+    /**
+     * @cfg {OpenLayers.Feature.Vector} feature
+     * A vector feature. If provided records created by the reader will
+     * include a field named "value" referencing the attribute value as
+     * set in the feature.
+     */
+
+    /**
+     * Create a new reader.
+     * @param {Object} config (optional) Config object.
      */
     constructor: function(config) {
         config = config || {};
@@ -48,10 +68,6 @@ Ext.define('GeoExt.data.reader.Attribute', {
             config.format = new OpenLayers.Format.WFSDescribeFeatureType();
         }
         this.callParent([config]);
-        // FIXME config.fields?
-        //GeoExt.data.AttributeReader.superclass.constructor.call(
-            //this, config, recordType || config.fields
-        //);
         if(config.feature) {
             var f = Ext.create('Ext.data.Field', {
                 name: "value",
@@ -63,16 +79,13 @@ Ext.define('GeoExt.data.reader.Attribute', {
         }
     },
 
-    /** private: method[read]
-     *  :arg request: ``Object`` The XHR object that contains the parsed doc.
-     *  :return: ``Object``  A data block which is used by an ``Ext.data.Store``
-     *      as a cache of ``Ext.data.Records``.
-     *  
-     *  This method is only used by a DataProxy which has retrieved data from a
-     *  remote server.
+    /** 
+     * Function called by the proxy to deserialize a DescribeFeatureType
+     * response into Model objects.
+     * @param {Object} request The XHR object that contains the
+     * DescribeFeatureType response.
      */
     read: function(request) {
-              // FIXME remove?
         var data = request.responseXML;
         if(!data || !data.documentElement) {
             data = request.responseText;
@@ -80,16 +93,13 @@ Ext.define('GeoExt.data.reader.Attribute', {
         return this.readRecords(data);
     },
 
-    /** private: method[readRecords]
-     *  :arg data: ``DOMElement or String or Array`` A document element or XHR
-     *      response string.  As an alternative to fetching attributes data from
-     *      a remote source, an array of attribute objects can be provided given
-     *      that the properties of each attribute object map to a provided field
-     *      name.
-     *  :return: ``Object`` A data block which is used by an ``Ext.data.Store``
-     *      as a cache of ``Ext.data.Records``.
-     *  
-     *  Create a data block containing Ext.data.Records from an XML document.
+    /**
+     * Function called by {@link #read} to do the actual deserialization.
+     * @param {DOMElement/String/Array} data A document element or XHR
+     * response string.  As an alternative to fetching attributes data from
+     * a remote source, an array of attribute objects can be provided given
+     * that the properties of each attribute object map to a provided field
+     * name.
      */
     readRecords: function(data) {
         var attributes;
@@ -146,11 +156,11 @@ Ext.define('GeoExt.data.reader.Attribute', {
         });
     },
 
-    /** private: method[ignoreAttribute]
-     *  :arg name: ``String`` The field name.
-     *  :arg value: ``String`` The field value.
-     *
-     *  :return: ``Boolean`` true if the attribute should be ignored.
+    /** 
+     * Determine if the attribute should be attribute.
+     * @param {String} name The field name.
+     * @param {String} value The field value.
+     * @return {Boolean} True if the attribute should be ignored.
      */
     ignoreAttribute: function(name, value) {
         var ignore = false;
