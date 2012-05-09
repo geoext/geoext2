@@ -146,7 +146,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
     },
 
     /** 
-     * Determine if the attribute should be attribute.
+     * Determine if the attribute should be ignored.
      * @param {String} name The field name.
      * @param {String} value The field value.
      * @return {Boolean} True if the attribute should be ignored.
