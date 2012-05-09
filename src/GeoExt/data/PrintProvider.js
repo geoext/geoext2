@@ -38,20 +38,20 @@ Ext.define('GeoExt.data.PrintProvider', {
     /** 
      * @private
      * @property {String} url
-     *  `String` Base url of the print service. Will always have a trailing
-     *  "/".
+     * Base url of the print service. Will always have a trailing "/".
      */
     url: null,
     
-    /** @cfg {Boolean} autoLoad
-     *  `Boolean` If set to true, the capabilities will be loaded upon
+    /** 
+     * @cfg {Boolean} autoLoad
+     * If set to true, the capabilities will be loaded upon
      *  instance creation, and `loadCapabilities` does not need to be called
      *  manually. Setting this when `capabilities` and no `url` is provided
      *  has no effect. Default is false.
      */
 
     /** @cfg {Object} capabilities
-     *  `Object` Capabilities of the print service. Only required if `url`
+     *  Capabilities of the print service. Only required if `url`
      *  is not provided. This is the object returned by the `info.json`
      *  endpoint of the print service, and is usually obtained by including a
      *  script tag pointing to
@@ -66,12 +66,13 @@ Ext.define('GeoExt.data.PrintProvider', {
     /** 
      * @private
      * @property {Object} capabilities
-     *  `Object` Capabilities as returned from the print service.
+     * Capabilities as returned from the print service.
      */
     capabilities: null,
     
-    /** @cfg {String} method
-     *  `String` Either `POST` or `GET` (case-sensitive). Method to use
+    /** 
+     * @cfg {String} method
+     * Either `POST` or `GET` (case-sensitive). Method to use
      *  when sending print requests to the servlet. If the print service is at
      *  the same origin as the application (or accessible via proxy), then
      *  `POST` is recommended. Use `GET` when accessing a remote print
@@ -82,40 +83,45 @@ Ext.define('GeoExt.data.PrintProvider', {
     /** 
      * @private
      * @property {String} method
-     *  `String` Either `POST` or `GET` (case-sensitive). Method to use
+     * Either `POST` or `GET` (case-sensitive). Method to use
      *  when sending print requests to the servlet.
      */
     method: "POST",
 
-    /** @cfg {String} encoding
-     * `String` The encoding to set in the headers when requesting the print
+    /** 
+     * @cfg {String} encoding
+     * The encoding to set in the headers when requesting the print
      * service. Prevent character encoding issues, especially when using IE.
      * Default is retrieved from document charset or characterSet if existing
      * or `UTF-8` if not.
      */
     encoding: document.charset || document.characterSet || "UTF-8",
 
-    /** @cfg {Number} timeout
-     *  `Number` Timeout of the POST Ajax request used for the print request
+    /** 
+     * @cfg {Number} timeout
+     * Timeout of the POST Ajax request used for the print request
      *  (in milliseconds). Default of 30 seconds. Has no effect if `method`
      *  is set to `GET`.
      */
     timeout: 30000,
     
-    /** api: property[customParams]
-     *  `Object` Key-value pairs of custom data to be sent to the print
+    /** 
+     * @property {Object} customParams
+     * Key-value pairs of custom data to be sent to the print
      *  service. Optional. This is e.g. useful for complex layout definitions
      *  on the server side that require additional parameters.
      */
     customParams: null,
     
-    /** @cfg {Object} baseParams
-     *  `Object` Key-value pairs of base params to be add to every 
+    /** 
+     * @cfg {Object} baseParams
+     * Key-value pairs of base params to be add to every 
      *  request to the service. Optional. 
      */
     
-    /** api: property[scales]
-     *  `Ext.data.JsonStore` read-only. A store representing the scales
+    /** 
+     * @property {Ext.data.JsonStore} scales
+     * read-only. A store representing the scales
      *  available.
      *  
      *  Fields of records in this store:
@@ -125,8 +131,9 @@ Ext.define('GeoExt.data.PrintProvider', {
      */
     scales: null,
     
-    /** api: property[dpis]
-     *  `Ext.data.JsonStore` read-only. A store representing the dpis
+    /** 
+     * @property {Ext.data.JsonStore} dpis
+     * read-only. A store representing the dpis
      *  available.
      *  
      *  Fields of records in this store:
@@ -136,8 +143,9 @@ Ext.define('GeoExt.data.PrintProvider', {
      */
     dpis: null,
         
-    /** api: property[layouts]
-     *  `Ext.data.JsonStore` read-only. A store representing the layouts
+    /** 
+     * @property {Ext.data.JsonStore} layouts
+     * read-only. A store representing the layouts
      *  available.
      *  
      *  Fields of records in this store:
@@ -148,24 +156,27 @@ Ext.define('GeoExt.data.PrintProvider', {
      */
     layouts: null,
     
-    /** api: property[dpi]
-     *  `Ext.data.Record` the record for the currently used resolution.
+    /** 
+     * @property {Ext.data.Record} dpi
+     * the record for the currently used resolution.
      *  Read-only, use `setDpi` to set the value.
      */
     dpi: null,
 
-    /** api: property[layout]
-     *  `Ext.data.Record` the record of the currently used layout. Read-only,
+    /** 
+     * @property {Ext.data.Record} layout
+     * the record of the currently used layout. Read-only,
      *  use `setLayout` to set the value.
      */
     layout: null,
 
     /**
-     * @private
      * Private constructor override.
+     * 
+     * @private
      */
     constructor: function(config) {
-    	this.initialConfig = config;
+        this.initialConfig = config;
         Ext.apply(this, config);
         
         if(!this.customParams) {
@@ -178,7 +189,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * capabilities - `Object` the capabilities
          */
@@ -188,9 +199,9 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
-         *  * layout - `Ext.data.Record` the new layout
+         *  * layout - {@link Ext.data.Record} the new layout
          */
 
         /** @event dpichange
@@ -198,9 +209,9 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
-         *  * dpi - `Ext.data.Record` the new dpi record
+         *  * dpi - {@link Ext.data.Record} the new dpi record
          */
         
         /** @event beforeprint
@@ -209,10 +220,10 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * map - `OpenLayers.Map` the map being printed
-         *  * pages - Array of :class:`GeoExt.data.PrintPage` the print
+         *  * pages - Array of {@link GeoExt.data.PrintPage} the print
          *    pages being printed
          *  * options - `Object` the options to the print command
          */
@@ -222,7 +233,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * url - `String` the url of the print document
          */
@@ -233,7 +244,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * response - `Object` the response object of the XHR
          */
@@ -245,7 +256,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * layer - `OpenLayers.Layer` the layer which is about to be 
          *    encoded.
@@ -258,7 +269,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * layer - `OpenLayers.Layer` the layer which is about to be 
          *    encoded.
@@ -274,7 +285,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  has been renamed to beforeencode.
          *
          *  Listener arguments:
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * url - `String` the url of the print document
          */
@@ -288,7 +299,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - :class:`GeoExt.data.PrintProvider` this
+         *  * printProvider - {@link GeoExt.data.PrintProvider} this
          *    PrintProvider
          *  * jsonData - `Object` The data that will be sent to the print
          *    server. Can be used to populate jsonData.legends.
@@ -300,7 +311,7 @@ Ext.define('GeoExt.data.PrintProvider', {
 
         this.scales = Ext.create('Ext.data.JsonStore', {
             proxy: {
-            	type: "memory",
+                type: "memory",
                 reader: {
                     type: "json",
                     root: "scales"
@@ -317,7 +328,7 @@ Ext.define('GeoExt.data.PrintProvider', {
         
         this.dpis = Ext.create('Ext.data.JsonStore', {
             proxy: {
-            	type: "memory",
+                type: "memory",
                 reader: {
                     type: "json",
                     root: "dpis"
@@ -331,7 +342,7 @@ Ext.define('GeoExt.data.PrintProvider', {
         
         this.layouts = Ext.create('Ext.data.JsonStore', {
             proxy: {
-            	type: "memory",
+                type: "memory",
                 reader: {
                     type: "json",
                     root: "layouts"
@@ -351,15 +362,15 @@ Ext.define('GeoExt.data.PrintProvider', {
                 this.url += "/";            
             }
             if (this.initialConfig.autoLoad) {
-            	this.loadCapabilities();
-			}
+                this.loadCapabilities();
+            }
         }
     },
     
     /** 
-     *  @param {} layout: `Ext.data.Record` the record of the layout.
+     * Sets the layout for this printProvider.
      *  
-     *  Sets the layout for this printProvider.
+     * @param {Ext.data.Record} layout the record of the layout.
      */
     setLayout: function(layout) {
         this.layout = layout;
@@ -367,9 +378,10 @@ Ext.define('GeoExt.data.PrintProvider', {
     },
     
     /** 
-     *  @param {} dpi: `Ext.data.Record` the dpi record.
+     * Sets the dpi for this printProvider.
+     * 
+     * @param {Ext.data.Record} dpi the dpi record.
      *  
-     *  Sets the dpi for this printProvider.
      */
     setDpi: function(dpi) {
         this.dpi = dpi;
@@ -377,23 +389,16 @@ Ext.define('GeoExt.data.PrintProvider', {
     },
     
     /** 
-     *  @param {} map: `GeoExt.MapPanel` or `OpenLayers.Map` The map to print.
-     *  @param {} pages: `Array` of :class:`GeoExt.data.PrintPage` or
-     *      :class:`GeoExt.data.PrintPage` page(s) to print.
-     *  @param {} options: `Object` of additional options, see below.
-     *  
      *  Sends the print command to the print service and opens a new window
      *  with the resulting PDF.
      *  
      *  Valid properties for the `options` argument:
      *
-     *      * `legend` - :class:`GeoExt.LegendPanel` If provided, the legend
+     *   * `legend` - {@link GeoExt.LegendPanel} If provided, the legend
      *        will be added to the print document. For the printed result to
      *        look like the LegendPanel, the following `!legends` block
      *        should be included in the `items` of your page layout in the
      *        print module's configuration file:
-     *        
-     *        .. code-block:: none
      *        
      *          - !legends
      *              maxIconWidth: 0
@@ -402,11 +407,16 @@ Ext.define('GeoExt.data.PrintProvider', {
      *              layerSpace: 5
      *              layerFontSize: 10
      *
-     *      * `overview` - :class:`OpenLayers.Control.OverviewMap` If provided,
+     *   * `overview` - `OpenLayers.Control.OverviewMap` If provided,
      *        the layers for the overview map in the printout will be taken from
      *        the OverviewMap control. If not provided, the print service will
      *        use the main map's layers for the overview map. Applies only for
      *        layouts configured to print an overview map.
+     *        
+     *  @param {GeoExt.MapPanel/OpenLayers.Map} map The map to print.
+     *  @param {`Array` of {@link GeoExt.data.PrintPage}/{@link GeoExt.data.PrintPage}} pages 
+     *   or page(s) to print.
+     *  @param {Object} options of additional options, see below.
      */
     print: function(map, pages, options) {
         if(map instanceof GeoExt.MapPanel) {
@@ -444,7 +454,7 @@ Ext.define('GeoExt.data.PrintProvider', {
         
         var encodedPages = [];
         Ext.each(pages, function(page) {
-        	
+            
             encodedPages.push(Ext.apply({
                 center: [page.center.lon, page.center.lat],
                 scale: page.scale.get("value"),
@@ -510,8 +520,9 @@ Ext.define('GeoExt.data.PrintProvider', {
         }
     },
     
-    /** @private
-     *  @param {} url: `String`
+    /** 
+     * @private
+     * @param {String} url
      */
     download: function(url) {
         if (this.fireEvent("beforedownload", this, url) !== false) {
@@ -555,7 +566,7 @@ Ext.define('GeoExt.data.PrintProvider', {
     * @private
     */
    loadStores: function() {
-	   
+       
        this.scales.loadRawData(this.capabilities);
        this.dpis.loadRawData(this.capabilities);
        this.layouts.loadRawData(this.capabilities);
@@ -588,11 +599,11 @@ Ext.define('GeoExt.data.PrintProvider', {
     },
     
     /** 
+     * Converts the provided url to an absolute url.
+     * 
      * @private
      * @param {String} url
      * @return {String}
-     *  
-     * Converts the provided url to an absolute url.
      */
     getAbsoluteUrl: function(url) {
         var a;
@@ -610,9 +621,10 @@ Ext.define('GeoExt.data.PrintProvider', {
     },
     
     /**
+     * Encoders for all print content.
+     * 
      * @private
      * @property {Object} encoders
-     * Encoders for all print content
      */
     encoders: {
         "layers": {
@@ -847,5 +859,4 @@ Ext.define('GeoExt.data.PrintProvider', {
             }
         }
     }
-    
 });

@@ -27,7 +27,7 @@ Ext.define('GeoExt.data.PrintPage', {
      * @property {OpenLayers.Feature.Vector} feature
      * Feature representing the page extent. To
      *  get the extent of the print page for a specific map, use
-     *  `getPrintExtent`.
+     *  #getPrintExtent.
      *  Read-only.
      */
     feature: null,
@@ -64,6 +64,8 @@ Ext.define('GeoExt.data.PrintPage', {
     customParams: null,
     
     /**
+     * Private constructor override.
+     * 
      * @private
      */
     constructor: function(config) {
@@ -118,28 +120,29 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** 
-     *  @param {OpenLayers.Map/GeoExt.MapPanel} map the map to get the print extent for. 
-     *  @return {OpenLayers.Bounds}
-     *
-     *  Gets this page's print extent for the provided map.
+     * Gets this page's print extent for the provided map.
+     *  
+     * @param {OpenLayers.Map/GeoExt.MapPanel} map the map to get the print extent for. 
+     * @return {OpenLayers.Bounds}
      */
     getPrintExtent: function(map) {
         map = map instanceof GeoExt.MapPanel ? map.map : map;
         return this.calculatePageBounds(this.scale, map.getUnits());
     },
 
-    /** 
-     *  @param {Ext.data.Record} scale The new scale record.
-     *  @param {String} units map units to use for the scale calculation.
-     *   Optional if the `feature` is on a layer which is added to a map.
-     *   If not found, "dd" will be assumed.
-     * 
-     *  Updates the page geometry to match a given scale. Since this takes the
+    /**
+     *  
+     * Updates the page geometry to match a given scale. Since this takes the
      *  current layout of the printProvider into account, this can be used to
      *  update the page geometry feature when the layout has changed.
+     *  
+     * @param {Ext.data.Record} scale The new scale record.
+     * @param {String} units map units to use for the scale calculation.
+     *   Optional if the `feature` is on a layer which is added to a map.
+     *   If not found, "dd" will be assumed.
      */
     setScale: function(scale, units) {
-    	
+        
         var bounds = this.calculatePageBounds(scale, units);
         var geom = bounds.toGeometry();
         var rotation = this.rotation;
@@ -150,9 +153,9 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** 
-     * @param {OpenLayers.LonLat} center The new center.
-     * 
      * Moves the page extent to a new center.
+     * 
+     * @param {OpenLayers.LonLat} center The new center.
      */
     setCenter: function(center) {
         var geom = this.feature.geometry;
@@ -165,11 +168,11 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** 
-     *  @param {Float} rotation The new rotation.
-     *  @param {Boolean} force If set to true, the rotation will also be 
+     * Sets a new rotation for the page geometry.
+     * 
+     * @param {Float} rotation The new rotation.
+     * @param {Boolean} force If set to true, the rotation will also be 
      *  set when the layout does not support it. Default is false.
-     *  
-     *  Sets a new rotation for the page geometry.
      */
     setRotation: function(rotation, force) {
         if(force || this.printProvider.layout.get("rotation") === true) {
@@ -180,10 +183,6 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** 
-     *  @param {GeoExt.MapPanel/OpenLayers.Map/OpenLayers.Feature.Vector} fitTo 
-     *      The map or feature to fit the page to.
-     *  @param {Object} options Additional options to determine how to fit
-     *
      *  Fits the page layout to a map or feature extent. If the map extent has
      *  not been centered yet, this will do nothing.
      * 
@@ -195,6 +194,10 @@ Ext.define('GeoExt.data.PrintPage', {
      *    `fitTo` extent on the printer. If `screen`, it will be the closest
      *    one that is entirely visible inside the `fitTo` extent. Default is
      *    `printer`.
+     *    
+     *  @param {GeoExt.MapPanel/OpenLayers.Map/OpenLayers.Feature.Vector} fitTo 
+     *      The map or feature to fit the page to.
+     *  @param {Object} options Additional options to determine how to fit
      * 
      */
     fit: function(fitTo, options) {
@@ -226,7 +229,7 @@ Ext.define('GeoExt.data.PrintPage', {
             var bounds = this.calculatePageBounds(rec, units);
             
             if (options.mode == "closest") {
-            	
+                
                 var diff = 
                     Math.abs(bounds.getWidth() - mapWidth) +
                     Math.abs(bounds.getHeight() - mapHeight);
@@ -255,14 +258,14 @@ Ext.define('GeoExt.data.PrintPage', {
     },
 
     /** 
-     * @private
-     * @param {OpenLayers.Geometry} geometry New geometry for the feature.
-     *    If not provided, the existing geometry will be left unchanged.
-     * @param {Object} mods An object with one or more of `scale`,
-     *    `center` and `rotation`, reflecting the page properties to update.
-     *      
-     *  Updates the page feature with a new geometry and notifies listeners
+     * Updates the page feature with a new geometry and notifies listeners
      *  of changed page properties.
+     *  
+     * @private
+     * @param {OpenLayers.Geometry} geometry New geometry for the #feature.
+     *    If not provided, the existing geometry will be left unchanged.
+     * @param {Object} mods An object with one or more of #scale,
+     *    #center and #rotation, reflecting the page properties to update.
      */
     updateFeature: function(geometry, mods) {
         var f = this.feature;
@@ -288,14 +291,14 @@ Ext.define('GeoExt.data.PrintPage', {
     
     /**
      * @private
-     * @param {Ext.data.Record} scale Scale record to calculate the page
-     *      bounds for.
-     * @param {String} units Map units to use for the scale calculation.
-     *      Optional if `feature` is added to a layer which is added to a
-     *      map. If not provided, "dd" will be assumed.
-     *  :return: `OpenLayers.Bounds`
+     * @param {Ext.data.Record} scale Scale record to calculate the page 
+     *  bounds for.
+     * @param {String} units Map units to use for the scale calculation. 
+     *  Optional if #feature is added to a layer which is added to a 
+     *  map. If not provided, "dd" will be assumed.
+     * @return `OpenLayers.Bounds`
      *  
-     *  Calculates the page bounds for a given scale.
+     * Calculates the page bounds for a given scale.
      */
     calculatePageBounds: function(scale, units) {
         var s = scale.get("value");
@@ -317,8 +320,9 @@ Ext.define('GeoExt.data.PrintPage', {
     },
     
     /** 
-     * @private
      * Handler for the printProvider's layoutchange event.
+     * 
+     * @private
      */
     onLayoutChange: function() {
         if(this.printProvider.layout.get("rotation") === false) {
@@ -329,8 +333,8 @@ Ext.define('GeoExt.data.PrintPage', {
         // to the first scale in the scales store, we need to
         // guard against that
         if (this.scale) {
-        	this.setScale(this.scale);
-		}
+            this.setScale(this.scale);
+        }
     },
     
     /** 
