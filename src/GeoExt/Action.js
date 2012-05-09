@@ -97,7 +97,7 @@ Ext.define('GeoExt.Action', {
      * 
      */
     constructor: function(config){
-    	// store the user scope and handlers
+        // store the user scope and handlers
         this.uScope = config.scope;
         this.uHandler = config.handler;
         this.uToggleHandler = config.toggleHandler;
@@ -140,8 +140,8 @@ Ext.define('GeoExt.Action', {
             });
             
         }
-    	
-    	this.callParent(arguments);
+        
+        this.callParent(arguments);
         
     },
     
@@ -197,7 +197,7 @@ Ext.define('GeoExt.Action', {
      *  Change the control state depending on the state boolean.
      */
     changeControlState: function(state){
-    	if(state) {
+        if(state) {
             if(!this._activating) {
                 this._activating = true;
                 this.control.activate();
@@ -224,7 +224,7 @@ Ext.define('GeoExt.Action', {
      *  Called when this action's control is activated.
      */
     onCtrlActivate: function(){
-    	var ctrl = this.control;
+        var ctrl = this.control;
         if(ctrl.type == OpenLayers.Control.TYPE_BUTTON) {
             this.enable();
         } else {
@@ -241,7 +241,7 @@ Ext.define('GeoExt.Action', {
      *  Called when this action's control is deactivated.
      */
     onCtrlDeactivate: function(){
-    	var ctrl = this.control;
+        var ctrl = this.control;
         if(ctrl.type == OpenLayers.Control.TYPE_BUTTON) {
             this.disable();
         } else {
