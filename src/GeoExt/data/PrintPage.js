@@ -1,7 +1,8 @@
 Ext.define('GeoExt.data.PrintPage', {
     extend: 'Ext.util.Observable',
-    
-    
+    requires: [
+        'GeoExt.panel.Map'
+    ],
     
     /** api:config[printProvider]
      * :class:`GeoExt.data.PrintProvider` The print provider to use with
