@@ -6,37 +6,36 @@ Ext.define('GeoExt.panel.Legend', {
     requires: ['GeoExt.container.LayerLegend'],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
-    config: {
-        /**
-         * @cfg {Boolean} dynamic
-         * If false the LegendPanel will not listen to the add, remove and change 
-         * events of the LayerStore. So it will load with the initial state of
-         * the LayerStore and not change anymore. 
-         */
-        dynamic: true,
 
-        /**
-         * @cfg {Ext.data.Store} layerStore
-         * The layer store containing layers to be displayed in the legend 
-         * container. If not provided it will be taken from the MapPanel.
-         */
-        layerStore: null,
+    /**
+     * @cfg {Boolean} dynamic
+     * If false the LegendPanel will not listen to the add, remove and change 
+     * events of the LayerStore. So it will load with the initial state of
+     * the LayerStore and not change anymore. 
+     */
+    dynamic: true,
 
-        /**
-         * @cfg {Array}
-         * An array of preferred legend types.
-         */
-        preferredTypes: null,
+    /**
+     * @cfg {Ext.data.Store} layerStore
+     * The layer store containing layers to be displayed in the legend 
+     * container. If not provided it will be taken from the MapPanel.
+     */
+    layerStore: null,
 
-        /**
-         * @cfg {Function}
-         *  A function, called in the scope of the legend panel, with a layer record
-         *  as argument. Is expected to return true for layers to be displayed, false
-         *  otherwise. By default, all layers will be displayed.
-         */
-        filter: function(record) {
-            return true;
-        }
+    /**
+     * @cfg {Array}
+     * An array of preferred legend types.
+     */
+    preferredTypes: null,
+
+    /**
+     * @cfg {Function}
+     * A function, called in the scope of the legend panel, with a layer record
+     * as argument. Is expected to return true for layers to be displayed, false
+     * otherwise. By default, all layers will be displayed.
+     */
+    filter: function(record) {
+        return true;
     },    
 
     /**

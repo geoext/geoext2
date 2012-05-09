@@ -5,33 +5,31 @@ Ext.define('GeoExt.LegendImage', {
     extend : 'Ext.Component',
     alias : 'widget.gx_legendimage',
 
-    config: {
-        /**
-         * @cfg {String} url
-         * The url of the image to load
-         */
-        url: null,
+    /**
+     * @cfg {String} url
+     * The url of the image to load
+     */
+    url: null,
 
-        /**
-         * @cfg {String} defaultImgSrc
-         * Path to image that will be used if the legend image fails
-         * to load.  Default is Ext.BLANK_IMAGE_URL.
-         */
-        defaultImgSrc: null,
+    /**
+     * @cfg {String} defaultImgSrc
+     * Path to image that will be used if the legend image fails
+     * to load.  Default is Ext.BLANK_IMAGE_URL.
+     */
+    defaultImgSrc: null,
 
-        /**
-         * @cfg {String} imgCls
-         * Optional css class to apply to img tag
-         */
-        imgCls: null,
+    /**
+     * @cfg {String} imgCls
+     * Optional css class to apply to img tag
+     */
+    imgCls: null,
 
-        /**
-         * @cfg {String}
-         * CSS class applied to img tag when no image is available or
-         * the default image was loaded.
-         */
-        noImgCls: "gx-legend-noimage"
-    },
+    /**
+     * @cfg {String}
+     * CSS class applied to img tag when no image is available or
+     * the default image was loaded.
+     */
+    noImgCls: "gx-legend-noimage",
 
     initComponent: function(){
         var me = this;
