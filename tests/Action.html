@@ -2,7 +2,7 @@
 <html debug="true">
   <head>
     <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
     
     <script type="text/javascript">
@@ -263,6 +263,7 @@
             t.eq(deactivateCnt, 0, "click again on menu item does not deactivate control");
             t.eq(activateCnt, 1, "click again on menu item activates control once");
             t.eq(checkHandlerCnt, 1, "click again on menu item calls check handler once");
+            
         }
         
         function test_toggle_group(t) {
