@@ -9,7 +9,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
         {name: "queryable", type: "boolean", mapping: "metadata.queryable"},
         {name: "opaque", type: "boolean", mapping: "metadata.opaque"},
         {name: "noSubsets", type: "boolean", mapping: "metadata.noSubsets"},
-        {name: "cascaded", type: "int", mapping: "metadata.casacaded"},
+        {name: "cascaded", type: "int", mapping: "metadata.cascaded"},
         {name: "fixedWidth", type: "int", mapping: "metadata.fixedWidth"},
         {name: "fixedHeight", type: "int", mapping: "metadata.fixedHeight"},
         {name: "minScale", type: "float", mapping: "metadata.minScale"},
