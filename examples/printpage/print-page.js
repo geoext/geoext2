@@ -21,7 +21,7 @@ Ext.require([
     'GeoExt.panel.Legend',
     'GeoExt.container.WMSLegend',
     'GeoExt.container.URLLegend',
-    'GeoExt.container.VectorLegend',
+    'GeoExt.container.VectorLegend'
 ]);
 
 var mapPanel, printPage, printProvider;
