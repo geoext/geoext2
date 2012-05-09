@@ -1,3 +1,45 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+/**
+ * @class GeoExt.state.PermalinkProvider
+ *
+ * The permalink provider.
+ *
+ *  Sample code displaying a new permalink each time the map is moved.
+ *
+ *      @example
+ *      // create permalink provider
+ *      var permalinkProvider = new GeoExt.state.PermalinkProvider();
+ *
+ *      // set it in the state manager
+ *      Ext.state.Manager.setProvider(permalinkProvider);
+ *
+ *      // create a map panel, and make it stateful
+ *      var mapPanel = new GeoExt.MapPanel({
+ *          renderTo: "map",
+ *          layers: [
+ *              new OpenLayers.Layer.WMS(
+ *                  "Global Imagery",
+ *                  "http://maps.opengeo.org/geowebcache/service/wms",
+ *                  {layers: "bluemarble"}
+ *              )
+ *          ],
+ *          stateId: "map",
+ *          prettyStateKeys: true // for pretty permalinks
+ *      });
+ *
+ *      // display permalink each time state is changed
+ *      permalinkProvider.on({
+ *          statechanged: function(provider, name, value) {
+ *              alert(provider.getLink());
+ *          }
+ *      });
+ */
 Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
     requires : [
@@ -17,14 +59,14 @@ Ext.define('GeoExt.state.PermalinkProvider', {
         this.state = this.readURL(url);
     
     },
-    /** api: config[encodeType]
-   *  ``Boolean`` Specifies whether type of state values should be encoded
-   *  and decoded. Set it to false if you work with components that don't
-   *  require encoding types, and want pretty permalinks. Defaults to true.
-   */
-    /** private: property[encodeType]
-   *  ``Boolean``
-   */
+
+    /**
+     * @private
+     * @property{Boolean}
+     *  Specifies whether type of state values should be encoded
+     *  and decoded. Set it to false if you work with components that don't
+     *  require encoding types, and want pretty permalinks. Defaults to true.
+     */
     encodeType: true,
     
     initComponent: function(){
@@ -33,11 +75,12 @@ Ext.define('GeoExt.state.PermalinkProvider', {
         me.callParent(arguments);
     },
         
-    /** private: method[readURL]
-     *  :param url: ``String`` The URL to get the state from.
-     *  :return: ``Object`` The state object.
+    /**
+     * Create a state object from a URL.
      *
-     *  Create a state object from a URL.
+     * @private
+     * @param url {String} The URL to get the state from.
+     * @return {Object} The state object.
      */
     readURL: function(url) {
         var state = {};
@@ -57,11 +100,11 @@ Ext.define('GeoExt.state.PermalinkProvider', {
         return state;
     },
 
-    /** api: method[getLink]
-     *  :param base: ``String`` The base URL, optional.
-     *  :return: ``String`` The permalink.
+    /**
+     * Returns the permalink corresponding to the current state.
      *
-     *  Return the permalink corresponding to the current state.
+     * @param base {String} The base URL, optional.
+     * @return {String} The permalink.
      */
     getLink: function(base) {
         base = base || document.location.href;

@@ -99,7 +99,7 @@ Ext.define('GeoExt.panel.Map', {
      * @cfg {OpenLayers.Map/Object} map
      * A configured map or a configuration object for the map constructor.
      * A configured map will be available after construction through the
-     * {@link #property-map} property.
+     * {@link GeoExt.panel.Map#property-map} property.
      */
     /** 
      * @property {OpenLayers.Map/Object} map 
@@ -351,7 +351,7 @@ Ext.define('GeoExt.panel.Map', {
     
     /**
      * @private
-     * The "moveend" listener bound to the {@link map}.
+     * The "moveend" listener bound to the {@link GeoExt.panel.Map#property-map}.
      */
     onMoveend: function(e) {
         this.fireEvent("aftermapmove", this, this.map, e);
@@ -360,7 +360,7 @@ Ext.define('GeoExt.panel.Map', {
     /**
      * @private
      * @param {Object} e
-     * The "changelayer" listener bound to the {@link map}.
+     * The "changelayer" listener bound to the {@link GeoExt.panel.Map#property-map}.
      */
     onChangelayer: function(e) {
         var me = this,

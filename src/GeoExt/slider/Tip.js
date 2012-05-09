@@ -35,7 +35,7 @@ Ext.define('GeoExt.slider.Tip', {
     minWidth: 10,
     
     /**
-     * @cfg {Array(Number)} offsets
+     * @cfg {Number[]} offsets
      * A two item list that provides x, y offsets for the tip.
      */
     offsets : [0, -10],
