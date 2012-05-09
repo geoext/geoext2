@@ -1,12 +1,10 @@
 /**
  * @class GeoExt.data.LayerModel
- * 
- *  Class defines a model for records containing an OpenLayers layer object.
+ * The layer model class used by {GeoExt.data.LayerStore} and its subclasses.
+ *  Defines a model for records containing an OpenLayers layer object.
  *  Usually this class is not instantiated directly, but referenced by its mtype 'gx_layer' 
  *  or name 'GeoExt.data.model.Layer' as string representation as a config option within creation of a superior component, 
  *  such as a store.
- */
-/**
  * @borrows Ext.data.Model
  */
 Ext.define('GeoExt.data.LayerModel',{
@@ -14,6 +12,18 @@ Ext.define('GeoExt.data.LayerModel',{
     extend: 'Ext.data.Model',
     requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
     alias: 'model.gx_layer',
+    statics: {
+        /**
+         * Convenience function for creating new layer model instance object
+         * using a layer object.
+         * @param {OpenLayers.Layer} layer
+         * @return {GeoExt.data.LayerModel} 
+         * @static         
+         */
+        createFromLayer: function(layer) {
+            return this.proxy.reader.readRecords([layer]).records[0];
+        }
+    },
     fields: [   
         'id',
         {name: 'title',        type: 'string', mapping: 'name'},
