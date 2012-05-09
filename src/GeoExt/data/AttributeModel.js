@@ -22,7 +22,7 @@ Ext.define('GeoExt.data.AttributeModel', {
     alias: 'model.gx_attribute',
     fields: [
         {name: 'name', type: 'string'},
-        {name: 'type', type: 'string'},
+        {name: 'type'},
         {name: 'restriction'},
         {name: 'nillable', type: 'bool'}
         // No 'value' field by default. The 'value' field gets added by the 
