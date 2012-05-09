@@ -15,20 +15,395 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-data-LayerStore'>/**
+  <pre class="prettyprint lang-js"><span id='global-property-'>/**
 </span> * @requires GeoExt/data/LayerModel.js
  */
 
+<span id='GeoExt-data-LayerStore'>/**
+</span> * @class GeoExt.data.LayerStore
+ * A store that synchronizes a layers array of an OpenLayers.Map with a
+ * layer store holding {@link GeoExt.data.LayerModel} instances.
+ */
 Ext.define('GeoExt.data.LayerStore', {
-    require: ['GeoExt.data.LayerModel'],
+    requires: ['GeoExt.data.LayerModel'],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.LayerModel',
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'json'
+    
+    statics: {
+<span id='GeoExt-data-LayerStore-static-property-MAP_TO_STORE'>        /**
+</span>         * @static
+         * @property {Number} MAP_TO_STORE
+         */
+        MAP_TO_STORE: 1,
+<span id='GeoExt-data-LayerStore-static-property-STORE_TO_MAP'>        /**
+</span>         * @static
+         * @property {Number} STORE_TO_MAP
+         */
+        STORE_TO_MAP: 2 
+    },
+
+<span id='GeoExt-data-LayerStore-event-bind'>    /**
+</span>     * @event bind
+     * Fires when the store is bound to a map.
+     *
+     * @param {GeoExt.data.LayerStore} store
+     * @param {OpenLayers.Map} map
+     */
+        
+<span id='GeoExt-data-LayerStore-cfg-map'>    /**
+</span>     * @cfg {OpenLayers.Map/GeoExt.panel.Map/Object} map
+     * Map that this store will be in sync with. If not provided, the
+     * store will not be bound to a map.
+     */
+        
+<span id='GeoExt-data-LayerStore-property-map'>    /** 
+</span>     * @property {OpenLayers.Map/Object} map
+     * Map that the store is synchronized with, if any.
+     */
+    map: null,
+        
+<span id='GeoExt-data-LayerStore-cfg-layers'>    /** 
+</span>     * @cfg {OpenLayers.Layer/Array} layers
+     * Layers that will be added to the store (and the map, depending on the
+     * value of the ``initDir`` option.
+     */
+        
+<span id='GeoExt-data-LayerStore-cfg-initDir'>    /** 
+</span>     * @cfg {Number} initDir
+     * Bitfields specifying the direction to use for the initial sync between
+     * the map and the store, if set to 0 then no initial sync is done.
+     * Defaults to {@link #MAP_TO_STORE} |
+     * {@link #STORE_TO_MAP}.
+     */
+
+<span id='GeoExt-data-LayerStore-method-constructor'>    /** 
+</span>     * @config {Object} Creation parameters
+     * @private
+     */
+    constructor: function(config) {
+        var me = this;
+
+        config = Ext.apply({}, config);
+
+        // &quot;map&quot; option
+        var map = (GeoExt.MapPanel &amp;&amp; config.map instanceof GeoExt.MapPanel) ?
+            config.map.map : config.map;
+        delete config.map;
+
+        // &quot;layers&quot; option - is an alias to &quot;data&quot; option
+        if(config.layers) {
+            config.data = config.layers;
         }
-    }
+        delete config.layers;
+
+        // &quot;initDir&quot; option
+        var options = {initDir: config.initDir};
+        delete config.initDir;
+
+        me.callParent([config]);
+
+        if(map) {
+            this.bind(map, options);
+        }
+    },
+
+<span id='GeoExt-data-LayerStore-method-bind'>    /**
+</span>     * Bind this store to a map instance, once bound the store
+     * is synchronized with the map and vice-versa.
+     *
+     * @param {OpenLayers.Map} map The map instance.
+     * @param {Object} options  
+     */
+    bind: function(map, options) {
+        var me = this;
+
+        if(me.map) {
+            // already bound
+            return;
+        }
+        me.map = map;
+        options = Ext.apply({}, options);
+
+        var initDir = options.initDir;
+        if(options.initDir == undefined) {
+            initDir = GeoExt.data.LayerStore.MAP_TO_STORE |
+                GeoExt.data.LayerStore.STORE_TO_MAP;
+        }
+
+        // create a snapshot of the map's layers
+        var layers = map.layers.slice(0);
+
+        if(initDir &amp; GeoExt.data.LayerStore.STORE_TO_MAP) {
+            me.each(function(record) {
+                me.map.addLayer(record.getLayer());
+            }, me);
+        }
+        if(initDir &amp; GeoExt.data.LayerStore.MAP_TO_STORE) {
+            me.loadRawData(layers, true);
+        }
+
+        map.events.on({
+            &quot;changelayer&quot;: me.onChangeLayer,
+            &quot;addlayer&quot;: me.onAddLayer,
+            &quot;removelayer&quot;: me.onRemoveLayer,
+            scope: me
+        });
+        me.on({
+            &quot;load&quot;: me.onLoad,
+            &quot;clear&quot;: me.onClear,
+            &quot;add&quot;: me.onAdd,
+            &quot;remove&quot;: me.onRemove,
+            &quot;update&quot;: me.onUpdate,
+            scope: me
+        });
+        me.data.on({
+            &quot;replace&quot; : me.onReplace,
+            scope: me
+        });
+        me.fireEvent(&quot;bind&quot;, me, map);
+    },
+
+<span id='GeoExt-data-LayerStore-method-unbind'>    /**
+</span>     * Unbind this store from the map it is currently bound.
+     */
+    unbind: function() {
+        var me = this;
+
+        if(me.map) {
+            me.map.events.un({
+                &quot;changelayer&quot;: me.onChangeLayer,
+                &quot;addlayer&quot;: me.onAddLayer,
+                &quot;removelayer&quot;: me.onRemoveLayer,
+                scope: me
+            });
+            me.un(&quot;load&quot;, me.onLoad, me);
+            me.un(&quot;clear&quot;, me.onClear, me);
+            me.un(&quot;add&quot;, me.onAdd, me);
+            me.un(&quot;remove&quot;, me.onRemove, me);
+
+            me.data.un(&quot;replace&quot;, me.onReplace, me);
+
+            me.map = null;
+        }
+    },
+        
+<span id='GeoExt-data-LayerStore-method-onChangeLayer'>        /**
+</span>         * Handler for layer changes.  When layer order changes, this moves the
+         * appropriate record within the store.
+         * @private
+         * @param {Object} evt
+         */
+        onChangeLayer: function(evt) {
+            var layer = evt.layer;
+            var recordIndex = this.findBy(function(rec, id) {
+                return rec.getLayer() === layer;
+            });
+            if(recordIndex &gt; -1) {
+                var record = this.getAt(recordIndex);
+                if(evt.property === &quot;order&quot;) {
+                    if(!this._adding &amp;&amp; !this._removing) {
+                        var layerIndex = this.map.getLayerIndex(layer);
+                        if(layerIndex !== recordIndex) {
+                            this._removing = true;
+                            this.remove(record);
+                            delete this._removing;
+                            this._adding = true;
+                            this.insert(layerIndex, [record]);
+                            delete this._adding;
+                        }
+                    }
+                } else if(evt.property === &quot;name&quot;) {
+                    record.set(&quot;title&quot;, layer.name);
+                } else {
+                    this.fireEvent(&quot;update&quot;, this, record, Ext.data.Record.EDIT);
+                }
+            }
+        },
+       
+<span id='GeoExt-data-LayerStore-method-onAddLayer'>        /**
+</span>         * Handler for a map's addlayer event
+         * @private
+         * @param {Object} evt
+         */
+        onAddLayer: function(evt) {
+            var me = this;
+            if(!me._adding) {
+                me._adding = true;
+                var result  = me.proxy.reader.read(evt.layer);
+                me.add(result.records);
+                delete me._adding;
+            }
+        },
+        
+<span id='GeoExt-data-LayerStore-method-onRemoveLayer'>        /**
+</span>         * Handler for a map's removelayer event
+         * @private
+         * @param {Object} evt
+         */
+        onRemoveLayer: function(evt){
+            //TODO replace the check for undloadDestroy with a listener for the
+            // map's beforedestroy event, doing unbind(). This can be done as soon
+            // as http://trac.openlayers.org/ticket/2136 is fixed.
+            if(this.map.unloadDestroy) {
+                if(!this._removing) {
+                    var layer = evt.layer;
+                    this._removing = true;
+                    this.remove(this.getByLayer(layer));
+                    delete this._removing;
+                }
+            } else {
+                this.unbind();
+            }
+        },
+        
+<span id='GeoExt-data-LayerStore-method-onLoad'>        /**
+</span>         * Handler for a store's load event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model[]} records
+         * @param {Object} options
+         */
+        onLoad: function(store, records, options) {
+            if (!Ext.isArray(records)) {
+                records = [records];
+            }
+            if (options &amp;&amp; !options.add) {
+                this._removing = true;
+                for (var i = this.map.layers.length - 1; i &gt;= 0; i--) {
+                    this.map.removeLayer(this.map.layers[i]);
+                }
+                delete this._removing;
+
+                // layers has already been added to map on &quot;add&quot; event
+                var len = records.length;
+                if (len &gt; 0) {
+                    var layers = new Array(len);
+                    for (var j = 0; j &lt; len; j++) {
+                        layers[j] = records[j].getLayer();
+                    }
+                    this._adding = true;
+                    this.map.addLayers(layers);
+                    delete this._adding;
+                }
+            }
+        },
+        
+<span id='GeoExt-data-LayerStore-method-onClear'>        /**
+</span>         * Handler for a store's clear event
+         * @private
+         * @param {Ext.data.Store} store
+         */
+        onClear: function(store) {
+            this._removing = true;
+            for (var i = this.map.layers.length - 1; i &gt;= 0; i--) {
+                this.map.removeLayer(this.map.layers[i]);
+            }
+            delete this._removing;
+        },
+        
+<span id='GeoExt-data-LayerStore-method-onAdd'>        /**
+</span>         * Handler for a store's add event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model[]} records
+         * @param {Number} index
+         */
+        onAdd: function(store, records, index) {
+            if(!this._adding) {
+                this._adding = true;
+                var layer;
+                for(var i=records.length-1; i&gt;=0; --i) {
+                    layer = records[i].getLayer();
+                    this.map.addLayer(layer);
+                    if(index !== this.map.layers.length-1) {
+                        this.map.setLayerIndex(layer, index);
+                    }
+                }
+                delete this._adding;
+            }
+        },
+        
+<span id='GeoExt-data-LayerStore-method-onRemove'>        /**
+</span>         * Handler for a store's remove event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model} record
+         * @param {Number} index
+         */
+        onRemove: function(store, record, index){
+            if(!this._removing) {
+                var layer = record.getLayer();
+                if (this.map.getLayer(layer.id) != null) {
+                    this._removing = true;
+                    this.removeMapLayer(record);
+                    delete this._removing;
+                }
+            }
+        },
+        
+<span id='GeoExt-data-LayerStore-method-onUpdate'>        /**
+</span>         * Handler for a store's update event
+         * @private
+         * @param {Ext.data.Store} store
+         * @param {Ext.data.Model} record
+         * @param {Number} operation
+         */
+        onUpdate: function(store, record, operation) {
+            if(operation === Ext.data.Record.EDIT) {
+                if (record.modified &amp;&amp; record.modified.title) {
+                    var layer = record.getLayer();
+                    var title = record.get(&quot;title&quot;);
+                    if(title !== layer.name) {
+                        layer.setName(title);
+                    }
+                }
+            }
+        },
+
+<span id='GeoExt-data-LayerStore-method-removeMapLayer'>        /**
+</span>         * Removes a record's layer from the bound map.
+         * @private
+         * @param {Ext.data.Record} record
+         */
+        removeMapLayer: function(record){
+            this.map.removeLayer(record.getLayer());
+        },
+
+<span id='GeoExt-data-LayerStore-method-onReplace'>        /**
+</span>         * Handler for a store's data collections' replace event
+         * @private
+         * @param {String} key
+         * @param {Ext.data.Model} oldRecord In this case, a record that has
+         *     been replaced.
+         * @param {Ext.data.Model} newRecord In this case, a record that is
+         *     replacing oldRecord.
+         */
+        onReplace: function(key, oldRecord, newRecord){
+            this.removeMapLayer(oldRecord);
+        },
+        
+<span id='GeoExt-data-LayerStore-method-getByLayer'>        /**
+</span>         * Get the record for the specified layer
+         * @param {OpenLayers.Layer} layer
+         * @returns {Ext.data.Model} or undefined if not found
+         */
+        getByLayer: function(layer) {
+            var index = this.findBy(function(r) {
+                return r.getLayer() === layer;
+            });
+            if(index &gt; -1) {
+                return this.getAt(index);
+            }
+        },
+        
+<span id='GeoExt-data-LayerStore-method-destroy'>        /**
+</span>         * @private
+         */
+        destroy: function() {
+            var me = this;
+            me.unbind();
+            me.callParent();
+        }
 });
 </pre>
 </body>

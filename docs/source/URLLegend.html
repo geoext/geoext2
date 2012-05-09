@@ -15,23 +15,23 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-legend-URL'>/**
-</span> * @class GeoExt.legend.URL
+  <pre class="prettyprint lang-js"><span id='GeoExt-container-URLLegend'>/**
+</span> * @class GeoExt.container.URLLegend
  */
-Ext.define('GeoExt.legend.URL', {
-    extend : 'GeoExt.legend.Layer',
-    requires: ['GeoExt.legend.Image'],
+Ext.define('GeoExt.container.URLLegend', {
+    extend : 'GeoExt.container.LayerLegend',
+    requires: ['GeoExt.LegendImage'],
     alias : 'widget.gx_urllegend',
     alternateClassName : 'GeoExt.URLLegend',
     
     statics : {
         supports: function(layerRecord) {
-            return layerRecord.get(&quot;legendURL&quot;) == null ? 0 : 10;
+            return Ext.isEmpty(layerRecord.get(&quot;legendURL&quot;)) ? 0 : 10;
         }
     },
 
     config: {
-<span id='GeoExt-legend-URL-cfg-defaultStyleIsFirst'>        /** @cfg {Boolean}
+<span id='GeoExt-container-URLLegend-cfg-defaultStyleIsFirst'>        /** @cfg {Boolean}
 </span>         * The WMS spec does not say if the first style advertised for a layer in
          * a Capabilities document is the default style that the layer is
          * rendered with. We make this assumption by default. To be strictly WMS
@@ -41,13 +41,13 @@ Ext.define('GeoExt.legend.URL', {
          */
         defaultStyleIsFirst: true,
 
-<span id='GeoExt-legend-URL-cfg-useScaleParameter'>        /** @cfg {Boolean}
+<span id='GeoExt-container-URLLegend-cfg-useScaleParameter'>        /** @cfg {Boolean}
 </span>         * Should we use the optional SCALE parameter in the SLD WMS
          * GetLegendGraphic request? Defaults to true.
          */
         useScaleParameter: true,
 
-<span id='GeoExt-legend-URL-cfg-baseParams'>        /** @cfg {Object}
+<span id='GeoExt-container-URLLegend-cfg-baseParams'>        /** @cfg {Object}
 </span>         * Optional parameters to add to the legend url, this can e.g. be used to
          * support vendor-specific parameters in a SLD WMS GetLegendGraphic
          * request. To override the default MIME type of image/gif use the
@@ -71,12 +71,12 @@ Ext.define('GeoExt.legend.URL', {
     initComponent: function(){
         var me = this;
         me.callParent(arguments);
-        this.add(Ext.create('GeoExt.legend.Image', {
+        this.add(Ext.create('GeoExt.LegendImage', {
             url: this.layerRecord.get(&quot;legendURL&quot;)
         }));
     },
 
-<span id='GeoExt-legend-URL-method-update'>    /** 
+<span id='GeoExt-container-URLLegend-method-update'>    /** 
 </span>     * Update the legend, adding, removing or updating
      * the per-sublayer box component.
      * @private
@@ -86,7 +86,7 @@ Ext.define('GeoExt.legend.URL', {
         this.items.get(1).setUrl(this.layerRecord.get(&quot;legendURL&quot;));
     }  
 }, function() {
-    GeoExt.legend.Layer.types[&quot;gx_urllegend&quot;] = GeoExt.legend.URL;
+    GeoExt.container.LayerLegend.types[&quot;gx_urllegend&quot;] = GeoExt.container.URLLegend;
 });
 </pre>
 </body>

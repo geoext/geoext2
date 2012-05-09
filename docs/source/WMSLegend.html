@@ -15,13 +15,13 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-legend-WMSLayer'>/**
-</span> * @class GeoExt.legend.WMSLayer
+  <pre class="prettyprint lang-js"><span id='GeoExt-container-WMSLegend'>/**
+</span> * @class GeoExt.container.WMSLegend
  */
-Ext.define('GeoExt.legend.WMSLayer', {
-    extend : 'GeoExt.legend.Layer',
+Ext.define('GeoExt.container.WMSLegend', {
+    extend : 'GeoExt.container.LayerLegend',
     alias : 'widget.gx_wmslegend',
-    requires: ['GeoExt.legend.Image'],
+    requires: ['GeoExt.LegendImage'],
     alternateClassName : 'GeoExt.WMSLegend',
 
     statics : {
@@ -31,7 +31,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
     },
 
     config: {
-<span id='GeoExt-legend-WMSLayer-cfg-defaultStyleIsFirst'>        /** @cfg {Boolean}
+<span id='GeoExt-container-WMSLegend-cfg-defaultStyleIsFirst'>        /** @cfg {Boolean}
 </span>         * The WMS spec does not say if the first style advertised for a layer in
          * a Capabilities document is the default style that the layer is
          * rendered with. We make this assumption by default. To be strictly WMS
@@ -41,13 +41,13 @@ Ext.define('GeoExt.legend.WMSLayer', {
          */
         defaultStyleIsFirst: true,
 
-<span id='GeoExt-legend-WMSLayer-cfg-useScaleParameter'>        /** @cfg {Boolean}
+<span id='GeoExt-container-WMSLegend-cfg-useScaleParameter'>        /** @cfg {Boolean}
 </span>         * Should we use the optional SCALE parameter in the SLD WMS
          * GetLegendGraphic request? Defaults to true.
          */
         useScaleParameter: true,
 
-<span id='GeoExt-legend-WMSLayer-cfg-baseParams'>        /** @cfg {Object}
+<span id='GeoExt-container-WMSLegend-cfg-baseParams'>        /** @cfg {Object}
 </span>         * Optional parameters to add to the legend url, this can e.g. be used to
          * support vendor-specific parameters in a SLD WMS GetLegendGraphic
          * request. To override the default MIME type of image/gif use the
@@ -77,7 +77,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
         me.update();
     },
     
-<span id='GeoExt-legend-WMSLayer-method-onLayerMoveend'>    /**
+<span id='GeoExt-container-WMSLegend-method-onLayerMoveend'>    /**
 </span>     * @private
      * @param {Object} e
      */
@@ -89,7 +89,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
         }
     },
 
-<span id='GeoExt-legend-WMSLayer-method-getLegendUrl'>    /** 
+<span id='GeoExt-container-WMSLegend-method-getLegendUrl'>    /** 
 </span>     * Get the legend URL of a sublayer.
      * @private
      * @param {String} layerName A sublayer.
@@ -156,7 +156,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
         return url;
     },
 
-<span id='GeoExt-legend-WMSLayer-method-update'>    /** 
+<span id='GeoExt-container-WMSLegend-method-update'>    /** 
 </span>     * Update the legend, adding, removing or updating
      * the per-sublayer box component.
      * @private
@@ -219,7 +219,7 @@ Ext.define('GeoExt.legend.WMSLayer', {
         this.callParent();
     }
 }, function() {
-    GeoExt.legend.Layer.types[&quot;gx_wmslegend&quot;] = GeoExt.legend.WMSLayer;
+    GeoExt.container.LayerLegend.types[&quot;gx_wmslegend&quot;] = GeoExt.container.WMSLegend;
 });
 </pre>
 </body>

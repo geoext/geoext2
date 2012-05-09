@@ -15,13 +15,13 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-legend-VectorLayer'>/**
-</span> * @class GeoExt.legend.VectorLayer
+  <pre class="prettyprint lang-js"><span id='GeoExt-container-VectorLegend'>/**
+</span> * @class GeoExt.container.VectorLegend
  */
-Ext.define('GeoExt.legend.VectorLayer', {
-    extend : 'GeoExt.legend.Layer',
+Ext.define('GeoExt.container.VectorLegend', {
+    extend : 'GeoExt.container.LayerLegend',
     alias : 'widget.gx_vectorlegend',
-    requires: ['GeoExt.renderer.Feature'],
+    requires: ['Ext.layout.container.Column', 'GeoExt.FeatureRenderer'],
     alternateClassName : 'GeoExt.VectorLegend',
     
     statics : {
@@ -31,27 +31,27 @@ Ext.define('GeoExt.legend.VectorLayer', {
     },
 
     config: {
-<span id='GeoExt-legend-VectorLayer-cfg-layerRecord'>        /** @cfg {GeoExt.data.LayerRecord}
+<span id='GeoExt-container-VectorLegend-cfg-layerRecord'>        /** @cfg {GeoExt.data.LayerRecord}
 </span>         * The record containing a vector layer that this legend will be based on.  
          * One of ``layerRecord``, ``layer``,  or ``rules`` must be specified in 
          * the config.
          */
         layerRecord: null,
 
-<span id='GeoExt-legend-VectorLayer-cfg-layer'>        /** @cfg {OpenLayers.Layer.Vector}
+<span id='GeoExt-container-VectorLegend-cfg-layer'>        /** @cfg {OpenLayers.Layer.Vector}
 </span>         * The layer that this legend will be based on.  One of ``layer``, 
          * ``rules``, or ``layerRecord`` must be specified in the config.
          */
         layer: null,
 
-<span id='GeoExt-legend-VectorLayer-cfg-rules'>        /** @cfg {Array}
+<span id='GeoExt-container-VectorLegend-cfg-rules'>        /** @cfg {Array}
 </span>         * List of rules.  One of ``rules``, ``layer``, or ``layerRecord`` must be 
          * specified in the config.  The ``symbolType`` property must also be
          * provided if only ``rules`` are given in the config.
          */
         rules: null,
 
-<span id='GeoExt-legend-VectorLayer-cfg-symbolType'>        /** @cfg {String}
+<span id='GeoExt-container-VectorLegend-cfg-symbolType'>        /** @cfg {String}
 </span>         * The symbol type for legend swatches.  Must be one of ``&quot;Point&quot;``, 
          * ``&quot;Line&quot;``, or ``&quot;Polygon&quot;``.  If not provided, the ``layer`` or
          * ``layerRecord`` config property must be specified, and the geometry type
@@ -63,14 +63,14 @@ Ext.define('GeoExt.legend.VectorLayer', {
          */
         symbolType: null,
 
-<span id='GeoExt-legend-VectorLayer-cfg-untitledPrefix'>        /** @cfg {String}
+<span id='GeoExt-container-VectorLegend-cfg-untitledPrefix'>        /** @cfg {String}
 </span>         * The prefix to use as a title for rules with no title or
          * name.  Default is ``&quot;Untitled &quot;``.  Prefix will be appended with a
          * number that corresponds to the index of the rule (1 for first rule).
          */
         untitledPrefix: &quot;Untitled &quot;,
 
-<span id='GeoExt-legend-VectorLayer-cfg-clickableSymbol'>        /** @cfg {Boolean}
+<span id='GeoExt-container-VectorLegend-cfg-clickableSymbol'>        /** @cfg {Boolean}
 </span>         * Set cursor style to &quot;pointer&quot; for symbolizers.  Register for
          * the ``symbolclick`` event to handle clicks.  Note that click events
          * are fired regardless of this value.  If ``false``, no cursor style will
@@ -78,7 +78,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
          */
         clickableSymbol: false,
 
-<span id='GeoExt-legend-VectorLayer-cfg-clickableTitle'>        /** @cfg {Boolean}
+<span id='GeoExt-container-VectorLegend-cfg-clickableTitle'>        /** @cfg {Boolean}
 </span>         * Set cursor style to &quot;pointer&quot; for rule titles.  Register for
          * the ``titleclick`` event to handle clicks.  Note that click events
          * are fired regardless of this value.  If ``false``, no cursor style will
@@ -86,7 +86,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
          */
         clickableTitle: false,
 
-<span id='GeoExt-legend-VectorLayer-cfg-selectOnClick'>        /** @cfg {Boolean}
+<span id='GeoExt-container-VectorLegend-cfg-selectOnClick'>        /** @cfg {Boolean}
 </span>         * Set to true if a rule should be selected by clicking on the
          * symbol or title. Selection will trigger the ruleselected event, and
          * a click on a selected rule will unselect it and trigger the
@@ -94,31 +94,31 @@ Ext.define('GeoExt.legend.VectorLayer', {
          */
         selectOnClick: false,
 
-<span id='GeoExt-legend-VectorLayer-cfg-enableDD'>        /** @cfg {Boolean}
+<span id='GeoExt-container-VectorLegend-cfg-enableDD'>        /** @cfg {Boolean}
 </span>         * Allow drag and drop of rules. Default is ``false``.
          */
         enableDD: false,
 
-<span id='GeoExt-legend-VectorLayer-cfg-bodyBorder'>        /** @cfg {Boolean}
+<span id='GeoExt-container-VectorLegend-cfg-bodyBorder'>        /** @cfg {Boolean}
 </span>         * Show a border around the legend panel. Default is ``false``.
          */
         bodyBorder: false
 
     },
           
-<span id='GeoExt-legend-VectorLayer-cfg-feature'>    /** @cfg {OpenLayers.Feature.Vector}
+<span id='GeoExt-container-VectorLegend-cfg-feature'>    /** @cfg {OpenLayers.Feature.Vector}
 </span>     * @private
      * Cached feature for rendering.
      */
     feature: null,
     
-<span id='GeoExt-legend-VectorLayer-cfg-selectedRule'>    /** @cfg {OpenLayers.Rule}
+<span id='GeoExt-container-VectorLegend-cfg-selectedRule'>    /** @cfg {OpenLayers.Rule}
 </span>     * @private
      * The rule that is currently selected.
      */
     selectedRule: null,
 
-<span id='GeoExt-legend-VectorLayer-cfg-currentScaleDenominator'>    /** @cfg {Number}
+<span id='GeoExt-container-VectorLegend-cfg-currentScaleDenominator'>    /** @cfg {Number}
 </span>     * @private
      * The current scale denominator of any map associated with this
      * legend.  Use :meth`setCurrentScaleDenominator` to change this.  If not
@@ -174,7 +174,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         this.add(this.rulesContainer);
         
         this.addEvents(
-<span id='GeoExt-legend-VectorLayer-event-titleclick'>            /** 
+<span id='GeoExt-container-VectorLegend-event-titleclick'>            /** 
 </span>             * @event titleclick
              * Fires when a rule title is clicked.
              * @param {GeoExt.VectorLegend} comp This component.
@@ -182,7 +182,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
              */
             &quot;titleclick&quot;, 
 
-<span id='GeoExt-legend-VectorLayer-event-symbolclick'>            /** 
+<span id='GeoExt-container-VectorLegend-event-symbolclick'>            /** 
 </span>             * @event symbolclick
              * Fires when a rule symbolizer is clicked.
              * @param {GeoExt.VectorLegend} comp This component.
@@ -190,7 +190,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
              */
             &quot;symbolclick&quot;,
 
-<span id='GeoExt-legend-VectorLayer-event-ruleclick'>            /** 
+<span id='GeoExt-container-VectorLegend-event-ruleclick'>            /** 
 </span>             *  @event ruleclick
              *  Fires when a rule entry is clicked (fired with symbolizer or
              *  title click).
@@ -199,7 +199,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
              */
             &quot;ruleclick&quot;,
             
-<span id='GeoExt-legend-VectorLayer-event-ruleselected'>            /** 
+<span id='GeoExt-container-VectorLegend-event-ruleselected'>            /** 
 </span>             * @event ruleselected
              * Fires when a rule is clicked and ``selectOnClick`` is set to 
              * ``true``.
@@ -208,7 +208,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
              */
             &quot;ruleselected&quot;,
             
-<span id='GeoExt-legend-VectorLayer-event-ruleunselected'>            /** 
+<span id='GeoExt-container-VectorLegend-event-ruleunselected'>            /** 
 </span>             * @event ruleunselected
              * Fires when the selected rule is clicked and ``selectOnClick`` 
              * is set to ``true``, or when a rule is unselected by selecting a
@@ -218,7 +218,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
              */
             &quot;ruleunselected&quot;,
             
-<span id='GeoExt-legend-VectorLayer-event-rulemoved'>            /** 
+<span id='GeoExt-container-VectorLegend-event-rulemoved'>            /** 
 </span>             * @event rulemoved
              * Fires when a rule is moved.
              * @param {GeoExt.VectorLegend} comp This component.
@@ -231,7 +231,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
  
     },
     
-<span id='GeoExt-legend-VectorLayer-method-onMapZoom'>   /**
+<span id='GeoExt-container-VectorLegend-method-onMapZoom'>   /**
 </span>    * Listener for map zoomend.
     * @private
     */
@@ -241,7 +241,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         );
     },
     
-<span id='GeoExt-legend-VectorLayer-method-symbolTypeFromFeature'>    /** 
+<span id='GeoExt-container-VectorLegend-method-symbolTypeFromFeature'>    /** 
 </span>     * Determine the symbol type given a feature.
      * @private
      * @param {OpenLayers.Feature.Vector} feature
@@ -251,7 +251,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         return (match &amp;&amp; match[0]) || &quot;Point&quot;;
     },
     
-<span id='GeoExt-legend-VectorLayer-method-onFeaturesAdded'>    /**
+<span id='GeoExt-container-VectorLegend-method-onFeaturesAdded'>    /**
 </span>     * Set as a one time listener for the ``featuresadded`` event on the layer
      * if it was provided with no features originally.
      * @private
@@ -271,7 +271,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         this.update();
     },
     
-<span id='GeoExt-legend-VectorLayer-method-setRules'>    /** 
+<span id='GeoExt-container-VectorLegend-method-setRules'>    /** 
 </span>     * Sets the ``rules`` property for this.  This is called when the component
      * is constructed without rules.  Rules will be derived from the layer's 
      * style map if it has one.
@@ -294,7 +294,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         }
     },
     
-<span id='GeoExt-legend-VectorLayer-method-setCurrentScaleDenominator'>    /**
+<span id='GeoExt-container-VectorLegend-method-setCurrentScaleDenominator'>    /**
 </span>     * Set the current scale denominator.  This will hide entries for any
      * rules that don't apply at the current scale.
      * @param {Number} scale The scale denominator.
@@ -306,7 +306,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         }
     },
 
-<span id='GeoExt-legend-VectorLayer-method-getRuleEntry'>    /** 
+<span id='GeoExt-container-VectorLegend-method-getRuleEntry'>    /** 
 </span>     * Get the item corresponding to the rule.
      * @private
      * @param {OpenLayers.Rule} rule
@@ -316,7 +316,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         return this.rulesContainer.items.get(this.rules.indexOf(rule));
     },
 
-<span id='GeoExt-legend-VectorLayer-method-addRuleEntry'>    /** 
+<span id='GeoExt-container-VectorLegend-method-addRuleEntry'>    /** 
 </span>     * Add a new rule entry in the rules container. This
      * method does not add the rule to the rules array.
      * @private
@@ -331,7 +331,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         }
     },
 
-<span id='GeoExt-legend-VectorLayer-method-removeRuleEntry'>    /** 
+<span id='GeoExt-container-VectorLegend-method-removeRuleEntry'>    /** 
 </span>     * Remove a rule entry from the rules container, this
      * method assumes the rule is in the rules array, and
      * it does not remove the rule from the rules array.
@@ -413,7 +413,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         };
     },
 
-<span id='GeoExt-legend-VectorLayer-method-createRuleRenderer'>    /** 
+<span id='GeoExt-container-VectorLegend-method-createRuleRenderer'>    /** 
 </span>     * Create a renderer for the rule.
      * @private
      * @param {OpenLayers.Rule} rule
@@ -468,7 +468,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         };
     },
 
-<span id='GeoExt-legend-VectorLayer-method-createRuleTitle'>    /** 
+<span id='GeoExt-container-VectorLegend-method-createRuleTitle'>    /** 
 </span>     * Create a title component for the rule.
      * @private
      * @param {OpenLayers.Rule} rule
@@ -496,7 +496,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         };
     },
     
-<span id='GeoExt-legend-VectorLayer-method-addDD'>    /** 
+<span id='GeoExt-container-VectorLegend-method-addDD'>    /** 
 </span>     * Adds drag &amp; drop functionality to a rule entry.
      * @private
      * @param {Ext.Component} component
@@ -551,7 +551,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         });
     },
     
-<span id='GeoExt-legend-VectorLayer-method-update'>    /** 
+<span id='GeoExt-container-VectorLegend-method-update'>    /** 
 </span>     * Update rule titles and symbolizers.
      */
     update: function() {
@@ -576,7 +576,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         }
     },
 
-<span id='GeoExt-legend-VectorLayer-method-updateRuleEntry'>    /**
+<span id='GeoExt-container-VectorLegend-method-updateRuleEntry'>    /**
 </span>     * Update the renderer and the title of a rule.
      * @private
      * @param {OpenLayers.Rule} rule
@@ -599,7 +599,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         this.fireEvent(&quot;rulemoved&quot;, this, srcRule);
     },
     
-<span id='GeoExt-legend-VectorLayer-method-getRuleTitle'>    /** 
+<span id='GeoExt-container-VectorLegend-method-getRuleTitle'>    /** 
 </span>     * Get a rule title given a rule.
      * @private
      * @return {String}
@@ -633,7 +633,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         this.callParent(arguments);
     },
 
-<span id='GeoExt-legend-VectorLayer-method-onStoreRemove'>    /**
+<span id='GeoExt-container-VectorLegend-method-onStoreRemove'>    /**
 </span>     * Handler for remove event of the layerStore
      * @private
      * @param {Ext.data.Store} store The store from which the record was
@@ -653,7 +653,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
         }
     },
 
-<span id='GeoExt-legend-VectorLayer-method-onStoreAdd'>    /** 
+<span id='GeoExt-container-VectorLegend-method-onStoreAdd'>    /** 
 </span>     * Handler for add event of the layerStore
      * @private
      * @param {Ext.data.Store} store The store to which the record was
@@ -678,7 +678,7 @@ Ext.define('GeoExt.legend.VectorLayer', {
     }
 
 }, function() {
-    GeoExt.legend.Layer.types[&quot;gx_vectorlegend&quot;] = GeoExt.legend.VectorLayer;
+    GeoExt.container.LayerLegend.types[&quot;gx_vectorlegend&quot;] = GeoExt.container.VectorLegend;
 });
 </pre>
 </body>

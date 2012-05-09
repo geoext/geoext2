@@ -20,7 +20,7 @@
  */
 Ext.define('GeoExt.panel.Legend', {
     extend : 'Ext.panel.Panel',
-    requires: ['GeoExt.legend.Layer'],
+    requires: ['GeoExt.container.LayerLegend'],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
     config: {
@@ -64,7 +64,7 @@ Ext.define('GeoExt.panel.Legend', {
         this.callParent(arguments);
     
         if(!this.layerStore) {
-            this.layerStore = GeoExt.panel.Map.guess().getLayers();
+            this.layerStore = GeoExt.panel.Map.guess().layers;
         }
         this.layerStore.each(function(record) {
             this.addLegend(record);
@@ -95,7 +95,7 @@ Ext.define('GeoExt.panel.Legend', {
         for(var i=count-1; i&gt;=0; --i) {
             record = store.getAt(i);
             layer = record.getLayer();
-            var types = GeoExt.legend.Layer.getTypes(record);
+            var types = GeoExt.container.LayerLegend.getTypes(record);
             if(layer.displayInLayerSwitcher &amp;&amp; types.length &gt; 0 &amp;&amp;
                 (store.getAt(i).get(&quot;hideInLegend&quot;) !== true)) {
                 ++panelIndex;
@@ -193,7 +193,7 @@ Ext.define('GeoExt.panel.Legend', {
             var layer = record.getLayer();
             index = index || 0;
             var legend;
-            var types = GeoExt.legend.Layer.getTypes(record, this.preferredTypes);
+            var types = GeoExt.container.LayerLegend.getTypes(record, this.preferredTypes);
             if(layer.displayInLayerSwitcher &amp;&amp; !record.get('hideInLegend') &amp;&amp; types.length &gt; 0) {
                 this.insert(index,       {
                     xtype: types[0],

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='GeoExt-LegendImage'>/**
+</span> * @class GeoExt.LegendImage
+ */
+Ext.define('GeoExt.LegendImage', {
+    extend : 'Ext.Component',
+    alias : 'widget.gx_legendimage',
+
+    config: {
+<span id='GeoExt-legend-Image-cfg-url'>        /**
+</span>         * @cfg {String} url
+         * The url of the image to load
+         */
+        url: null,
+
+<span id='GeoExt-legend-Image-cfg-defaultImgSrc'>        /**
+</span>         * @cfg {String} defaultImgSrc
+         * Path to image that will be used if the legend image fails
+         * to load.  Default is Ext.BLANK_IMAGE_URL.
+         */
+        defaultImgSrc: null,
+
+<span id='GeoExt-legend-Image-cfg-imgCls'>        /**
+</span>         * @cfg {String} imgCls
+         * Optional css class to apply to img tag
+         */
+        imgCls: null,
+
+<span id='GeoExt-legend-Image-cfg-noImgCls'>        /**
+</span>         * @cfg {String}
+         * CSS class applied to img tag when no image is available or
+         * the default image was loaded.
+         */
+        noImgCls: &quot;gx-legend-noimage&quot;
+    },
+
+    initComponent: function(){
+        var me = this;
+        me.callParent(arguments);
+        if(this.defaultImgSrc === null) {
+            this.defaultImgSrc = Ext.BLANK_IMAGE_URL;
+        }
+        this.autoEl = {
+            tag: &quot;img&quot;,
+            &quot;class&quot;: (this.imgCls ? this.imgCls + &quot; &quot; + this.noImgCls : this.noImgCls),
+            src: this.defaultImgSrc
+        };
+    },
+    
+<span id='GeoExt-legend-Image-method-setUrl'>    /**
+</span>     * Sets the url of the legend image.
+     * @param {String} url The new URL.
+     */
+    setUrl: function(url) {
+        this.url = url;
+        var el = this.getEl();
+        if (el) {
+            el.un(&quot;load&quot;, this.onImageLoad, this);
+            el.on(&quot;load&quot;, this.onImageLoad, this, {single: true});
+            el.un(&quot;error&quot;, this.onImageLoadError, this);
+            el.on(&quot;error&quot;, this.onImageLoadError, this, {
+                single: true
+            });
+            el.dom.src = url;
+        }
+    },
+
+<span id='GeoExt-legend-Image-method-onRender'>    /** 
+</span>     * Private method called when the legend image component is being
+     * rendered.
+     * @private
+     */
+    onRender: function(ct, position) {
+        this.callParent(arguments);
+        if(this.url) {
+            this.setUrl(this.url);
+        }
+    },
+
+<span id='GeoExt-legend-Image-method-onDestroy'>    /** 
+</span>     * Private method called during the destroy sequence.
+     * @private
+     */
+    onDestroy: function() {
+        var el = this.getEl();
+        if(el) {
+            el.un(&quot;load&quot;, this.onImageLoad, this);
+            el.un(&quot;error&quot;, this.onImageLoadError, this);
+        }
+        this.callParent();
+    },
+    
+<span id='GeoExt-legend-Image-method-onImageLoadError'>    /**
+</span>     * Private method called if the legend image fails loading.
+     * @private
+     */
+    onImageLoadError: function() {
+        var el = this.getEl();
+        el.addCls(this.noImgCls);
+        el.dom.src = this.defaultImgSrc;
+    },
+
+<span id='GeoExt-legend-Image-method-onImageLoad'>    /**
+</span>     * Private method called after the legend image finished loading.
+     * @private
+     */
+    onImageLoad: function() {
+        var el = this.getEl();
+        if (!OpenLayers.Util.isEquivalentUrl(el.dom.src, this.defaultImgSrc)) {
+            el.removeCls(this.noImgCls);
+        }
+    }
+
+});
+</pre>
+</body>
+</html>

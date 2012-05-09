@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='GeoExt-slider-Tip'>/**
+</span> * @class GeoExt.slider.Tip
+ * 
+ * Create a slider tip displaying ``Ext.slider.SingleSlider`` values over slider thumbs.
+ * 
+ *     @example
+ *     var slider = Ext.create('GeoExt.ZoomSlider', {
+ *         map: panel.map,
+ *         aggressive: true,                                                                                                                                                   
+ *         width: 200,
+ *         plugins: new GeoExt.SliderTip({
+ *             getText: function(thumb) {
+ *                 return Ext.String.format('&lt;div&gt;Scale: 1:{0}&lt;/div&gt;', thumb.slider.getScale());
+ *             }
+ *         }),
+ *         renderTo: document.body
+ *     });
+ * 
+ */
+Ext.define('GeoExt.slider.Tip', {
+    extend : 'Ext.slider.Tip',
+    alternateClassName : 'GeoExt.SliderTip',
+    
+<span id='GeoExt-slider-Tip-cfg-hover'>    /**
+</span>     * @cfg {Boolean} hover
+     * Display the tip when hovering over the thumb.  If ``false``, tip will
+     *  only be displayed while dragging.  Default is ``true``.
+     */
+    hover: true,
+    
+<span id='GeoExt-slider-Tip-cfg-minWidth'>    /**
+</span>     * @cfg {Number} minWidth
+     * Minimum width of the tip.  Default is 10.
+     */
+    minWidth: 10,
+    
+<span id='GeoExt-slider-Tip-cfg-offsets'>    /**
+</span>     * @cfg {Array(Number)} offsets
+     * A two item list that provides x, y offsets for the tip.
+     */
+    offsets : [0, -10],
+    
+<span id='GeoExt-slider-Tip-cfg-dragging'>    /**
+</span>     * @cfg {Boolean} dragging
+     * The thumb is currently being dragged.
+     */
+    dragging: false,
+    
+<span id='GeoExt-slider-Tip-method-init'>    /**
+</span>     * @private
+     * @param {Ext.slider.SingleSlider} slider
+     * 
+     * Called when the plugin is initialized.
+     */
+    init: function(slider) {
+        this.callParent(arguments);
+        if (this.hover) {
+            slider.on(&quot;render&quot;, this.registerThumbListeners, this);
+        }
+        
+        this.slider = slider;
+    },
+    
+<span id='GeoExt-slider-Tip-method-registerThumbListeners'>    /**
+</span>     * @private
+     * Set as a listener for 'render' if hover is true.
+     */
+    registerThumbListeners: function() {
+        var thumb, el;
+        for (var i=0, ii=this.slider.thumbs.length; i&lt;ii; ++i) {
+            thumb = this.slider.thumbs[i];
+            el = thumb.tracker.el;
+            (function(thumb, el) {
+                el.on({
+                    mouseover: function(e) {
+                        this.onSlide(this.slider, e, thumb);
+                        this.dragging = false;
+                    },
+                    mouseout: function() {
+                        if (!this.dragging) {
+                            this.hide.apply(this, arguments);
+                        }
+                    },
+                    scope: this
+                });
+            }).apply(this, [thumb, el]);
+        }
+    },
+
+<span id='GeoExt-slider-Tip-method-onSlide'>    /**
+</span>     * @private
+     * @param {Ext.slider.SingleSlider} slider
+     * @param {Object} e
+     * @param {Object} thumb
+     * 
+     * Listener for dragstart and drag.
+     */
+    onSlide: function(slider, e, thumb) {
+        this.dragging = true;
+        return this.callParent(arguments);
+    }
+
+});
+</pre>
+</body>
+</html>
