@@ -51,11 +51,10 @@
  *      
  *      
  */
-Ext.define('GeoExt.panel.Map', {
-    extend : 'Ext.panel.Panel',
-    requires : ['GeoExt.data.LayerStore'],
-    alias : 'widget.gx_mappanel',
-    alternateClassName : 'GeoExt.MapPanel',
+Ext.define('GeoExt.panel.PrintMap', {
+    extend : 'GeoExt.panel.Map',
+    alias : 'widget.gx_printmappanel',
+    alternateClassName : 'GeoExt.PrintMapPanel',
     
     /** 
      * @cfg {Object} map
