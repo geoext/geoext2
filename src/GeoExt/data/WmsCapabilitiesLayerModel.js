@@ -5,7 +5,6 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     alias: 'model.gx_wmscapabilities',
     fields: [
         {name: "name", type: "string", mapping: "metadata.name"},
-        {name: "title", type: "string", mapping: "metadata.title"},
         {name: "abstract", type: "string", mapping: "metadata.abstract"},
         {name: "queryable", type: "boolean", mapping: "metadata.queryable"},
         {name: "opaque", type: "boolean", mapping: "metadata.opaque"},
