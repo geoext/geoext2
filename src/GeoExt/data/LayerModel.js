@@ -60,7 +60,28 @@ Ext.define('GeoExt.data.LayerModel',{
         return this.raw;
     },
     
-
+   /**
+    * @private
+    */
+    updateField: function(rawProperty,value){
+        //these properties either are handled elsewhere or apply to the collection
+        var ignoreProperties = ['visibility', 'order'];
+        if(ignoreProperties.indexOf(rawProperty)==-1){
+            var field = this.fields.get(rawProperty);
+            if(!field){
+                //property name is not a field, look for a mapping
+                this.fields.each(function(fieldObj){
+                    if(fieldObj.mapping == rawProperty){
+                        field = fieldObj;
+                        return false; //stop processing
+                    }
+                }, this);
+            }
+            field && this.set(field.name,value);
+        }
+    },
+    
+    
     /**
      * @private
      */    
