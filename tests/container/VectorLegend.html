@@ -24,13 +24,13 @@
         var legend;
 
         // no config (won't render)
-        legend = Ext.create("GeoExt.VectorLegend");
-        t.ok(legend instanceof GeoExt.VectorLegend, "instance of VectorLegend");
-        t.ok(legend instanceof GeoExt.LayerLegend, "instance of LayerLegend");
+        legend = Ext.create("GeoExt.container.VectorLegend");
+        t.ok(legend instanceof GeoExt.container.VectorLegend, "instance of VectorLegend");
+        t.ok(legend instanceof GeoExt.container.LayerLegend, "instance of LayerLegend");
         legend.destroy();
         
         // rules & symbolType
-        legend = Ext.create("GeoExt.VectorLegend", {
+        legend = Ext.create("GeoExt.container.VectorLegend", {
             legendTitle: "my title",
             renderTo: "legendpanel",
             rules: [
@@ -65,7 +65,7 @@
     function test_setCurrentScaleDenominator(t) {
         t.plan(12);
         
-        var legend = Ext.create("GeoExt.VectorLegend", {
+        var legend = Ext.create("GeoExt.container.VectorLegend", {
             legendTitle: "my title",
             renderTo: "legendpanel",
             rules: [
@@ -112,7 +112,7 @@
 
         var store = Ext.create("GeoExt.data.LayerStore", {map: map});
 
-        var legend = Ext.create("GeoExt.VectorLegend", {
+        var legend = Ext.create("GeoExt.container.VectorLegend", {
             layerRecord: store.getAt(0),
             renderTo: "legendpanel",
             symbolType: "Point"
@@ -141,7 +141,7 @@
         map.zoomToMaxExtent();
 
         var store = Ext.create("GeoExt.data.LayerStore", {map: map});
-        var legend = Ext.create("GeoExt.VectorLegend", {
+        var legend = Ext.create("GeoExt.container.VectorLegend", {
             layerRecord: store.getAt(1),
             renderTo: "legendpanel",
             symbolType: "Point"
@@ -177,7 +177,7 @@
 
         var store = Ext.create("GeoExt.data.LayerStore", {map: map});
         
-        var legend = Ext.create("GeoExt.VectorLegend", {
+        var legend = Ext.create("GeoExt.container.VectorLegend", {
             layerRecord: store.getAt(0),
             renderTo: "legendpanel",
             symbolType: "Point"
@@ -242,7 +242,7 @@
         ];
         
         // [a] test legend with default config
-        legend = Ext.create("GeoExt.VectorLegend", {
+        legend = Ext.create("GeoExt.container.VectorLegend", {
             renderTo: "legendpanel",
             rules: rules
         });
@@ -252,7 +252,7 @@
         legend.destroy();
         
         // [b] test legend with custom untitledPrefix
-        legend = Ext.create("GeoExt.VectorLegend", {
+        legend = Ext.create("GeoExt.container.VectorLegend", {
             renderTo: "legendpanel",
             rules: rules,
             untitledPrefix: "foo "
@@ -263,7 +263,7 @@
         legend.destroy();
         
         // [c] test legend with null untitledPrefix
-        legend = Ext.create("GeoExt.VectorLegend", {
+        legend = Ext.create("GeoExt.container.VectorLegend", {
             renderTo: "legendpanel",
             rules: rules,
             untitledPrefix: null
@@ -299,7 +299,7 @@
             new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(1,1))
         ]);
 
-        var legend1 = Ext.create("GeoExt.VectorLegend", {
+        var legend1 = Ext.create("GeoExt.container.VectorLegend", {
             layerRecord: store.getAt(0)
         });
 
@@ -333,7 +333,7 @@
             new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(2,2))
         ]);
         
-        var legend2 = Ext.create("GeoExt.VectorLegend", {
+        var legend2 = Ext.create("GeoExt.container.VectorLegend", {
             layerRecord: store.getAt(1)
         });
 

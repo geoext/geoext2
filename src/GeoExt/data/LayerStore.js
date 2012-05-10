@@ -11,12 +11,14 @@ Ext.define('GeoExt.data.LayerStore', {
     statics: {
         /**
          * @static
-         * @property {Number} MAP_TO_STORE
+         * @property {Number}
+         * Direction: Map to store
          */
         MAP_TO_STORE: 1,
         /**
          * @static
-         * @property {Number} STORE_TO_MAP
+         * @property {Number}
+         * Direction: Store to map
          */
         STORE_TO_MAP: 2 
     },
@@ -382,5 +384,14 @@ Ext.define('GeoExt.data.LayerStore', {
             var me = this;
             me.unbind();
             me.callParent();
-        }
+        },
+
+    /**
+     * Build layer records out of an array of layers and appends them to the
+     * store.
+     * @param {OpenLayers.Layer[]} layers
+     */
+    addLayers: function(layers) {
+        return this.loadRawData(layers, true);
+    }
 });
