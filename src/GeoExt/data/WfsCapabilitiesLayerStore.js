@@ -8,6 +8,13 @@
 
 /**
  * @class GeoExt.data.WfsCapabilitiesLayerStore
+ * Small helper class to make creating stores for remote WFS layer data
+ * easier.  The store is pre-configured with a built-in
+ * {Ext.data.proxy.Ajax} and {GeoExt.data.reader.WfsCapabilities}.
+ * The proxy is configured to allow caching and issues requests via GET.
+ * If you require some other proxy/reader combination then you'll have to
+ * configure this with your own proxy or create a basic
+ * {GeoExt.data.LayerStore} and configure as needed.
  */
 Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
     extend: 'Ext.data.Store',

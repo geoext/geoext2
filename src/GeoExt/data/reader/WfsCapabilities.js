@@ -8,6 +8,8 @@
 
 /**
  * @class GeoExt.data.reader.WfsCapabilities
+ * Data reader class to create {GeoExt.data.WfsCapabilitiesLayerModel[]} 
+ * from a WFS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WfsCapabilities', {
     alternateClassName: ['GeoExt.data.reader.WFSCapabilities', 'GeoExt.data.WFSCapabilitiesReader'],
