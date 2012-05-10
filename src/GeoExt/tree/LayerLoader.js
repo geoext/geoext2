@@ -142,10 +142,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
             var child = this.createNode({
                 plugins: [{
                     ptype: 'gx_layer',
-                    layer: layer,
-                    layerStore: this.store,
+                    layer: layer
                 }],
-                leaf: true,
                 text: layer.name
             });
             var sibling = node.childNodes && node.getChildAt(index);

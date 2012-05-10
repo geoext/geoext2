@@ -5,7 +5,8 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     alias: 'model.gx_layertree',
     fields: [  
         {name: 'text', type: 'string'}, 
-        {name: 'plugins'}
+        {name: 'plugins'},
+        {name: 'checkedGroup', type: 'string'}
     ],
     
     init: function() {
