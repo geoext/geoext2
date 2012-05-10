@@ -11,12 +11,21 @@
  */
 
 /**
- * <p>An Attribute Store.
- * TODO: port the original AttributeStore's bind method + callbacks to this new one.</p>
+ * A store to work with DescribeFeatureType responses. This is a regular
+ * Ext store preconfigured with a {@link GeoExt.data.AttributeModel}.
+ *
+ *
+ * Example:
+<pre><code>
+Ext.create('GeoExt.data.AttributeStore', {
+    ignore: {type: 'xsd:string'},
+    url: 'http://host.wfsdescribefeaturetype'
+});
+</code></pre>
  */
 Ext.define('GeoExt.data.AttributeStore', {
     extend: 'Ext.data.Store',
-    requires: ['GeoExt.data.AttributeModel', 'Ext.data.Field'],
+    requires: ['GeoExt.data.AttributeModel'],
     model: 'GeoExt.data.AttributeModel',
 
     config: {
@@ -27,22 +36,18 @@ Ext.define('GeoExt.data.AttributeStore', {
         url: null,
 
         /**
-         * @cfg {Object} format
-         * The Ext.Format passed to the reader. 
+         * @cfg {Object}
+         * The `OpenLayers.Format` passed to the reader. See
+         * {@link GeoExt.data.reader.Attribute}.
          */
         format: null,
         
         /**
-         * @cfg {Object} ignore
-         * The ignore object passed to the reader.
+         * @cfg {Object}
+         * The ignore object passed to the reader. See
+         * {@link GeoExt.data.reader.Attribute}.
          */
-        ignore: null,
-        
-        /**
-         * @cfg {Object} feature
-         * The OpenLayers.Feature.Vector passed to the reader.
-         */
-        feature: null
+        ignore: null
     },
 
     /**
@@ -52,10 +57,6 @@ Ext.define('GeoExt.data.AttributeStore', {
         // At this point, we have to copy the complex objects from the config
         // into the prototype. This is because Ext.data.Store's constructor 
         // creates deep copies of these objects.
-        if (config.feature) {
-            this.feature = config.feature;
-            delete config.feature;
-        }
         if (config.format) {
             this.format = config.format;
             delete config.format;
@@ -71,10 +72,6 @@ Ext.define('GeoExt.data.AttributeStore', {
             this.setUrl(this.url);
             delete this.url;
         }
-        if (this.feature) {
-            this.setFeature(this.feature);
-            delete this.feature;
-        }
         if (this.format) {
             this.setFormat(this.format);
             delete this.format;
@@ -82,36 +79,27 @@ Ext.define('GeoExt.data.AttributeStore', {
     },
 
     /**
-     * @private
      * We're setting the proxy URL.
      * @param {String} url
+     * @private
      */
     applyUrl: function(url) {
         this.getProxy().url = url;
     },
 
     /**
-     * @private
-     * We're setting the proxy URL.
-     * @param {OpenLayers.Feature} feature
-     */
-    applyFeature: function(feature) {
-        this.getProxy().getReader().setFeature(feature);
-    },
-
-    /**
-     * @private
      * We're setting the ignore property in the reader.
      * @param {Object} ignore
+     * @private
      */
     applyIgnore: function(ignore) {
         this.getProxy().getReader().setIgnore(ignore);
     },
 
     /**
-     * @private
      * We're setting the format property in the reader.
      * @param {OpenLayers.Format} format
+     * @private
      */
     applyFormat: function(format) {
         this.getProxy().getReader().setFormat(format);
