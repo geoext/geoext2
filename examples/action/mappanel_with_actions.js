@@ -23,7 +23,7 @@ Ext.application({
         var ctrl, toolbarItems = [], action, actions = {};
         
         // ZoomToMaxExtent control, a "button" control
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             control: new OpenLayers.Control.ZoomToMaxExtent(),
             map: map,
             text: "max extent",
@@ -35,7 +35,7 @@ Ext.application({
         
         // Navigation control and DrawFeature controls
         // in the same toggle group
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             text: "nav",
             control: new OpenLayers.Control.Navigation(),
             map: map,
@@ -51,7 +51,7 @@ Ext.application({
         actions["nav"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             text: "draw poly",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Polygon),
             map: map,
@@ -65,7 +65,7 @@ Ext.application({
         actions["draw_poly"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             text: "draw line",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Path),
             map: map,
@@ -81,7 +81,7 @@ Ext.application({
         toolbarItems.push("-");
         
         // SelectFeature control, a "toggle" control
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             text: "select",
             control: new OpenLayers.Control.SelectFeature(vector, {
                 type: OpenLayers.Control.TYPE_TOGGLE,
@@ -100,7 +100,7 @@ Ext.application({
         ctrl = new OpenLayers.Control.NavigationHistory();
         map.addControl(ctrl);
         
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             text: "previous",
             control: ctrl.previous,
             disabled: true,
@@ -109,7 +109,7 @@ Ext.application({
         actions["previous"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         
-        action = new GeoExt.Action({
+        action = Ext.create('GeoExt.Action', {
             text: "next",
             control: ctrl.next,
             disabled: true,
@@ -143,11 +143,9 @@ Ext.application({
         });
         
         var mappanel = Ext.create('GeoExt.panel.Map', {
-            title: 'The GeoExt.panel.Map-class',
+            title: 'Using GeoExt.Action instances in various places',
             map: map,
-            stateful: true,
-            stateId: 'mappanel',
-            mapExtent: '7,51,8,52',
+            extent: '5.19,46.85,15.47,55.63',
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
