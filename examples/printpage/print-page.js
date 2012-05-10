@@ -19,8 +19,8 @@ Ext.require([
     'GeoExt.data.PrintPage',
     'GeoExt.panel.Map',
     'GeoExt.panel.Legend',
-    'GeoExt.container.WMSLegend',
-    'GeoExt.container.URLLegend',
+    'GeoExt.container.WmsLegend',
+    'GeoExt.container.UrlLegend',
     'GeoExt.container.VectorLegend'
 ]);
 
