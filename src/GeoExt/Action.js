@@ -14,12 +14,12 @@
  *  Base class is [Ext.Action](http://dev.sencha.com/deploy/dev/docs/?class=Ext.Action)
  *
  *      @example
- *      var action = new GeoExt.Action({
+ *      var action = Ext.create('GeoExt.Action', {
  *          text: "max extent",
  *          control: new OpenLayers.Control.ZoomToMaxExtent(),
  *          map: map
  *      });
- *      var toolbar = new Ext.toolbar.Toolbar([action]);
+ *      var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
  *
  */
 Ext.define('GeoExt.Action', {

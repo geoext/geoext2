@@ -42,7 +42,7 @@
                 checkHandler: checkHandler
             };
 
-            action = new GeoExt.Action(cfg);
+            action = Ext.create('GeoExt.Action', cfg);
 
             t.ok(action.control == ctrl,
                  "constructor sets control in the instance");
@@ -84,15 +84,18 @@
                 stopEvent: function() {},
                 button: 0
             };
-
-            menu = new Ext.menu.Menu({
+   
+            menu = Ext.create('Ext.menu.Menu', {
                 // with shadow set to its default value ("sides")
                 // IE throws "object: Invalid argument" exceptions
                 shadow: false
             });
-            menuBtn = new Ext.button.Button({menu: menu});
 
-            tb = new Ext.toolbar.Toolbar({
+            menuBtn = Ext.create('Ext.button.Button', {
+                menu: menu
+            });
+
+            tb = Ext.create('Ext.toolbar.Toolbar', {
                 renderTo: "toolbar",
                 items: [menuBtn]
             });
@@ -105,8 +108,8 @@
                 }
             });
             ctrl.activate();
-             
-            action = new GeoExt.Action({
+
+            action = Ext.create('GeoExt.Action', {
                 control: ctrl,
                 handler: function() {
                     handlerCnt++;
@@ -114,7 +117,8 @@
             });
             
             // create button from action and it to toolbar
-            btn = new Ext.button.Button(action);
+            btn = Ext.create('Ext.button.Button', action);
+            
             tb.add(btn);
             
             // simulate click on button
@@ -128,7 +132,7 @@
             t.eq(handlerCnt, 1, "click on button calls action handler once");
             
             // create menu item from action and it to menu
-            item = new Ext.menu.Item(action);
+            item = Ext.create('Ext.menu.Item', action);
             menu.add(item);
 
             // simulate click on menu item
@@ -167,16 +171,19 @@
                 button: 0
             };
 
-            menu = new Ext.menu.Menu({
+            menu = Ext.create('Ext.menu.Menu', {
                 // with shadow set to its default value ("sides")
                 // IE throws "object: Invalid argument" exceptions
                 shadow: false
             });
-            menuBtn = new Ext.button.Button({menu: menu});
+            
+            menuBtn = Ext.create('Ext.button.Button', {
+                menu: menu
+            });
 
-            tb = new Ext.toolbar.Toolbar({
+            tb = Ext.create('Ext.toolbar.Toolbar', {
                 renderTo: "toolbar",
-                buttons: [menuBtn]
+                items: [menuBtn]
             });
 
             // the control
@@ -192,7 +199,7 @@
             });
             ctrl.activate();
 
-            action = new GeoExt.Action({
+            action = Ext.create('GeoExt.Action', {
                 control: ctrl,
                 enableToggle: true,
                 toggleHandler: function() {
@@ -204,7 +211,7 @@
             });
             
             // create button from action and it to toolbar
-            btn = new Ext.button.Button(action);
+            btn = Ext.create('Ext.button.Button', action);
             tb.add(btn);
             t.eq(btn.pressed, true, "Button initially pressed for active control");
             
@@ -232,8 +239,8 @@
             t.eq(activateCnt, 1, "click again on button activates control once");
             t.eq(toggleHandlerCnt, 1, "click again on button calls toggle handler once");
 
-            // create menu item from action and it to menu
-            item = new Ext.menu.CheckItem(action);
+            // create menu item from action and add it to menu
+            item = Ext.create('Ext.menu.CheckItem', action);
             menu.add(item);
             
             // simulate click on menu item
@@ -282,16 +289,19 @@
                 button: 0
             };
 
-            menu = new Ext.menu.Menu({
+            menu = Ext.create('Ext.menu.Menu', {
                 // with shadow set to its default value ("sides")
                 // IE throws "object: Invalid argument" exceptions
                 shadow: false
             });
-            menuBtn = new Ext.button.Button({menu: menu});
+            
+            menuBtn = Ext.create('Ext.button.Button', {
+                menu: menu
+            });
 
-            tb = new Ext.toolbar.Toolbar({
+            tb = Ext.create('Ext.toolbar.Toolbar', {
                 renderTo: "toolbar",
-                buttons: [menuBtn]
+                items: [menuBtn]
             });
 
             // the controls
@@ -319,13 +329,13 @@
             ctrl2.activate();
 
             // the actions
-            action1 = new GeoExt.Action({
+            action1 = Ext.create('GeoExt.Action', {
                 control: ctrl1,
                 toggleGroup: "ctrl",
                 group: "ctrl",
                 pressed: false
             });
-            action2 = new GeoExt.Action({
+            action2 = Ext.create('GeoExt.Action', {
                 control: ctrl2,
                 toggleGroup: "ctrl",
                 group: "ctrl",
@@ -333,12 +343,12 @@
             });
             
             // create buttons from actions and add them to toolbar
-            btn1 = new Ext.button.Button(action1);
+            btn1 = Ext.create('Ext.button.Button', action1);
             tb.add(btn1);
             
             t.eq(btn1.pressed, true, "btn1 is pressed because ctrl1 is active");
             
-            btn2 = new Ext.button.Button(action2);
+            btn2 = Ext.create('Ext.button.Button', action2);
             tb.add(btn2);
             tb.doLayout();
             // Ext.ButtonToggleMgr is registered too late, so we need to fire
@@ -370,9 +380,9 @@
             t.eq(activateCtrl2Cnt, 1, "click on btn2 activates ctrl2 once");
 
             // create menu items from actions and them to menu
-            item1 = new Ext.menu.CheckItem(action1);
+            item1 = Ext.create('Ext.menu.CheckItem', action1);
             menu.add(item1);
-            item2 = new Ext.menu.CheckItem(action2);
+            item2 = Ext.create('Ext.menu.CheckItem', action2);
             menu.add(item2);
 
             // simulate click on item1
@@ -409,7 +419,7 @@
             var ctrl2 = new OpenLayers.Control();
             
             // confirm that control is activated with pressed true
-            var act1 = new GeoExt.Action({
+            var act1 = Ext.create('GeoExt.Action', {
                 control: ctrl1,
                 map: map,
                 pressed: true,
@@ -419,7 +429,7 @@
             t.eq(ctrl1.active, true, "ctrl1 activated with pressed true");
             
             // confirm that a control is not activated with pressed false
-            var act2 = new GeoExt.Action({
+            var act2 = Ext.create('GeoExt.Action', {
                 control: ctrl2,
                 map: map,
                 pressed: false,
@@ -441,7 +451,7 @@
             var ctrl2 = new OpenLayers.Control();
             
             // confirm that control is activated with checked true
-            var act1 = new GeoExt.Action({
+            var act1 = Ext.create('GeoExt.Action', {
                 control: ctrl1,
                 map: map,
                 checked: true,
@@ -451,7 +461,7 @@
             t.eq(ctrl1.active, true, "ctrl1 activated with checked true");
             
             // confirm that a control is not activated with checked false
-            var act2 = new GeoExt.Action({
+            var act2 = Ext.create('GeoExt.Action', {
                 control: ctrl2,
                 map: map,
                 checked: false,
@@ -467,13 +477,13 @@
         function test_deactivateOnDisable(t) {
             t.plan(7);
 
-            var act1 = new GeoExt.Action({
+            var act1 = Ext.create('GeoExt.Action', {
                 control: new OpenLayers.Control(),
                 map: new OpenLayers.Map()
             });
             t.eq(act1.deactivateOnDisable, false, "false by default");            
 
-            var act2 = new GeoExt.Action({
+            var act2 = Ext.create('GeoExt.Action', {
                 control: new OpenLayers.Control({active: true}),
                 map: new OpenLayers.Map(),
                 deactivateOnDisable: true
@@ -492,13 +502,13 @@
         function test_activateOnEnable(t) {
             t.plan(7);
 
-            var act1 = new GeoExt.Action({
+            var act1 = Ext.create('GeoExt.Action', {
                 control: new OpenLayers.Control(),
                 map: new OpenLayers.Map()
             });
             t.eq(act1.activateOnEnable, false, "false by default");            
 
-            var act2 = new GeoExt.Action({
+            var act2 = Ext.create('GeoExt.Action', {
                 control: new OpenLayers.Control({active: false}),
                 map: new OpenLayers.Map(),
                 disabled: true,
