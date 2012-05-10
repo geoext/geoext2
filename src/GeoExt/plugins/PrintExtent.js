@@ -11,13 +11,13 @@
  *  immediately:
  *      
  *      @example
- *      var printExtent = new GeoExt.plugins.PrintExtent({
+ *      var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
  *          printProvider: new GeoExt.data.PrintProvider({
  *              capabilities: printCapabilities
  *          })
  *      });
  *     
- *      var mapPanel = new GeoExt.MapPanel({
+ *      var mapPanel = Ext.create('GeoExt.panel.Map', {
  *          border: false,
  *          renderTo: "div-id",
  *          layers: [new OpenLayers.Layer.WMS("Tasmania", "http://demo.opengeo.org/geoserver/wms",
@@ -46,64 +46,76 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      */
     initialConfig: null,
 
-    /** api: config[printProvider]
-     *  :class:`GeoExt.data.PrintProvider` The print provider this form
+    /** 
+     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * The print provider this form
      *  is connected to. Optional if pages are provided.
      */
-    /** api: property[printProvider]
-     *  :class:`GeoExt.data.PrintProvider` The print provider this form
+    /** 
+     * @property {GeoExt.data.PrintProvider} printProvider
+     * The print provider this form
      *  is connected to. Read-only.
      */
     printProvider: null,
     
-    /** private: property[map]
-     *  ``OpenLayers.Map`` The map the layer and control are added to.
+    /** 
+     * @private 
+     * @property {OpenLayers.Map} map
+     * The map the layer and control are added to.
      */
     map: null,
     
-    /** api: config[layer]
-     *  ``OpenLayers.Layer.Vector`` The layer used to render extent and handle
+    /** 
+     * @cfg {OpenLayers.Layer.Vector} layer
+     * The layer used to render extent and handle
      *  features to. Optional, will be created if not provided.
      */
-    /** private: property[layer]
-     *  ``OpenLayers.Layer.Vector`` The layer used to render extent and handle
+    /** 
+     * @private
+     * @property {OpenLayers.Layer.Vector} layer
+     * The layer used to render extent and handle
      *  features to.
      */
     layer: null,
     
-    /** api: config[transformFeatureOptions]
-     *  ``Object`` Optional options for the`OpenLayers.Control.TransformFeature` 
+    /** 
+     * @cfg {Object} transformFeatureOptions
+     * Optional options for the`OpenLayers.Control.TransformFeature` 
      *  control.
      */
     transformFeatureOptions: null,
 
-    /** private: property[control]
-     *  ``OpenLayers.Control.TransformFeature`` The control used to change
-     *      extent, center, rotation and scale.
+    /** 
+     * @private
+     * @property {OpenLayers.Control.TransformFeature} control
+     * The control used to change extent, center, rotation and scale.
      */
     control: null,
     
-    /** api: config[pages]
-     *  Array of :class:`GeoExt.data.PrintPage` The pages that this plugin
-     *  controls. Optional. If not provided, it will be created with one page
+    /** 
+     * @cfg {GeoExt.data.PrintPage[]} pages
+     * The pages that this plugin controls. Optional. 
+     *  If not provided, it will be created with one page
      *  that is completely contained within the visible map extent.
      *  
-     *  .. note:: All pages must use the same PrintProvider.
+     *      All pages must use the same PrintProvider.
      */
-    /** api: property[pages]
-     *  Array of :class:`GeoExt.data.PrintPage` The pages that this component
-     *  controls. Read-only.
+    /** 
+     * @property {GeoExt.data.PrintPage[]} pages
+     * The pages that this component controls. Read-only.
      */
     pages: null,
 
-    /** api: property[page]
-     *  :class:`GeoExt.data.PrintPage` The page currently set for
-     *  transformation.
+    /** 
+     * @property {GeoExt.data.PrintPage} page
+     * The page currently set for transformation.
      */
     page: null,
 
-    /** private: method[constructor]
-     *  Private constructor override.
+    /** 
+     * Private constructor override.
+     *  
+     * @private
      */
     constructor: function(config) {
         config = config || {};
@@ -119,33 +131,34 @@ Ext.define('GeoExt.plugins.PrintExtent', {
             this.pages = [];
         }
         
-        this.addEvents(
-            /** api: event[selectpage]
-             *  Triggered when a page has been selected using the control
-             *  
-             *  Listener arguments:
-             *  * printPage - :class:`GeoExt.data.PrintPage` this printPage
-             */
-            "selectpage"
-        );
+        /** 
+         * @event selectpage
+         * Triggered when a page has been selected using the control.
+         *  
+         * Listener arguments:
+         *    * printPage - {@link GeoExt.data.PrintPage} this printPage
+         */
 
+        
         this.callParent(arguments);
     },
 
-    /** api: method[print]
-     *  :param options: ``Object`` Options to send to the PrintProvider's
-     *      print method. See :class:`GeoExt.data.PrintProvider` :: ``print``.
-     *  
-     *  Prints all pages as shown on the map.
+    /** 
+     * Prints all pages as shown on the map.
+     * 
+     * @param {Object} options Options to send to the PrintProvider's
+     *  print method. See {@link GeoExt.data.PrintProvider#print print-method} of 
+     *  {@link GeoExt.data.PrintProvider}.
      */
     print: function(options) {
         this.printProvider.print(this.map, this.pages, options);
     },
 
-    /** private: method[init]
-     *  :param mapPanel: class:`GeoExt.MapPanel`
-     *  
-     *  Initializes the plugin.
+    /** 
+     * Initializes the plugin.
+     * 
+     * @private
+     * @param {GeoExt.panel.Map} mapPanel
      */
     init: function(mapPanel) {
         this.map = mapPanel.map;
@@ -164,13 +177,13 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         this.show();
     },
 
-    /** api: method[addPage]
-     *  :param page: :class:`GeoExt.data.PrintPage` The page to add
-     *       to this plugin. If not provided, a page that fits the current
-     *       extent is created.
-     *  :return: page :class:``GeoExt.data.PrintPage``
-     *  
-     *  Adds a page to the list of pages that this plugin controls.
+    /** 
+     * Adds a page to the list of pages that this plugin controls.
+     * 
+     * @param {GeoExt.data.PrintPage} page The page to add
+     *  to this plugin. If not provided, a page that fits the current
+     *  extent is created.
+     * @return {GeoExt.data.PrintPage} page
      */
     addPage: function(page) {
         page = page || Ext.create('GeoExt.data.PrintPage', {
@@ -195,11 +208,11 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         return page;
     },
 
-    /** api: method[removePage]
-     *  :param page: :class:`GeoExt.data.PrintPage` The page to remove
-     *       from this plugin.
-     *       
-     *  Removes a page from the list of pages that this plugin controls.
+    /** 
+     * Removes a page from the list of pages that this plugin controls.
+     * 
+     * @param {GeoExt.data.PrintPage} page The page to remove
+     *  from this plugin.
      */
     removePage: function(page) {
         Ext.Array.remove(this.pages, page);
@@ -209,21 +222,20 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         page.un("change", this.onPageChange, this);
     },
     
-    /** api: method[selectPage]
-     *  :param page: :class:`GeoExt.data.PrintPage` The page to select
-     *  
-     *  Selects the given page (ie. calls the setFeature on the modify feature
+    /** 
+     * Selects the given page (i.e. calls the setFeature on the modify feature
      *  control)
+     * 
+     * @param {GeoExt.data.PrintPage} page The page to select
      */
     selectPage: function(page) {
         this.control.active && this.control.setFeature(page.feature);
         // FIXME raise the feature up so that it is on top
     },
 
-    /** api: method[show]
-     * 
-     *  Sets up the plugin, initializing the ``OpenLayers.Layer.Vector``
-     *  layer and ``OpenLayers.Control.TransformFeature``, and centering
+    /** 
+     *  Sets up the plugin, initializing the `OpenLayers.Layer.Vector`
+     *  layer and `OpenLayers.Control.TransformFeature`, and centering
      *  the first page if no pages were specified in the configuration.
      */
     show: function() {
@@ -240,11 +252,11 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         }
     },
 
-    /** api: method[hide]
+    /** 
      * 
      *  Tear downs the plugin, removing the
-     *  ``OpenLayers.Control.TransformFeature`` control and
-     *  the ``OpenLayers.Layer.Vector`` layer.
+     *  `OpenLayers.Control.TransformFeature` control and
+     *  the `OpenLayers.Layer.Vector` layer.
      */
     hide: function() {
         // note: we need to be extra cautious when destroying OpenLayers
@@ -266,7 +278,8 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         }
     },
 
-    /** private: method[onMapPanelDestroy]
+    /** 
+     * @private
      */
     onMapPanelDestroy: function() {
 
@@ -297,7 +310,8 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         this.map = null;
     },
     
-    /** private: method[createControl]
+    /** 
+     * @private
      */
     createControl: function() {
         this.control = new OpenLayers.Control.TransformFeature(this.layer, Ext.applyIf({
@@ -357,8 +371,10 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         }, this.transformFeatureOptions));
     },
 
-    /** private: method[fitPage]
-     *  Fits the current print page to the map.
+    /** 
+     * Fits the current print page to the map.
+     * 
+     * @private
      */
     fitPage: function() {
         if(this.page) {
@@ -366,9 +382,11 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         }
     },
 
-    /** private: method[updateBox]
-     *  Updates the transformation box after setting a new scale or
+    /** 
+     * Updates the transformation box after setting a new scale or
      *  layout, or to fit the box to the extent feature after a tranform.
+     *  
+     * @private
      */
     updateBox: function() {
         var page = this.page;
@@ -376,8 +394,10 @@ Ext.define('GeoExt.plugins.PrintExtent', {
             this.control.setFeature(page.feature, {rotation: -page.rotation});
     },
 
-    /** private: method[onPageChange]
-     *  Handler for a page's change event.
+    /** 
+     * Handler for a page's change event.
+     * 
+     * @private
      */
     onPageChange: function(page, mods) {
         if(!this._updating) {
