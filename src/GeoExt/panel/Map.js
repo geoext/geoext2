@@ -39,15 +39,15 @@ Ext.define('GeoExt.panel.Map', {
     
     statics : {
         /**
-         * @return {GeoExt.panel.Map} 
-         * @static
-         * 
-         * The first map panel found via an  the Ext.ComponentQuery.query 
+         * The first map panel found via an the Ext.ComponentQuery.query 
          * manager.
          *  
          * Convenience function for guessing the map panel of an application. 
          * This can reliably be used for all applications that just have one map
          * panel in the viewport.
+         *
+         * @return {GeoExt.panel.Map} 
+         * @static         
          */
         guess : function() {
             var candidates = Ext.ComponentQuery.query("gx_mappanel");
@@ -99,7 +99,7 @@ Ext.define('GeoExt.panel.Map', {
      * @cfg {OpenLayers.Map/Object} map
      * A configured map or a configuration object for the map constructor.
      * A configured map will be available after construction through the
-     * {@link #property-map} property.
+     * {@link GeoExt.panel.Map#property-map} property.
      */
     /** 
      * @property {OpenLayers.Map/Object} map 
@@ -129,9 +129,7 @@ Ext.define('GeoExt.panel.Map', {
         "afterlayervisibilitychange",
         "afterlayeropacitychange",
         "afterlayerorderchange",
-        "afterlayernamechange",
-        "afterlayeradd",
-        "afterlayerremove"
+        "afterlayernamechange"
     ],
     
     /**
@@ -176,7 +174,7 @@ Ext.define('GeoExt.panel.Map', {
 
         // create a layerstore with the current maps layers
         me.layers = Ext.create('GeoExt.data.LayerStore', {
-            data: me.map.layers
+            map: me
         });
         
         // check config-property controls
@@ -235,26 +233,29 @@ Ext.define('GeoExt.panel.Map', {
          * @event afterlayernamechange
          * Fires after a layer name changed.
          */
-        /**
-         * @event afterlayeradd
-         * Fires after a layer added to the map.
-         */
-        /**
-         * @event afterlayerremove
-         * Fires after a layer removed from the map.
-         */
         
+        //TODO This should be handled by a LayoutManager
+        this.on("afterlayout", function() {
+            //TODO remove function check when we require OpenLayers > 2.11
+            if (typeof this.map.getViewport === "function") {
+                this.items.each(function(cmp) {
+                    if (typeof cmp.addToMapPanel === "function") {
+                        cmp.getEl().appendTo(this.map.getViewport());
+                    }
+                }, this);
+            }
+        }, this);
     },
     
     /**
-     * @private
-     * 
      * Returns the an array of default controls for autocreated OpenLayers.Map
      * instances. Will give the autocreated controls the following controls:
      * 
      * * [OpenLayers.Control.Attribution](http://dev.openlayers.org/releases/OpenLayers-2.11/doc/apidocs/files/OpenLayers/Control/Attribution-js.html)
      * * [OpenLayers.Control.ArgParser](http://dev.openlayers.org/releases/OpenLayers-2.11/doc/apidocs/files/OpenLayers/Control/ArgParser-js.html)
      * * [OpenLayers.Control.Navigation](http://dev.openlayers.org/releases/OpenLayers-2.11/doc/apidocs/files/OpenLayers/Control/Navigation-js.html)
+     *
+     * @private
      */
     getDefaultControls: function() {
         var olc = OpenLayers.Control;
@@ -266,8 +267,8 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
-     * @private
      * Private method called after the panel has been rendered.
+     * @private
      */
     afterRender: function(){
         var me = this;
@@ -284,8 +285,8 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
-     * @private
      * Tell the map that it needs to recalculate its size and position.
+     * @private
      */
     updateMapSize: function() {
         var map = this.map;
@@ -295,9 +296,9 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
-     * @private
      * Adjust the geographic position of the map according to the defined center
      * and/or zoom, the defined extent or the #map's maxExtent. 
+     * @private
      */
     adjustGeographicPosition: function(){
         var me = this,
@@ -317,9 +318,9 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
-     * @private
      * Private method called after the panel has been rendered or after it
      * has been laid out by its parent's layout.
+     * @private
      */
     renderMap: function() {
         var me = this,
@@ -331,9 +332,8 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
-     * @private
-     * 
      * Determines whether we have a size we can render the map into.
+     * @private
      */
     hasRenderableSize: function() {
         var me = this,
@@ -349,17 +349,17 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
+     * The "moveend" listener bound to the {@link GeoExt.panel.Map#property-map}.
      * @private
-     * The "moveend" listener bound to the {@link map}.
      */
     onMoveend: function(e) {
         this.fireEvent("aftermapmove", this, this.map, e);
     },
 
     /**
+     * The "changelayer" listener bound to the {@link GeoExt.panel.Map#property-map}.
      * @private
      * @param {Object} e
-     * The "changelayer" listener bound to the {@link map}.
      */
     onChangelayer: function(e) {
         var me = this,
@@ -378,26 +378,6 @@ Ext.define('GeoExt.panel.Map', {
     },
 
     /**
-     * @private
-     * The "addlayer" listener bound to the {@link map}.
-     */
-    onAddlayer: function(e) {
-        this.layers.load();
-        this.fireEvent("afterlayeradd", this, this.map, e);
-    },
-
-    /**
-     * @private
-     * The "removelayer" listener bound to the {@link map}.
-     */
-    onRemovelayer: function(e) {
-        this.layers.load();
-        this.fireEvent("afterlayerremove", this, this.map, e);
-    },
-    
-    /**
-     * @private
-     * @return {Object} 
      * Returns a state of the Map as keyed Object. Depending on the point in 
      * time this methoid is being called, the following keys will be available:
      * 
@@ -413,6 +393,8 @@ Ext.define('GeoExt.panel.Map', {
      * 
      * The <XXX> suffix is either the title or id of the layer record, it can be 
      * influenced by setting #prettyStateKeys to `true` or `false`.
+     * @private
+     * @return {Object} 
      */
     getState: function() {
         var me = this,
@@ -453,9 +435,9 @@ Ext.define('GeoExt.panel.Map', {
     },
     
     /**
+     * Apply the state provided as an argument.
      * @private
      * @param {Object} state The state to apply.
-     * Apply the state provided as an argument.
      */
     applyState: function(state) {
         var me = this;
@@ -494,8 +476,8 @@ Ext.define('GeoExt.panel.Map', {
 
     
     /**
-     * @private
      * Private method called during the destroy sequence.
+     * @private
      */
     beforeDestroy: function() {
         me = this;

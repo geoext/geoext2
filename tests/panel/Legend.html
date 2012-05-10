@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
     <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
 
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
@@ -17,8 +17,8 @@
 
         Ext.require([
             'GeoExt.panel.Map',
-            'GeoExt.container.URLLegend',
-            'GeoExt.container.WMSLegend',
+            'GeoExt.container.UrlLegend',
+            'GeoExt.container.WmsLegend',
             'GeoExt.container.VectorLegend',
             'GeoExt.panel.Legend'
         ]);
@@ -54,7 +54,7 @@
             mapPanel.layers.getAt(0).set("legendURL", newUrl);
 
             var item = lp.getComponent(lp.getIdForLayer(mapPanel.map.layers[0]));
-            t.ok(item instanceof GeoExt.URLLegend, "If legendURL is found in layerRecord, UrlLegend is chosen.")
+            t.ok(item instanceof GeoExt.container.UrlLegend, "If legendURL is found in layerRecord, UrlLegend is chosen.")
             var url = item.items.get(1).getEl().dom.src;
             t.eq(url, newUrl, "Update the image with the provided legendURL");
 
@@ -94,7 +94,6 @@
         function test_ignoreLayerVisibility(t) {
             t.plan(2);
             var mapPanel = loadMapPanel();
-            mapPanel.map.layers[0].setVisibility(false);
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 defaults: {
                     listeners: {
@@ -102,6 +101,7 @@
                     }
                 },
                 renderTo: 'legendpanel'});
+            mapPanel.map.layers[0].setVisibility(false);
             var id = lp.getIdForLayer(mapPanel.layers.getAt(0).getLayer());
             t.eq(lp.getComponent(id).isVisible(), true, "Layer is visible because our beforehide listener returns false");
 
@@ -174,7 +174,7 @@
         function test_unsupported(t) {
             
             t.plan(1);
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
                 renderTo: "mappanel",
                 height: 400,
@@ -260,7 +260,7 @@
             layer = new OpenLayers.Layer.WMS("test2", '/ows', {layers: 'b'}, {isBaseLayer: false});
             map.addLayer(layer);
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 map: map,
                 id: "map-panel",
                 title: "GeoExt MapPanel",
@@ -309,6 +309,7 @@
             });
             t.eq(cmp.items.getCount(), 2,
                  "mergeNewParams caused removal of a legend image");
+            mapPanel.destroy();
         }
 
         function test_scaledependency(t) {
@@ -330,6 +331,7 @@
         }
 
     </script>
+  </head>
   <body>
     <div id="legendpanel"></div>
     <div id="mappanel"></div>

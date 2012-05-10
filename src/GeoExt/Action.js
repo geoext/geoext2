@@ -146,10 +146,9 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
+     *  The private handler.
      * @private
      * @param {Ext.Component} The component that triggers the handler.
-     *
-     *  The private handler.
      */
     pHandler: function(cmp){
         var ctrl = this.control;
@@ -163,11 +162,10 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
+     *  The private toggle handler.
      * @private
      * @param {Ext.Component} cmp The component that triggers the toggle handler.
      * @param {Boolean} state The state of the toggle.
-     *
-     *  The private toggle handler.
      */
     pToggleHandler: function(cmp, state){
         this.changeControlState(state);
@@ -177,11 +175,10 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
+     *  The private check handler.
      * @private
      * @param {Ext.Component} cmp The component that triggers the check handler.
      * @param {Boolean} state The state of the toggle.
-     *
-     *  The private check handler.
      */
     pCheckHandler: function(cmp, state){
         this.changeControlState(state);
@@ -191,10 +188,9 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
+     *  Change the control state depending on the state boolean.
      * @private
      * @param {Boolean} state The state of the toggle.
-     *
-     *  Change the control state depending on the state boolean.
      */
     changeControlState: function(state){
         if(state) {
@@ -219,9 +215,8 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
-     * @private
-     *
      *  Called when this action's control is activated.
+     * @private
      */
     onCtrlActivate: function(){
         var ctrl = this.control;
@@ -236,9 +231,8 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
-     * @private
-     *
      *  Called when this action's control is deactivated.
+     * @private
      */
     onCtrlDeactivate: function(){
         var ctrl = this.control;

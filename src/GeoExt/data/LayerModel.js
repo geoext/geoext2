@@ -1,21 +1,29 @@
 /**
- * @class GeoExt.data.LayerModel
- * @borrows Ext.data.Model
- * 
- *  Class defines a model for records containing an OpenLayers layer object.
- *  Usually this class is not instantiated directly, but referenced by its mtype 'gx_layer' 
- *  or name 'GeoExt.data.model.Layer' as string representation as a config option within creation of a superior component, 
- *  such as a store.
+ * The layer model class used by the stores.
  */
-Ext.define('GeoExt.data.LayerModel', {
+Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'Ext.data.Model',
-    alias: ['gx_layer'],
-    fields: [
-        {name: 'title', mapping: 'name'},
-        {name: 'name', mapping: 'metadata.name'},
-        {name: 'legendURL', mapping: 'metadata.legendURL'},
-        'id'
+    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    alias: 'model.gx_layer',
+    statics: {
+        /**
+         * Convenience function for creating new layer model instance object
+         * using a layer object.
+         * @param {OpenLayers.Layer} layer
+         * @return {GeoExt.data.LayerModel} 
+         * @static         
+         */
+        createFromLayer: function(layer) {
+            return this.proxy.reader.readRecords([layer]).records[0];
+        }
+    },
+    fields: [   
+        'id',
+        {name: 'title', type: 'string', mapping: 'name'},
+        {name: 'legendURL', type: 'string', mapping: 'metadata.legendURL'},
+        {name: 'hideTitle', type: 'bool', mapping: 'metadata.hideTitle'},
+        {name: 'hideInLegend', type: 'bool', mapping: 'metadata.hideInLegend'}
     ],
     proxy: {
         type: 'memory',
@@ -23,12 +31,10 @@ Ext.define('GeoExt.data.LayerModel', {
             type: 'json'
         }
     },
-
-/**
- * Returns the {OpenLayers.Layer} layer object used in this model instance
- */
+    /**
+     * Returns the {OpenLayers.Layer} layer object used in this model instance
+     */
     getLayer: function() {
         return this.raw;
     }
 });
-

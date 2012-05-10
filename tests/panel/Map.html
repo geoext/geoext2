@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js" ></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
 
     <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
 
@@ -11,13 +11,12 @@
             disableCaching: false,
             enabled: true,
             paths: {
-                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
 
-        Ext.require(['Ext.layout.container.Border', 'GeoExt.panel.Map']);
-    
+        Ext.require(['GeoExt.panel.Map', 'GeoExt.slider.Zoom']);
+ 
         // the hidden span element that contains the test iframe
         var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
        
@@ -732,6 +731,29 @@
 
             mapPanel.destroy();
             hiddenSpan.style.display = "none";
+        }
+        
+        function test_add(t) {
+            t.plan(1);
+            var layers = [
+                new OpenLayers.Layer("foo", {visibility: true}),
+                new OpenLayers.Layer("bar", {visibility: false})
+            ];
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
+                renderTo: "mappanel",
+                stateId: "map",
+                height: 400,
+                width: 600,
+                layers: layers,
+                center: [5, 45],
+                zoom: 6,
+                items: {
+                    xtype: "gx_zoomslider",
+                    ref: "zoomSlider"
+                }
+            });
+            t.ok(mapPanel.items.get(0).getEl().dom.parentNode === Ext.query(".olMapViewport", mapPanel.map.div)[0], "MapPanel item has the map's viewport div as parent.");
+            mapPanel.destroy();
         }
     </script>
   </head>
