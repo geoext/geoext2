@@ -110,7 +110,6 @@ Ext.define('GeoExt.panel.PrintMap', {
      *  completely different extent than the one that would appear on the
      *  printed map. Default is false.
      */
-//    limitScales: false,
      
     /** 
      * @property {Ext.data.Store} previewScales
