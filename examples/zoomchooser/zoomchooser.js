@@ -37,15 +37,19 @@ Ext.application({
         var zoomSelector = Ext.create("Ext.form.ComboBox", {
             store: scaleStore,
             emptyText: "Zoom Level",
-            tpl: '<tpl for="."><div class="x-combo-list-item">1 : {[parseInt(values.scale)]}</div></tpl>',
+            listConfig: {
+                getInnerTpl: function() {
+                    return "1: {scale:round(0)}";
+                }
+            },
             editable: false,
             triggerAction: 'all', // needed so that the combo box doesn't filter by its current content
-            mode: 'local' // keep the combo box from forcing a lot of unneeded data refreshes
+            queryMode: 'local' // keep the combo box from forcing a lot of unneeded data refreshes
         });
 
         zoomSelector.on('select', 
             function(combo, record, index) {
-                map.zoomTo(record.data.level);
+                map.zoomTo(record[0].get("level"));
             },
             this
         );     
