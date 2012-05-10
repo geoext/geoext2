@@ -1,0 +1,68 @@
+/*
+ * Copyright (c) 2012-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
+/**
+ * Used to read the attributes of a feature.
+ */
+Ext.define('GeoExt.data.reader.Feature', {
+    extend: 'Ext.data.reader.Json',
+    alias : 'reader.feature',
+
+    /**
+     * Force to have our convertRecordData.
+     * @private
+     */
+    buildExtractors: function() {
+        this.callParent(arguments);
+        this.convertRecordData = this.convertFreatureRecordData;
+    },
+
+    /**
+     * Copy feature attribute to record.
+     * @private
+     */
+    convertFreatureRecordData: function(convertedValues, feature, record) {
+        var records = [];
+
+        if (feature) {
+            var fields = record.fields;
+            var values = {};
+            if (feature.attributes) {
+                for (var j = 0, jj = fields.length; j < jj; j++){
+                    var field = fields.items[j];
+                    var v;
+                    if (/[\[\.]/.test(field.mapping)) {
+                        try {
+                            v = new Function("obj", "return obj." + field.mapping)(feature.attributes);
+                        } catch(e){
+                            v = field.defaultValue;
+                        }
+                    }
+                    else {
+                        v = feature.attributes[field.mapping || field.name] || field.defaultValue;
+                    }
+                    if (field.convert) {
+                        v = field.convert(v, feature);
+                    }
+                    convertedValues[field.name] = v;
+                }
+            }
+            record.state = feature.state;
+            if (feature.state == OpenLayers.State.INSERT ||
+                    feature.state == OpenLayers.State.UPDATE) {
+                record.setDirty();
+            }
+
+            // newly inserted features need to be made into phantom records
+            var id = (feature.state === OpenLayers.State.INSERT) ? undefined : feature.id;
+            convertedValues['id'] = id;
+        }
+
+        return records;
+    }
+});

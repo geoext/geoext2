@@ -9,13 +9,13 @@
 /**
  * Show a legend image in a BoxComponent and make sure load errors are 
  * dealt with.
- * @class GeoExt.container.URLLegend
+ * @class GeoExt.container.UrlLegend
  */
-Ext.define('GeoExt.container.URLLegend', {
+Ext.define('GeoExt.container.UrlLegend', {
     extend : 'GeoExt.container.LayerLegend',
     requires: ['GeoExt.LegendImage'],
     alias : 'widget.gx_urllegend',
-    alternateClassName : 'GeoExt.URLLegend',
+    alternateClassName : 'GeoExt.UrlLegend',
     
     statics : {
         supports: function(layerRecord) {
@@ -78,5 +78,5 @@ Ext.define('GeoExt.container.URLLegend', {
         this.items.get(1).setUrl(this.layerRecord.get("legendURL"));
     }  
 }, function() {
-    GeoExt.container.LayerLegend.types["gx_urllegend"] = GeoExt.container.URLLegend;
+    GeoExt.container.LayerLegend.types["gx_urllegend"] = GeoExt.container.UrlLegend;
 });

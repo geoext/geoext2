@@ -17,12 +17,12 @@
 
         Ext.require([
             'GeoExt.panel.Map',
-            'GeoExt.container.WMSLegend'
+            'GeoExt.container.WmsLegend'
         ]);
 
         function loadMapPanel(render) {
             var renderTo = render === false ? null : "mappanel";
-            var mapPanel = Ext.create("GeoExt.MapPanel", {
+            var mapPanel = Ext.create("GeoExt.panel.Map", {
                 // panel options
                 id: "map-panel",
                 title: "GeoExt MapPanel",
@@ -47,7 +47,7 @@
             var layer1 = new OpenLayers.Layer.WMS("test", '/ows', {layers: ['a,b', 'c,d']});
             var layer2 = new OpenLayers.Layer.WMS("test", '/ows', {layers: ['x', 'y']});
             mapPanel.map.addLayers([layer1, layer2]);
-            l = Ext.create("GeoExt.WMSLegend", {
+            l = Ext.create("GeoExt.container.WmsLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(1)
             });
@@ -59,7 +59,7 @@
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy();
 
-            l = Ext.create("GeoExt.WMSLegend", {
+            l = Ext.create("GeoExt.container.WmsLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(2)
             });
@@ -78,7 +78,7 @@
             var l, url, expectedUrl;
             var mapPanel = loadMapPanel(false);
 
-            l = Ext.create("GeoExt.WMSLegend", {
+            l = Ext.create("GeoExt.container.WmsLegend", {
                 renderTo: 'legendwms',
                 baseParams: {FORMAT: 'image/png', foo: 'bar bar'},
                 useScaleParameter: false,
@@ -92,7 +92,7 @@
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy()
 
-            l = Ext.create("GeoExt.WMSLegend", {
+            l = Ext.create("GeoExt.container.WmsLegend", {
                 renderTo: 'legendwms',
                 useScaleParameter: false,
                 layerRecord: mapPanel.layers.getAt(0)
@@ -103,7 +103,7 @@
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy()
 
-            l = Ext.create("GeoExt.WMSLegend", {
+            l = Ext.create("GeoExt.container.WmsLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0)
             });
