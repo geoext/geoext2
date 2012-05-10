@@ -282,17 +282,25 @@
         }
 
         function test_featuremodified_update(t) {
-            t.plan(13);
+            t.plan(30);
 
             /*
              * Set up
              */
-            var feature = new OpenLayers.Feature.Vector(null, {
+            var feature1 = new OpenLayers.Feature.Vector(null, {
+                foo: "foo",
+                bar: "bar"
+            });
+            var feature2 = new OpenLayers.Feature.Vector(null, {
+                foo: "foo",
+                bar: "bar"
+            });
+            var feature3 = new OpenLayers.Feature.Vector(null, {
                 foo: "foo",
                 bar: "bar"
             });
             // confirm that we can update phantom records
-            feature.state = OpenLayers.State.INSERT;
+            feature1.state = OpenLayers.State.INSERT;
 
             function keys(obj) {
                 var list = [], k;
@@ -301,7 +309,7 @@
                 }
                 return list;
             }
-            var originalAttrs = keys(feature.attributes);
+            var originalAttrs = keys(feature1.attributes);
 
             var layer = new OpenLayers.Layer.Vector("vector");
 
@@ -309,42 +317,62 @@
                 model: 'My.FooBar.Model',
                 layer: layer
             });
-            store.addFeatures(feature);
-            var record = store.getByFeature(feature);
+            store.addFeatures([feature1, feature2, feature3]);
+            var record1 = store.getByFeature(feature1);
+            var record2 = store.getByFeature(feature2);
+            var record3 = store.getByFeature(feature3);
 
-            t.eq(record.get("foo"), "foo",
+            t.eq(record1.get("foo"), "foo",
                  "record gets correct initial value for property \"foo\"");
-
-            t.eq(record.get("bar"), "bar",
+            t.eq(record1.get("bar"), "bar",
                  "record gets correct initial value for property \"bar\"");
+            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
+            t.eq(record2.dirty, false, "record is not dirty");
+            t.eq(record3.dirty, false, "record is not dirty");
 
             /*
              * Test
              */
 
             // featuremodified
-            feature.attributes.foo = "foo2";
-            feature.attributes.bar = "bar2";
-            layer.events.triggerEvent("featuremodified", {feature: feature});
+            feature2.attributes.foo = "foo2";
+            feature2.attributes.bar = "bar2";
+            layer.events.triggerEvent("featuremodified", {feature: feature2});
 
-            t.eq(record.get("foo"), "foo2",
+            t.eq(record2.get("foo"), "foo2",
                  "featuremodified event causes update of record property \"foo\"");
-
-            t.eq(record.get("bar"), "bar2",
+            t.eq(record2.get("bar"), "bar2",
                  "featuremodified event causes update of record property \"bar\"");
+            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
+            t.eq(record2.dirty, true, "record is dirty");
+            t.eq(feature2.state, OpenLayers.State.UPDATE, "feature is update");
+            t.eq(record3.dirty, false, "record is not dirty");
 
             // update
-            record.set("foo", "foo3");
-            record.set("bar", "bar3");
+            record3.set("foo", "foo3");
+            record3.set("bar", "bar3");
 
-            t.eq(feature.attributes.foo, "foo3",
+            t.eq(feature3.attributes.foo, "foo3",
                  "update event causes update of feature property \"foo\"");
-
-            t.eq(feature.attributes.bar, "bar3",
+            t.eq(feature3.attributes.bar, "bar3",
                  "update event causes update of feature property \"bar\"");
+            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
+            t.eq(record2.dirty, true, "record is dirty");
+            t.eq(feature2.state, OpenLayers.State.UPDATE, "feature is update");
+            t.eq(record3.dirty, true, "record is not dirty");
+            t.eq(feature3.state, OpenLayers.State.UPDATE, "feature is update");
 
             // make sure calling record.set didn't add any attributes
-            var currentAttrs = keys(feature.attributes);
+            var currentAttrs = keys(feature1.attributes);
+            t.eq(originalAttrs.length, currentAttrs.length,
+                 "no new attributes added: " + currentAttrs.join(", "));
+            currentAttrs = keys(feature2.attributes);
+            t.eq(originalAttrs.length, currentAttrs.length,
+                 "no new attributes added: " + currentAttrs.join(", "));
+            currentAttrs = keys(feature3.attributes);
             t.eq(originalAttrs.length, currentAttrs.length,
                  "no new attributes added: " + currentAttrs.join(", "));
 
@@ -367,16 +395,16 @@
             t.eq(record.get("bar"), 0, "0 correctly set");*/
 
             // confirm that updates work from the record
-            delete feature.state;
-            record.set("foo", "set from record");
-            t.eq(feature.attributes.foo, "set from record");
-            t.eq(feature.state, OpenLayers.State.UPDATE, "state properly set");
+            delete feature1.state;
+            record1.set("foo", "set from record");
+            t.eq(feature1.attributes.foo, "set from record");
+            t.eq(feature1.state, OpenLayers.State.UPDATE, "state properly set");
 
             // confirm that newly inserted features don't get update state
-            feature.state = OpenLayers.State.INSERT;
-            record.set("foo", "still insert");
-            t.eq(feature.attributes.foo, "still insert", "attribute set");
-            t.eq(feature.state, OpenLayers.State.INSERT, "insert state remains");
+            feature1.state = OpenLayers.State.INSERT;
+            record1.set("foo", "still insert");
+            t.eq(feature1.attributes.foo, "still insert", "attribute set");
+            t.eq(feature1.state, OpenLayers.State.INSERT, "insert state remains");
 
             // confirm that update doesn't cause errors for features that were
             // filtered out
