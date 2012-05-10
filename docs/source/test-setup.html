@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Test.SandBoxImpl.prototype.addIframe = function(config) {
+    var sandBox = this,
+    me = new Test.SandBoxImpl();
+    
+    me.domReady(function() {
+        me.reporter = sandBox.reporter;
+        me.createIframe(config);
+    });
+    
+    return me;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+var lib = {dom:{}};
+
+////////////////////////////////////////////////////////////////////////////////
+var test = {dom:{}};
+
+////////////////////////////////////////////////////////////////////////////////
+test.helpers = [{ type: &quot;js&quot;, src: &quot;../../../../testreporter/deploy/testreporter/jasmine.js&quot; }];
+test.helpers.push({ type: &quot;js&quot;, src: &quot;resources/APITest.js&quot; });
+test.helpers.push({ type: &quot;js&quot;, src: &quot;resources/BlockLoader.js&quot; });
+test.helpers.push({ type: &quot;js&quot;, src: &quot;resources/TestHelper.js&quot; });
+
+////////////////////////////////////////////////////////////////////////////////
+lib.foundation = jsbToTestLib(&quot;../../&quot;,
+    {
+        &quot;id&quot;: &quot;foundation&quot;,
+        &quot;files&quot;: [
+            { &quot;path&quot;: &quot;../../platform/core/src/&quot;, &quot;name&quot;: &quot;Ext.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/version/&quot;, &quot;name&quot;: &quot;Version.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;String.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;Number.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;Array.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;Function.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;Object.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;Date.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/class/&quot;, &quot;name&quot;: &quot;Base.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/class/&quot;, &quot;name&quot;: &quot;Class.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/class/&quot;, &quot;name&quot;: &quot;ClassManager.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/class/&quot;, &quot;name&quot;: &quot;Loader.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/lang/&quot;, &quot;name&quot;: &quot;Error.js&quot; }
+        ]
+    }
+);
+
+////////////////////////////////////////////////////////////////////////////////
+lib.extras = jsbToTestLib(&quot;../../&quot;,
+    {
+        &quot;id&quot;: &quot;extras&quot;,
+        &quot;files&quot;: [
+            { &quot;path&quot;: &quot;../../platform/core/src/misc/&quot;, &quot;name&quot;: &quot;JSON.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/&quot;, &quot;name&quot;: &quot;Ext-more.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/util/&quot;, &quot;name&quot;: &quot;Format.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/util/&quot;, &quot;name&quot;: &quot;TaskManager.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/&quot;, &quot;name&quot;: &quot;Support.js&quot; }
+        ]
+    }
+);
+
+////////////////////////////////////////////////////////////////////////////////
+lib.dom.extjs = [{type:'js', src:'../../../../platform/deploy/sencha-extjs-dom.js'}];
+lib.dom.touch = [{type:'js', src:'../../../../platform/deploy/sencha-touch-dom.js'}];
+lib.dom.platform = jsbToTestLib(&quot;../../&quot;,
+    {
+        &quot;id&quot;: &quot;dom&quot;,
+        &quot;files&quot;: [
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;DomHelper.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;DomQuery.js&quot; },
+
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.traversal.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.insertion.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.style.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.fx.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.anim.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.static.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;CompositeElementLite.js&quot; },
+
+            { &quot;path&quot;: &quot;../../platform/core/src/util/&quot;, &quot;name&quot;: &quot;DelayedTask.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/util/&quot;, &quot;name&quot;: &quot;Event.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/&quot;, &quot;name&quot;: &quot;EventManager.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/&quot;, &quot;name&quot;: &quot;EventObject.js&quot; },
+
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element-more.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.alignment.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.position.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.scroll.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.fx-more.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;Element.keys.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;CompositeElementLite-more.js&quot; },
+            { &quot;path&quot;: &quot;../../platform/core/src/dom/&quot;, &quot;name&quot;: &quot;CompositeElement.js&quot; }
+        ]
+    }
+);
+
+////////////////////////////////////////////////////////////////////////////////
+test.dom.shared = jsbToTestLib(&quot;&quot;,
+    {
+        &quot;files&quot;: [
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;sanity.js&quot; },
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;DomHelper.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;DomQuery.js&quot; },
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.js&quot; },
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.traversal.js&quot; },
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.insertion.js&quot; },
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.style.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.fx.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.anim.js&quot; },
+            { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.static.js&quot; }
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;CompositeElementLite.js&quot; },
+
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.static-more.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element-more.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.alignment.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.position.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.scroll.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.fx-more.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;Element.keys.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;CompositeElementLite-more.js&quot; },
+            // { &quot;path&quot;: &quot;spec/dom/&quot;, &quot;name&quot;: &quot;CompositeElement.js&quot; }
+        ]
+    }
+);
+
+////////////////////////////////////////////////////////////////////////////////
+test.dom.platform = [].concat(test.dom.shared);
+test.dom.platform.push({type:'js', src:'spec/dom/platform-api.js'});
+
+////////////////////////////////////////////////////////////////////////////////
+test.dom.extjs = [].concat(test.dom.shared);
+test.dom.extjs.push({type:'js', src:'spec/dom/extjs-api.js'});
+
+////////////////////////////////////////////////////////////////////////////////
+test.dom.touch = [].concat(test.dom.shared);
+test.dom.touch.push({type:'js', src:'spec/dom/touch-api.js'});
+
+</pre>
+</body>
+</html>

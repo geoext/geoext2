@@ -1,0 +1,969 @@
+{
+    "projectName": "Project Name",
+    "licenseText": "Copyright(c) 2012 Company Name",
+    "builds": [
+        {
+            "name": "All Classes",
+            "target": "all-classes.js",
+            "options": {
+                "debug": true
+            },
+            "files": [
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Observable.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/association/",
+                    "name": "Association.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "IdGenerator.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Operation.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "validations.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "HashMap.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "SortTypes.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Floating.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Filter.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Sorter.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Animate.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "ElementContainer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Renderable.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ComponentQuery.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "ProtoElement.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "KeyMap.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Memento.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/state/",
+                    "name": "Provider.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "CubicBezier.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "Proxy.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "Template.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "Queue.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "XTemplateParser.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ZIndexManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "Target.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "Color.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/boxOverflow/",
+                    "name": "None.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Offset.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "ClickRepeater.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "TextMetrics.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/app/",
+                    "name": "Controller.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "AbstractManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ModelManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ComponentManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Types.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Field.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "AbstractMixedCollection.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Sortable.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "MixedCollection.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "StoreManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Errors.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Model.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/state/",
+                    "name": "Manager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/state/",
+                    "name": "Stateful.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "AbstractComponent.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "Component.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/app/",
+                    "name": "EventBus.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/container/",
+                    "name": "DockingContainer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "Easing.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "XTemplateCompiler.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "XTemplate.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/toolbar/",
+                    "name": "Fill.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "Element.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "ElementCSS.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "CompositeElement.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "CompositeElementCSS.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "Sprite.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "CompositeSprite.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/target/",
+                    "name": "Component.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "Manager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "Animator.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "Draw.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "PropertyHandler.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/fx/",
+                    "name": "Anim.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "StatusProxy.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/",
+                    "name": "Layout.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/component/",
+                    "name": "Component.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/component/",
+                    "name": "Dock.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Region.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DragDropManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/",
+                    "name": "Container.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/",
+                    "name": "Auto.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/container/",
+                    "name": "AbstractContainer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/container/",
+                    "name": "Container.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "Header.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/boxOverflow/",
+                    "name": "Scroller.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DragDrop.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DD.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DDProxy.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DragSource.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "DD.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/toolbar/",
+                    "name": "Item.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/toolbar/",
+                    "name": "Separator.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/menu/",
+                    "name": "Manager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/component/",
+                    "name": "Auto.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/component/",
+                    "name": "Button.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/button/",
+                    "name": "Button.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/boxOverflow/",
+                    "name": "Menu.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/",
+                    "name": "Box.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/",
+                    "name": "HBox.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/",
+                    "name": "VBox.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/toolbar/",
+                    "name": "Toolbar.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "AbstractPanel.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "Panel.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/tip/",
+                    "name": "Tip.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/tip/",
+                    "name": "ToolTip.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/tip/",
+                    "name": "QuickTip.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/tip/",
+                    "name": "QuickTipManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/app/",
+                    "name": "Application.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Point.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "Layer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "PluginManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/resizer/",
+                    "name": "Resizer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "Tool.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "CSS.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/component/",
+                    "name": "Body.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "Img.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ElementLoader.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Queue.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Bindable.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DragTracker.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/component/",
+                    "name": "Draw.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/container/",
+                    "name": "Fit.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/menu/",
+                    "name": "Item.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/menu/",
+                    "name": "Separator.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "LruCache.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/",
+                    "name": "ClassList.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "CompositeSprite.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "KeyNav.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "FocusManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/proxy/",
+                    "name": "Proxy.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/proxy/",
+                    "name": "Server.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/writer/",
+                    "name": "Writer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Connection.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "ResultSet.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ComponentLoader.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "LoadMask.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "ComponentDragger.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/window/",
+                    "name": "Window.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/",
+                    "name": "ContextItem.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/layout/",
+                    "name": "Context.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "Surface.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "Component.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/menu/",
+                    "name": "CheckItem.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/menu/",
+                    "name": "KeyNav.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/menu/",
+                    "name": "Menu.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "AbstractStore.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/writer/",
+                    "name": "Json.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/proxy/",
+                    "name": "Client.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/proxy/",
+                    "name": "Memory.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "Ajax.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/proxy/",
+                    "name": "Ajax.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/reader/",
+                    "name": "Reader.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/reader/",
+                    "name": "Json.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Store.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/reader/",
+                    "name": "Array.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "ArrayStore.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/resizer/",
+                    "name": "ResizeTracker.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Batch.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/data/",
+                    "name": "Request.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/engine/",
+                    "name": "SvgExporter.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/engine/",
+                    "name": "ImageExporter.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/util/",
+                    "name": "Grouper.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "ShadowPool.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "Matrix.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "SpriteDD.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/",
+                    "name": "Shadow.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/",
+                    "name": "Sprite.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/engine/",
+                    "name": "Svg.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/draw/engine/",
+                    "name": "Vml.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/container/",
+                    "name": "Viewport.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/resizer/",
+                    "name": "Splitter.js"
+                },
+                {
+                    "path": "app/view/",
+                    "name": "Header.js"
+                },
+                {
+                    "path": "app/model/",
+                    "name": "Summit.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Callout.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Highlight.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Label.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "MaskLayer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Navigation.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Shape.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "TipSurface.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/theme/",
+                    "name": "Theme.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/panel/",
+                    "name": "Table.js"
+                },
+                {
+                    "path": "../../../src/GeoExt/data/reader/",
+                    "name": "Feature.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/selection/",
+                    "name": "Model.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "LegendItem.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Legend.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Mask.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Tip.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Series.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Cartesian.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Gauge.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Pie.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Radar.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/theme/",
+                    "name": "Base.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/",
+                    "name": "Chart.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Abstract.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Axis.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Category.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Gauge.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Numeric.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Radial.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/axis/",
+                    "name": "Time.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Area.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Bar.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Column.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Line.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/chart/series/",
+                    "name": "Scatter.js"
+                },
+                {
+                    "path": "app/view/summit/",
+                    "name": "Chart.js"
+                },
+                {
+                    "path": "../../../src/GeoExt/data/",
+                    "name": "FeatureStore.js"
+                },
+                {
+                    "path": "app/store/",
+                    "name": "Summits.js"
+                },
+                {
+                    "path": "app/controller/",
+                    "name": "Map.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/selection/",
+                    "name": "DataViewModel.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/view/",
+                    "name": "AbstractView.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/view/",
+                    "name": "View.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/view/",
+                    "name": "Table.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "View.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "Panel.js"
+                },
+                {
+                    "path": "app/view/summit/",
+                    "name": "Grid.js"
+                },
+                {
+                    "path": "app/view/",
+                    "name": "Viewport.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/resizer/",
+                    "name": "SplitterTracker.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/selection/",
+                    "name": "RowModel.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "PagingScroller.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/view/",
+                    "name": "TableChunker.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "ColumnLayout.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/plugin/",
+                    "name": "HeaderResizer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "LockingView.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DragZone.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "Registry.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DDTarget.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "ScrollManager.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "Lockable.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/header/",
+                    "name": "DragZone.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DropTarget.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/dd/",
+                    "name": "DropZone.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/header/",
+                    "name": "DropZone.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/plugin/",
+                    "name": "HeaderReorderer.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/header/",
+                    "name": "Container.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/",
+                    "name": "ColumnComponentLayout.js"
+                },
+                {
+                    "path": "extjs-4.1.0/src/grid/column/",
+                    "name": "Column.js"
+                }
+            ]
+        },
+        {
+            "name": "Application - Production",
+            "target": "app-all.js",
+            "compress": true,
+            "files": [
+                {
+                    "path": "",
+                    "name": "all-classes.js"
+                },
+                {
+                    "path": "",
+                    "name": "app.js"
+                }
+            ]
+        },
+        {
+            "name": "Application - Production",
+            "target": "app-all-debug.js",
+            "compress": false,
+            "options": {
+                "debug": true
+            },
+            "files": [
+                {
+                    "path": "",
+                    "name": "all-classes.js"
+                },
+                {
+                    "path": "",
+                    "name": "app.js"
+                }
+            ]
+        }
+    ],
+    "resources": []
+}

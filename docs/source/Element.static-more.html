@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-dom-Element'>/**
+</span> * @class Ext.dom.Element
+ */
+(function(){
+    var doc = document,
+        isCSS1 = doc.compatMode == &quot;CSS1Compat&quot;,
+        ELEMENT = Ext.Element,
+        fly = function(el){
+            if (!_fly) {
+                _fly = new Ext.Element.Flyweight();
+            }
+            _fly.dom = el;
+            return _fly;
+        }, _fly;
+
+    Ext.apply(ELEMENT, {
+
+        getViewWidth : function(full) {
+            return full ? ELEMENT.getDocumentWidth() : ELEMENT.getViewportWidth();
+        },
+
+        getViewHeight : function(full) {
+            return full ? ELEMENT.getDocumentHeight() : ELEMENT.getViewportHeight();
+        },
+
+        getDocumentHeight: function() {
+            return Math.max(!isCSS1 ? doc.body.scrollHeight : doc.documentElement.scrollHeight, ELEMENT.getViewportHeight());
+        },
+
+        getDocumentWidth: function() {
+            return Math.max(!isCSS1 ? doc.body.scrollWidth : doc.documentElement.scrollWidth, ELEMENT.getViewportWidth());
+        },
+
+        getViewportHeight: function(){
+            return Ext.isIE ?
+                   (Ext.isStrict ? doc.documentElement.clientHeight : doc.body.clientHeight) :
+                   self.innerHeight;
+        },
+
+        getViewportWidth : function() {
+            return (!Ext.isStrict &amp;&amp; !Ext.isOpera) ? doc.body.clientWidth :
+                   Ext.isIE ? doc.documentElement.clientWidth : self.innerWidth;
+        },
+
+        getY : function(el) {
+            return ELEMENT.getXY(el)[1];
+        },
+
+        getX : function(el) {
+            return ELEMENT.getXY(el)[0];
+        },
+
+        getOffsetParent: function (el) {
+            el = Ext.getDom(el);
+            try {
+                // accessing offsetParent can throw &quot;Unspecified Error&quot; in IE6-8 (not 9)
+                return el.offsetParent;
+            } catch (e) {
+                var body = document.body; // safe bet, unless...
+                return (el == body) ? null : body;
+            }
+        },
+
+        getXY : function(el) {
+            var p,
+                pe,
+                b,
+                bt,
+                bl,
+                dbd,
+                x = 0,
+                y = 0,
+                scroll,
+                hasAbsolute,
+                bd = (doc.body || doc.documentElement),
+                ret;
+
+            el = Ext.getDom(el);
+
+            if(el != bd){
+                hasAbsolute = fly(el).isStyle(&quot;position&quot;, &quot;absolute&quot;);
+
+                if (el.getBoundingClientRect) {
+                    try {
+                        b = el.getBoundingClientRect();
+                        scroll = fly(document).getScroll();
+                        ret = [ Math.round(b.left + scroll.left), Math.round(b.top + scroll.top) ];
+                    } catch (e) {
+                        // IE6-8 can also throw from getBoundingClientRect...
+                    }
+                }
+
+                if (!ret) {
+                    for (p = el; p; p = ELEMENT.getOffsetParent(p)) {
+                        pe = fly(p);
+                        x += p.offsetLeft;
+                        y += p.offsetTop;
+
+                        hasAbsolute = hasAbsolute || pe.isStyle(&quot;position&quot;, &quot;absolute&quot;);
+
+                        if (Ext.isGecko) {
+                            y += bt = parseInt(pe.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+                            x += bl = parseInt(pe.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+
+                            if (p != el &amp;&amp; !pe.isStyle('overflow','visible')) {
+                                x += bl;
+                                y += bt;
+                            }
+                        }
+                    }
+
+                    if (Ext.isSafari &amp;&amp; hasAbsolute) {
+                        x -= bd.offsetLeft;
+                        y -= bd.offsetTop;
+                    }
+
+                    if (Ext.isGecko &amp;&amp; !hasAbsolute) {
+                        dbd = fly(bd);
+                        x += parseInt(dbd.getStyle(&quot;borderLeftWidth&quot;), 10) || 0;
+                        y += parseInt(dbd.getStyle(&quot;borderTopWidth&quot;), 10) || 0;
+                    }
+
+                    p = el.parentNode;
+                    while (p &amp;&amp; p != bd) {
+                        if (!Ext.isOpera || (p.tagName.toUpperCase() != 'TR' &amp;&amp; !fly(p).isStyle(&quot;display&quot;, &quot;inline&quot;))) {
+                            x -= p.scrollLeft;
+                            y -= p.scrollTop;
+                        }
+                        p = p.parentNode;
+                    }
+                    ret = [x,y];
+                }
+            }
+            return ret || [0,0];
+        },
+
+        setXY : function(el, xy) {
+            (el = Ext.fly(el, '_setXY')).position();
+
+            var pts = el.translatePoints(xy),
+                style = el.dom.style,
+                pos;
+
+            for (pos in pts) {
+                if (!isNaN(pts[pos])) {
+                    style[pos] = pts[pos] + &quot;px&quot;;
+                }
+            }
+        },
+
+        setX : function(el, x) {
+            ELEMENT.setXY(el, [x, false]);
+        },
+
+        setY : function(el, y) {
+            ELEMENT.setXY(el, [false, y]);
+        }
+    });
+}());
+</pre>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">if (system.args.length !== 1) {
+    system.print('Usage:');
+    system.print('  hammerjs build-data.js');
+    system.exit(-1);
+}
+
+var scanDirectory = function (path) {
+    var entries = [],
+        subdirs;
+    if (fs.exists(path) &amp;&amp; fs.isFile(path) &amp;&amp; path.match('.js$')) {
+        entries.push(path);
+    } else if (fs.isDirectory(path)) {
+        fs.list(path).forEach(function (e) {
+            subdirs = scanDirectory(path + '/' + e);
+            subdirs.forEach(function (s) {
+                entries.push(s);
+            });
+        });
+    }
+    return entries;
+};
+var specsFolder = ['../spec' ],
+specs = [];
+for (var i = 0; i &lt; specsFolder.length; i++) {
+    specs = specs.concat(scanDirectory(specsFolder[i]));
+}
+
+var output = [];
+
+for (var i = 0; i &lt; specs.length; i++) {
+    output.push(&quot;'&quot;+specs[i].replace('../', '')+&quot;'&quot;);
+}
+
+system.print(&quot;/* DO NO EDIT THIS FILE MANUALLY IT IS GENERATED AUTOMATICALLY BY ../build/build.sh */\n this.ExtSpecs = [&quot; + output.join(&quot;,&quot;) + &quot;];&quot;);</pre>
+</body>
+</html>

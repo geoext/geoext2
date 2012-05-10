@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">describe(&quot;Ext.Class&quot;, function() {
+    var emptyFn = function(){},
+        cls;
+
+    beforeEach(function() {
+        window.My = {
+            awesome: {
+                Class: function(){},
+                Class1: function(){},
+                Class2: function(){}
+            },
+            cool: {
+                AnotherClass: function(){},
+                AnotherClass1: function(){},
+                AnotherClass2: function(){}
+            }
+        };
+    });
+
+    afterEach(function() {
+        if (window.My) {
+            window.My = undefined;
+        }
+
+        try {
+            delete window.My;
+        } catch (e) {}
+    });
+
+    // START PREPROCESSORS =================================================================== /
+    describe(&quot;preprocessors&quot;, function() {
+
+        beforeEach(function() {
+            cls = Ext.Class.create(null, {});
+        });
+
+        describe(&quot;extend&quot;, function() {
+
+            it(&quot;should extend from Base if no 'extend' property found&quot;, function() {
+                var data = {};
+
+                Ext.Class.preprocessors.extend.fn(cls, data, emptyFn, {}, emptyFn);
+
+                expect((new cls) instanceof Ext.Base).toBeTruthy();
+            });
+
+            it(&quot;should extend from given parent class&quot;, function() {
+                var data = {
+                    extend: My.awesome.Class
+                };
+
+                Ext.Class.preprocessors.extend.fn(cls, data, emptyFn, {}, emptyFn);
+
+                expect((new cls) instanceof My.awesome.Class).toBeTruthy();
+            });
+
+            it(&quot;should have superclass reference&quot;, function() {
+                var data = {
+                    extend: My.awesome.Class
+                };
+
+                var parentPrototype = My.awesome.Class.prototype;
+
+                Ext.Class.preprocessors.extend.fn(cls, data, emptyFn, {}, emptyFn);
+
+                expect(cls.superclass).toEqual(parentPrototype);
+                expect((new cls).superclass).toEqual(parentPrototype);
+            });
+        });
+
+        describe(&quot;other preprocessors&quot;, function() {
+            beforeEach(function() {
+                Ext.Class.preprocessors.extend.fn(cls, {}, emptyFn, {}, emptyFn);
+            });
+
+            describe(&quot;config&quot;, function() {
+
+                it(&quot;should create getter if not exists&quot;, function() {
+                    var data = {
+                        config: {
+                            someName: 'someValue'
+                        }
+                    };
+
+                    Ext.Class.preprocessors.config.fn(cls, data, emptyFn, {}, emptyFn);
+
+                    expect(data.getSomeName).toBeDefined();
+                });
+
+                it(&quot;should NOT create getter if already exists&quot;, function() {
+                    var data = {
+                        config: {
+                            someName: 'someValue'
+                        }
+                    };
+
+                    var called = false;
+                    cls.prototype.getSomeName = function() {
+                        called = true;
+                    };
+
+                    Ext.Class.preprocessors.config.fn(cls, data, emptyFn, {}, emptyFn);
+
+                    expect(data.getSomeName).not.toBeDefined();
+                });
+
+                it(&quot;should create setter if not exists&quot;, function() {
+                    var data = {
+                        config: {
+                            someName: 'someValue'
+                        }
+                    };
+
+                    Ext.Class.preprocessors.config.fn(cls, data, emptyFn, {}, emptyFn);
+
+                    expect(data.setSomeName).toBeDefined();
+                });
+
+                it(&quot;should NOT create setter if already exists&quot;, function() {
+                    var data = {
+                        config: {
+                            someName: 'someValue'
+                        }
+                    };
+
+                    var called = false;
+
+                    cls.prototype.setSomeName = function() {
+                        called = true;
+                    };
+
+                    Ext.Class.preprocessors.config.fn(cls, data, emptyFn, {}, emptyFn);
+
+                    expect(data.setSomeName).not.toBeDefined();
+                });
+            });
+
+            describe(&quot;statics&quot;, function() {
+                it(&quot;should copy static properties to the class&quot;, function() {
+                    var data = {
+                        statics: {
+                            someName: 'someValue',
+                            someMethod: Ext.emptyFn
+                        }
+                    };
+
+                    Ext.Class.preprocessors.statics.fn(cls, data, emptyFn, {}, emptyFn);
+
+                    var obj = new cls;
+
+                    expect(data.statics).not.toBeDefined();
+                    expect(cls.someName).toBe('someValue');
+                    expect(cls.someMethod).toBe(Ext.emptyFn);
+                });
+            });
+
+            describe(&quot;inheritableStatics&quot;, function() {
+
+                it(&quot;should store names of inheritable static properties&quot;, function() {
+                    var data = {
+                        inheritableStatics: {
+                            someName: 'someValue',
+                            someMethod: Ext.emptyFn
+                        }
+                    };
+
+                    Ext.Class.preprocessors.inheritableStatics.fn(cls, data, emptyFn, {}, emptyFn);
+
+                    var obj = new cls;
+
+                    expect(obj.inheritableStatics).not.toBeDefined();
+                    expect(cls.someName).toBe('someValue');
+                    expect(cls.prototype.$inheritableStatics).toEqual(['someName', 'someMethod']);
+                    expect(cls.someMethod).toBe(Ext.emptyFn);
+                });
+
+                it(&quot;should inherit inheritable statics&quot;, function() {
+                    var data = {
+                        inheritableStatics: {
+                            someName: 'someValue',
+                            someMethod: Ext.emptyFn
+                        }
+                    }, cls2 = Ext.Class.create(null, {});
+
+                    Ext.Class.preprocessors.inheritableStatics.fn(cls, data, emptyFn, {}, emptyFn);
+                    Ext.Class.preprocessors.extend.fn(cls2, { extend: cls }, emptyFn, {}, emptyFn);
+
+                    expect(cls2.someName).toEqual('someValue');
+                    expect(cls2.someMethod).toBe(Ext.emptyFn);
+                });
+
+                it(&quot;should NOT inherit inheritable statics if the class already has it&quot;, function() {
+                    var data = {
+                        inheritableStatics: {
+                            someName: 'someValue',
+                            someMethod: Ext.emptyFn
+                        }
+                    }, cls2 = Ext.Class.create(null, {});
+
+                    cls2.someName = 'someOtherValue';
+                    cls2.someMethod = function(){};
+
+                    Ext.Class.preprocessors.inheritableStatics.fn(cls, data, emptyFn, {}, emptyFn);
+                    Ext.Class.preprocessors.extend.fn(cls2, { extend: cls }, emptyFn, {}, emptyFn);
+
+                    expect(cls2.someName).toEqual('someOtherValue');
+                    expect(cls2.someMethod).not.toBe(Ext.emptyFn);
+                });
+            });
+        });
+    });
+
+    // END PREPROCESSORS =================================================================== /
+
+    describe(&quot;Instantiation&quot;, function() {
+        var subClass, parentClass, mixinClass1, mixinClass2;
+
+        beforeEach(function() {
+            mixinClass1 = new Ext.Class({
+                config: {
+                    mixinConfig: 'mixinConfig'
+                },
+
+                constructor: function(config) {
+                    this.initConfig(config);
+
+                    this.mixinConstructor1Called = true;
+                },
+
+                mixinProperty1: 'mixinProperty1',
+
+                mixinMethod1: function() {
+                    this.mixinMethodCalled = true;
+                }
+            });
+
+            mixinClass2 = new Ext.Class({
+                constructor: function(config) {
+                    this.initConfig(config);
+
+                    this.mixinConstructor2Called = true;
+                },
+
+                mixinProperty2: 'mixinProperty2',
+
+                mixinMethod2: function() {
+                    this.mixinMethodCalled = true;
+                }
+            });
+
+            parentClass = new Ext.Class({
+                mixins: {
+                    mixin1: mixinClass1
+                },
+                config: {
+                    name: 'parentClass',
+                    isCool: false,
+                    members: {
+                        abe: 'Abraham Elias',
+                        ed: 'Ed Spencer'
+                    },
+                    hobbies: ['football', 'bowling']
+                },
+                constructor: function(config) {
+                    this.initConfig(config);
+
+                    this.parentConstructorCalled = true;
+
+                    this.mixins.mixin1.constructor.apply(this, arguments);
+                },
+
+                parentProperty: 'parentProperty',
+
+                parentMethod: function() {
+                    this.parentMethodCalled = true;
+                }
+            });
+
+            subClass = new Ext.Class({
+                extend: parentClass,
+                mixins: {
+                    mixin1: mixinClass1,
+                    mixin2: mixinClass2
+                },
+                config: {
+                    name: 'subClass',
+                    isCool: true,
+                    members: {
+                        jacky: 'Jacky Nguyen',
+                        tommy: 'Tommy Maintz'
+                    },
+                    hobbies: ['sleeping', 'eating', 'movies'],
+                    isSpecial: true
+                },
+                constructor: function(config) {
+                    this.initConfig(config);
+
+                    this.subConstrutorCalled = true;
+
+                    subClass.superclass.constructor.apply(this, arguments);
+
+                    this.mixins.mixin2.constructor.apply(this, arguments);
+                },
+                myOwnMethod: function() {
+                    this.myOwnMethodCalled = true;
+                }
+            });
+        });
+
+        describe(&quot;addStatics&quot;, function() {
+            it(&quot;single with name - value arguments&quot;, function() {
+                var called = false;
+
+                subClass.addStatics({
+                    staticMethod: function(){
+                        called = true;
+                    }
+                });
+
+                expect(subClass.staticMethod).toBeDefined();
+                subClass.staticMethod();
+
+                expect(called).toBeTruthy();
+            });
+
+            it(&quot;multiple with object map argument&quot;, function() {
+                subClass.addStatics({
+                    staticProperty: 'something',
+                    staticMethod: function(){}
+                });
+
+                expect(subClass.staticProperty).toEqual('something');
+                expect(subClass.staticMethod).toBeDefined();
+            });
+        });
+
+
+        describe(&quot;override&quot;, function() {
+            it(&quot;should override&quot;, function() {
+                subClass.override({
+                    myOwnMethod: function(){
+                        this.isOverridden = true;
+
+                        this.callOverridden(arguments);
+                    }
+                });
+
+                var obj = new subClass;
+                obj.myOwnMethod();
+
+                expect(obj.isOverridden).toBe(true);
+                expect(obj.myOwnMethodCalled).toBe(true);
+            });
+        });
+
+        describe(&quot;define override&quot;, function() {
+            var obj,
+                createFnsCalled;
+
+            beforeEach(function () {
+                createFnsCalled = [];
+                function onCreated () {
+                    createFnsCalled.push(this.$className);
+                }
+
+                Ext.define('Foo.UnusedOverride', {
+                    override: 'Foo.Nothing',
+
+                    foo: function (x) {
+                        return this.callParent([x*2]);
+                    }
+                }, onCreated);
+
+                // this override comes before its target:
+                Ext.define('Foo.SingletonOverride', {
+                    override: 'Foo.Singleton',
+
+                    foo: function (x) {
+                        return this.callParent([x*2]);
+                    }
+                }, onCreated);
+
+                Ext.define('Foo.Singleton', {
+                    singleton: true,
+                    foo: function (x) {
+                        return x;
+                    }
+                });
+
+                Ext.define('Foo.SomeClass', {
+                    method1: function(x) {
+                        return 'b' + x;
+                    },
+
+                    statics: {
+                        staticMethod: function (x) {
+                            return 'B' + x;
+                        }
+                    }
+                });
+
+                // this override comes after its target:
+                Ext.define('Foo.SomeClassOverride', {
+                    override: 'Foo.SomeClass',
+
+                    method1: function(x) {
+                        return 'a' + this.callParent([x*2]) + 'c';
+                    },
+
+                    method2: function() {
+                        return 'two';
+                    },
+
+                    statics: {
+                        newStatic: function () {
+                            return 'boo';
+                        },
+                        staticMethod: function (x) {
+                            return 'A' + this.callParent([x*2]) + 'C';
+                        }
+                    }
+                }, onCreated);
+
+                obj = Ext.create('Foo.SomeClass');
+            });
+
+            afterEach(function () {
+                var classes = Ext.ClassManager.classes,
+                    alternateToName = Ext.ClassManager.maps.alternateToName;
+                try {
+                    delete Ext.global.Foo;
+                } catch (e) {
+                    Ext.global.Foo = null;
+                }
+                obj = null;
+
+                Ext.each(['Foo.SingletonOverride', 'Foo.Singleton', 'Foo.SomeClassOverride', 'Foo.SomeClass'],
+                    function (className) {
+                        try {
+                            delete classes[className];
+                            delete alternateToName[className];
+                        } catch(e) {
+                            classes[className] = null;
+                            alternateToName[className] = null;
+                        }
+                    });
+            });
+
+            it(&quot;should call the createdFn&quot;, function () {
+                expect(createFnsCalled.length).toEqual(2);
+                expect(createFnsCalled[0]).toEqual('Foo.Singleton');
+                expect(createFnsCalled[1]).toEqual('Foo.SomeClass');
+            });
+
+            it(&quot;can add new methods&quot;, function() {
+                expect(obj.method2()).toEqual('two');
+            });
+
+            it(&quot;can add new static methods&quot;, function() {
+                expect(Foo.SomeClass.newStatic()).toEqual('boo');
+            });
+
+            it(&quot;callParent should work for instance methods&quot;, function() {
+                expect(obj.method1(21)).toEqual('ab42c');
+            });
+
+            it(&quot;callParent should work for static methods&quot;, function() {
+                expect(Foo.SomeClass.staticMethod(21)).toEqual('AB42C');
+            });
+
+            it('works with singletons', function () {
+                expect(Foo.Singleton.foo(21)).toEqual(42);
+            });
+        });
+
+        describe(&quot;mixin&quot;, function() {
+            it(&quot;should have all properties of mixins&quot;, function() {
+                var obj = new subClass;
+                expect(obj.mixinProperty1).toEqual('mixinProperty1');
+                expect(obj.mixinProperty2).toEqual('mixinProperty2');
+                expect(obj.mixinMethod1).toBeDefined();
+                expect(obj.mixinMethod2).toBeDefined();
+                expect(obj.config.mixinConfig).toEqual('mixinConfig');
+            });
+        });
+
+        describe(&quot;config&quot;, function() {
+            it(&quot;should merge properly&quot;, function() {
+                var obj = new subClass;
+                expect(obj.config).toEqual({
+                    mixinConfig: 'mixinConfig',
+                    name: 'subClass',
+                    isCool: true,
+                    members: {
+                        abe: 'Abraham Elias',
+                        ed: 'Ed Spencer',
+                        jacky: 'Jacky Nguyen',
+                        tommy: 'Tommy Maintz'
+                    },
+                    hobbies: ['sleeping', 'eating', 'movies'],
+                    isSpecial: true
+                });
+            });
+
+            it(&quot;should apply default config&quot;, function() {
+                var obj = new subClass;
+                expect(obj.getName()).toEqual('subClass');
+                expect(obj.getIsCool()).toEqual(true);
+                expect(obj.getHobbies()).toEqual(['sleeping', 'eating', 'movies']);
+            });
+
+            it(&quot;should apply with supplied config&quot;, function() {
+                var obj = new subClass({
+                    name: 'newName',
+                    isCool: false,
+                    members: {
+                        aaron: 'Aaron Conran'
+                    }
+                });
+
+                expect(obj.getName()).toEqual('newName');
+                expect(obj.getIsCool()).toEqual(false);
+                expect(obj.getMembers().aaron).toEqual('Aaron Conran');
+            });
+
+            it(&quot;should not share the same config&quot;, function() {
+                var obj1 = new subClass({
+                    name: 'newName',
+                    isCool: false,
+                    members: {
+                        aaron: 'Aaron Conran'
+                    }
+                });
+
+                var obj2 = new subClass();
+
+                expect(obj2.getName()).not.toEqual('newName');
+            });
+        });
+
+        describe(&quot;overriden methods&quot;, function() {
+            it(&quot;should call self constructor&quot;, function() {
+                var obj = new subClass;
+                expect(obj.subConstrutorCalled).toBeTruthy();
+            });
+
+            it(&quot;should call parent constructor&quot;, function() {
+                var obj = new subClass;
+                expect(obj.parentConstructorCalled).toBeTruthy();
+            });
+
+            it(&quot;should call mixins constructors&quot;, function() {
+                var obj = new subClass;
+                expect(obj.mixinConstructor1Called).toBeTruthy();
+                expect(obj.mixinConstructor2Called).toBeTruthy();
+            });
+        });
+
+    });
+
+});
+</pre>
+</body>
+</html>

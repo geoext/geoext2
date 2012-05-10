@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">xdescribe(&quot;Ext.core.DomHelper&quot;, function(){
+    // TODO this spec is just unmaintanable, because of subtleGradient magic...
+    // no dynamic spec generation !
+    var TestHelper = {
+        dom:{
+            cleanBody: function(){
+                document.getElementsByTagName('body')[0].innerHTML = '';
+            },
+
+            parentNodeName: {
+                '*'      : 'div',
+                frame    : 'frameset',
+                col      : 'colgroup',
+                colgroup : 'table',
+                option   : 'select',
+                optgroup : 'select',
+                tbody    : 'table',
+                thead    : 'table',
+                tfoot    : 'table',
+                tr       : 'tbody',
+                td       : 'tr'
+            },
+
+            voidNode: {
+                area   : true,
+                br     : true,
+                col    : true,
+                frame  : true,
+                hr     : true,
+                img    : true,
+                input  : true,
+                link   : true,
+                meta   : true,
+                param  : true,
+                range  : true,
+                spacer : true,
+                wbr    : true
+            }
+
+        },
+        String:{
+            html: function(tagName, className){
+                var HTML = '&lt;'+tagName+' class='+className+'&gt;';
+                if (!TestHelper.dom.voidNode[tagName]) HTML += '&lt;/'+tagName+'&gt;';
+                // console.log(HTML);
+                return HTML;
+            }
+        }
+    };    
+    
+    xdescribe('useDom = false', function(){
+        beforeEach(function(){
+            Ext.core.DomHelper.useDom = false;
+        });
+        //Ext_core_DomHelper_Tests.apply(this, arguments);
+    });
+    
+    xdescribe('useDom = true', function(){
+        beforeEach(function(){
+            Ext.core.DomHelper.useDom = false;
+        });
+        afterEach(function(){
+            Ext.core.DomHelper.useDom = true;
+        });
+        //Ext_core_DomHelper_Tests.apply(this, arguments);
+    });
+   
+   
+function Ext_core_DomHelper_Tests() {
+    var dh = Ext.core.DomHelper,
+        el, els;
+    beforeEach(function(){
+        el = Ext.getBody().createChild({
+            id      : 'DomHelperHelper',
+            children: [
+                {cls: 'child', id: 'firstChild'},
+                {cls: 'child'},
+                {cls: 'child'},
+                {cls: 'child'},
+                {cls: 'child'},
+                {cls: 'child2'},
+                {cls: 'child2'},
+                {cls: 'child'},
+                {cls: 'child'},
+                {cls: 'child'}
+            ]
+        });
+        
+        els = Ext.select('#DomHelperHelper &gt; div');
+    });
+    
+    afterEach(TestHelper.dom.cleanBody);
+    
+    describe(&quot;markup&quot;, function() {
+        it(&quot;should return the markup for a string&quot;, function() {
+            var markup = '&lt;div class=&quot;class&quot;&gt;my div!&lt;/div&gt;';
+            
+            expect(dh.markup(markup)).toEqual(markup);
+        });
+        
+        it(&quot;should return the markup for an object&quot;, function() {
+            var markup = '&lt;div class=&quot;class&quot;&gt;&lt;span style=&quot;padding:10px;&quot;&gt;test&lt;/span&gt;&lt;br/&gt;&lt;/div&gt;',
+                html   = {
+                    cls: 'class',
+                    children: [
+                        {
+                            tag : 'span',
+                            html: 'test',
+                            style: {
+                                padding: '10px'
+                            }
+                        },
+                        {tag: 'br'}
+                    ]
+                };
+            
+            expect(dh.markup(html)).toEqual(markup);
+        });
+    });
+    
+    describe(&quot;applyStyles&quot;, function() {
+        it(&quot;should apply styles from a string&quot;, function() {
+            dh.applyStyles(el, 'padding:10px;');
+            
+            expect(el.dom.style.padding).toMatch(/^(?:10px|10px 10px 10px 10px)$/);
+        });
+        
+        it(&quot;should apply styles from an object&quot;, function() {
+            dh.applyStyles(el, {
+                padding: '10px'
+            });
+            
+            expect(el.dom.style.padding).toMatch(/^(?:10px|10px 10px 10px 10px)$/);
+        });
+        
+        // TODO: Implement using raw numbers in DomHelper.applyStyles
+        xit(&quot;should apply styles from an object using numbers&quot;, function() {
+            dh.applyStyles(el, {
+                padding: 10
+            });
+            
+            expect(el.dom.style.padding).toMatch(/^(?:10px|10px 10px 10px 10px)$/);
+        });
+        
+        it(&quot;should apply styles from a function&quot;, function() {
+            dh.applyStyles(el, function() {
+                return {
+                    padding: '10px'
+                };
+            });
+            
+            expect(el.dom.style.padding).toMatch(/^(?:10px|10px 10px 10px 10px)$/);
+        });
+    });
+    
+    describe(&quot;insertHtml&quot;, function() {
+        
+        var testEl, HTML = '&lt;div id=&quot;newChild&quot;&gt;&lt;/div&gt;';
+        
+        describe(&quot;basic&quot;,function(){
+            beforeEach(function(){
+                testEl = Ext.getDom(els.first());
+                expect(Ext.get('newChild')).toBeNull();
+            });
+            afterEach(function(){
+                var el = document.getElementById('newChild');
+                expect(el).toBeDefined();
+                testEl.innerHTML = '';
+            });
+
+            it(&quot;should insert a new element beforeBegin&quot;, function() { dh.insertHtml('beforeBegin', testEl, HTML); });
+            it(&quot;should insert a new element afterBegin&quot;, function() { dh.insertHtml('afterBegin', testEl, HTML); });
+            it(&quot;should insert a new element beforeEnd&quot;, function() { dh.insertHtml('beforeEnd', testEl, HTML); });
+            it(&quot;should insert a new element afterEnd&quot;, function() { dh.insertHtml('afterEnd', testEl, HTML); });
+            
+            describe(&quot;textNode&quot;, function(){
+                var UID=0, text, textNode;
+                beforeEach(function(){
+                    textNode = document.createTextNode(text = &quot;howdy&quot; + (UID++));
+                    testEl.appendChild(textNode);
+                    expect(testEl.firstChild).toEqual(textNode);
+                    expect(testEl.firstChild.nodeValue).toEqual(text);
+                });
+                afterEach(function(){
+                    expect(testEl.childNodes.length).toEqual(2);
+                    testEl.removeChild(textNode);
+                    expect(testEl.childNodes.length).toEqual(1);
+                    
+                    textNode = null;
+                    testEl.innerHTML = '';
+                    expect(testEl.childNodes.length).toEqual(0);
+                });
+                
+                it(&quot;should insert a new element beforeBegin&quot;, function() { dh.insertHtml('beforeBegin', textNode, HTML); });
+                it(&quot;should insert a new element afterBegin&quot;, function() { dh.insertHtml('afterBegin', textNode, HTML); });
+                it(&quot;should insert a new element beforeEnd&quot;, function() { dh.insertHtml('beforeEnd', textNode, HTML); });
+                it(&quot;should insert a new element afterEnd&quot;, function() { dh.insertHtml('afterEnd', textNode, HTML); });
+            });
+
+        });
+        
+        describe(&quot;details&quot;, function(){
+            var outside = {afterEnd:true, beforeBegin:true},
+                inside = {afterBegin:true, beforeEnd:true},
+                everywhere = {afterEnd:true, beforeBegin:true, afterBegin:true, beforeEnd:true};
+            
+            for (var tagName in TestHelper.dom.voidNode) {
+                insertHtml_shouldSupport(outside, tagName, tagName);
+            }
+            
+            insertHtml_shouldSupport(everywhere, 'div', 'div');
+            insertHtml_shouldSupport(everywhere, 'a', 'p');
+            insertHtml_shouldSupport(everywhere, 'a', 'a');
+            
+            insertHtml_shouldSupport(inside, 'tr', 'td');
+            insertHtml_shouldSupport(outside, 'tr', 'tr');
+            
+            insertHtml_shouldSupport(inside, 'tbody', 'tr');
+            insertHtml_shouldSupport(inside, 'tfoot', 'tr');
+            insertHtml_shouldSupport(inside, 'thead', 'tr');
+            
+            insertHtml_shouldSupport(outside, 'tbody', 'tbody');
+            insertHtml_shouldSupport(outside, 'tbody', 'thead');
+            insertHtml_shouldSupport(outside, 'tbody', 'tfoot');
+            insertHtml_shouldSupport(outside, 'tfoot', 'tbody');
+            insertHtml_shouldSupport(outside, 'tfoot', 'thead');
+            insertHtml_shouldSupport(outside, 'tfoot', 'tfoot');
+            insertHtml_shouldSupport(outside, 'thead', 'tbody');
+            insertHtml_shouldSupport(outside, 'thead', 'thead');
+            insertHtml_shouldSupport(outside, 'thead', 'tfoot');
+            
+            
+            function insertHtml_shouldSupport(where, tagName, tagNameToInsert){
+                if (where.afterBegin) insertHtml_shouldSupport_inside('afterBegin', tagName, tagNameToInsert);
+                if (where.beforeEnd) insertHtml_shouldSupport_inside('beforeEnd', tagName, tagNameToInsert);
+                if (where.afterEnd) insertHtml_shouldSupport_outside('afterEnd', tagName, tagNameToInsert);
+                if (where.beforeBegin) insertHtml_shouldSupport_outside('beforeBegin', tagName, tagNameToInsert);
+                
+                if (where.afterBegin || where.beforeEnd){
+                    it([&quot;should overwrite the HTML&quot;,
+                        &quot;of a&quot;, tagName.toUpperCase(), &quot;Element&quot;].join(' '), function(){
+                        
+                        var html = TestHelper.String.html(tagNameToInsert, 'overwrite');
+                        
+                        var target = document.createElement(tagName);
+                        expect(target.parentNode).toBeNull();
+                        expect(target.childNodes.length).toBe(0);
+                        expect(target.firstChild).toBeNull();
+                        
+                        dh.overwrite(target, html);
+                        expect(target.childNodes.length).toBe(1);
+                        expect(target.firstChild).toBeDefined();
+                        expect(target.firstChild.className).toBe('overwrite');
+                    });
+                    
+                    
+                    if (Ext.core.Element.prototype.setHTML) it([&quot;should set the HTML&quot;,
+                        &quot;of a&quot;, tagName.toUpperCase(), &quot;Element&quot;].join(' '), function(){
+                        
+                        var html = TestHelper.String.html(tagNameToInsert, 'overwrite');
+                        
+                        var target = document.createElement(tagName);
+                        expect(target.parentNode).toBeNull();
+                        expect(target.childNodes.length).toBe(0);
+                        expect(target.firstChild).toBeNull();
+                        
+                        Ext.fly(target).setHTML(html);
+                        expect(target.childNodes.length).toBe(1);
+                        expect(target.firstChild).toBeDefined();
+                        expect(target.firstChild.className).toBe('overwrite');
+                    });
+                }
+            }
+            
+            function insertHtml_shouldSupport_inside(where, tagName, tagNameToInsert){
+                it([&quot;should insertHtml&quot;, tagNameToInsert.toUpperCase(), where,
+                    &quot;of a &quot; + tagName.toUpperCase() + &quot; Element&quot;,
+                    &quot;when it has no parentNode&quot;].join(' '), function(){
+                    
+                    var html = TestHelper.String.html(tagNameToInsert, where);
+                    
+                    var target = document.createElement(tagName);
+                    expect(target.parentNode).toBeNull();
+                    expect(target.childNodes.length).toBe(0);
+                    expect(target.firstChild).toBeNull();
+                    
+                    dh.insertHtml(where, target, html);
+                    expect(target.childNodes.length).toBe(1);
+                    expect(target.firstChild).toBeDefined();
+                    expect(target.firstChild.className).toBe(where);
+                });
+            }
+            
+            function insertHtml_shouldSupport_outside(where, tagName, tagNameToInsert){
+                it([&quot;should insertHtml&quot;, tagNameToInsert.toUpperCase(), where,
+                    &quot;of a &quot; + tagName.toUpperCase() + &quot; Element&quot;].join(' '), function(){
+                    
+                    var html = TestHelper.String.html(tagNameToInsert, where);
+                    
+                    var target = document.createElement(tagName);
+                    document.createElement(TestHelper.dom.parentNodeName[tagName] || TestHelper.dom.parentNodeName['*']).appendChild(target);
+                    var parentNode = target.parentNode;
+                    
+                    expect(parentNode).toBeDefined();
+                    expect(target.childNodes.length).toBe(0);
+                    expect(target.firstChild).toBeNull();
+                    expect(parentNode.childNodes.length).toBe(1);
+                    
+                    dh.insertHtml(where, target, html);
+                    parentNode.removeChild(target);
+                    
+                    expect(parentNode.childNodes.length).toBe(1);
+                    expect(parentNode.firstChild.tagName.toLowerCase()).toBe(tagNameToInsert);
+                    expect(parentNode.firstChild.className).toBe(where);
+                });
+            }
+        });
+        
+    });
+    
+    describe(&quot;overwrite&quot;, function() {
+        it(&quot;should overwrite the el&quot;, function() {
+            var node = Ext.getDom(els.first());
+            
+            expect(node.innerHTML).toEqual('');
+            
+            dh.overwrite(node, {
+                tag : 'span',
+                html: 'hello'
+            });
+            
+            expect(node.innerHTML.toLowerCase()).toEqual('&lt;span&gt;hello&lt;/span&gt;');
+        });
+        
+        describe(&quot;table innerHTML bug&quot;, function(){
+            it(&quot;should set the html of a tr Element, even when it has no parentNode&quot;, function(){
+                var tr = document.createElement('tr');
+                expect(tr.parentNode).toEqual(null);
+                expect(tr.childNodes.length).toEqual(0);
+                
+                dh.overwrite(tr, '&lt;td&gt;cell1');
+                expect(tr.childNodes.length).toEqual(1);
+                expect(tr.lastChild.innerHTML).toEqual('cell1');
+                
+                dh.overwrite(tr, '&lt;td&gt;cell2');
+                expect(tr.childNodes.length).toEqual(1);
+                expect(tr.lastChild.innerHTML).toEqual('cell2');
+                
+            });
+            
+            it(&quot;should set the html of an Element&quot;, function(){
+                var html = '&lt;a href=&quot;http://mootools.net/&quot;&gt;Link&lt;/a&gt;';
+                var parent = document.createElement('div');
+                dh.overwrite(parent, html);
+                expect(parent.innerHTML.toLowerCase()).toEqual(html.toLowerCase());
+            });
+            
+            it(&quot;should set the html of an Element with multiple arguments&quot;, function(){
+                var html = ['&lt;p&gt;Paragraph&lt;/p&gt;', '&lt;a href=&quot;http://mootools.net/&quot;&gt;Link&lt;/a&gt;'];
+                var parent = document.createElement('div');
+                dh.overwrite(parent, html);
+                
+                expect(parent.innerHTML.toLowerCase()).toEqual(html.join('').toLowerCase());
+            });
+            
+            it(&quot;should set the html of a select Element&quot;, function(){
+                var html = '&lt;option&gt;option 1&lt;/option&gt;&lt;option selected=&quot;selected&quot;&gt;option 2&lt;/option&gt;';
+                var select = document.createElement('select');
+                dh.overwrite(select, html);
+                
+                expect(select.childNodes.length).toEqual(2);
+                expect(select.options.length).toEqual(2);
+                expect(select.selectedIndex).toEqual(1);
+            });
+            
+            it(&quot;should set the html of a table Element&quot;, function(){
+                var html = '&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;cell&quot;&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;';
+                var table = document.createElement('table');
+                
+                dh.overwrite(table, html);
+                
+                expect(table.childNodes.length).toEqual(1);
+                expect(table.firstChild.firstChild.childNodes.length).toEqual(2);
+                expect(table.firstChild.lastChild.firstChild.className).toEqual('cell');
+            });
+            
+            it(&quot;should set the html of a tbody Element&quot;, function(){
+                var html = '&lt;tr&gt;&lt;td&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;cell&quot;&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;';
+                var tbody = document.createElement('tbody');
+                document.createElement('table').appendChild(tbody);
+                dh.overwrite(tbody, html);
+                
+                expect(tbody.childNodes.length).toEqual(2);
+                expect(tbody.lastChild.firstChild.className).toEqual('cell');
+            });
+            
+            it(&quot;should set the html of a thead Element&quot;, function(){
+                var html = '&lt;tr&gt;&lt;td&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;cell&quot;&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;';
+                var thead = document.createElement('thead');
+                document.createElement('table').appendChild(thead);
+                dh.overwrite(thead, html);
+                
+                expect(thead.childNodes.length).toEqual(2);
+                expect(thead.lastChild.firstChild.className).toEqual('cell');
+            });
+            
+            it(&quot;should set the html of a tfoot Element&quot;, function(){
+                var html = '&lt;tr&gt;&lt;td&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;cell&quot;&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;&lt;/tr&gt;';
+                var tfoot = document.createElement('tfoot');
+                document.createElement('table').appendChild(tfoot);
+                dh.overwrite(tfoot, html);
+                
+                expect(tfoot.childNodes.length).toEqual(2);
+                expect(tfoot.lastChild.firstChild.className).toEqual('cell');
+            });
+            
+            it(&quot;should set the html of a tr Element&quot;, function(){
+                var html = '&lt;td class=&quot;cell&quot;&gt;cell 1&lt;/td&gt;&lt;td&gt;cell 2&lt;/td&gt;';
+                var tr = document.createElement('tr');
+                document.createElement('tbody').appendChild(tr);
+                document.createElement('table').appendChild(tr.parentNode);
+                dh.overwrite(tr, html);
+                
+                expect(tr.childNodes.length).toEqual(2);
+                expect(tr.firstChild.className).toEqual('cell');
+            });
+            
+            it(&quot;should set the html of a td Element&quot;, function(){
+                var html = '&lt;span class=&quot;span&quot;&gt;Some Span&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;Some Link&lt;/a&gt;';
+                var td = document.createElement('td');
+                document.createElement('tr').appendChild(td);
+                document.createElement('tbody').appendChild(td.parentNode);
+                document.createElement('table').appendChild(td.parentNode.parentNode);
+                dh.overwrite(td, html);
+                
+                expect(td.childNodes.length).toEqual(2);
+                expect(td.firstChild.className).toEqual('span');
+            });
+            
+        });
+    });
+}
+});
+
+</pre>
+</body>
+</html>

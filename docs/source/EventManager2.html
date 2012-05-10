@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">describe(&quot;Ext.EventManager&quot;, function() {
+    var element,
+        elementWithId,
+        elementWithoutId;
+    
+    beforeEach(function() {
+        // add global variable in whitelist
+        addGlobal(&quot;id&quot;);
+        addGlobal(&quot;ExtBox1&quot;);
+        element = document.body;
+        
+        elementWithId = document.createElement(&quot;DIV&quot;);
+        elementWithId.id = 'element-with-id';
+        element.appendChild(elementWithId);
+        
+        elementWithoutId = document.createElement(&quot;DIV&quot;);
+        element.appendChild(elementWithoutId);
+    });
+    
+    afterEach(function() {
+        var el = Ext.get(elementWithId);
+        if (el) {
+            el.remove();
+        }
+        el = Ext.get(elementWithoutId);
+        if (el) {
+            el.remove();
+        }
+    });
+    
+    describe(&quot;event binding&quot;, function() {
+        describe(&quot;getId&quot;, function() {
+            describe(&quot;if element has an id&quot;, function() {
+                it(&quot;should return element id&quot;, function() {
+                    expect(elementWithId.id).toBe(Ext.EventManager.getId(elementWithId));
+                });
+            });
+            
+            describe(&quot;if element hasn't an id&quot;, function() {
+                var id, result;
+                beforeEach(function() {
+                    id = 'nf-42';
+                    spyOn(Ext, &quot;id&quot;).andCallFake(function(dom) {
+                        return (dom.id = id);
+                    });
+                    result = Ext.EventManager.getId(elementWithoutId);
+                });
+                
+
+                it(&quot;should add an id to element with Ext.id&quot;, function() {
+                    expect(elementWithoutId.id).toBe(id);
+                });
+                
+                it(&quot;should return the element id&quot;, function() {
+                    expect(result).toBe(id);
+                });
+            });
+            
+            describe(&quot;document and window&quot;, function() {
+                describe(&quot;document&quot;, function() {
+                    var result;
+                    beforeEach(function() {
+                        result = Ext.EventManager.getId(document);
+                    });
+
+                    it(&quot;should enable skipGarbageCollection flag&quot;, function() {
+                        expect(Ext.cache[Ext.documentId].skipGarbageCollection).toBe(true);
+                    });
+                    
+                    it(&quot;should return Ext.documentId&quot;, function() {
+                        expect(result).toBe(Ext.documentId);
+                    });
+                });
+                
+                describe(&quot;window&quot;, function() {
+                    var result;
+                    beforeEach(function() {
+                        result = Ext.EventManager.getId(window);
+                    });
+                    
+                    it(&quot;should enable skipGarbageCollection flag&quot;, function() {
+                        expect(Ext.cache[Ext.windowId].skipGarbageCollection).toBe(true);
+                    });
+                    
+                    it(&quot;should return Ext.windowId&quot;, function() {
+                        expect(result).toBe(Ext.windowId);
+                    });
+                });
+            });
+        });
+        
+        describe(&quot;prepareListenerConfig&quot;, function() {
+            var config, configWithFn;
+            
+            beforeEach(function() {
+                config = {
+                    click: Ext.emptyFn,
+                    scope: fakeScope
+                };
+                
+                configWithFn = {
+                    click: {
+                       fn: Ext.emptyFn, 
+                       scope: fakeScope
+                    }
+                };
+                spyOn(Ext.EventManager, &quot;removeListener&quot;);
+                spyOn(Ext.EventManager, &quot;addListener&quot;);
+            });
+            
+            describe(&quot;if remove&quot;, function() {
+                describe(&quot;with an object like click: function(){}, scope: this&quot;, function() {
+                    it(&quot;should call removeListener&quot;, function() {
+                        Ext.EventManager.prepareListenerConfig(element, config, true);
+                        expect(Ext.EventManager.removeListener).toHaveBeenCalledWith(element, 'click', Ext.emptyFn, fakeScope, config);
+                    });
+                });
+                
+                describe(&quot;with an object like click: {fn: function(){}, scope: this}&quot;, function() {
+                    it(&quot;should call removeListener&quot;, function() {
+                        Ext.EventManager.prepareListenerConfig(element, configWithFn, true);
+                        expect(Ext.EventManager.removeListener).toHaveBeenCalledWith(element, 'click', Ext.emptyFn, fakeScope, configWithFn.click);
+                    });                    
+                });
+            });
+            
+            describe(&quot;if add&quot;, function() {
+                describe(&quot;with an object like click: function(){}, scope: this&quot;, function() {
+                    it(&quot;should call addListener&quot;, function() {
+                        Ext.EventManager.prepareListenerConfig(element, config);
+                        expect(Ext.EventManager.addListener).toHaveBeenCalledWith(element, 'click', Ext.emptyFn, fakeScope, config);
+                    });
+                });
+                
+                describe(&quot;with an object like click: {fn: function(){}, scope: this}&quot;, function() {
+                    it(&quot;should call addListener&quot;, function() {
+                        Ext.EventManager.prepareListenerConfig(element, configWithFn);
+                        expect(Ext.EventManager.addListener).toHaveBeenCalledWith(element, 'click', Ext.emptyFn, fakeScope, configWithFn.click);
+                    });                    
+                });
+            });
+        });
+        
+        describe(&quot;addListener&quot;, function() {
+            describe(&quot;if eventName is an object&quot;, function() {
+                var eventName;
+                
+                beforeEach(function() {
+                    eventName = {};    
+                });
+                
+                it(&quot;should call prepareListenerConfig&quot;, function() {
+                    spyOn(Ext.EventManager, &quot;prepareListenerConfig&quot;);
+                    Ext.EventManager.addListener(element, eventName);
+                    expect(Ext.EventManager.prepareListenerConfig).toHaveBeenCalledWith(element, eventName);
+                });
+            });
+             
+            describe(&quot;event firing&quot;, function() {
+                var config;
+   
+                beforeEach(function() {
+                    config = {
+                        click: {
+                           fn: jasmine.createSpy(), 
+                           scope: fakeScope
+                        }
+                    };
+                    
+                    Ext.EventManager.addListener(element, config);
+                });
+                
+                afterEach(function() {
+                    Ext.EventManager.removeListener(element, config);
+                });
+                                
+                it(&quot;should call the listener&quot;, function() {
+                    jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                    
+                    expect(config.click.fn).toHaveBeenCalled();
+                });
+                
+
+            });
+            
+            describe(&quot;options&quot;, function() {
+                var config;
+                
+                afterEach(function() {
+                    Ext.EventManager.removeListener(element, config);
+                });
+                
+                describe(&quot;scope&quot;, function() {
+                    it(&quot;should call the listener with the correct scope&quot;, function() {
+                        config = {
+                            click: {
+                               fn: jasmine.createSpy(), 
+                               scope: fakeScope
+                            }
+                        };     
+                        
+                        Ext.EventManager.addListener(element, config);
+
+                        jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                        expect(config.click.fn.calls[0].object).toBe(fakeScope);                   
+                    });
+                });
+                
+                describe(&quot;delegate&quot;, function() {
+                    var child;
+                    beforeEach(function() {
+                        config = {
+                            click: {
+                               fn: jasmine.createSpy(),
+                               delegate: &quot;.something&quot;,
+                               scope: fakeScope
+                            }
+                        };
+                        
+                        child = Ext.get(element).createChild({
+                            cls: &quot;child&quot;
+                        }).dom;
+                    });
+                    
+                    afterEach(function() {
+                        var elChild = Ext.get(child);
+                        if (elChild) {
+                            elChild.remove();
+                        }
+                    });
+                    
+                    describe(&quot;if filter found nothing&quot;, function() {
+                        it(&quot;should not call the listener&quot;, function() {
+                            Ext.EventManager.addListener(element, config);
+                            jasmine.fireMouseEvent(child, &quot;click&quot;, 1, 1);
+                            
+                            expect(config.click.fn).not.toHaveBeenCalled();                 
+                        });
+                    });
+                    
+                    describe(&quot;if filter found something&quot;, function() {
+                        it(&quot;should call the listener&quot;, function() {
+                            Ext.get(child).addCls(&quot;something&quot;);
+                            Ext.EventManager.addListener(element, config);
+                            jasmine.fireMouseEvent(child, &quot;click&quot;, 1, 1);
+                            
+                            expect(config.click.fn).toHaveBeenCalled();                 
+                        });
+                    });
+                    
+                    describe(&quot;stopevent&quot;, function() {
+                        var checkbox;
+                        
+                        beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   stopEvent: true,
+                                   scope: fakeScope
+                                }
+                            };
+                            
+                            checkbox = Ext.get(element).createChild({
+                                tag: &quot;input&quot;,
+                                type: &quot;checkbox&quot;
+                            }).dom;
+                                                 
+                            Ext.EventManager.addListener(element, config);
+                            Ext.EventManager.addListener(checkbox, config);
+                            if (jasmine.browser.isIE) {
+                                checkbox.click();
+                            } else {
+                                jasmine.fireMouseEvent(checkbox, &quot;click&quot;, 1, 1);
+                            }
+                        });
+                        
+                        afterEach(function() {
+                            var checkBoxEl = Ext.get(checkbox);
+                            if (checkBoxEl) {
+                                checkBoxEl.remove();
+                            }
+                            Ext.EventManager.removeListener(checkbox, config);
+                        });
+                        
+                        it(&quot;should stop propagation to parent elements&quot;, function() {
+                            expect(config.click.fn.calls.length).toEqual(1);
+                        });
+                        
+                        it(&quot;should prevent default browser handling of the event&quot;, function() {
+                            expect(checkbox.checked).toBe(false);
+                        });
+                    });
+                    
+                    describe(&quot;preventDefault&quot;, function() {
+                        var checkbox;
+                        
+                        beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   preventDefault: true,
+                                   scope: fakeScope
+                                }
+                            };
+                            
+                            checkbox = Ext.get(element).createChild({
+                                tag: &quot;input&quot;,
+                                type: &quot;checkbox&quot;
+                            }).dom;
+                                                 
+                            Ext.EventManager.addListener(element, config);
+                            Ext.EventManager.addListener(checkbox, config);
+                            if (jasmine.browser.isIE) {
+                                checkbox.click();
+                            } else {
+                                jasmine.fireMouseEvent(checkbox, &quot;click&quot;, 1, 1);
+                            }
+                        });
+                        
+                        afterEach(function() {
+                            var checkBoxEl = Ext.get(checkbox);
+                            if (checkBoxEl) {
+                                checkBoxEl.remove();
+                            }
+                            Ext.EventManager.removeListener(checkbox, config);
+                        });
+                                                
+                        it(&quot;should prevent default browser handling of the event&quot;, function() {
+                            expect(checkbox.checked).toBe(false);
+                        });  
+                        
+                        it(&quot;should not stop the propagation of the event&quot;, function() {
+                            expect(config.click.fn.calls.length).toEqual(2);
+                        });
+                    });
+                                        
+                    describe(&quot;stopPropagation&quot;, function() {
+                        var checkbox;
+                        
+                        beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   stopPropagation: true,
+                                   scope: fakeScope
+                                }
+                            };
+                            
+                            checkbox = Ext.getBody().createChild({
+                                tag: &quot;input&quot;,
+                                type: &quot;checkbox&quot;
+                            }).dom;
+                                                 
+                            Ext.EventManager.addListener(element, config);
+                            Ext.EventManager.addListener(checkbox, config);
+                            if (jasmine.browser.isIE) {
+                                checkbox.click();
+                            } else {
+                                jasmine.fireMouseEvent(checkbox, &quot;click&quot;, 1, 1);
+                            }
+        
+                        });
+                        
+                        afterEach(function() {
+                            var checkBoxEl = Ext.get(checkbox);
+                            if (checkBoxEl) {
+                                checkBoxEl.remove();
+                            }
+                            Ext.EventManager.removeListener(checkbox, config);
+                        });
+                        
+                        it(&quot;should stop propagation to parent elements&quot;, function() {
+                            expect(config.click.fn.calls.length).toEqual(1);
+                        });
+                        
+                        it(&quot;should not prevent default browser handling of the event&quot;, function() {
+                            expect(checkbox.checked).toBe(true);
+                        });
+                    });
+                    
+                    describe(&quot;normalized&quot;, function() {
+                        var event;
+                        beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   normalized: false,
+                                   scope: fakeScope
+                                }
+                            };
+                                                 
+                            Ext.EventManager.addListener(element, config);
+
+                            event = jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                        });
+                        
+                        it(&quot;should pass a browser event instead of an Ext.EventObject&quot;, function() {
+                            expect(config.click.fn).toHaveBeenCalledWith(event, element, config.click);
+                        });
+                    });
+                    
+                    describe(&quot;delay&quot;, function() {
+                         beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   delay: 1,
+                                   scope: fakeScope
+                                }
+                            };
+                                                 
+                            Ext.EventManager.addListener(element, config);
+                        });
+                        
+                        it(&quot;should not call listener before 1 ms&quot;, function() {
+                            jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                            expect(config.click.fn).not.toHaveBeenCalled();
+                        });
+                        
+                        it(&quot;should call listener after 1 ms&quot;, function() {
+                            runs(function() {
+                                jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                            });
+                            
+                            waits(1);
+                            
+                            runs(function() {
+                                expect(config.click.fn).toHaveBeenCalled();
+                            });
+                        });
+                    });
+                    
+                    describe(&quot;single&quot;, function() {
+                         beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   single: true,
+                                   scope: fakeScope
+                                }
+                            };
+                                                 
+                            Ext.EventManager.addListener(element, config);
+                            jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                            jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                        });
+                        
+                        it(&quot;should call listener only one time&quot;, function() {
+                            expect(config.click.fn.calls.length).toEqual(1);
+                        });
+                    });
+                    
+                    describe(&quot;buffer&quot;, function() {
+                        beforeEach(function() {
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   buffer: 1,
+                                   scope: fakeScope
+                                }
+                            };
+                                                 
+                            Ext.EventManager.addListener(element, config);
+                            jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                            jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                        });
+                        
+                        it(&quot;should call listener only one time&quot;, function() {
+                            waits(1);
+                            runs(function() {
+                                expect(config.click.fn.calls.length).toEqual(1);
+                            });
+                        });                       
+                    });
+                    
+                    describe(&quot;target&quot;, function() {
+                        var child;
+                        beforeEach(function() {
+                            child = Ext.get(element).createChild({
+                            }).dom;
+                            
+                            config = {
+                                click: {
+                                   fn: jasmine.createSpy(),
+                                   target: element,
+                                   scope: fakeScope
+                                }
+                            };
+                                                 
+                            Ext.EventManager.addListener(element, config);                            
+                        });
+                        
+                        afterEach(function() {
+                            var childEl = Ext.get(child);
+                            if (childEl) {
+                                childEl.remove();
+                            }
+                        });
+                        
+                        it(&quot;should call listener if element event is fired&quot;, function() {
+                            jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                            expect(config.click.fn).toHaveBeenCalled();
+                        });
+                        
+                        it(&quot;should not call listener if child event is fired (no bubbling)&quot;, function() {
+                            jasmine.fireMouseEvent(child, &quot;click&quot;, 1, 1);
+                            expect(config.click.fn).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+        });
+        
+        describe(&quot;removeListener&quot;, function() {
+            describe(&quot;if eventName is an object&quot;, function() {
+                it(&quot;should call prepareListenerConfig&quot;, function() {
+                    var eventName = {};
+                    spyOn(Ext.EventManager, &quot;prepareListenerConfig&quot;);
+                    Ext.EventManager.removeListener(element, eventName);
+                    expect(Ext.EventManager.prepareListenerConfig).toHaveBeenCalledWith(element, eventName, true);
+                });
+            });            
+            
+            describe(&quot;event firing&quot;, function() {
+                var config;
+   
+                beforeEach(function() {
+                    config = {
+                        click: {
+                           fn: jasmine.createSpy(), 
+                           scope: fakeScope
+                        }
+                    };
+                    
+                    Ext.EventManager.addListener(element, config);
+                    Ext.EventManager.removeListener(element, config);
+                });
+                
+                it(&quot;should not call the listener&quot;, function() {
+                    jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                    
+                    expect(config.click.fn).not.toHaveBeenCalled();
+                });
+            });
+        });
+    
+        describe(&quot;removeAll&quot;, function() {
+            var config;
+
+            beforeEach(function() {
+                config = {
+                    click: {
+                       fn: jasmine.createSpy(), 
+                       scope: fakeScope
+                    },
+                    mouseover: {
+                        fn: jasmine.createSpy(),
+                        scope: fakeScope
+                    }
+                };
+                
+                Ext.EventManager.addListener(element, config);
+                Ext.EventManager.removeAll(element, config);
+            });
+            
+            it(&quot;should should not call click listener&quot;, function() {
+                jasmine.fireMouseEvent(element, &quot;click&quot;, 1, 1);
+                
+                expect(config.click.fn).not.toHaveBeenCalled();
+            });
+            
+            it(&quot;should not call mouseover listener&quot;, function() {
+                jasmine.fireMouseEvent(element, &quot;mouseover&quot;, 1, 1);
+                
+                expect(config.mouseover.fn).not.toHaveBeenCalled();
+            });
+        });
+        
+        describe(&quot;purgeElement&quot;, function() {
+            var child, config;
+            
+            beforeEach(function() {
+                child = Ext.get(element).createChild({
+                    cls: &quot;child&quot;
+                }).dom;
+                
+                config = {
+                    mouseover: {
+                        fn: jasmine.createSpy(),
+                        scope: fakeScope
+                    }
+                };  
+                              
+                Ext.EventManager.addListener(element, config);
+                Ext.EventManager.addListener(child, config);
+                Ext.EventManager.purgeElement(element);
+            });
+            
+            afterEach(function() {
+                var childEl = Ext.get(child);
+                if (childEl) {
+                    childEl.remove();
+                }
+            });
+            
+            it(&quot;should remove all listeners from element&quot;, function() {
+                jasmine.fireMouseEvent(element, &quot;mouseover&quot;, 1, 1);
+
+                expect(config.mouseover.fn).not.toHaveBeenCalled();                
+            });
+            
+            it(&quot;should remove all listeners from element children&quot;, function() {
+                jasmine.fireMouseEvent(child, &quot;mouseover&quot;, 1, 1);
+                               
+                expect(config.mouseover.fn).not.toHaveBeenCalled(); 
+            });
+        });
+        
+        describe(&quot;methods alias&quot;, function() {
+            it(&quot;should alias addListener with on&quot;, function() {
+                expect(Ext.EventManager.on).toBe(Ext.EventManager.addListener);
+            });
+            
+            it(&quot;should alias removeListener with un&quot;, function() {
+                expect(Ext.EventManager.un).toBe(Ext.EventManager.removeListener);
+            });
+        });
+    });
+});
+</pre>
+</body>
+</html>

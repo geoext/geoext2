@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('Sample.Developer', {
+    extend: 'Sample.Person',
+
+    statics: {
+        averageIQ: 120
+    },
+
+    config: {
+        languages: ['JavaScript', 'C++', 'Python']
+    },
+
+    constructor: function(config) {
+        this.isGeek = true;
+
+        // Apply a method from the parent class' prototype
+        return this.callParent(arguments);
+    },
+
+    canCode: function(language) {
+        return Ext.Array.contains(this.getLanguages(), language);
+    },
+
+    code: function(language) {
+        if (!this.canCode(language)) {
+            alert(&quot;I can't code in: &quot; + language);
+
+            return this;
+        }
+
+        alert(&quot;I'm coding in: &quot; + language);
+
+        this.eat(&quot;Bugs&quot;);
+
+        return this;
+    },
+
+    clone: function() {
+        var self = this.statics(),
+            cloned = new self(this.config);
+
+        return cloned;
+    }
+});
+</pre>
+</body>
+</html>

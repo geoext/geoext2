@@ -225,8 +225,6 @@ Ext.define('GeoExt.panel.Map', {
         me.map.events.on({
             &quot;moveend&quot;: me.onMoveend,
             &quot;changelayer&quot;: me.onChangelayer,
-            &quot;addlayer&quot;: me.onAddlayer,
-            &quot;removelayer&quot;: me.onRemovelayer,
             scope: me
         });
         
@@ -490,7 +488,19 @@ Ext.define('GeoExt.panel.Map', {
             }
         }
     },
-
+    
+<span id='GeoExt-panel-Map-method-onBeforeAdd'>    /**
+</span>     * Check if an added item has to take separate actions
+     * to be added to the map.
+     * See e.g. the GeoExt.slider.Zoom or GeoExt.slider.LayerOpacity
+     * @private
+     */
+    onBeforeAdd: function(item) {
+        if(Ext.isFunction(item.addToMapPanel)) {
+            item.addToMapPanel(this);
+        }
+        this.callParent(arguments);
+    },
     
 <span id='GeoExt-panel-Map-method-beforeDestroy'>    /**
 </span>     * Private method called during the destroy sequence.
@@ -505,8 +515,6 @@ Ext.define('GeoExt.panel.Map', {
             this.map.events.un({
                 &quot;moveend&quot;: this.onMoveend,
                 &quot;changelayer&quot;: this.onChangelayer,
-                &quot;addlayer&quot;: this.onAddlayer,
-                &quot;removelayer&quot;: this.onRemovelayer,
                 scope: this
             });
         }

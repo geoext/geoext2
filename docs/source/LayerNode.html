@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('GeoExt.tree.LayerNode', {
+    extend: 'Ext.AbstractPlugin',
+    mixins: ['Ext.util.Observable'],
+    alias: 'plugin.gx_layer',
+
+<span id='global-cfg-layer'>    /**
+</span>     * The layer that the layer node will be bound to.
+     * @cfg {OpenLayers.Layer} layer
+     */
+
+<span id='global-cfg-checkedGroup'>    /**
+</span>     * If provided, nodes will be rendered with a radio button instead of a
+     * checkbox. All layers represented by nodes with the same checkedGroup are
+     * considered mutually exclusive - only one can be visible at a time.
+     * @cfg {String} checkedGroup
+     */
+    
+<span id='global-cfg-fixedText'>    /**
+</span>     * If the node was configured with a text, we consider the text fixed and
+     * won't update it when the layer's name changes.
+     * @cfg {Boolean} fixedText
+     */
+    
+<span id='global-method-init'>    /** 
+</span>     *  @private
+     */
+    init: function(target) {
+        target.raw.checked = &quot;&quot;;
+        target.raw.layer = this.layer;
+        target.raw.checkedGroup = this.checkedGroup === undefined ?
+            this.layer.isBaseLayer ? &quot;gx_baselayer&quot; : &quot;&quot; :
+            &quot;&quot;;
+        target.raw.fixedText = !!target.raw.text;
+        
+        target.raw.leaf = target.raw.leaf || !target.raw.children;
+        
+        if(!target.raw.iconCls &amp;&amp; !target.raw.children) {
+            target.raw.iconCls = &quot;gx-tree-layer-icon&quot;;
+        }
+        
+        if (target.raw.text) {
+            this.fixedText = true;
+        }
+    }
+
+});</pre>
+</body>
+</html>

@@ -15,6 +15,41 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"></pre>
+  <pre class="prettyprint lang-js"><span id='GeoExt-data-LayerTreeModel'>/**
+</span> * Model used for trees that use GeoExt tree components.
+ * @class
+ */
+Ext.define('GeoExt.data.LayerTreeModel',{
+    alternateClassName: 'GeoExt.data.LayerTreeRecord',
+    extend: 'Ext.data.Model',
+    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    alias: 'model.gx_layertree',
+    fields: [  
+        {name: 'text', type: 'string'}, 
+        {name: 'plugins'},
+        {name: 'layer'},
+        {name: 'checkedGroup', type: 'string'},
+        {name: 'fixedText', type: 'bool'}
+    ],
+    
+<span id='GeoExt-data-LayerTreeModel-method-init'>    /**
+</span>     * @private
+     */
+    init: function() {
+        var me = this;
+
+        if (me.raw &amp;&amp; me.raw.plugins) {
+            var plugins = me.raw.plugins,
+                plugin, instance;
+            for (var i=0, ii=plugins.length; i&lt;ii; ++i) {
+                plugin = plugins[i];
+                instance = Ext.PluginMgr.create(Ext.isString(plugin) ? {
+                    ptype: plugin
+                } : plugin);
+                instance.init(me);
+            }
+        }
+    }
+});</pre>
 </body>
 </html>

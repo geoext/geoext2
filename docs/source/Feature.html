@@ -15,400 +15,74 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">Ext.define('GeoExt.renderer.Feature', {
-    extend : 'Ext.Component',
-    requires : [
-    //    'GeoExt.data.LayerStore'
-    ],
-    alias : 'widget.gx_renderer',
-    alternateClassName : 'GeoExt.FeatureRenderer',
-    
-    statics : {
-        guess : function() {
-            var candidates = Ext.ComponentQuery.query(&quot;gx_urllegend&quot;);
-            return ((candidates &amp;&amp; candidates.length &gt; 0) 
-                ? candidates[0] 
-                : null);
-        }
-    },
-    
-          
-<span id='global-property-feature'>    /** api: config[feature]
-</span>     *  ``OpenLayers.Feature.Vector``
-     *  Optional vector to be drawn.  If not provided, and if ``symbolizers``
-     *  is configured with an array of plain symbolizer objects, ``symbolType``
-     *  should be configured.
-     */
-    feature: undefined,
-    
-<span id='global-property-symbolizers'>    /** api: config[symbolizers]
-</span>     *  ``Array(Object)``
-     *  An array of ``OpenLayers.Symbolizer`` instances or plain symbolizer
-     *  objects (in painters order) for rendering a  feature.  If no
-     *  symbolizers are provided, the OpenLayers default will be used. If a
-     *  symbolizer is an instance of ``OpenLayers.Symbolizer``, its type will
-     *  override the symbolType for rendering.
-     */
-    symbolizers: [OpenLayers.Feature.Vector.style[&quot;default&quot;]],
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2012-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
 
-<span id='global-property-symbolType'>    /** api: config[symbolType]
-</span>     *  ``String``
-     *  One of ``&quot;Point&quot;``, ``&quot;Line&quot;``, or ``&quot;Polygon&quot;``.  Only pertinent if 
-     *  OpenLayers.Symbolizer objects are not used.  If ``feature``
-     *  is provided, it will be preferred.  The default is &quot;Polygon&quot;.
-     */
-    symbolType: &quot;Polygon&quot;,
-    
-<span id='global-property-resolution'>    /** private: property[resolution]
-</span>     *  ``Number``
-     *  The resolution for the renderer.
-     */
-    resolution: 1,
-    
-<span id='global-property-minWidth'>    /** private: property[minWidth]
-</span>     *  ``Number``
-     */
-    minWidth: 20,
+<span id='GeoExt-data-reader-Feature'>/**
+</span> * Used to read the attributes of a feature.
+ */
+Ext.define('GeoExt.data.reader.Feature', {
+    extend: 'Ext.data.reader.Json',
+    alias : 'reader.feature',
 
-<span id='global-property-minHeight'>    /** private: property[minHeight]
-</span>     *  ``Number``
+<span id='GeoExt-data-reader-Feature-method-buildExtractors'>    /**
+</span>     * Force to have our convertRecordData.
+     * @private
      */
-    minHeight: 20,
-
-<span id='global-property-renderers'>    /** private: property[renderers]
-</span>     * ``Array(String)`` 
-     *  List of supported Renderer classes. Add to this list to add support for 
-     *  additional renderers. The first renderer in the list that returns 
-     *  ``true`` for the ``supported`` method will be used, if not defined in 
-     *  the ``renderer`` config property.
-     */
-    renderers: [&quot;SVG&quot;, &quot;VML&quot;, &quot;Canvas&quot;],
-
-<span id='global-property-rendererOptions'>    /** private: property[rendererOptions]
-</span>     *  ``Object``
-     *  Options for the renderer. See ``OpenLayers.Renderer`` for supported 
-     *  options.
-     */
-    rendererOptions: null,
-    
-<span id='global-property-pointFeature'>    /** private: property[pointFeature]
-</span>     *  ``OpenLayers.Feature.Vector``
-     *  Feature with point geometry.
-     */
-    pointFeature: undefined,
-    
-<span id='global-property-lineFeature'>    /** private: property[lineFeature]
-</span>     *  ``OpenLayers.Feature.Vector`` 
-     *  Feature with LineString geometry.  Default zig-zag is provided.
-     */
-    lineFeature: undefined,
-
-<span id='global-property-polygonFeature'>    /** private: property[polygonFeature]
-</span>     *  ``OpenLayers.Feature.Vector``
-     *   Feature with Polygon geometry.  Default is a soft cornered rectangle.
-     */
-    polygonFeature: undefined,
-    
-<span id='global-property-renderer'>    /** private: property[renderer]
-</span>     *  ``OpenLayers.Renderer``
-     */
-    renderer: null,
-    
-    initComponent: function(){
-        var me = this;
-        
-        this.autoEl = {
-            tag: &quot;div&quot;,
-            &quot;class&quot;: (this.imgCls ? this.imgCls : &quot;&quot;),
-            id: this.getId()
-        };
-        me.callParent(arguments);
-
-        Ext.applyIf(this, {
-            pointFeature: new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.Point(0, 0)
-                ),
-            lineFeature: new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.LineString([
-                    new OpenLayers.Geometry.Point(-8, -3),
-                    new OpenLayers.Geometry.Point(-3, 3),
-                    new OpenLayers.Geometry.Point(3, -3),
-                    new OpenLayers.Geometry.Point(8, 3)
-                    ])
-                ),
-            polygonFeature: new OpenLayers.Feature.Vector(
-                new OpenLayers.Geometry.Polygon([
-                    new OpenLayers.Geometry.LinearRing([
-                        new OpenLayers.Geometry.Point(-8, -4),
-                        new OpenLayers.Geometry.Point(-6, -6),
-                        new OpenLayers.Geometry.Point(6, -6),
-                        new OpenLayers.Geometry.Point(8, -4),
-                        new OpenLayers.Geometry.Point(8, 4),
-                        new OpenLayers.Geometry.Point(6, 6),
-                        new OpenLayers.Geometry.Point(-6, 6),
-                        new OpenLayers.Geometry.Point(-8, 4)
-                        ])
-                    ])
-                )
-        });
-        if(!this.feature) {
-            this.setFeature(null, {
-                draw: false
-            });
-        }
-        this.addEvents(
-<span id='global-property-click'>            /** api: event[click]
-</span>             *  Fires when the feature is clicked on.
-             *
-             *  Listener arguments:
-             *  
-             *  * renderer - :class:`GeoExt.FeatureRenderer` This feature renderer.
-             */
-            &quot;click&quot;
-            );
- 
-    },
-<span id='global-method-initCustomEvents'>    /** private: method[initCustomEvents]
-</span>     */
-    initCustomEvents: function() {
-        this.clearCustomEvents();
-        this.el.on(&quot;click&quot;, this.onClick, this);
-        
-    },
-    
-<span id='global-method-clearCustomEvents'>    /** private: method[clearCustomEvents]
-</span>     */
-    clearCustomEvents: function() {
-        if (this.el &amp;&amp; this.el.removeAllListeners) {
-            this.el.removeAllListeners();            
-        }
-    },
-    
-<span id='global-method-onClick'>    /** private: method[onClick]
-</span>     */
-    onClick: function() {
-        this.fireEvent(&quot;click&quot;, this);
-    },
-
-<span id='global-method-onRender'>    /** private: method[onRender]
-</span>     */
-    onRender: function(ct, position) {
-        
-        if(!this.el) {
-            this.el = document.createElement(&quot;div&quot;);
-            this.el.id = this.getId();
-//            document.body.appendChild(this.el);
-
-        }
-        if(!this.renderer || !this.renderer.supported()) {  
-            this.assignRenderer();
-        }
-        // monkey-patch renderer so we always get a resolution
-        this.renderer.map = {
-            //            getResolution: (function() {
-            //                return this.resolution;
-            //            }).createDelegate(this)
-            getResolution: Ext.Function.bind(function() {
-                return this.resolution;
-            }, this)
-        };
+    buildExtractors: function() {
         this.callParent(arguments);
-        this.drawFeature();
+        this.convertRecordData = this.convertFreatureRecordData;
     },
 
-<span id='global-method-afterRender'>    /** private: method[afterRender]
-</span>     */
-    afterRender: function() {
-       
-        this.callParent(arguments);
-        this.initCustomEvents();
-    },
+<span id='GeoExt-data-reader-Feature-method-convertFreatureRecordData'>    /**
+</span>     * Copy feature attribute to record.
+     * @private
+     */
+    convertFreatureRecordData: function(convertedValues, feature, record) {
+        var records = [];
 
-<span id='global-method-onResize'>    /** private: method[onResize]
-</span>     */
-    onResize: function(w, h) {
-        this.setRendererDimensions();
-        this.callParent(arguments);
-    },
-    
-<span id='global-method-setRendererDimensions'>    /** private: method[setRendererDimensions]
-</span>     */
-    setRendererDimensions: function() {
-        var gb = this.feature.geometry.getBounds();
-        var gw = gb.getWidth();
-        var gh = gb.getHeight();
-<span id='global-property-resolution'>        /**
-</span>         * Determine resolution based on the following rules:
-         * 1) always use value specified in config
-         * 2) if not specified, use max res based on width or height of element
-         * 3) if no width or height, assume a resolution of 1
-         */
-        var resolution = this.initialConfig.resolution;
-        if(!resolution) {
-            resolution = Math.max(gw / this.width || 0, gh / this.height || 0) || 1;
-        }
-        this.resolution = resolution;
-        // determine height and width of element
-        var width = Math.max(this.width || this.minWidth, gw / resolution);
-        var height = Math.max(this.height || this.minHeight, gh / resolution);
-        // determine bounds of renderer
-        var center = gb.getCenterPixel();
-        var bhalfw = width * resolution / 2;
-        var bhalfh = height * resolution / 2;
-        var bounds = new OpenLayers.Bounds(
-            center.x - bhalfw, center.y - bhalfh,
-            center.x + bhalfw, center.y + bhalfh
-            );
-        this.renderer.setSize(new OpenLayers.Size(Math.round(width), Math.round(height)));
-        this.renderer.setExtent(bounds, true);
-    },
-
-<span id='global-method-assignRenderer'>    /** private: method[assignRenderer]
-</span>     *  Iterate through the available renderer implementations and selects 
-     *  and assign the first one whose ``supported`` method returns ``true``.
-     */
-    assignRenderer: function()  {
-
-//        return true;
-        this.renderer = new OpenLayers.Renderer.SVG(this.el, this.rendererOptions)
-//        for(var i=0, len=this.renderers.length; i&lt;len; ++i) {
-//            var Renderer = OpenLayers.Renderer[this.renderers[i]];
-//            if(Renderer &amp;&amp; Renderer.prototype.supported()) {
-//                this.renderer = new Renderer(
-//                    this.el, this.rendererOptions
-//                    );
-//                break;
-//            }  
-//        }  
-    },
-    
-<span id='global-method-setSymbolizers'>    /** api: method[setSymbolizers]
-</span>     *  :arg symbolizers: ``Array(Object)`` An array of symbolizers
-     *  :arg options: ``Object``
-     *
-     *  Update the symbolizers used to render the feature.
-     *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
-     */
-    setSymbolizers: function(symbolizers, options) {
-        this.symbolizers = symbolizers;
-        if(!options || options.draw) {
-            this.drawFeature();
-        }
-    },
-    
-<span id='global-method-setSymbolType'>    /** api: method[setSymbolType]
-</span>     *  :arg type: ``String`` One of the ``symbolType`` strings.
-     *  :arg options: ``Object``
-     * 
-     *  Create a new feature based on the geometry type and render it.
-     *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
-     */
-    setSymbolType: function(type, options) {
-        this.symbolType = type;
-        this.setFeature(null, options);
-    },
-    
-<span id='global-method-setFeature'>    /** api: method[setFeature]
-</span>     *  :arg feature: ``OpenLayers.Feature.Vector`` The feature to be rendered.  
-     *      If none is provided, one will be created based on ``symbolType``.
-     *  :arg options: ``Object``
-     *
-     *  Update the feature and redraw.
-     *
-     *  Valid options:
-     *  
-     *  * draw - ``Boolean`` Draw the feature after setting it.  Default is ``true``.
-     */
-    setFeature: function(feature, options) {
-        this.feature = feature || this[this.symbolType.toLowerCase() + &quot;Feature&quot;];
-        if(!options || options.draw) {
-            this.drawFeature();
-        }
-    },
-
-<span id='global-method-drawFeature'>    /** private: method[drawFeature]
-</span>     *  Render the feature with the symbolizers.
-     */
-    drawFeature: function() {
-        this.renderer.clear();
-        this.setRendererDimensions();
-        // TODO: remove this when OpenLayers.Symbolizer is required
-        var Symbolizer = OpenLayers.Symbolizer;
-        var Text = Symbolizer &amp;&amp; Symbolizer.Text;
-        var symbolizer, feature, geomType;
-        for (var i=0, len=this.symbolizers.length; i&lt;len; ++i) {
-            symbolizer = this.symbolizers[i];
-            feature = this.feature;
-            // don't render text symbolizers
-            if (!Text || !(symbolizer instanceof Text)) {
-                if (Symbolizer &amp;&amp; (symbolizer instanceof Symbolizer)) {
-                    symbolizer = symbolizer.clone();
-                    if (!this.initialConfig.feature) {
-                        geomType = symbolizer.CLASS_NAME.split(&quot;.&quot;).pop().toLowerCase();
-                        feature = this[geomType + &quot;Feature&quot;];
+        if (feature) {
+            var fields = record.fields;
+            var values = {};
+            if (feature.attributes) {
+                for (var j = 0, jj = fields.length; j &lt; jj; j++){
+                    var field = fields.items[j];
+                    var v;
+                    if (/[\[\.]/.test(field.mapping)) {
+                        try {
+                            v = new Function(&quot;obj&quot;, &quot;return obj.&quot; + field.mapping)(feature.attributes);
+                        } catch(e){
+                            v = field.defaultValue;
+                        }
                     }
-                } else {
-                    // TODO: remove this when OpenLayers.Symbolizer is used everywhere
-                    symbolizer = Ext.apply({}, symbolizer);
+                    else {
+                        v = feature.attributes[field.mapping || field.name] || field.defaultValue;
+                    }
+                    if (field.convert) {
+                        v = field.convert(v, record);
+                    }
+                    convertedValues[field.name] = v;
                 }
-                this.renderer.drawFeature(
-                    feature.clone(),
-                    symbolizer
-                    );
             }
-        }
-    },
-    
-<span id='global-method-update'>    /** api: method[update]
-</span>     *  :arg options: ``Object`` Object with properties to be updated.
-     * 
-     *  Update the ``symbolType`` or ``feature`` and ``symbolizer`` and redraw
-     *  the feature.
-     *
-     *  Valid options:
-     *  
-     *  * feature - ``OpenLayers.Feature.Vector`` The new or updated feature.  
-     *      If provided, the feature gets precedence over ``symbolType``.
-     *  * symbolType - ``String`` One of the allowed ``symbolType`` values.
-     *  * symbolizers - ``Array(Object)`` An array of symbolizer objects.
-     */
-    update: function(options) {
-        options = options || {};
-        if(options.feature) {
-            this.setFeature(options.feature, {
-                draw: false
-            });
-        } else if(options.symbolType) {
-            this.setSymbolType(options.symbolType, {
-                draw: false
-            });
-        }
-        if(options.symbolizers) {
-            this.setSymbolizers(options.symbolizers, {
-                draw: false
-            });
-        }
-        this.drawFeature();
-    },
+            record.state = feature.state;
+            if (feature.state == OpenLayers.State.INSERT ||
+                    feature.state == OpenLayers.State.UPDATE) {
+                record.setDirty();
+            }
 
-<span id='global-method-beforeDestroy'>    /** private: method[beforeDestroy]
-</span>     *  Private method called during the destroy sequence.
-     */
-    beforeDestroy: function() {
-        this.clearCustomEvents();
-        if (this.renderer) {
-            this.renderer.destroy();
+            // newly inserted features need to be made into phantom records
+            var id = (feature.state === OpenLayers.State.INSERT) ? undefined : feature.id;
+            convertedValues['id'] = id;
         }
-    } 
+
+        return records;
+    }
 });
-
-
 </pre>
 </body>
 </html>

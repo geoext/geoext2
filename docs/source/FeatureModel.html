@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
+<span id='global-property-'>/**
+</span> * @require OpenLayers/Control/SelectFeature.js
+ * @require OpenLayers/Layer/Vector.js
+ * @require OpenLayers/BaseTypes/Class.js
+ */
+
+<span id='GeoExt-selection-FeatureModel'>/**
+</span> * @class GeoExt.selection.FeatureModel
+ *
+ * A row selection model which enables automatic selection of features
+ * in the map when rows are selected in the grid and vice-versa.
+ *
+ * Sample code to create a feature grid with a feature selection model:
+ *
+ *      @example
+ *      var gridPanel = new Ext.grid.GridPanel({
+ *          title: &quot;Feature Grid&quot;,
+ *          region: &quot;east&quot;,
+ *          store: store,
+ *          width: 320,
+ *          columns: [{
+ *              header: &quot;Name&quot;,
+ *              width: 200,
+ *              dataIndex: &quot;name&quot;
+ *          }, {
+ *              header: &quot;Elevation&quot;,
+ *              width: 100,
+ *              dataIndex: &quot;elevation&quot;
+ *          }],
+ *          selType: 'featuremodel'
+ *     });
+ */
+
+
+Ext.define('GeoExt.selection.FeatureModel', {
+    extend: 'Ext.selection.RowModel',
+    alias: 'selection.featuremodel',
+
+<span id='GeoExt-selection-FeatureModel-cfg-autoActivateControl'>    /**
+</span>     * @cfg {Boolean}
+     * If true the select feature control is activated and
+     * deactivated when binding and unbinding.
+     */
+    autoActivateControl: true,
+
+<span id='GeoExt-selection-FeatureModel-cfg-layerFromStore'>    /**
+</span>     * @cfg {Boolean}
+     * If true, and if the constructor is passed neither a
+     * layer nor a select feature control, a select feature control is
+     * created using the layer found in the grid's store. Set it to
+     * false if you want to manually bind the selection model to a
+     * layer.
+     */
+    layerFromStore: true,
+
+<span id='GeoExt-selection-FeatureModel-cfg-selectControl'>    /**
+</span>     * @cfg {OpenLayers.Control.SelectFeature}
+     * The select feature control instance. If not
+     * provided one will be created.  If provided any &quot;layer&quot; config option
+     * will be ignored, and its &quot;multiple&quot; option will be used to configure
+     * the selectionModel.  If an ``Object`` is provided here, it will be
+     * passed as config to the SelectFeature constructor, and the &quot;layer&quot;
+     * config option will be used for the layer.
+     */
+    selectControl: null,
+
+<span id='GeoExt-selection-FeatureModel-cfg-layer'>    /**
+</span>     * @cfg {OpenLayers.Layer.Vector} layer
+     * The vector layer used for the creation of
+     * the select feature control, it must already be added to the map. If not
+     * provided, the layer bound to the grid's store, if any, will be used.
+     */
+
+<span id='GeoExt-selection-FeatureModel-property-bound'>    /**
+</span>     * @private {Boolean}
+     * Flag indicating if the selection model is bound.
+     */
+    bound: false,
+
+<span id='GeoExt-selection-FeatureModel-property-selectedFeatures'>    /**
+</span>     * @private {OpenLayers.Feature.Vector[]}
+     * An array to store the selected features.
+     */
+    selectedFeatures: [],
+
+<span id='GeoExt-selection-FeatureModel-cfg-autoPanMapOnSelection'>    /**
+</span>     * @cfg {Boolean}
+     * If true the map will recenter on feature selection
+     * so that the selected features are visible.
+     */
+    autoPanMapOnSelection: false,
+
+<span id='GeoExt-selection-FeatureModel-method-constructor'>    /**
+</span>     * @private
+     */
+    constructor: function(config) {
+        config = config || {};
+        if (config.selectControl instanceof OpenLayers.Control.SelectFeature) {
+            if (!config.singleSelect) {
+                var ctrl = config.selectControl;
+                config.singleSelect = !(ctrl.multiple || !!ctrl.multipleKey);
+            }
+        } else if (config.layer instanceof OpenLayers.Layer.Vector) {
+            this.selectControl = this.createSelectControl(
+                    config.layer, config.selectControl);
+            delete config.layer;
+            delete config.selectControl;
+        }
+        if (config.autoPanMapOnSelection) {
+            this.autoPanMapOnSelection = true;
+            delete config.autoPanMapOnSelection;
+        }
+        this.callParent(arguments);
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-bindComponent'>    /**
+</span>     * @private
+     *
+     * Called after this.grid is defined
+     */
+    bindComponent: function() {
+        this.callParent(arguments);
+        if (this.layerFromStore) {
+            var layer = this.view.getStore() &amp;&amp; this.view.getStore().layer;
+            if (layer &amp;&amp; !(this.selectControl instanceof
+                    OpenLayers.Control.SelectFeature)) {
+                this.selectControl = this.createSelectControl(
+                        layer, this.selectControl);
+            }
+        }
+        if (this.selectControl) {
+            this.bind(this.selectControl);
+        }
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-createSelectControl'>    /**
+</span>     * @private
+     * Create the select feature control.
+     *
+     * @param {OpenLayers.Layer.Vector} layer The vector layer.
+     * @param {Object} config The select feature control config.
+     */
+    createSelectControl: function(layer, config) {
+        config = config || {};
+        var singleSelect = config.singleSelect !== undefined ?
+                config.singleSelect : this.singleSelect;
+        config = OpenLayers.Util.extend({
+            toggle: true,
+            multipleKey: singleSelect ? null :
+                (Ext.isMac ? &quot;metaKey&quot; : &quot;ctrlKey&quot;)
+        }, config);
+        var selectControl = new OpenLayers.Control.SelectFeature(
+                layer, config);
+        layer.map.addControl(selectControl);
+        return selectControl;
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-bind'>    /**
+</span>     * Bind the selection model to a layer or a SelectFeature control.
+     *
+     * @param {OpenLayers.Layer.Vector/OpenLayers.Control.SelectFeature} obj
+     * The object this selection model should be bound to,
+     * either a vector layer or a select feature control.
+     * @param {Object} options An object with a &quot;controlConfig&quot;
+     * property referencing the configuration object to pass to the
+     * ``OpenLayers.Control.SelectFeature`` constructor.
+     * @return {OpenLayers.Control.SelectFeatur}
+     * The select feature control this selection model uses.
+     */
+    bind: function(obj, options) {
+        if (!this.bound) {
+            options = options || {};
+            this.selectControl = obj;
+            if (obj instanceof OpenLayers.Layer.Vector) {
+                this.selectControl = this.createSelectControl(
+                    obj, options.controlConfig
+                );
+            }
+            if (this.autoActivateControl) {
+                this.selectControl.activate();
+            }
+            var layers = this.getLayers();
+            for (var i = 0, len = layers.length; i &lt; len; i++) {
+                layers[i].events.on({
+                    featureselected: this.featureSelected,
+                    featureunselected: this.featureUnselected,
+                    scope: this
+                });
+            }
+            this.on(&quot;rowselect&quot;, this.rowSelected, this);
+            this.on(&quot;rowdeselect&quot;, this.rowDeselected, this);
+            this.bound = true;
+        }
+        return this.selectControl;
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-unbind'>    /**
+</span>     * Unbind the selection model from the layer or SelectFeature control.
+     *
+     * @return {OpenLayers.Control.SelectFeature}
+     * The select feature control this selection model used.
+     */
+    unbind: function() {
+        var selectControl = this.selectControl;
+        if (this.bound) {
+            var layers = this.getLayers();
+            for (var i = 0, len = layers.length; i &lt; len; i++) {
+                layers[i].events.un({
+                    featureselected: this.featureSelected,
+                    featureunselected: this.featureUnselected,
+                    scope: this
+                });
+            }
+            this.un(&quot;rowselect&quot;, this.rowSelected, this);
+            this.un(&quot;rowdeselect&quot;, this.rowDeselected, this);
+            if (this.autoActivateControl) {
+                selectControl.deactivate();
+            }
+            this.selectControl = null;
+            this.bound = false;
+        }
+        return selectControl;
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-featureSelected'>    /**
+</span>     * @private
+     * @param {Object} evt
+     * An object with a feature property referencing the selected feature.
+     */
+    featureSelected: function(evt) {
+        if (!this._selecting) {
+            var store = this.view.store;
+            var row = store.findBy(function(record, id) {
+                return record.raw == evt.feature;
+            });
+            if (row != -1 &amp;&amp; !this.isSelected(row)) {
+                this._selecting = true;
+                this.select(row, !this.singleSelect);
+                this._selecting = false;
+                // focus the row in the grid to ensure it is visible
+                this.view.focusRow(row);
+            }
+        }
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-featureUnselected'>    /**
+</span>     * @private
+     * @param {Object} evt
+     * An object with a feature property referencing the unselected feature.
+     */
+    featureUnselected: function(evt) {
+        if (!this._selecting) {
+            var store = this.view.store;
+            var row = store.findBy(function(record, id) {
+                return record.raw == evt.feature;
+            });
+            if (row != -1 &amp;&amp; this.isSelected(row)) {
+                this._selecting = true;
+                this.deselect(row);
+                this._selecting = false;
+                this.view.focusRow(row);
+            }
+        }
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-onSelectChange'>    /**
+</span>     * @private
+     * @param {Ext.data.Record} record The record.
+     * @param {Boolean} isSelected.
+     */
+    onSelectChange: function(record, isSelected) {
+        this.callParent(arguments);
+
+        var feature = record.raw;
+        if (this.selectControl &amp;&amp; !this._selecting &amp;&amp; feature) {
+            var layers = this.getLayers();
+            if (isSelected) {
+                for (var i = 0, len = layers.length; i &lt; len; i++) {
+                    if (layers[i].selectedFeatures.indexOf(feature) == -1) {
+                        this._selecting = true;
+                        this.selectControl.select(feature);
+                        this._selecting = false;
+                        this.selectedFeatures.push(feature);
+                        break;
+                    }
+                }
+                if (this.autoPanMapOnSelection) {
+                    this.recenterToSelectionExtent();
+                }
+            }
+            else {
+                for (var i = 0, len = layers.length; i &lt; len; i++) {
+                    if (layers[i].selectedFeatures.indexOf(feature) != -1) {
+                        this._selecting = true;
+                        this.selectControl.unselect(feature);
+                        this._selecting = false;
+                        OpenLayers.Util.removeItem(this.selectedFeatures, feature);
+                        break;
+                    }
+                }
+                if (this.autoPanMapOnSelection &amp;&amp; this.selectedFeatures.length &gt; 0) {
+                    this.recenterToSelectionExtent();
+                }
+            }
+        }
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-getLayers'>    /**
+</span>     * @private
+     * @return the layers attached to the select feature control.
+     */
+    getLayers: function() {
+        return this.selectControl.layers || [this.selectControl.layer];
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-recenterToSelectionExtent'>    /**
+</span>     * @private
+     * centers the map in order to display all selected features.
+     */
+    recenterToSelectionExtent: function() {
+        var map = this.selectControl.map;
+        var selectionExtent = this.getSelectionExtent();
+        var selectionExtentZoom = map.getZoomForExtent(selectionExtent, false);
+        if (selectionExtentZoom &gt; map.getZoom()) {
+            map.setCenter(selectionExtent.getCenterLonLat());
+        }
+        else {
+            map.zoomToExtent(selectionExtent);
+        }
+    },
+
+<span id='GeoExt-selection-FeatureModel-method-getSelectionExtent'>    /**
+</span>     * Calculates the max extent which includes all selected features.
+     *
+     * @return {OpenLayers.Bounds}
+     * Return null if the layer has no features with geometries.
+     */
+    getSelectionExtent: function () {
+        var maxExtent = null;
+        var features = this.selectedFeatures;
+        if (features &amp;&amp; (features.length &gt; 0)) {
+            var geometry = null;
+            for (var i = 0, len = features.length; i &lt; len; i++) {
+                geometry = features[i].geometry;
+                if (geometry) {
+                    if (maxExtent === null) {
+                        maxExtent = new OpenLayers.Bounds();
+                    }
+                    maxExtent.extend(geometry.getBounds());
+                }
+            }
+        }
+        return maxExtent;
+    }
+});
+</pre>
+</body>
+</html>

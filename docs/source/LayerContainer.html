@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='global-property-'>/**
+</span> * @require GeoExt/tree/LayerLoader.js
+ */
+
+<span id='GeoExt-tree-LayerContainer'>/**
+</span> * @class
+ * A subclass of Ext.data.Model decorated with an Ext.data.NodeInterface
+ * that will collect all layers of an OpenLayers map. Only layers that
+ * have displayInLayerSwitcher set to true will be included.
+ * The childrens' iconCls defaults to &quot;gx-tree-layer-icon&quot; and this node'
+ * text defaults to &quot;Layers&quot;.
+ */
+Ext.define('GeoExt.tree.LayerContainer', {
+    extend: 'Ext.AbstractPlugin',
+    mixins: ['Ext.util.Observable'],
+    requires: [
+        'Ext.data.NodeInterface',
+        'GeoExt.tree.LayerLoader'
+    ],
+    alias: 'plugin.gx_layercontainer',
+    
+<span id='GeoExt-tree-LayerContainer-cfg-loader'>    /**
+</span>     * @cfg {GeoExt.tree.LayerLoader/Object} loader
+     * The loader to use with this container. If an Object is provided, a
+     * GeoExt.tree.LayerLoader, configured with the the properties from
+     * the provided object, will be created. By default, a LayerLoader for
+     * all layers of the first MapPanel found by the ComponentManager will be
+     * created.
+     */
+    
+<span id='GeoExt-tree-LayerContainer-property-text'>    /**
+</span>     * The text for the target node.
+     */
+    text: 'Layers',
+    
+<span id='GeoExt-tree-LayerContainer-method-init'>    /**
+</span>     * @private
+     */
+    init: function(target) {
+        var me = this;
+
+        var loader = me.loader;
+        
+        me.loader = (loader &amp;&amp; loader instanceof GeoExt.tree.LayerLoader) ?
+            loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+        me.loader.load(target);
+        
+        Ext.applyIf(target.raw, {text: &quot;Layers&quot;});
+    },
+    
+<span id='GeoExt-tree-LayerContainer-method-recordIndexToNodeIndex'>    /**
+</span>     * @private
+     * @param {Number} index  The record index in the layer store.
+     * @returns {Number} The appropriate child node index for the record.
+     */
+    recordIndexToNodeIndex: function(index) {
+        var me = this;
+        var store = me.loader.store;
+        var count = store.getCount();
+        var nodeCount = me.childNodes.length;
+        var nodeIndex = -1;
+        for(var i=count-1; i&gt;=0; --i) {
+            if(me.loader.filter(store.getAt(i)) === true) {
+                ++nodeIndex;
+                if(index === i || nodeIndex &gt; nodeCount-1) {
+                    break;
+                }
+            }
+        }
+        return nodeIndex;
+    },
+    
+<span id='GeoExt-tree-LayerContainer-method-destroy'>    /**
+</span>     * @private
+     */
+    destroy: function() {
+        var me = this;
+        if (!(me.initialConfig.loader instanceof GeoExt.data.Loader)) {
+            me.loader.destroy();
+        }
+        delete me.loader;
+        me.callParent();
+    }
+});
+</pre>
+</body>
+</html>

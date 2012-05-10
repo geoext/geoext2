@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">describe(&quot;Ext.Function&quot;, function() {
+    
+    var _setTimeout,
+        _clearTimeout,
+        timeouts,
+        timeoutIds,
+        clearedTimeoutIds,
+        runAfterInvocation = function(spyedFunction, callback, invocationCount) {
+            invocationCount = invocationCount || 1;
+            waitsFor(function() { return spyedFunction.calls.length &gt;= invocationCount; });
+            runs(callback);
+        },
+        mockTimeout = function() {
+            timeouts = [];
+            timeoutIds = [];
+            clearedTimeoutIds = [];
+            
+            _setTimeout = window.setTimeout;
+            window.setTimeout = function(fn, timeout) {
+                timeouts.push(timeout);
+                var timeoutId = _setTimeout.apply(this, arguments);
+                timeoutIds.push(timeoutId);
+                return timeoutId;
+            };
+            
+            _clearTimeout = window.clearTimeout;
+            window.clearTimeout = function(timeoutId) {
+                clearedTimeoutIds.push(timeoutId);
+                _clearTimeout.apply(this, arguments);
+            };
+        },
+        unmockTimeout = function() {
+            timeouts = undefined;
+            timeoutIds = undefined;
+            clearedTimeoutIds = undefined;
+            window.setTimeout = _setTimeout;
+            window.clearTimeout = _clearTimeout;
+        };
+
+    
+    describe(&quot;bind&quot;, function() {
+        var fn,
+            bind;
+
+        beforeEach(function() {
+            fn = jasmine.createSpy(&quot;bindSpy&quot;);
+        });
+
+        it(&quot;should return a function if a function is passed as first argument&quot;, function() {
+            bind = Ext.Function.bind(fn, this);
+
+            expect(typeof bind === &quot;function&quot;).toBe(true);
+        });
+
+        it(&quot;should use the correct scope&quot;, function() {
+            bind = Ext.Function.bind(fn, fakeScope);
+
+            bind();
+
+            expect(fn.calls[0].object).toBe(fakeScope);
+        });
+
+        it(&quot;should call the first function when it is executed&quot;, function() {
+            bind = Ext.Function.bind(fn, this);
+
+            bind();
+
+            expect(fn).toHaveBeenCalled();
+        });
+
+        describe(&quot;argument passing&quot;, function() {
+
+            it(&quot;should use default args if none are passed&quot;, function() {
+                bind = Ext.Function.bind(fn, this, ['a', 'b']);
+
+                bind();
+
+                expect(fn).toHaveBeenCalledWith('a', 'b');
+            });
+
+            it(&quot;should use passed args if they are present&quot;, function() {
+                bind = Ext.Function.bind(fn, this);
+
+                bind('c', 'd');
+
+                expect(fn).toHaveBeenCalledWith('c', 'd');
+            });
+
+            it(&quot;should append args&quot;, function() {
+                bind = Ext.Function.bind(fn, this, ['a', 'b'], true);
+
+                bind('c', 'd');
+
+                expect(fn).toHaveBeenCalledWith('c', 'd', 'a', 'b');
+            });
+
+            it(&quot;should append args at the given index&quot;, function() {
+                bind = Ext.Function.bind(fn, this, ['a', 'b'], 0);
+
+                bind('c', 'd');
+
+                expect(fn).toHaveBeenCalledWith('a', 'b', 'c', 'd');
+            });
+        });
+    });
+    
+    describe(&quot;pass&quot;, function() {
+        it(&quot;should pass the specified array of arguments as the first arguments to the given function&quot;, function() {
+            var fn = jasmine.createSpy(),
+                args = [0, 1, 2],
+                callback = Ext.Function.pass(fn, args);
+            callback(3, 4, 5);
+            expect(fn).toHaveBeenCalledWith(0, 1, 2, 3, 4, 5);
+        });
+        it(&quot;should pass the specified string argument as the first argument to the given function&quot;, function() {
+            var fn = jasmine.createSpy(),
+                args = 'a',
+                callback = Ext.Function.pass(fn, args);
+            callback('b', 'c');
+            expect(fn).toHaveBeenCalledWith('a', 'b', 'c');
+        });
+        it(&quot;should pass the specified numeric argument as the first argument to the given function&quot;, function() {
+            var fn = jasmine.createSpy(),
+                args = 0,
+                callback = Ext.Function.pass(fn, args);
+            callback(1);
+            expect(fn).toHaveBeenCalledWith(0, 1);
+        });
+        it(&quot;should pass the specified 'arguments' argument as the first argument to the given funciton&quot;, function() {
+            var testFunction = function () {
+                    var fn = jasmine.createSpy(),
+                        args = arguments,
+                        callback = Ext.Function.pass(fn, args);
+                    callback(3, 4, 5);
+                    expect(fn).toHaveBeenCalledWith(0, 1, 2, 3, 4, 5);
+                };
+            testFunction(0, 1, 2);
+        });
+        it(&quot;should discard the argument if it's undefined&quot;, function() {
+            var fn = jasmine.createSpy(),
+                args = undefined,
+                callback = Ext.Function.pass(fn, args);
+                callback(1);
+            expect(fn).toHaveBeenCalledWith(1);
+        });
+        it(&quot;should use 'this' as default scope&quot;, function() {
+           var foo = 'a',
+               fn = jasmine.createSpy().andCallFake(function() {
+                   foo = this.foo;
+               }),
+               callback = Ext.Function.pass(fn, 'c');
+           callback('d');
+           expect(fn).toHaveBeenCalledWith('c', 'd');
+           expect(foo).toBeUndefined();
+        });
+        it(&quot;should override 'this' with the specified scope&quot;, function() {
+            var foo = 'a',
+                scope = { foo: 'b' },
+                fn = jasmine.createSpy().andCallFake(function() {
+                    foo = this.foo;
+                }),
+                callback = Ext.Function.pass(fn, 'c', scope);
+            callback('d');
+            expect(fn).toHaveBeenCalledWith('c', 'd');
+            expect(foo).toBe('b');
+        });
+    });
+    
+    describe(&quot;clone&quot;, function() {
+        it(&quot;should clone the given function&quot;, function() {
+            var fn = jasmine.createSpy().andCallFake(function(arg) { return 'bar'; }),
+                clonedFn = Ext.Function.clone(fn),
+                result = clonedFn('foo');
+            expect(result).toBe('bar');
+            expect(fn).toHaveBeenCalledWith('foo');
+        });
+    });
+
+    describe(&quot;createInterceptor&quot;, function() {
+        var interceptor,
+            interceptorFn,
+            interceptedFn,
+            interceptorIsRunFirst,
+            interceptedIsRunAfter;
+
+        beforeEach(function() {
+            interceptorIsRunFirst = false;
+            interceptedIsRunAfter = false;
+
+            interceptorFn = jasmine.createSpy(&quot;interceptorSpy&quot;).andCallFake(function() {
+                interceptorIsRunFirst = true;
+            });
+            interceptedFn = jasmine.createSpy(&quot;interceptedSpy&quot;).andCallFake(function() {
+                interceptedIsRunAfter = interceptorIsRunFirst;
+            });
+        });
+
+        describe(&quot;if no function is passed&quot;, function() {
+            it(&quot;should return the same function&quot;, function() {
+                expect(Ext.Function.createInterceptor(interceptedFn)).toEqual(interceptedFn);
+            });
+        });
+
+        describe(&quot;if a function is passed&quot;, function() {
+            beforeEach(function() {
+                interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn, fakeScope);
+                interceptor();
+            });
+
+            it(&quot;should return a new function&quot;, function() {
+                expect(typeof interceptor === &quot;function&quot;).toBe(true);
+                expect(interceptor).not.toEqual(interceptedFn);
+            });
+
+            it(&quot;should set the correct scope for the interceptor function&quot;, function() {
+                expect(interceptorFn.calls[0].object).toBe(fakeScope);
+            });
+
+            it(&quot;should call the interceptor function first&quot;, function() {
+                expect(interceptedIsRunAfter).toBe(true);
+            });
+
+        });
+
+        describe(&quot;if the interceptor function returns false&quot;, function() {
+            it(&quot;should not execute the original function&quot;, function() {
+                interceptor = Ext.Function.createInterceptor(interceptedFn, function() {
+                    return false;
+                });
+
+                interceptor();
+                expect(interceptedFn).not.toHaveBeenCalled();
+            });
+        });
+    });
+    
+    describe(&quot;createDelayed&quot;, function() {
+       it(&quot;should create bind to the given function to be called after x milliseconds&quot;, function() {
+           mockTimeout();
+           var fn = jasmine.createSpy(),
+               delayedFn = Ext.Function.createDelayed(fn, 2);
+           
+           delayedFn('foo');
+           expect(timeouts.shift()).toBe(2);
+           
+           expect(fn).not.toHaveBeenCalled();
+           
+           runAfterInvocation(fn, function() {
+               expect(fn).toHaveBeenCalledWith('foo');
+           });
+           unmockTimeout();
+       });
+       it(&quot;should use the specified scope as 'this'&quot;, function() {
+           var scope = { x: 'foo' },
+               fn = jasmine.createSpy().andCallFake(function() { this.x = 'bar' }),
+               delayedFn = Ext.Function.createDelayed(fn, 2, scope);
+           delayedFn();
+           expect(fn).not.toHaveBeenCalled();
+           expect(scope.x).toBe('foo');
+           
+           runAfterInvocation(fn, function() {
+               expect(scope.x).toBe('bar');
+           });
+       });
+       it(&quot;should override the call arguments with the specified arguments&quot;, function() {
+           var scope = {},
+               args = [0, 1, 2],
+               fn = jasmine.createSpy(),
+               delayedFn = Ext.Function.createDelayed(fn, 2, scope, args);
+           delayedFn(3, 4, 5);
+           expect(fn).not.toHaveBeenCalled();
+           runAfterInvocation(fn, function() {
+               expect(fn).toHaveBeenCalledWith(0, 1, 2); 
+           });
+       });
+       it(&quot;should append the specified arguments to the call arguments when appendArgs is true&quot;, function() {
+           var scope = {},
+               args = [0, 1, 2],
+               fn = jasmine.createSpy(),
+               delayedFn = Ext.Function.createDelayed(fn, 2, scope, args, true);
+           delayedFn(3, 4, 5);
+           expect(fn).not.toHaveBeenCalled();
+           runAfterInvocation(fn, function() {
+               expect(fn).toHaveBeenCalledWith(3, 4, 5, 0, 1, 2); 
+           });
+       });
+       it(&quot;should insert the specified arguments into the call arguments at the position specified by appendArgs&quot;, function() {
+           var scope = {},
+           args = [0, 1, 2],
+           fn = jasmine.createSpy(),
+           delayedFn = Ext.Function.createDelayed(fn, 2, scope, args, 2);
+           delayedFn(3, 4, 5);
+           expect(fn).not.toHaveBeenCalled();
+           runAfterInvocation(fn, function() {
+               expect(fn).toHaveBeenCalledWith(3, 4, 0, 1, 2, 5); 
+           });
+       });
+    });
+
+    describe(&quot;defer&quot;, function() {
+        var fn;
+
+        beforeEach(function(){
+            fn = jasmine.createSpy(&quot;deferSpy&quot;);
+        });
+
+        it(&quot;should execute the function after the specified number of milliseconds&quot;, function() {
+            Ext.defer(fn, 10);
+
+            waitsFor(function(){
+                return fn.calls.length === 1;
+            }, &quot;fn was never called&quot;);
+
+            runs(function() {
+                expect(fn).toHaveBeenCalled();
+            });
+        });
+
+        it(&quot;should execute the function directly if the specified number of milliseconds is &lt;= 0&quot;, function() {
+            Ext.defer(fn, 0);
+
+            expect(fn).toHaveBeenCalled();
+        });
+
+        it(&quot;should set the correct scope&quot;, function() {
+            Ext.defer(fn, 10, fakeScope);
+
+            waitsFor(function(){
+                return fn.calls.length === 1;
+            }, &quot;fn was never called&quot;);
+
+            runs(function() {
+                expect(fn.calls[0].object).toBe(fakeScope);
+            });
+        });
+
+        it(&quot;should pass the correct arguments&quot;, function() {
+            Ext.defer(fn, 10, this, [1, 2, 3]);
+
+            waitsFor(function(){
+                return fn.calls.length === 1;
+            }, &quot;fn was never called&quot;);
+
+            runs(function() {
+                expect(fn).toHaveBeenCalledWith(1,2,3);
+            });
+        });
+
+        it(&quot;should return a timeout number&quot;, function() {
+            expect(typeof Ext.defer(function() {}, 10) === 'number').toBe(true);
+        });
+    });
+
+    describe(&quot;createSequence&quot;, function() {
+        var sequence,
+            newFn,
+            origFn,
+            origFnIsRunFirst,
+            newFnIsRunAfter;
+
+        beforeEach(function() {
+            origFnIsRunFirst = false;
+            newFnIsRunAfter = false;
+
+            origFn = jasmine.createSpy(&quot;interceptedSpy&quot;).andCallFake(function() {
+                origFnIsRunFirst = true;
+            });
+
+            newFn = jasmine.createSpy(&quot;sequenceSpy&quot;).andCallFake(function() {
+                newFnIsRunAfter = origFnIsRunFirst;
+            });
+        });
+
+        describe(&quot;if no function is passed&quot;, function() {
+            it(&quot;should return the same function&quot;, function() {
+                expect(Ext.Function.createSequence(origFn)).toEqual(origFn);
+            });
+        });
+
+        describe(&quot;if a function is passed&quot;, function() {
+            beforeEach(function() {
+                sequence = Ext.Function.createSequence(origFn, newFn, fakeScope);
+                sequence();
+            });
+
+            it(&quot;should return a new function&quot;, function() {
+                expect(typeof sequence === &quot;function&quot;).toBe(true);
+                expect(sequence).not.toEqual(origFn);
+            });
+
+            it(&quot;should set the correct scope for the sequence function&quot;, function() {
+                expect(newFn.calls[0].object).toBe(fakeScope);
+            });
+
+            it(&quot;should call the sequence function first&quot;, function() {
+                expect(newFnIsRunAfter).toBe(true);
+            });
+
+        });
+    });
+    
+    describe(&quot;createBuffered&quot;, function() {
+        it(&quot;should prevent the execution of multiple calls of the buffered function within the timeout period&quot;, function() {
+            mockTimeout();
+            var fn = jasmine.createSpy(),
+                bufferedFn = Ext.Function.createBuffered(fn, 2);
+           
+            bufferedFn();
+            expect(timeouts.shift()).toBe(2);
+           
+            bufferedFn();
+            expect(clearedTimeoutIds.shift()).toBe(timeoutIds.shift());
+            expect(timeouts.shift()).toBe(2);
+           
+            expect(fn).not.toHaveBeenCalled();
+            runAfterInvocation(fn, function() {
+                expect(fn.calls.length).toBe(1);
+            });
+            
+            unmockTimeout();
+        });
+        it(&quot;should use the specified scope as 'this'&quot;, function() {
+            var scope = { x: 1 },
+                fn = jasmine.createSpy().andCallFake(function() { this.x++; }),
+                bufferedFn = Ext.Function.createBuffered(fn, 20, scope);
+            bufferedFn();
+            expect(scope.x).toBe(1);
+            bufferedFn();
+            runAfterInvocation(fn, function() {
+                expect(scope.x).toBe(2);
+            });
+        });
+        it(&quot;should override the call arguments with the specified ones&quot;, function() {
+            var scope = {},
+                args = ['bar1', 'bar2'],
+                fn = jasmine.createSpy(),
+                bufferedFn = Ext.Function.createBuffered(fn, 20, scope, args);
+            bufferedFn('foo1', 'foo2');
+            expect(fn).not.toHaveBeenCalled();
+            runAfterInvocation(fn, function() {
+                expect(fn).toHaveBeenCalledWith('bar1', 'bar2');
+            });
+        });
+    });
+    
+    describe(&quot;createThrottled&quot;, function() {
+        it(&quot;should execute only once per each specified time interval&quot;, function() {
+            mockTimeout();
+            var fn = jasmine.createSpy(),
+                throttledFn = Ext.Function.createThrottled(fn, 10);
+           
+            expect(fn).not.toHaveBeenCalled();
+            throttledFn();
+            expect(clearedTimeoutIds.shift()).toBeUndefined();
+            expect(fn.calls.length).toBe(1);
+            
+            throttledFn();
+            expect(timeouts.shift()).not.toBeGreaterThan(10);
+            expect(clearedTimeoutIds.shift()).toBeUndefined();
+            throttledFn();
+            expect(timeouts.shift()).not.toBeGreaterThan(10);
+            expect(clearedTimeoutIds.shift()).toBe(timeoutIds.shift());
+            throttledFn();
+            expect(timeouts.shift()).not.toBeGreaterThan(10);
+            expect(clearedTimeoutIds.shift()).toBe(timeoutIds.shift());
+            
+            expect(fn.calls.length).toBe(1);
+            runAfterInvocation(fn, function() {
+                expect(fn.calls.length).toEqual(2);
+                throttledFn(); // elapsed may have been exceeded here, so this call may execute immediately
+                expect(fn.calls.length).not.toBeLessThan(2);
+                expect(fn.calls.length).not.toBeGreaterThan(3);
+            }, 2);
+            unmockTimeout();
+        });
+        
+        it(&quot;should use the specified scope as 'this'&quot;, function() {
+            var scope = {},
+                fn = jasmine.createSpy().andCallFake(function(value) { this.x = value; }),
+                throttledFn = Ext.Function.createThrottled(fn, 10, scope);
+            
+            throttledFn('foo');
+            throttledFn('bar');
+            throttledFn('baz');
+            throttledFn('qux');
+            
+            expect(fn).toHaveBeenCalledWith('foo');
+            expect(scope.x).toBe('foo');
+            expect(fn.calls.length).toBe(1);
+        });
+    });
+    
+    describe(&quot;interceptAfter&quot;, function() {
+        it(&quot;should execute interceptor after each method call&quot;, function() {
+            var monologue = {
+                    phrases: [],
+                    addPhrase: function(phrase) {
+                        this.phrases.push(phrase)
+                    }
+                },
+                addMeToo = jasmine.createSpy().andCallFake(function(phrase) {
+                    this.phrases.push(phrase + ' too');
+                });
+                
+            Ext.Function.interceptAfter(monologue, 'addPhrase', addMeToo);
+            monologue.addPhrase('I like you');
+            monologue.addPhrase('I love you');
+            expect(monologue.phrases).toEqual(['I like you', 'I like you too', 'I love you', 'I love you too']);
+            expect(addMeToo).toHaveBeenCalledWith('I like you');
+            expect(addMeToo).toHaveBeenCalledWith('I love you');
+        });
+        
+        it(&quot;should execute interceptor after each method call with the specified scope as 'this'&quot;, function() {
+            var monologue = {
+                    phrases: [],
+                    addPhrase: function(phrase) {
+                        this.phrases.push(phrase)
+                    }
+                },
+                transcription = {
+                    phrases: []
+                },
+                transcriptPhrase = jasmine.createSpy().andCallFake(function(phrase) {
+                    this.phrases.push(&quot;He said: &quot; + phrase);
+                });
+            
+            Ext.Function.interceptAfter(monologue, 'addPhrase', transcriptPhrase, transcription);
+            monologue.addPhrase('I like you');
+            monologue.addPhrase('I love you');
+            expect(monologue.phrases).toEqual(['I like you', 'I love you']);
+            expect(transcription.phrases).toEqual(['He said: I like you', 'He said: I love you']);
+            expect(transcriptPhrase).toHaveBeenCalledWith('I like you');
+            expect(transcriptPhrase).toHaveBeenCalledWith('I love you');
+        });
+    });
+});
+</pre>
+</body>
+</html>

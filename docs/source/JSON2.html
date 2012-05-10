@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">describe(&quot;Ext.JSON&quot;, function() {
+    var nativeJson;
+
+    beforeEach(function() {
+        nativeJson = Ext.USE_NATIVE_JSON;
+        Ext.USE_NATIVE_JSON = false;
+
+    });
+
+    afterEach(function() {
+        Ext.USE_NATIVE_JSON = nativeJson;
+    });
+
+    describe(&quot;encode&quot;, function() {
+        var encode = Ext.JSON.encode;
+
+        describe(&quot;numbers encoding&quot;, function() {
+            it(&quot;should convert integer to string&quot;, function() {
+                expect(encode(15)).toEqual(&quot;15&quot;);
+            });
+
+            it(&quot;should convert float to string&quot;, function() {
+                expect(encode(14.7)).toEqual(&quot;14.7&quot;);
+            });
+
+            it(&quot;should convert Infinity to null string&quot;, function() {
+                expect(encode(Infinity)).toEqual(&quot;null&quot;);
+            });
+
+            it(&quot;should convert NaN to null string&quot;, function() {
+                expect(encode(NaN)).toEqual(&quot;null&quot;);
+            });
+        });
+
+        describe(&quot;encoding of not defined values&quot;, function() {
+            it(&quot;should convert undefined to null string&quot;, function() {
+                expect(encode(undefined)).toEqual(&quot;null&quot;);
+            });
+
+            it(&quot;should convert null to null string&quot;, function() {
+                expect(encode(null)).toEqual(&quot;null&quot;);
+            });
+        });
+
+        describe(&quot;encoding function&quot;, function() {
+            it(&quot;should convert function to null string&quot;, function() {
+                expect(encode(Ext.emptyFn)).toEqual(&quot;null&quot;);
+            });
+        });
+
+        describe(&quot;boolean encoding&quot;, function() {
+            it(&quot;should convert true to 'true'' string&quot;, function() {
+                expect(encode(true)).toEqual(&quot;true&quot;);
+            });
+
+            it(&quot;should convert null to 'false' string&quot;, function() {
+                expect(encode(false)).toEqual(&quot;false&quot;);
+            });
+        });
+
+        describe(&quot;array encoding&quot;, function() {
+            it(&quot;should convert empty array&quot;, function() {
+                expect(encode([])).toEqual(&quot;[]&quot;);
+            });
+            
+            it(&quot;should convert array of numbers to string&quot;, function() {
+                expect(encode([1, 2, 3])).toEqual(&quot;[1,2,3]&quot;);
+            });
+
+            it(&quot;should convert array of strings to string&quot;, function() {
+                expect(encode([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])).toEqual(&quot;[\&quot;a\&quot;,\&quot;b\&quot;,\&quot;c\&quot;]&quot;);
+            });
+
+            it(&quot;should encode array including function member to string&quot;, function() {
+                expect(encode([1, Ext.emptyFn, 3])).toEqual(&quot;[1,null,3]&quot;);
+            });
+
+            it(&quot;should convert array including undefined member to string&quot;, function() {
+                expect(encode([1, undefined, 3])).toEqual(&quot;[1,null,3]&quot;);
+            });
+
+            it(&quot;should convert array including null member to string&quot;, function() {
+                expect(encode([1, null, 3])).toEqual(&quot;[1,null,3]&quot;);
+            });
+        });
+
+        describe(&quot;string encoding&quot;, function() {
+            it(&quot;should convert string&quot;, function() {
+                expect(encode(&quot;You're fired!&quot;)).toEqual(&quot;\&quot;You're fired!\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with international character&quot;, function() {
+                expect(encode(&quot;You're fired!&quot;)).toEqual(&quot;\&quot;You're fired!\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with tab character&quot;, function() {
+                expect(encode(&quot;a\tb&quot;)).toEqual(&quot;\&quot;a\\tb\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with carriage return character&quot;, function() {
+                expect(encode(&quot;a\rb&quot;)).toEqual(&quot;\&quot;a\\rb\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with form feed character&quot;, function() {
+                expect(encode(&quot;a\fb&quot;)).toEqual(&quot;\&quot;a\\fb\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with new line character&quot;, function() {
+                expect(encode(&quot;a\nb&quot;)).toEqual(&quot;\&quot;a\\nb\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with vertical tab character&quot;, function() {
+                expect(encode(&quot;a\x0bb&quot;)).toEqual(&quot;\&quot;a\\u000bb\&quot;&quot;);
+            });
+
+            it(&quot;should convert string with backslash character&quot;, function() {
+                expect(encode(&quot;a\\b&quot;)).toEqual(&quot;\&quot;a\\\\b\&quot;&quot;);
+            });
+        });
+
+        describe(&quot;object encoding&quot;, function() {
+            it(&quot;should convert empty object&quot;, function() {
+                expect(encode({})).toEqual(&quot;{}&quot;);
+            });
+            
+            it(&quot;should convert empty object with undefined property&quot;, function() {
+                expect(encode({
+                    foo: &quot;bar&quot;,
+                    bar: undefined
+                })).toEqual(&quot;{\&quot;foo\&quot;:\&quot;bar\&quot;,\&quot;bar\&quot;:null}&quot;);
+            });
+            
+            it(&quot;should convert empty object with null property&quot;, function() {
+                expect(encode({
+                    foo: &quot;bar&quot;,
+                    bar: null
+                })).toEqual(&quot;{\&quot;foo\&quot;:\&quot;bar\&quot;,\&quot;bar\&quot;:null}&quot;);
+            });
+            
+            it(&quot;should convert empty object with function property&quot;, function() {
+                expect(encode({
+                    foo: &quot;bar&quot;,
+                    bar: Ext.emptyFn
+                })).toEqual(&quot;{\&quot;foo\&quot;:\&quot;bar\&quot;,\&quot;bar\&quot;:null}&quot;);
+            });
+            
+            it(&quot;should not encode dom object&quot;, function() {
+               expect(encode(Ext.getBody().dom)).toBe('undefined');
+            });
+            
+            it(&quot;should handle encoding unknown child objects&quot;, function(){
+                expect(encode({
+                    prop: Ext.getBody().dom
+                })).toBe('{&quot;prop&quot;:undefined}');
+            });
+        });
+
+        describe('encodeDate', function() {
+            var date;
+            
+            it(&quot;should encode a date object&quot;, function() {
+                date = new Date(&quot;October 13, 1983 04:04:00&quot;);
+    
+                expect(encode(date)).toEqual(&quot;\&quot;1983-10-13T04:04:00\&quot;&quot;);
+            });
+            
+            it(&quot;should format integers to have at least two digits&quot;, function() {
+                date = new Date(&quot;August 9, 1983 06:03:02&quot;);
+                
+                expect(encode(date)).toEqual(&quot;\&quot;1983-08-09T06:03:02\&quot;&quot;);            
+            });
+        });
+        
+        describe(&quot;mix all possibilities&quot;, function() {
+            it(&quot;should encode data&quot;, function() {
+                 expect(encode({
+                    arr: [1, Ext.emptyFn, undefined, 2, [1, 2, 3], {a: 1, b: null}],
+                    foo: &quot;bar&quot;,
+                    woo: {
+                        chu: &quot;a\tb&quot;
+                    }
+                 })).toEqual(&quot;{\&quot;arr\&quot;:[1,null,null,2,[1,2,3],{\&quot;a\&quot;:1,\&quot;b\&quot;:null}],\&quot;foo\&quot;:\&quot;bar\&quot;,\&quot;woo\&quot;:{\&quot;chu\&quot;:\&quot;a\\tb\&quot;}}&quot;);
+            });
+        });
+    });
+
+    describe(&quot;decode&quot;, function() {
+        it(&quot;should decode data&quot;, function() {
+            expect(Ext.decode(&quot;{\&quot;arr\&quot;:[1,null,null,2,[1,2,3],{\&quot;a\&quot;:1,\&quot;b\&quot;:null}],\&quot;foo\&quot;:\&quot;bar\&quot;,\&quot;woo\&quot;:{\&quot;chu\&quot;:\&quot;a\\tb\&quot;}}&quot;)).toEqual({
+                    arr: [1, null, null, 2, [1, 2, 3], {a: 1, b: null}],
+                    foo: &quot;bar&quot;,
+                    woo: {
+                        chu: &quot;a\tb&quot;
+                    }            
+            });
+        });
+        
+        it(&quot;should raise an Ext.Error with invalid data&quot;, function() {
+            expect(function(){
+                Ext.decode('{foo:&quot;bar&quot;, x}');
+            }).toRaiseExtError();
+        });
+            
+        describe(&quot;with safe param&quot;, function(){
+            it(&quot;should decode valid data&quot;, function() {
+                expect(Ext.decode(&quot;{\&quot;foo\&quot;:\&quot;bar\&quot;}&quot;, true)).toEqual({
+                    foo: &quot;bar&quot;        
+                });
+            });
+            
+            it(&quot;should return null with invalid data&quot;, function() {
+                expect(Ext.decode('{foo+&quot;bar&quot;}', true)).toBeNull();
+            });
+        });
+    });
+    
+    it('should encode and decode an object', function(){
+        var object = {
+            a: [0, 1, 2],
+            s: &quot;It's-me-Jacky!!&quot;,
+            ss: &quot;!@#$%^&amp;*()~=_-+][{};:?/.,&lt;&gt;'\&quot;&quot;,
+            u: '\x01',
+            i: 1,
+            f: 3.14,
+            b: false,
+            n: null,
+            tree: {
+                sub: {
+                    subMore: {
+                        subEvenMore: {
+                            arr: [5,6,7, {
+                                complex: true
+                            }]
+                        }
+                    }
+                }
+            }
+        };
+
+        expect(Ext.JSON.decode(Ext.JSON.encode(object))).toEqual(object);
+    });
+    
+    describe(&quot;aliases&quot;, function() {
+        it(&quot;should alias Ext.JSON.decode with Ext.decode&quot;, function() {
+            expect(Ext.decode).toBe(Ext.JSON.decode);
+        });
+
+        it(&quot;should alias Ext.JSON.encode with Ext.encode&quot;, function() {
+            expect(Ext.encode).toBe(Ext.JSON.encode);
+        });
+    });
+});
+</pre>
+</body>
+</html>
