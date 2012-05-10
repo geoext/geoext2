@@ -1,50 +1,72 @@
-/*
- * Copyright (c) 2008-2010 The Open Source Geospatial Foundation
- *
+/**
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
+
 /**
+ * @class GeoExt.Action
+ * Action class to create GeoExt.Action
+ * 
+ * Sample code to create a toolbar with an OpenLayers control into it.
  *
- *  Sample code to create a toolbar with an OpenLayers control into it.
- *  Base class is [Ext.Action](http://dev.sencha.com/deploy/dev/docs/?class=Ext.Action)
- *
- *      @example
- *      var action = new GeoExt.Action({
- *          text: "max extent",
- *          control: new OpenLayers.Control.ZoomToMaxExtent(),
- *          map: map
- *      });
- *      var toolbar = new Ext.Toolbar([action]);
+ *     @example
+ *     var action = Ext.create('GeoExt.Action', {
+ *         text: "max extent",
+ *         control: new OpenLayers.Control.ZoomToMaxExtent(),
+ *         map: map
+ *     });
+ *     var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
  *
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
     alias : 'widget.gx_action',
-    
+
     /**
      * @cfg {OpenLayers.Control}
      * The OpenLayers control wrapped in this action.
      */
     control: null,
-    
+
+    /** 
+     * @property {Boolean} activateOnEnable
+     * Activate the action's control when the action is enabled.
+     */
+    /** 
+     * @cfg {Boolean} activateOnEnable
+     * Activate the action's control when the action is enabled.
+     */
+    activateOnEnable: false,
+
+    /** 
+     * @property {Boolean} deactivateOnDisable
+     * Deactivate the action's control when the action is disabled.
+     */
+    /** 
+     * @cfg {Boolean} deactivateOnDisable
+     * Deactivate the action's control when the action is disabled.
+     */
+    deactivateOnDisable: false,
+
     /**
      * @cfg {OpenLayers.Map}
-     *  The OpenLayers map that the control should be added
-     *  to.  For controls that don't need to be added to a map or have already
-     *  been added to one, this config property may be omitted.
+     * The OpenLayers map that the control should be added
+     * to.  For controls that don't need to be added to a map or have already
+     * been added to one, this config property may be omitted.
      */
     map: null,
-    
+
     /**
      * @private
      * @cfg {Object}
-     *  The user-provided scope, used when calling uHandler,
-     *  uToggleHandler, and uCheckHandler.
+     * The user-provided scope, used when calling uHandler,
+     * uToggleHandler, and uCheckHandler.
      */
     uScope: null,
-    
+
     /**
      * @private
      * @cfg {Function}
@@ -52,7 +74,7 @@ Ext.define('GeoExt.Action', {
      *  the "handler" property.
      */
     uHandler: null,
-    
+
     /**
      * @private
      * @cfg {Function}
@@ -60,7 +82,7 @@ Ext.define('GeoExt.Action', {
      *  the "toggleHandler" property.
      */
     uToggleHandler: null,
-    
+
     /**
      * @private
      * @cfg {Function}
@@ -68,14 +90,17 @@ Ext.define('GeoExt.Action', {
      *  the "checkHandler" property.
      */
     uCheckHandler: null,
-    
+
     /** 
+     * @private
+     * 
      * Create a GeoExt.Action instance. A GeoExt.Action is created to insert
      * an OpenLayers control in a toolbar as a button or in a menu as a menu
      * item. A GeoExt.Action instance can be used like a regular Ext.Action,
      * look at the Ext.Action API doc for more detail.
      * 
-     * @private
+     * @param {Object} config (optional) Config object.
+     * 
      */
     constructor: function(config){
         // store the user scope and handlers
@@ -88,11 +113,17 @@ Ext.define('GeoExt.Action', {
         config.handler = this.pHandler;
         config.toggleHandler = this.pToggleHandler;
         config.checkHandler = this.pCheckHandler;
-        
+
         // set control in the instance, the Ext.Action
         // constructor won't do it for us
-        var ctrl = this.control = config.control;
+        this.control = config.control;
+        var ctrl = this.control;
         delete config.control;
+        
+        this.activateOnEnable = !!config.activateOnEnable;
+        delete config.activateOnEnable;
+        this.deactivateOnDisable = !!config.deactivateOnDisable;
+        delete config.deactivateOnDisable;
         
         // register "activate" and "deactivate" listeners
         // on the control
@@ -102,21 +133,27 @@ Ext.define('GeoExt.Action', {
                 config.map.addControl(ctrl);
                 delete config.map;
             }
-            if ((config.pressed || config.checked) && ctrl.map) {
+            if((config.pressed || config.checked) && ctrl.map) {
                 ctrl.activate();
+            }
+            if (ctrl.active) {
+                config.pressed = true;
+                config.checked = true;
             }
             ctrl.events.on({
                 activate: this.onCtrlActivate,
                 deactivate: this.onCtrlDeactivate,
                 scope: this
             });
+            
         }
         
         this.callParent(arguments);
+        
     },
     
     /**
-     *  The private handler.
+     * The private handler.
      * @private
      * @param {Ext.Component} The component that triggers the handler.
      */
@@ -132,7 +169,7 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
-     *  The private toggle handler.
+     * The private toggle handler.
      * @private
      * @param {Ext.Component} cmp The component that triggers the toggle handler.
      * @param {Boolean} state The state of the toggle.
@@ -145,7 +182,7 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
-     *  The private check handler.
+     * The private check handler.
      * @private
      * @param {Ext.Component} cmp The component that triggers the check handler.
      * @param {Boolean} state The state of the toggle.
@@ -158,37 +195,41 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
-     *  Change the control state depending on the state boolean.
+     * Change the control state depending on the state boolean.
      * @private
      * @param {Boolean} state The state of the toggle.
      */
     changeControlState: function(state){
-        if (state) {
-            if (!this._activating) {
+        if(state) {
+            if(!this._activating) {
                 this._activating = true;
                 this.control.activate();
+                // update initialConfig for next component created from this action
+                this.initialConfig.pressed = true;
+                this.initialConfig.checked = true;
                 this._activating = false;
             }
-        }
-        else {
-            if (!this._deactivating) {
+        } else {
+            if(!this._deactivating) {
                 this._deactivating = true;
                 this.control.deactivate();
+                // update initialConfig for next component created from this action
+                this.initialConfig.pressed = false;
+                this.initialConfig.checked = false;
                 this._deactivating = false;
             }
         }
     },
     
     /**
-     *  Called when this action's control is activated.
+     * Called when this action's control is activated.
      * @private
      */
     onCtrlActivate: function(){
         var ctrl = this.control;
-        if (ctrl.type == OpenLayers.Control.TYPE_BUTTON) {
+        if(ctrl.type == OpenLayers.Control.TYPE_BUTTON) {
             this.enable();
-        }
-        else {
+        } else {
             // deal with buttons
             this.safeCallEach("toggle", [true]);
             // deal with check items
@@ -197,15 +238,14 @@ Ext.define('GeoExt.Action', {
     },
     
     /**
-     *  Called when this action's control is deactivated.
+     * Called when this action's control is deactivated.
      * @private
      */
     onCtrlDeactivate: function(){
         var ctrl = this.control;
-        if (ctrl.type == OpenLayers.Control.TYPE_BUTTON) {
+        if(ctrl.type == OpenLayers.Control.TYPE_BUTTON) {
             this.disable();
-        }
-        else {
+        } else {
             // deal with buttons
             this.safeCallEach("toggle", [false]);
             // deal with check items
@@ -213,19 +253,40 @@ Ext.define('GeoExt.Action', {
         }
     },
     
-    /**
-     * @private
-     *
-     */
-    safeCallEach: function(fnName, args){
-        var cs = this.items;
-        for (var i = 0, len = cs.length; i < len; i++) {
-            if (cs[i][fnName]) {
-                cs[i].rendered ? cs[i][fnName].apply(cs[i], args) : cs[i].on({
-                    "render": cs[i][fnName].bind(cs[i][fnName], cs.scope, args, false),
-                    single: true
-                });
-            }
-        }
-    }
+   /** 
+    * @private
+    * 
+    * Called when the control which should get toggled 
+    * is not of type OpenLayers.Control.TYPE_BUTTON
+    */
+   safeCallEach: function(fnName, args) {
+       var cs = this.items;
+       for(var i = 0, len = cs.length; i < len; i++){
+           if(cs[i][fnName]) {
+               cs[i].rendered ?
+                   cs[i][fnName].apply(cs[i], args) :
+                   cs[i].on({
+                       "render": cs[i][fnName].bind(cs[i], args),
+                       single: true
+                   });
+           }
+       }
+   },
+   
+   /** 
+    * @private
+    * @param {Boolean} v Disable the action's components.
+    * 
+    * Override method on super to optionally deactivate controls on disable.
+    */
+   setDisabled : function(v) {
+       if (!v && this.activateOnEnable && this.control && !this.control.active) {
+           this.control.activate();
+       }
+       if (v && this.deactivateOnDisable && this.control && this.control.active) {
+           this.control.deactivate();
+       }
+       return GeoExt.Action.superclass.setDisabled.apply(this, arguments);
+   }
+
 });
