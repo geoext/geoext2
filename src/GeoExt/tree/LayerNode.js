@@ -60,11 +60,11 @@ Ext.define('GeoExt.tree.LayerNode', {
         target.raw.checked = "";
         target.raw.leaf = target.raw.leaf || !target.raw.children;
         
-        if(!target.iconCls && !target.children) {
-            target.iconCls = "gx-tree-layer-icon";
+        if(!target.raw.iconCls && !target.raw.children) {
+            target.raw.iconCls = "gx-tree-layer-icon";
         }
         
-        if (target.text) {
+        if (target.raw.text) {
             this.fixedText = true;
         }
     },
