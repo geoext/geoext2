@@ -19,20 +19,24 @@
             }
         });
 
+        Ext.require([
+            'GeoExt.data.AttributeModel',
+            'Ext.data.writer.Json'
+        ]);
+
         function test_constructor(t) {
             t.plan(2);
 
-            var model;
+            var record;
 
-            model = Ext.create('GeoExt.data.AttributeModel', {
-                name: "id"
+            record = Ext.create('GeoExt.data.AttributeModel', {
+                name: "foo"
             });
-            t.ok(model.getProxy() instanceof Ext.data.proxy.Ajax,
-                 "ctor creates an ajax proxy if none is provided");
-            t.eq(model.get("name"), "id", 
-                "ctor populates field values");
 
-            model.destroy();
+            t.ok(record.getProxy() instanceof Ext.data.proxy.Ajax,
+                "ctor creates an ajax proxy if none is provided");
+            t.eq(record.get("name"), "foo",
+                "ctor populates field values");
         }
     </script>
   </head>

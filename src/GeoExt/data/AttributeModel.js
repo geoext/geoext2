@@ -30,7 +30,6 @@ Ext.define('GeoExt.data.AttributeModel', {
     ],
     proxy: {
         type: 'ajax',
-        url: 'change_me', // should not be not empty or it fails in the tests,
         reader: {
             type: 'gx_attribute'
         }
