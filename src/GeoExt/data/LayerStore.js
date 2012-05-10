@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
 /**
  * @class GeoExt.data.LayerStore
  * A store that synchronizes a layers array of an OpenLayers.Map with a
@@ -7,7 +15,7 @@ Ext.define('GeoExt.data.LayerStore', {
     requires: ['GeoExt.data.LayerModel'],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.LayerModel',
-    
+
     statics: {
         /**
          * @static
@@ -20,7 +28,7 @@ Ext.define('GeoExt.data.LayerStore', {
          * @property {Number}
          * Direction: Store to map
          */
-        STORE_TO_MAP: 2 
+        STORE_TO_MAP: 2
     },
 
     /**
@@ -30,26 +38,26 @@ Ext.define('GeoExt.data.LayerStore', {
      * @param {GeoExt.data.LayerStore} store
      * @param {OpenLayers.Map} map
      */
-        
+
     /**
      * @cfg {OpenLayers.Map/GeoExt.panel.Map/Object} map
      * Map that this store will be in sync with. If not provided, the
      * store will not be bound to a map.
      */
-        
-    /** 
+
+    /**
      * @property {OpenLayers.Map/Object} map
      * Map that the store is synchronized with, if any.
      */
     map: null,
-        
-    /** 
+
+    /**
      * @cfg {OpenLayers.Layer/Array} layers
      * Layers that will be added to the store (and the map, depending on the
      * value of the ``initDir`` option.
      */
-        
-    /** 
+
+    /**
      * @cfg {Number} initDir
      * Bitfields specifying the direction to use for the initial sync between
      * the map and the store, if set to 0 then no initial sync is done.
@@ -57,7 +65,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * {@link #STORE_TO_MAP}.
      */
 
-    /** 
+    /**
      * @config {Object} Creation parameters
      * @private
      */
@@ -93,7 +101,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * is synchronized with the map and vice-versa.
      *
      * @param {OpenLayers.Map} map The map instance.
-     * @param {Object} options  
+     * @param {Object} options
      */
     bind: function(map, options) {
         var me = this;
@@ -167,7 +175,7 @@ Ext.define('GeoExt.data.LayerStore', {
             me.map = null;
         }
     },
-        
+
         /**
          * Handler for layer changes.  When layer order changes, this moves the
          * appropriate record within the store.
@@ -200,7 +208,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 }
             }
         },
-       
+
         /**
          * Handler for a map's addlayer event
          * @private
@@ -215,7 +223,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 delete me._adding;
             }
         },
-        
+
         /**
          * Handler for a map's removelayer event
          * @private
@@ -236,7 +244,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 this.unbind();
             }
         },
-        
+
         /**
          * Handler for a store's load event
          * @private
@@ -268,7 +276,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 }
             }
         },
-        
+
         /**
          * Handler for a store's clear event
          * @private
@@ -281,7 +289,7 @@ Ext.define('GeoExt.data.LayerStore', {
             }
             delete this._removing;
         },
-        
+
         /**
          * Handler for a store's add event
          * @private
@@ -303,7 +311,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 delete this._adding;
             }
         },
-        
+
         /**
          * Handler for a store's remove event
          * @private
@@ -321,7 +329,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 }
             }
         },
-        
+
         /**
          * Handler for a store's update event
          * @private
@@ -362,7 +370,7 @@ Ext.define('GeoExt.data.LayerStore', {
         onReplace: function(key, oldRecord, newRecord){
             this.removeMapLayer(oldRecord);
         },
-        
+
         /**
          * Get the record for the specified layer
          * @param {OpenLayers.Layer} layer
@@ -376,7 +384,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 return this.getAt(index);
             }
         },
-        
+
         /**
          * @private
          */
