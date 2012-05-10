@@ -10,7 +10,7 @@
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
-    requires: ['GeoExt.panel.Map'],
+    requires: ['GeoExt.panel.Map', 'GeoExt.tree.LayerNode'],
 
     /**
      * Triggered before loading children. Return false to avoid
@@ -79,10 +79,6 @@ Ext.define('GeoExt.tree.LayerLoader', {
                 node.removeChild(node.firstChild);
             }
             
-            if(!this.uiProviders) {
-                this.uiProviders = node.getOwnerTree().getLoader().uiProviders;
-            }
-    
             if(!this.store) {
                 this.store = GeoExt.MapPanel.guess().layers;
             }
@@ -142,18 +138,28 @@ Ext.define('GeoExt.tree.LayerLoader', {
     addLayerNode: function(node, layerRecord, index) {
         index = index || 0;
         if (this.filter(layerRecord) === true) {
+            var layer = layerRecord.getLayer();
             var child = this.createNode({
-                nodeType: 'gx_layer',
-                layer: layerRecord.getLayer(),
-                layerStore: this.store
+                plugins: [{
+                    ptype: 'gx_layer',
+                    layer: layer,
+                    layerStore: this.store,
+                }],
+                leaf: true,
+                text: layer.name
             });
-            var sibling = node.item(index);
+            var sibling = node.childNodes && node.getChildAt(index);
             if(sibling) {
                 node.insertBefore(child, sibling);
-            } else {
+                child.on("move", this.onChildMove, this);
+            } else if (node.isLoaded()) {
                 node.appendChild(child);
+            } else {
+                if (!node.raw.children) {
+                    node.raw.children = [];
+                }
+                node.raw.children.push(child);
             }
-            child.on("move", this.onChildMove, this);
         }
     },
 
@@ -250,8 +256,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
     addStoreHandlers: function(node) {
         if(!this._storeHandlers) {
             this._storeHandlers = {
-                "add": this.onStoreAdd.createDelegate(this, [node], true),
-                "remove": this.onStoreRemove.createDelegate(this, [node], true)
+                "add": this.onStoreAdd.bind(this, [node], true),
+                "remove": this.onStoreRemove.bind(this, [node], true)
             };
             for(var evt in this._storeHandlers) {
                 this.store.on(evt, this._storeHandlers[evt], this);
@@ -280,12 +286,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
         if(this.baseAttrs){
             Ext.apply(attr, this.baseAttrs);
         }
-        if(typeof attr.uiProvider == 'string'){
-           attr.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
-        }
-        attr.nodeType = attr.nodeType || "gx_layer";
-
-        return new Ext.tree.TreePanel.nodeTypes[attr.nodeType](attr);
+        
+        return attr;
     },
 
     /** private: method[destroy]

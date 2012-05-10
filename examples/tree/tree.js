@@ -3,7 +3,8 @@ Ext.require([
     'Ext.layout.container.Border',
     'Ext.tree.Panel',
     'GeoExt.panel.Map',
-    'GeoExt.tree.LayerContainer'
+    'GeoExt.tree.LayerContainer',
+    'GeoExt.data.LayerTreeModel'
 ]);
 
 var mapPanel, tree;
@@ -94,9 +95,10 @@ Ext.application({
         // create our own layer node UI class, using the TreeNodeUIEventMixin
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
         
-        var treeConfig = [
-            Ext.create('GeoExt.tree.LayerContainer')
-        /*{
+        /*var treeConfig = [
+            {text: "myplainnode", leaf: true},
+            {nodeType: 'gx_layercontainer', layerStore: map.layers}
+        {
             nodeType: "gx_baselayercontainer"
         }, {
             nodeType: "gx_overlaylayercontainer",
@@ -119,7 +121,22 @@ Ext.application({
             loader: {
                 param: "LAYERS"
             }
-        }*/];
+        }];*/
+
+        var store = Ext.create('Ext.data.TreeStore', {
+            model: 'GeoExt.data.LayerTreeModel',
+            root: {
+                expanded: true,
+                children: [
+                    {text: "myplainnode", leaf: true},
+                    {plugins: ['gx_layercontainer']},
+                    {plugins: [{
+                        ptype: 'gx_layercontainer',
+                        layers: mapPanel.layers
+                    }], text: "My Layers", expanded: true}
+                ]
+            }
+        });
 
         // create the tree with the configuration from above
         tree = Ext.create('Ext.tree.Panel', {
@@ -140,9 +157,7 @@ Ext.application({
                     }
                 })
             ],*/
-            root: {
-                children: treeConfig           
-            },
+            store: store,
             rootVisible: false,
             lines: false
         });

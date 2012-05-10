@@ -11,11 +11,13 @@
  * text defaults to "Layers".
  */
 Ext.define('GeoExt.tree.LayerContainer', {
-    extend: 'Ext.data.Model',
+    extend: 'Ext.AbstractPlugin',
+    mixins: ['Ext.util.Observable'],
     requires: [
         'Ext.data.NodeInterface',
         'GeoExt.tree.LayerLoader'
     ],
+    alias: 'plugin.gx_layercontainer',
     
     /**
      * @cfg {GeoExt.tree.LayerLoader/Object} loader
@@ -27,22 +29,23 @@ Ext.define('GeoExt.tree.LayerContainer', {
      */
     
     /**
-     * The text for this node.
+     * The text for the target node.
      */
     text: 'Layers',
     
     /**
      * @private
      */
-    constructor: function(config) {
+    init: function(target) {
         var me = this;
-        me.callParent([config]);
+
+        var loader = me.loader;
         
-        Ext.data.NodeInterface.decorate(me);
+        me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
+            loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+        me.loader.load(target);
         
-        /*this.loader = config.loader instanceof GeoExt.tree.LayerLoader ?
-            config.loader :
-            Ext.create('GeoExt.tree.LayerLoader', config.loader);*/
+        Ext.applyIf(target.raw, {text: "Layers"});
     },
     
     /**
