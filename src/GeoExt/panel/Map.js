@@ -473,7 +473,19 @@ Ext.define('GeoExt.panel.Map', {
             }
         }
     },
-
+    
+    /**
+     * Check if an added item has to take separate actions
+     * to be added to the map.
+     * See e.g. the GeoExt.slider.Zoom or GeoExt.slider.LayerOpacity
+     * @private
+     */
+    onBeforeAdd: function(item) {
+        if(Ext.isFunction(item.addToMapPanel)) {
+            item.addToMapPanel(this);
+        }
+        this.callParent(arguments);
+    },
     
     /**
      * Private method called during the destroy sequence.
