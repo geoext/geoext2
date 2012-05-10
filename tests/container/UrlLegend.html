@@ -17,7 +17,7 @@
 
         Ext.require([
             'GeoExt.data.LayerStore',
-            'GeoExt.container.URLLegend'
+            'GeoExt.container.UrlLegend'
         ]);
 
         function test_initialize(t) {
@@ -28,7 +28,7 @@
                     new OpenLayers.Layer("foo")
                 ]
             });
-            var legend = Ext.create("GeoExt.URLLegend", {
+            var legend = Ext.create("GeoExt.container.UrlLegend", {
                 layerRecord: store.getAt(0),
                 renderTo: "legend"
             });
@@ -43,7 +43,7 @@
                     new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
                 ]
             });
-            var legend = Ext.create("GeoExt.URLLegend", {
+            var legend = Ext.create("GeoExt.UrlLegend", {
                 layerRecord: store.getAt(0),
                 renderTo: "legend"
             });
@@ -60,7 +60,7 @@
                 ]
             });
             var rec = store.getAt(0);
-            var legend = Ext.create("GeoExt.URLLegend", {
+            var legend = Ext.create("GeoExt.UrlLegend", {
                 layerRecord: rec,
                 renderTo: "legend"
             });
@@ -79,8 +79,8 @@
                 ]
             });
 
-            t.ok(GeoExt.URLLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
-            t.eq(GeoExt.URLLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
+            t.ok(GeoExt.container.UrlLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
+            t.eq(GeoExt.container.UrlLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
         }
 
     </script>
