@@ -466,6 +466,47 @@
                  "update event causes update of feature property \"bar\"");
         }
 
+        function test_with_store_as_class(t) {
+            t.plan(9);
+
+            var layer = new OpenLayers.Layer.Vector();
+            layer.addFeatures([
+                new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(6, 46), {
+                    foo: 'bar',
+                    ele: 12
+                }),
+                new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(9, 46.56), {
+                    foo: '42',
+                    ele: -100
+                })
+            ]);
+
+            Ext.define('My.data.Store', {
+                extend: 'GeoExt.data.FeatureStore',
+                model: 'My.Test.Model',
+                layer: layer
+            });
+
+            var store = Ext.create('My.data.Store');
+
+            t.ok(store instanceof GeoExt.data.FeatureStore,
+                 "store is a GeoExt.data.FeatureStore instance");
+            t.eq(store.layer.id, layer.id,
+                 "ctor sets the passed layer in the instance");
+
+            t.eq(store.getCount(), 2, "layer.features added to the store");
+
+            t.eq(store.getAt(0).get('foo'), 'bar', "feature[0].foo == 'bar'");
+            t.eq(store.getAt(0).get('ele'), 12, "feature[0].ele == 12");
+            t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
+            t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
+
+            t.ok(store.getAt(0).raw instanceof OpenLayers.Feature.Vector,
+                 "feature[0].raw is a OpenLayers.Feature.Vector");
+            t.ok(store.getAt(1).raw instanceof OpenLayers.Feature.Vector,
+                 "feature[1].raw is a OpenLayers.Feature.Vector");
+        }
+
         function test_destroy(t) {
             t.plan(1);
             var layer = new OpenLayers.Layer.Vector();

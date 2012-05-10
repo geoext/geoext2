@@ -36,6 +36,13 @@ Ext.define('GeoExt.data.FeatureStore', {
      */
 
     /**
+     * @private
+     * @property {OpenLayers.Layer.Vector}
+     * True when the vector layer is binded.
+     */
+    isLayerBinded: false,
+
+    /**
      * @cfg {OpenLayers.Layer.Vector} layer
      * Layer that this store will be in sync with. If not provided, the
      * store will not be bound to a layer.
@@ -81,8 +88,10 @@ Ext.define('GeoExt.data.FeatureStore', {
             }
         }, config);
 
-        var layer = config.layer;
-        delete config.layer;
+        if (config.layer) {
+            this.layer = config.layer;
+            delete config.layer;
+        }
 
         // features option. Alias to data option
         if (config.features) {
@@ -95,8 +104,8 @@ Ext.define('GeoExt.data.FeatureStore', {
         var options = {initDir: config.initDir};
         delete config.initDir;
 
-        if (layer) {
-            this.bind(layer, options);
+        if (this.layer) {
+            this.bind(this.layer, options);
         }
     },
 
@@ -116,11 +125,12 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Object} options
      */
     bind: function(layer, options) {
-        if (this.layer) {
+        if (this.isLayerBinded) {
             // already bound
             return;
         }
         this.layer = layer;
+        this.isLayerBinded = true;
 
         var initDir = options.initDir;
         if (options.initDir == undefined) {
@@ -164,7 +174,7 @@ Ext.define('GeoExt.data.FeatureStore', {
      * Unbind this store to his layer instance.
      */
     unbind: function() {
-        if (this.layer) {
+        if (this.isLayerBinded) {
             this.layer.events.un({
                 'featuresadded': this.onFeaturesAdded,
                 'featuresremoved': this.onFeaturesRemoved,
@@ -180,6 +190,7 @@ Ext.define('GeoExt.data.FeatureStore', {
                 scope: this
             });
             this.layer = null;
+            this.isLayerBinded = false;
         }
     },
 
