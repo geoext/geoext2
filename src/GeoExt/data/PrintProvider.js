@@ -277,7 +277,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *    sent to the print service.
          */
 
-        /** api: events[beforedownload
+        /** @event beforedownload
          *  Triggered before the PDF is downloaded. By returning false from
          *  a listener, the default handling of the PDF can be cancelled
          *  and applications can take control over downloading the PDF.
@@ -414,9 +414,9 @@ Ext.define('GeoExt.data.PrintProvider', {
      *        layouts configured to print an overview map.
      *        
      *  @param {GeoExt.MapPanel/OpenLayers.Map} map The map to print.
-     *  @param {`Array` of {@link GeoExt.data.PrintPage}/{@link GeoExt.data.PrintPage}} pages 
+     *  @param {GeoExt.data.PrintPage[]/GeoExt.data.PrintPage} pages 
      *   or page(s) to print.
-     *  @param {Object} options of additional options, see below.
+     *  @param {Object} options of additional options, see above.
      */
     print: function(map, pages, options) {
         if(map instanceof GeoExt.MapPanel) {
