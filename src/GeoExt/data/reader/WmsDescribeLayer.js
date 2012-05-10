@@ -1,6 +1,6 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -31,7 +31,7 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
         }
     },
 
-    /** 
+    /**
      * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}
