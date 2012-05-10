@@ -143,11 +143,9 @@ Ext.application({
         });
         
         var mappanel = Ext.create('GeoExt.panel.Map', {
-            title: 'The GeoExt.panel.Map-class',
+            title: 'Using GeoExt.Action instances in various places',
             map: map,
-            stateful: true,
-            stateId: 'mappanel',
-            mapExtent: '7,51,8,52',
+            extent: '5.19,46.85,15.47,55.63',
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
