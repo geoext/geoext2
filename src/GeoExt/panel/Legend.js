@@ -1,4 +1,20 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
 /**
+ *  A panel showing legends of all layers in a layer store.
+ *  Depending on the layer type, a legend renderer will be chosen.
+ *
+ *  The LegendPanel will include legends for all the layers in the
+ *  ``layerStore`` it is configured with, unless the layer is configured with
+ *  ``displayInLayerSwitcher: false``, or a layer record has a
+ *  ``hideInLegend`` field with a value of ``true``. Additional filtering can
+ *  be done by configuring a ``filter`` on the LegendPanel.
  * @class GeoExt.panel.Legend
  */
 Ext.define('GeoExt.panel.Legend', {
@@ -6,37 +22,36 @@ Ext.define('GeoExt.panel.Legend', {
     requires: ['GeoExt.container.LayerLegend'],
     alias : 'widget.gx_legendpanel',
     alternateClassName : 'GeoExt.LegendPanel',
-    config: {
-        /**
-         * @cfg {Boolean} dynamic
-         * If false the LegendPanel will not listen to the add, remove and change 
-         * events of the LayerStore. So it will load with the initial state of
-         * the LayerStore and not change anymore. 
-         */
-        dynamic: true,
 
-        /**
-         * @cfg {Ext.data.Store} layerStore
-         * The layer store containing layers to be displayed in the legend 
-         * container. If not provided it will be taken from the MapPanel.
-         */
-        layerStore: null,
+    /**
+     * @cfg {Boolean} dynamic
+     * If false the LegendPanel will not listen to the add, remove and change 
+     * events of the LayerStore. So it will load with the initial state of
+     * the LayerStore and not change anymore. 
+     */
+    dynamic: true,
 
-        /**
-         * @cfg {Array}
-         * An array of preferred legend types.
-         */
-        preferredTypes: null,
+    /**
+     * @cfg {Ext.data.Store} layerStore
+     * The layer store containing layers to be displayed in the legend 
+     * container. If not provided it will be taken from the MapPanel.
+     */
+    layerStore: null,
 
-        /**
-         * @cfg {Function}
-         *  A function, called in the scope of the legend panel, with a layer record
-         *  as argument. Is expected to return true for layers to be displayed, false
-         *  otherwise. By default, all layers will be displayed.
-         */
-        filter: function(record) {
-            return true;
-        }
+    /**
+     * @cfg {Array}
+     * An array of preferred legend types.
+     */
+    preferredTypes: null,
+
+    /**
+     * @cfg {Function}
+     * A function, called in the scope of the legend panel, with a layer record
+     * as argument. Is expected to return true for layers to be displayed, false
+     * otherwise. By default, all layers will be displayed.
+     */
+    filter: function(record) {
+        return true;
     },    
 
     /**
