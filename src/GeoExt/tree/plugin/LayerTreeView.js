@@ -94,6 +94,7 @@ Ext.define('GeoExt.tree.plugin.LayerTreeView', {
     
     /** private: method[onLayerVisiilityChanged
      *  handler for visibilitychanged events on the layer
+     * @scope (Ext.data.NodeInterface) current node
      */
     onLayerVisibilityChanged: function() {
         if(!this._visibilityChanging) {
@@ -116,7 +117,7 @@ Ext.define('GeoExt.tree.plugin.LayerTreeView', {
             } else {
                 layer.setVisibility(checked);
             }
-            delete this._visibilityChanging;
+            delete node._visibilityChanging;
         }
     },
     
