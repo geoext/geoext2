@@ -242,13 +242,13 @@ Ext.define('GeoExt.data.LayerStore', {
          * @private
          * @param {Ext.data.Store} store
          * @param {Ext.data.Model[]} records
-         * @param {Object} options
+         * @param {Boolean} successful
          */
-        onLoad: function(store, records, options) {
-            if (!Ext.isArray(records)) {
-                records = [records];
-            }
-            if (options && !options.add) {
+        onLoad: function(store, records, successful) {
+            if (successful) {
+                if (!Ext.isArray(records)) {
+                    records = [records];
+                }
                 this._removing = true;
                 for (var i = this.map.layers.length - 1; i >= 0; i--) {
                     this.map.removeLayer(this.map.layers[i]);
