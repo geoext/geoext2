@@ -11,8 +11,7 @@
  */
 
 /**
- * <p>An Attribute Store.
- * TODO: port the original AttributeStore's bind method + callbacks to this new one.</p>
+ * <p>An Attribute Store.</p>
  */
 Ext.define('GeoExt.data.AttributeStore', {
     extend: 'Ext.data.Store',
@@ -36,13 +35,7 @@ Ext.define('GeoExt.data.AttributeStore', {
          * @cfg {Object} ignore
          * The ignore object passed to the reader.
          */
-        ignore: null,
-        
-        /**
-         * @cfg {Object} feature
-         * The OpenLayers.Feature.Vector passed to the reader.
-         */
-        feature: null
+        ignore: null
     },
 
     /**
@@ -52,10 +45,6 @@ Ext.define('GeoExt.data.AttributeStore', {
         // At this point, we have to copy the complex objects from the config
         // into the prototype. This is because Ext.data.Store's constructor 
         // creates deep copies of these objects.
-        if (config.feature) {
-            this.feature = config.feature;
-            delete config.feature;
-        }
         if (config.format) {
             this.format = config.format;
             delete config.format;
@@ -71,10 +60,6 @@ Ext.define('GeoExt.data.AttributeStore', {
             this.setUrl(this.url);
             delete this.url;
         }
-        if (this.feature) {
-            this.setFeature(this.feature);
-            delete this.feature;
-        }
         if (this.format) {
             this.setFormat(this.format);
             delete this.format;
@@ -88,15 +73,6 @@ Ext.define('GeoExt.data.AttributeStore', {
      */
     applyUrl: function(url) {
         this.getProxy().url = url;
-    },
-
-    /**
-     * @private
-     * We're setting the proxy URL.
-     * @param {OpenLayers.Feature} feature
-     */
-    applyFeature: function(feature) {
-        this.getProxy().getReader().setFeature(feature);
     },
 
     /**

@@ -27,18 +27,16 @@
         ]);
 
         function test_constructor(t) {
-            t.plan(5);
+            t.plan(4);
 
             var store,
-                format = new OpenLayers.Format(), 
-                feature = new OpenLayers.Feature.Vector();
+                format = new OpenLayers.Format();
 
             store = Ext.create('GeoExt.data.AttributeStore', {
                 url: '/truite',
                 ignore: {
                     type: "xsd:string"
                 },
-                feature: feature,
                 format: format
             });
 
@@ -50,9 +48,6 @@
 
             t.eq(store.getProxy().getReader().getIgnore(), {type: "xsd:string"},
                 "ctor sets the correct ignore property in the reader");
-
-            t.ok(store.getProxy().getReader().getFeature() === feature, 
-                "ctor sets the feature in the reader");
 
             t.ok(store.getProxy().getReader().getFormat() === format, 
                 "ctor sets the format in the reader");
