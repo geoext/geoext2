@@ -46,7 +46,9 @@
         )
     };
 
-    GeoExt.Form = {
+    Ext.define('GeoExt.Form', {
+        singleton: true,
+
         /**
          * @property {Number} ENDS_WITH
          * Use `GeoExt.Form.ENDS_WITH` as the `wildcard` param to `toFilter`
@@ -270,5 +272,5 @@
 
             return field;
         }
-    };
+    });
 })();
