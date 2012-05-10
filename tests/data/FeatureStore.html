@@ -244,7 +244,7 @@
             var feature = store.getByFeature(features[0]);
             t.ok(feature);
 
-            var feature = store.getByFeature(features[1]);
+            feature = store.getByFeature(features[1]);
             t.ok(feature);
         }
 
@@ -294,11 +294,9 @@
             // confirm that we can update phantom records
             feature.state = OpenLayers.State.INSERT;
 
-            var id = feature.id;
-
             function keys(obj) {
-                var list = [];
-                for(var k in obj) {
+                var list = [], k;
+                for (k in obj) {
                     list.push(k);
                 }
                 return list;
@@ -416,8 +414,8 @@
             var id = feature.id;
 
             function keys(obj) {
-                var list = [];
-                for(var k in obj) {
+                var list = [], k;
+                for (k in obj) {
                     list.push(k);
                 }
                 return list;
