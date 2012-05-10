@@ -12,7 +12,7 @@
  */
 Ext.define('GeoExt.data.WmsDescribeLayerModel',{
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    requires: ['Ext.data.proxy.Memory', 'GeoExt.data.reader.WmsDescribeLayer'],
     alias: 'model.gx_wmsdescribelayer',
     fields: [   
         {name: "owsType", type: "string"},
@@ -22,7 +22,7 @@ Ext.define('GeoExt.data.WmsDescribeLayerModel',{
     proxy: {
         type: 'memory',
         reader: {
-            type: 'json'
+            type: 'gx_wmsdescribelayer'
         }
     }
 });
