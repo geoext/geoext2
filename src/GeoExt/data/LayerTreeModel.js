@@ -6,7 +6,8 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     fields: [  
         {name: 'text', type: 'string'}, 
         {name: 'plugins'},
-        {name: 'checkedGroup', type: 'string'}
+        {name: 'checkedGroup', type: 'string'},
+        {name: 'layer'}
     ],
     
     init: function() {

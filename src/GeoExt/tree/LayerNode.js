@@ -58,6 +58,7 @@ Ext.define('GeoExt.tree.LayerNode', {
      */
     init: function(target) {
         target.raw.checked = "";
+        target.raw.layer = this.layer;
         target.raw.leaf = target.raw.leaf || !target.raw.children;
         
         if(!target.raw.iconCls && !target.raw.children) {
