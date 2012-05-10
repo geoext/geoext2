@@ -9,7 +9,7 @@
  */
 Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
-    extend: 'Ext.data.Model',
+    extend: 'GeoExt.data.NativeAccessors',
     requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
     alias: 'model.gx_layer',
     statics: {
@@ -88,44 +88,5 @@ Ext.define('GeoExt.data.LayerModel',{
             }
             field && this.set(field.name,value);
         }
-    },
-    
-    
-    /**
-     * @private
-     */    
-    afterEdit: function(fields){
-        var layer = this.raw;
-        for(var i=0,len=fields.length;i<len;i++){
-            var field = fields[i];
-            var nativeFunc = this.findNativeAccessor('set', field);
-            if(nativeFunc){
-                nativeFunc.call(layer, this.data[field]);
-            }
-        }
-        this.callParent([fields]);
-    },
-    
-    //inherit docs
-    get: function(field){
-        var val;
-        var nativeFunc = this.findNativeAccessor('get', field);
-        if(nativeFunc){
-            val = nativeFunc.call(layer, this.data.field);
-        } else {
-            //no native getter, so just use the normal model get function
-            //Ext.data.Model doesn't contain post processing code, so don't callParent otherwise
-            val = this.callParent([field]);
-        }
-        return val;
-    },
-    /**
-     * @private
-     */
-    findNativeAccessor: function(operation,property){
-        var layer = this.raw;
-        var nativeProp = (this.fields.get(property) && this.fields.get(property).mapping) || property;
-        var nativeFunc = layer[operation+nativeProp[0].toUpperCase()+nativeProp.slice(1)];
-        return nativeFunc;
     }
 });
