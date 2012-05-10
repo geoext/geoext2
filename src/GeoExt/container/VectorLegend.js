@@ -1,4 +1,13 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
 /**
+ * Create a vector legend.
  * @class GeoExt.container.VectorLegend
  */
 Ext.define('GeoExt.container.VectorLegend', {
@@ -13,95 +22,92 @@ Ext.define('GeoExt.container.VectorLegend', {
         }
     },
 
-    config: {
-        /** @cfg {GeoExt.data.LayerRecord}
-         * The record containing a vector layer that this legend will be based on.  
-         * One of ``layerRecord``, ``layer``,  or ``rules`` must be specified in 
-         * the config.
-         */
-        layerRecord: null,
+    /** @cfg {GeoExt.data.LayerRecord}
+     * The record containing a vector layer that this legend will be based on.  
+     * One of ``layerRecord``, ``layer``,  or ``rules`` must be specified in 
+     * the config.
+     */
+    layerRecord: null,
 
-        /** @cfg {OpenLayers.Layer.Vector}
-         * The layer that this legend will be based on.  One of ``layer``, 
-         * ``rules``, or ``layerRecord`` must be specified in the config.
-         */
-        layer: null,
+    /** @cfg {OpenLayers.Layer.Vector}
+     * The layer that this legend will be based on.  One of ``layer``, 
+     * ``rules``, or ``layerRecord`` must be specified in the config.
+     */
+    layer: null,
 
-        /** @cfg {Array}
-         * List of rules.  One of ``rules``, ``layer``, or ``layerRecord`` must be 
-         * specified in the config.  The ``symbolType`` property must also be
-         * provided if only ``rules`` are given in the config.
-         */
-        rules: null,
+    /** @cfg {Array}
+     * List of rules.  One of ``rules``, ``layer``, or ``layerRecord`` must be 
+     * specified in the config.  The ``symbolType`` property must also be
+     * provided if only ``rules`` are given in the config.
+     */
+    rules: null,
 
-        /** @cfg {String}
-         * The symbol type for legend swatches.  Must be one of ``"Point"``, 
-         * ``"Line"``, or ``"Polygon"``.  If not provided, the ``layer`` or
-         * ``layerRecord`` config property must be specified, and the geometry type
-         * of the first feature found on the layer will be used. If a rule does
-         * not have a symbolizer for ``symbolType``, we look at the symbolizers
-         * for the rule, and see if it has a ``"Point"``, ``"Line"`` or
-         * ``"Polygon"`` symbolizer, which we use for rendering a swatch of the
-         * respective geometry type. 
-         */
-        symbolType: null,
+    /** @cfg {String}
+     * The symbol type for legend swatches.  Must be one of ``"Point"``, 
+     * ``"Line"``, or ``"Polygon"``.  If not provided, the ``layer`` or
+     * ``layerRecord`` config property must be specified, and the geometry type
+     * of the first feature found on the layer will be used. If a rule does
+     * not have a symbolizer for ``symbolType``, we look at the symbolizers
+     * for the rule, and see if it has a ``"Point"``, ``"Line"`` or
+     * ``"Polygon"`` symbolizer, which we use for rendering a swatch of the
+     * respective geometry type. 
+     */
+    symbolType: null,
 
-        /** @cfg {String}
-         * The prefix to use as a title for rules with no title or
-         * name.  Default is ``"Untitled "``.  Prefix will be appended with a
-         * number that corresponds to the index of the rule (1 for first rule).
-         */
-        untitledPrefix: "Untitled ",
+    /** @cfg {String}
+     * The prefix to use as a title for rules with no title or
+     * name.  Default is ``"Untitled "``.  Prefix will be appended with a
+     * number that corresponds to the index of the rule (1 for first rule).
+     */
+    untitledPrefix: "Untitled ",
 
-        /** @cfg {Boolean}
-         * Set cursor style to "pointer" for symbolizers.  Register for
-         * the ``symbolclick`` event to handle clicks.  Note that click events
-         * are fired regardless of this value.  If ``false``, no cursor style will
-         * be set.  Default is ``false``.
-         */
-        clickableSymbol: false,
+    /** @cfg {Boolean}
+     * Set cursor style to "pointer" for symbolizers.  Register for
+     * the ``symbolclick`` event to handle clicks.  Note that click events
+     * are fired regardless of this value.  If ``false``, no cursor style will
+     * be set.  Default is ``false``.
+     */
+    clickableSymbol: false,
 
-        /** @cfg {Boolean}
-         * Set cursor style to "pointer" for rule titles.  Register for
-         * the ``titleclick`` event to handle clicks.  Note that click events
-         * are fired regardless of this value.  If ``false``, no cursor style will
-         * be set.  Default is ``false``.
-         */
-        clickableTitle: false,
+    /** @cfg {Boolean}
+     * Set cursor style to "pointer" for rule titles.  Register for
+     * the ``titleclick`` event to handle clicks.  Note that click events
+     * are fired regardless of this value.  If ``false``, no cursor style will
+     * be set.  Default is ``false``.
+     */
+    clickableTitle: false,
 
-        /** @cfg {Boolean}
-         * Set to true if a rule should be selected by clicking on the
-         * symbol or title. Selection will trigger the ruleselected event, and
-         * a click on a selected rule will unselect it and trigger the
-         * ``ruleunselected`` event. Default is ``false``.
-         */
-        selectOnClick: false,
+    /** @cfg {Boolean}
+     * Set to true if a rule should be selected by clicking on the
+     * symbol or title. Selection will trigger the ruleselected event, and
+     * a click on a selected rule will unselect it and trigger the
+     * ``ruleunselected`` event. Default is ``false``.
+     */
+    selectOnClick: false,
 
-        /** @cfg {Boolean}
-         * Allow drag and drop of rules. Default is ``false``.
-         */
-        enableDD: false,
+    /** @cfg {Boolean}
+     * Allow drag and drop of rules. Default is ``false``.
+     */
+    enableDD: false,
 
-        /** @cfg {Boolean}
-         * Show a border around the legend panel. Default is ``false``.
-         */
-        bodyBorder: false
-
-    },
+    /** @cfg {Boolean}
+     * Show a border around the legend panel. Default is ``false``.
+     */
+    bodyBorder: false,
           
-    /** @cfg {OpenLayers.Feature.Vector}
+    /** @property {OpenLayers.Feature.Vector}
      * @private
      * Cached feature for rendering.
      */
     feature: null,
     
-    /** @cfg {OpenLayers.Rule}
+    /** @property {OpenLayers.Rule}
      * @private
      * The rule that is currently selected.
      */
     selectedRule: null,
 
-    /** @cfg {Number}
+    /** @property {Number}
      * @private
      * The current scale denominator of any map associated with this
      * legend.  Use :meth`setCurrentScaleDenominator` to change this.  If not

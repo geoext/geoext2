@@ -1,8 +1,23 @@
+/**
+ * The layer model class used by the stores.
+ */
 Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'Ext.data.Model',
     requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
     alias: 'model.gx_layer',
+    statics: {
+        /**
+         * Convenience function for creating new layer model instance object
+         * using a layer object.
+         * @param {OpenLayers.Layer} layer
+         * @return {GeoExt.data.LayerModel} 
+         * @static         
+         */
+        createFromLayer: function(layer) {
+            return this.proxy.reader.readRecords([layer]).records[0];
+        }
+    },
     fields: [   
         'id',
         {name: 'title', type: 'string', mapping: 'name'},
