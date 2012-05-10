@@ -19,15 +19,17 @@ Ext.require([
     'GeoExt.data.PrintPage',
     'GeoExt.panel.Map',
     'GeoExt.panel.Legend',
-    'GeoExt.container.WMSLegend',
-    'GeoExt.container.URLLegend',
+    'GeoExt.container.WmsLegend',
+    'GeoExt.container.UrlLegend',
     'GeoExt.container.VectorLegend'
 ]);
 
 var mapPanel, printPage, printProvider;
 
-Ext.onReady(function() {
-    // The printProvider that connects us to the print service
+Ext.application({
+    name: 'PrintPage and PrintProvider - GeoExt2',
+    launch: function() {
+        // The printProvider that connects us to the print service
     printProvider = Ext.create('GeoExt.data.PrintProvider', {
         method: "GET", // "POST" recommended for production use
         capabilities: printCapabilities, // from the info.json script in the html
@@ -45,8 +47,14 @@ Ext.onReady(function() {
     // The map we want to print
     mapPanel = Ext.create('GeoExt.panel.Map', {
         region: "center",
-        layers: [new OpenLayers.Layer.WMS("Tasmania", "http://demo.opengeo.org/geoserver/wms",
-            {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
+        layers: [
+            new OpenLayers.Layer.WMS(
+                "Tasmania",
+                "http://demo.opengeo.org/geoserver/wms",
+                { layers: "topp:tasmania_state_boundaries" },
+                { singleTile: true }
+            )
+        ],
         center: [146.56, -41.56],
         zoom: 7
     });
@@ -78,7 +86,11 @@ Ext.onReady(function() {
         }, {
             xtype: "checkbox",
             boxLabel: "Include legend?",
-            handler: function() {includeLegend = this.checked}
+            handler: function() {
+                includeLegend = this.checked;
+            }
         }]
     });
+    }
 });
+
