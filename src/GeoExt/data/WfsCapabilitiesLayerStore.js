@@ -65,7 +65,9 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
                 modelFields.add(new Ext.data.Field(xtraFields[i]));
             }
         }
-        config.url && me.setUrl(config.url);
+        if (config.url) {
+            me.setUrl(config.url);
+        }
     },
     /**
      * @private
