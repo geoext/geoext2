@@ -46,10 +46,14 @@ Ext.define('GX.view.summit.Chart', {
                 smooth: true,
                 tips: {
                     trackMouse: true,
-                    width: 100,
-                    height: 28,
+                    width: 130,
+                    height: 40,
                     renderer: function(storeItem, item) {
-                        this.setTitle(item.value[1] + ' meters');
+                        this.setTitle(
+                            storeItem.get('name') +
+                            '<br />' +
+                            item.value[1] + ' meters'
+                        );
                     }
                 },
                 title: [
