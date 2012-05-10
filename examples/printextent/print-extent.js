@@ -1,8 +1,6 @@
 Ext.require([
-    'Ext.Window',
     'GeoExt.panel.Map',
     'GeoExt.data.PrintProvider',
-    'GeoExt.panel.PrintMap',
     'GeoExt.plugins.PrintExtent'
 ]);
 
@@ -10,7 +8,7 @@ var mapPanel, printProvider;
 
 Ext.onReady(function() {
     // The printProvider that connects us to the print service
-    printProvider = new GeoExt.data.PrintProvider({
+    printProvider = Ext.create('GeoExt.data.PrintProvider', {
         method: "GET", // "POST" recommended for production use
         capabilities: printCapabilities, // from the info.json script in the html
         customParams: {
@@ -19,12 +17,12 @@ Ext.onReady(function() {
         }
     });
 
-    var printExtent = new GeoExt.plugins.PrintExtent({
+    var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
         printProvider: printProvider
     });
 
     // The map we want to print, with the PrintExtent added as item.
-    mapPanel = new GeoExt.MapPanel({
+    mapPanel = Ext.create('GeoExt.panel.Map', {
         renderTo: "content",
         width: 450,
         height: 320,
