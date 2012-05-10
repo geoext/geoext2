@@ -20,12 +20,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
     requires: ['GeoExt.data.reader.WmsCapabilities'],
     model: 'GeoExt.data.WmsCapabilitiesLayerModel',
     alternateClassName: ['GeoExt.data.WMSCapabilitiesStore','GeoExt.data.WmsCapabilitiesStore'],
-    /**
-     * @cfg {Array[{Object}]}
-     * An array of {Ext.data.Field} configuration objects to create additional fields on the
-     * {GeoExt.data.WmsCapabilitiesLayerModel} layer records created by this store when parsing a WMS capabilities document
-     */
-    fields: null,
+
     config: {
         /**
          * @cfg {String}
@@ -41,30 +36,10 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
      * @private
      */
     constructor: function(config){
-        var me = this,
-        xtraFields = null;
-        
-        config = Ext.apply({}, config);
-        
-        if(config.fields){
-            //save a ref to the extra fields but delete them from the config
-            //since a fields property passed in a config object can cause some
-            //unexpected behavior
-            xtraFields = config.fields;
-            delete config.fields;
-        }
+        var me = this;
         me.callParent([config]);
         
-        //post process the extra fields. they will be lost if done before the
-        //parent constructor is called
-        if(xtraFields){
-            var model = me.getModel();
-            var modelFields = model.fields;
-            for (var i=0; i < xtraFields.length; i++) {
-                modelFields.add(new Ext.data.Field(xtraFields[i]));
-            }
-        }
-        config.url && me.setUrl(config.url);
+        if(config.url) { me.setUrl(config.url); }
     },
     /**
      * @private
