@@ -30,8 +30,7 @@ Ext.define('GeoExt.data.LayerModel',{
         {name: 'legendURL',    type: 'string', mapping: 'metadata.legendURL'},
         {name: 'hideTitle',    type: 'bool',   mapping: 'metadata.hideTitle'},
         {name: 'hideInLegend', type: 'bool',   mapping: 'metadata.hideInLegend'},
-        {name: 'opacity',      type: 'float'},
-        {name: 'zIndex',       type: 'int'},       
+        {name: 'opacity',      type: 'float'},    
         {name: 'isBaseLayer',  type: 'bool'}, 
         {name: 'visibility',   type: 'bool'},     
         {name: 'attribution',  type: 'string'}
@@ -53,9 +52,9 @@ Ext.define('GeoExt.data.LayerModel',{
         //attach listeners to layer properties modification events      
         layer.events.on({
             'visibilitychanged':function(evt){
-                var visiblity = evt.object.getVisibility();
-                this[this.persistenceProperty]['visibility'] = visibility;
-                Ext.Array.include(this.modified,'visibility');
+                var visibile = evt.object.getVisibility();
+                this[this.persistenceProperty].visibility = visibile;
+                this.modified.visibility = visibile;
                 this.dirty = true;
                 this.callStore('afterEdit', this.modified);
             },
@@ -76,7 +75,7 @@ Ext.define('GeoExt.data.LayerModel',{
     updateField: function(rawProperty,value){
         //these properties either are handled elsewhere or apply to the collection
         var ignoreProperties = ['visibility', 'order'];
-        if(ignoreProperties.indexOf(rawProperty)==-1){
+        if(ignoreProperties.indexOf(rawProperty) < 0){
             var field = this.fields.get(rawProperty);
             if(!field){
                 //property name is not a field, look for a mapping
@@ -99,9 +98,9 @@ Ext.define('GeoExt.data.LayerModel',{
         var layer = this.raw;
         for(var i=0,len=fields.length;i<len;i++){
             var field = fields[i];
-            var nativeFunc = this.findNativeAccessor('set',field);
+            var nativeFunc = this.findNativeAccessor('set', field);
             if(nativeFunc){
-                nativeFunc(this.data.field);
+                nativeFunc.call(layer, this.data[field]);
             }
         }
         this.callParent([fields]);
@@ -110,9 +109,9 @@ Ext.define('GeoExt.data.LayerModel',{
     //inherit docs
     get: function(field){
         var val;
-        var nativeFunc = this.findNativeAccessor('get',field.name || field);
+        var nativeFunc = this.findNativeAccessor('get', field);
         if(nativeFunc){
-            val = nativeFunc(this.data.field);
+            val = nativeFunc.call(layer, this.data.field);
         } else {
             //no native getter, so just use the normal model get function
             //Ext.data.Model doesn't contain post processing code, so don't callParent otherwise
@@ -127,6 +126,6 @@ Ext.define('GeoExt.data.LayerModel',{
         var layer = this.raw;
         var nativeProp = (this.fields.get(property) && this.fields.get(property).mapping) || property;
         var nativeFunc = layer[operation+nativeProp[0].toUpperCase()+nativeProp.slice(1)];
-        return nativeFunc | null;
+        return nativeFunc;
     }
 });

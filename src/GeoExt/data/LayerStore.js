@@ -177,7 +177,9 @@ Ext.define('GeoExt.data.LayerStore', {
         onChangeLayer: function(evt) {
             var layer = evt.layer;
             var record = this.getByLayer(layer);
-            if(evt.property === "order") {
+            var recordIndex = this.indexOf(record);
+            var property = evt.property;
+            if(property === "order") {
                 if(!this._adding && !this._removing) {
                     var layerIndex = this.map.getLayerIndex(layer);
                     if(layerIndex !== recordIndex) {
@@ -190,7 +192,7 @@ Ext.define('GeoExt.data.LayerStore', {
                     }
                 }
             } else {
-                record.updateField(evt.property, layer['property']);
+                record.updateField(property, layer[property]);
             }
         },
        
