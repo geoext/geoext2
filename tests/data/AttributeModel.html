@@ -14,8 +14,8 @@
             enabled:true,
             disableCaching: false,
             paths: {
-                //"Ext": "../../../<YOUR_EXTJS_PATH>/src",
-                "GeoExt": "../../src/GeoExt"
+                //Ext: "<PATH_TO_EXT_JS>/src",
+                GeoExt: "../../src/GeoExt"
             }
         });
 
@@ -37,6 +37,18 @@
                 "ctor creates an ajax proxy if none is provided");
             t.eq(record.get("name"), "foo",
                 "ctor populates field values");
+        }
+
+        function test_extend(t) {
+            t.plan(1);
+
+            var Model = Ext.Class({
+                extend: 'GeoExt.data.AttributeModel',
+                fields: [{name: 'foo', type: 'string'}]
+            });
+
+            t.ok(Model.prototype.fields.get('foo') !== undefined,
+                 'fields are added when subclassing');
         }
     </script>
   </head>
