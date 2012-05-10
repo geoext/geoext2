@@ -49,14 +49,18 @@ Ext.define('GeoExt.data.reader.Feature', {
                     if (field.convert) {
                         v = field.convert(v, feature);
                     }
-                    record.set(field.name, v);
+                    convertedValues[field.name] = v;
                 }
             }
             record.state = feature.state;
+            if (feature.state == OpenLayers.State.INSERT ||
+                    feature.state == OpenLayers.State.UPDATE) {
+                record.setDirty();
+            }
 
             // newly inserted features need to be made into phantom records
             var id = (feature.state === OpenLayers.State.INSERT) ? undefined : feature.id;
-            record.set("id", id);
+            convertedValues['id'] = id;
         }
 
         return records;
