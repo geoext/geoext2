@@ -208,8 +208,6 @@ Ext.define('GeoExt.panel.Map', {
         me.map.events.on({
             "moveend": me.onMoveend,
             "changelayer": me.onChangelayer,
-            "addlayer": me.onAddlayer,
-            "removelayer": me.onRemovelayer,
             scope: me
         });
         
@@ -500,8 +498,6 @@ Ext.define('GeoExt.panel.Map', {
             this.map.events.un({
                 "moveend": this.onMoveend,
                 "changelayer": this.onChangelayer,
-                "addlayer": this.onAddlayer,
-                "removelayer": this.onRemovelayer,
                 scope: this
             });
         }
