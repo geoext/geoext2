@@ -1,5 +1,5 @@
 /**
- * @class GeoExt.plugin.PrintExtent
+ * @class GeoExt.plugins.PrintExtent
  * 
  *  Provides a way to show and modify the extents of print pages on the map. It
  *  uses a layer to render the page extent and handle features of print pages,
@@ -35,12 +35,13 @@
  */
 Ext.define('GeoExt.plugins.PrintExtent', {
     extend : 'Ext.util.Observable',
-//    requires: ['GeoExt.data.PrintPage'],
+    requires: ['GeoExt.data.PrintPage'],
     alias : 'widget.gx_printextent',
     alternateClassName : 'GeoExt.PrintExtent',
     
-    /** private: initialConfig
-     *  ``Object`` Holds the initial config object passed to the
+    /** 
+     * @private {Object} initialConfig
+     * Holds the initial config object passed to the
      *  constructor.
      */
     initialConfig: null,
@@ -172,7 +173,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      *  Adds a page to the list of pages that this plugin controls.
      */
     addPage: function(page) {
-        page = page || new GeoExt.data.PrintPage({
+        page = page || Ext.create('GeoExt.data.PrintPage', {
             printProvider: this.printProvider
         });
         if(this.pages.indexOf(page) === -1) {
@@ -201,7 +202,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      *  Removes a page from the list of pages that this plugin controls.
      */
     removePage: function(page) {
-        this.pages.remove(page);
+        Ext.Array.remove(this.pages, page);
         if (page.feature.layer) {
             this.layer.removeFeatures([page.feature]);
         }
