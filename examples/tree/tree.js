@@ -6,7 +6,8 @@ Ext.require([
     'GeoExt.panel.Map',
     'GeoExt.tree.LayerContainer',
     'GeoExt.data.LayerTreeModel',
-    'GeoExt.tree.plugin.LayerTreeView'
+    'GeoExt.tree.plugin.LayerTreeView',
+    'GeoExt.tree.Column'
 ]);
 
 var mapPanel, tree;
@@ -150,6 +151,9 @@ Ext.application({
             collapsible: true,
             collapseMode: "mini",
             autoScroll: true,
+            columns: [{
+                      xtype: 'gx_treecolumn'
+            }],
             /*plugins: [
                 new GeoExt.plugins.TreeNodeRadioButton({
                     listeners: {
