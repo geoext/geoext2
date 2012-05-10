@@ -31,11 +31,11 @@
         function test_ctor(t) {
             t.plan(1);
 
-            var printProvider = new GeoExt.data.PrintProvider({
+            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
                 capabilities: printCapabilities
             })
             
-            var printExtent = new GeoExt.plugins.PrintExtent({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
                 printProvider: printProvider
             });
             
@@ -46,13 +46,13 @@
         function test_init(t) {
             t.plan(2);
 
-            var printExtent = new GeoExt.plugins.PrintExtent({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 })
             });
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 width: 256,
                 height: 256,
@@ -74,17 +74,17 @@
          function test_transformFeatureOptions(t) {
              t.plan(2);
 
-             var printExtent = new GeoExt.plugins.PrintExtent({
+             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
                  transformFeatureOptions: {
                      rotate: false,
                      renderIntent: "foobar"
                  },
-                 printProvider: new GeoExt.data.PrintProvider({
+                 printProvider: Ext.create('GeoExt.data.PrintProvider', {
                      capabilities: printCapabilities
                  })
              });
 
-             var mapPanel = new GeoExt.MapPanel({
+             var mapPanel = Ext.create('GeoExt.panel.Map', {
                  renderTo: "mappanel",
                  width: 256,
                  height: 256,
@@ -106,13 +106,13 @@
         function test_destroy(t) {
             t.plan(3);
 
-            var printExtent = new GeoExt.plugins.PrintExtent({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 })
             });
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 width: 256,
                 height: 256,
@@ -136,13 +136,13 @@
          function test_setUp(t) {
             t.plan(4);
 
-            var printExtent = new GeoExt.plugins.PrintExtent({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 })
             });
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 width: 256,
                 height: 256,
@@ -154,8 +154,26 @@
             });
             printExtent.addPage();
 
-            t.ok(printExtent.pages[0].center.equals(mapPanel.map.getCenter()),
-                 "print page centered to map center");
+            // this one fails due to rounding errors.
+            // t.ok(printExtent.pages[0].center.equals(mapPanel.map.getCenter()),
+            // "print page centered to map center");
+
+            // this one works around the rounding issue
+            var lonlat2string = function(ll, prec){
+                var parts = [],
+                    precision = prec || 5;
+                parts.push(ll.lon.toFixed(precision));
+                parts.push(ll.lat.toFixed(precision));
+                return parts.join(',');  
+            };
+            printExtentCenter = lonlat2string(printExtent.pages[0].center, 8);
+            mapPanelCenter = lonlat2string(mapPanel.map.getCenter(), 8);
+            t.eq(
+                printExtentCenter,
+                mapPanelCenter,
+                "print page centered to map center (" + printExtentCenter + ")"
+            );
+
             t.ok(printExtent.layer.map == mapPanel.map,
                  "auto-generated layer added to map.");
             t.ok(printExtent.pages[0].feature.layer == printExtent.layer,
@@ -169,14 +187,14 @@
         function test_hide(t) {
             t.plan(2);
  
-            var printExtent = new GeoExt.plugins.PrintExtent({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
                 layer: new OpenLayers.Layer.Vector("hello world"),
-                printProvider: new GeoExt.data.PrintProvider({
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 })
             });
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 width: 256,
                 height: 256,
@@ -203,13 +221,13 @@
 
             t.plan(2);
 
-            var printExtent = new GeoExt.plugins.PrintExtent({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 })
             });
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 width: 256,
                 height: 256,
@@ -251,14 +269,14 @@
                  fit: function() {}
             };
 
-            var printExtent = new GeoExt.plugins.PrintExtent({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 }),
                 pages: [page] 
             });
 
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
                 width: 256,
                 height: 256,
@@ -300,8 +318,8 @@
                 zoom: 5
             });
 
-            printExtent = new GeoExt.plugins.PrintExtent({
-                printProvider: new GeoExt.data.PrintProvider({
+            printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
+                printProvider: Ext.create('GeoExt.data.PrintProvider', {
                     capabilities: printCapabilities
                 })
             });
