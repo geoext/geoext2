@@ -33,7 +33,7 @@ Ext.define('GeoExt.data.LayerModel',{
         {name: 'isBaseLayer',  type: 'bool'}, 
         {name: 'visibility',   type: 'bool'},     
         {name: 'attribution',  type: 'string'},
-        {name: 'params'}
+        {name: 'params',       defaultValue: null}
     ],
     proxy: {
         type: 'memory',
