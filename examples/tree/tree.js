@@ -2,9 +2,11 @@ Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
     'Ext.tree.Panel',
+    'Ext.tree.plugin.TreeViewDragDrop',
     'GeoExt.panel.Map',
     'GeoExt.tree.LayerContainer',
-    'GeoExt.data.LayerTreeModel'
+    'GeoExt.data.LayerTreeModel',
+    'GeoExt.tree.plugin.LayerTreeView'
 ]);
 
 var mapPanel, tree;
@@ -159,7 +161,15 @@ Ext.application({
             ],*/
             store: store,
             rootVisible: false,
-            lines: false
+            lines: false,
+            viewConfig: {
+                plugins: [{
+                    ptype: 'treeviewdragdrop',
+                    appendOnly: false
+                }, {
+                    ptype: 'layertreeview'
+                }]
+            }
         });
     
         Ext.create('Ext.Viewport', {
