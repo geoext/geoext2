@@ -27,7 +27,9 @@ Ext.define('GeoExt.tree.LayerNode', {
     init: function(target) {
         target.raw.checked = "";
         target.raw.layer = this.layer;
-        target.raw.checkedGroup = this.checkedGroup;
+        target.raw.checkedGroup = this.checkedGroup === undefined ?
+            this.layer.isBaseLayer ? "gx_baselayer" : "" :
+            "";
         target.raw.fixedText = !!target.raw.text;
         
         target.raw.leaf = target.raw.leaf || !target.raw.children;
