@@ -1,51 +1,52 @@
 /**
  * @class GeoExt.slider.Tip
- * 
+ *
  * Create a slider tip displaying ``Ext.slider.SingleSlider`` values over slider thumbs.
- * 
- *     @example
- *     var slider = Ext.create('GeoExt.ZoomSlider', {
- *         map: panel.map,
- *         aggressive: true,                                                                                                                                                   
- *         width: 200,
- *         plugins: new GeoExt.SliderTip({
- *             getText: function(thumb) {
- *                 return Ext.String.format('<div>Scale: 1:{0}</div>', thumb.slider.getScale());
- *             }
- *         }),
- *         renderTo: document.body
- *     });
- * 
+ *
+ * Example:
+<pre><code>
+var slider = Ext.create('GeoExt.ZoomSlider', {
+    map: panel.map,
+    aggressive: true,
+    width: 200,
+    plugins: new GeoExt.SliderTip({
+        getText: function(thumb) {
+            return Ext.String.format('<div>Scale: 1:{0}</div>', thumb.slider.getScale());
+        }
+    }),
+    renderTo: document.body
+});
+</code></pre>
  */
 Ext.define('GeoExt.slider.Tip', {
     extend : 'Ext.slider.Tip',
     alternateClassName : 'GeoExt.SliderTip',
-    
+
     /**
      * @cfg {Boolean} hover
      * Display the tip when hovering over the thumb.  If ``false``, tip will
      *  only be displayed while dragging.  Default is ``true``.
      */
     hover: true,
-    
+
     /**
      * @cfg {Number} minWidth
      * Minimum width of the tip.  Default is 10.
      */
     minWidth: 10,
-    
+
     /**
      * @cfg {Number[]} offsets
      * A two item list that provides x, y offsets for the tip.
      */
     offsets : [0, -10],
-    
+
     /**
      * @cfg {Boolean} dragging
      * The thumb is currently being dragged.
      */
     dragging: false,
-    
+
     /**
      * Called when the plugin is initialized.
      * @private
@@ -56,10 +57,10 @@ Ext.define('GeoExt.slider.Tip', {
         if (this.hover) {
             slider.on("render", this.registerThumbListeners, this);
         }
-        
+
         this.slider = slider;
     },
-    
+
     /**
      * Set as a listener for 'render' if hover is true.
      * @private
