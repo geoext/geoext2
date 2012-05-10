@@ -27,31 +27,35 @@
         ]);
 
         function test_constructor(t) {
-            t.plan(4);
+            t.plan(5);
 
-            var store, fieldsCountBefore, fieldsCountAfter;
-
-            fieldsCountBefore = Ext.create('GeoExt.data.AttributeModel').fields.getCount();
+            var store,
+                format = new OpenLayers.Format(), 
+                feature = new OpenLayers.Feature.Vector();
 
             store = Ext.create('GeoExt.data.AttributeStore', {
                 url: '/truite',
                 ignore: {
                     type: "xsd:string"
                 },
-                fields: ['test']
+                feature: feature,
+                format: format
             });
 
             t.ok(store instanceof GeoExt.data.AttributeStore,
                  "ctor creates a GeoExt.data.AttributeStore instance");
+
             t.eq(store.getProxy().url, '/truite',
                 "ctor creates a proxy with the correct url");
 
-            fieldsCountAfter = Ext.create('GeoExt.data.AttributeModel').fields.getCount();
-            t.eq(fieldsCountAfter, fieldsCountBefore + 1,
-                "ctor appends a field to the given model");
-
-            t.eq(store.getProxy().getReader().ignore, {type: "xsd:string"},
+            t.eq(store.getProxy().getReader().getIgnore(), {type: "xsd:string"},
                 "ctor sets the correct ignore property in the reader");
+
+            t.ok(store.getProxy().getReader().getFeature() === feature, 
+                "ctor sets the feature in the reader");
+
+            t.ok(store.getProxy().getReader().getFormat() === format, 
+                "ctor sets the format in the reader");
 
             store.destroy();
         }

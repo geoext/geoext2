@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
@@ -6,12 +6,11 @@
  * of the license.
  */
 
-/**
+/*
  * @requires GeoExt/data/AttributeModel.js
  */
 
 /**
- * @class GeoExt.data.AttributeStore
  * <p>An Attribute Store.
  * TODO: port the original AttributeStore's bind method + callbacks to this new one.</p>
  */
@@ -20,84 +19,101 @@ Ext.define('GeoExt.data.AttributeStore', {
     requires: ['GeoExt.data.AttributeModel', 'Ext.data.Field'],
     model: 'GeoExt.data.AttributeModel',
 
-    /**
-     * @cfg {Array[{Object}]}
-     * An array of {Ext.data.Field} configuration objects to create additional
-     * fields on the {@link GeoExt.data.AttributeModel} instances created by
-     * this store when parsing a WFS DescribeFeatureType document.
-     */
-    fields: null,
-
     config: {
         /**
          * @cfg {String}
-         * The URL from which to retrieve the WFS DescribeFeatureType document
+         * The URL from which to retrieve the WFS DescribeFeatureType document.
          */
+        url: null,
+
         /**
-         * @property {String}
-         * The URL from which to retrieve the WFS DescribeFeatureType document
+         * @cfg {Object} format
+         * The Ext.Format passed to the reader. 
          */
-        url: null
+        format: null,
+        
+        /**
+         * @cfg {Object} ignore
+         * The ignore object passed to the reader.
+         */
+        ignore: null,
+        
+        /**
+         * @cfg {Object} feature
+         * The OpenLayers.Feature.Vector passed to the reader.
+         */
+        feature: null
     },
 
     /**
      * @private
      */
     constructor: function(config) {
-        var me = this,
-            xtraFields = null,
-            ignore, url;
-
-        config = Ext.apply({}, config);
-
-        if (config.ignore) {
-            ignore = config.ignore;
-            delete config.ignore;
+        // At this point, we have to copy the complex objects from the config
+        // into the prototype. This is because Ext.data.Store's constructor 
+        // creates deep copies of these objects.
+        if (config.feature) {
+            this.feature = config.feature;
+            delete config.feature;
         }
-        if (config.url) {
-            url = config.url;
-            delete config.url;
-        }
-        if (config.fields) {
-            //save a ref to the extra fields but delete them from the config
-            //since a fields property passed in a config object can cause some
-            //unexpected behavior
-            xtraFields = config.fields;
-            delete config.fields;
+        if (config.format) {
+            this.format = config.format;
+            delete config.format;
         }
 
-        me.callParent([config]);
+        this.callParent([config]);
 
-        //post process the extra fields. they will be lost if done before the
-        //parent constructor is called
-        if (xtraFields) {
-            var model = me.getProxy().model,
-                modelFields = model.prototype.fields;
-            for (var i=0; i < xtraFields.length; i++) {
-                modelFields.add(
-                    Ext.create('Ext.data.Field', xtraFields[i])
-                );
-            }
+        if (this.ignore) {
+            this.setIgnore(this.ignore);
+            delete this.ignore;
         }
-
-        // pass on the ignore property (what about format ?) to the reader
-        if (ignore) {
-            me.getProxy().getReader().ignore = ignore;
+        if (this.url) {
+            this.setUrl(this.url);
+            delete this.url;
         }
-        if (url) {
-            me.setUrl(url);
+        if (this.feature) {
+            this.setFeature(this.feature);
+            delete this.feature;
+        }
+        if (this.format) {
+            this.setFormat(this.format);
+            delete this.format;
         }
     },
 
     /**
      * @private
-     * We're setting the proxy URL
-     * @param {String} newValue The new proxy URL
+     * We're setting the proxy URL.
+     * @param {String} url
      */
-    applyUrl: function(newValue) {
-        if (newValue && Ext.isString(newValue)) {
-            this.getProxy().url = newValue;
-        }
-        // no return value, since Ext.data.Store has no url property
+    applyUrl: function(url) {
+        this.getProxy().url = url;
+    },
+
+    /**
+     * @private
+     * We're setting the proxy URL.
+     * @param {OpenLayers.Feature} feature
+     */
+    applyFeature: function(feature) {
+        this.getProxy().getReader().setFeature(feature);
+    },
+
+    /**
+     * @private
+     * We're setting the ignore property in the reader.
+     * @param {Object} ignore
+     */
+    applyIgnore: function(ignore) {
+        this.getProxy().getReader().setIgnore(ignore);
+    },
+
+    /**
+     * @private
+     * We're setting the format property in the reader.
+     * @param {OpenLayers.Format} format
+     */
+    applyFormat: function(format) {
+        this.getProxy().getReader().setFormat(format);
     }
 });
