@@ -38,45 +38,54 @@ Ext.define('GeoExt.data.reader.Attribute', {
     alternateClassName: 'GeoExt.data.AttributeReader',
     alias: 'reader.gx_attribute',
 
-    /**
-     * @cfg {OpenLayers.Format} format
-     * A parser for transforming the XHR response
-     * into an array of objects representing attributes.  Defaults to
-     * `OpenLayers.Format.WFSDescribeFeatureType` parser.
-     */
+    config: {
+        /**
+         * @cfg {OpenLayers.Format} format
+         * A parser for transforming the XHR response
+         * into an array of objects representing attributes.  Defaults to
+         * `OpenLayers.Format.WFSDescribeFeatureType` parser.
+         */
+        format: null,
 
-    /**
-     * @cfg {Object} ignore
-     * Properties of the ignore object should be field names.
-     * Values are either arrays or regular expressions.
-     */
+        /**
+         * @cfg {Object} ignore
+         * Properties of the ignore object should be field names.
+         * Values are either arrays or regular expressions.
+         */
+        ignore: null,
 
-    /**
-     * @cfg {OpenLayers.Feature.Vector} feature
-     * A vector feature. If provided records created by the reader will
-     * include a field named "value" referencing the attribute value as
-     * set in the feature.
-     */
-
+        /**
+         * @cfg {OpenLayers.Feature.Vector} feature
+         * A vector feature. If provided records created by the reader will
+         * include a field named "value" referencing the attribute value as
+         * set in the feature.
+         */
+        feature: null
+    },
+    
     /**
      * Create a new reader.
      * @param {Object} config (optional) Config object.
      */
     constructor: function(config) {
-        config = config || {};
-        if(!config.format) {
-            config.format = new OpenLayers.Format.WFSDescribeFeatureType();
-        }
         this.callParent([config]);
-        if(config.feature) {
-            var f = Ext.create('Ext.data.Field', {
-                name: "value",
-                defaultValue: undefined // defaultValue defaults to ""
-                                        // in Ext.data.Field, we may 
-                                        // need to change that...
-            });
-            this.model.prototype.fields.add(f);
+        
+        this.setFormat(this.format || new OpenLayers.Format.WFSDescribeFeatureType());
+        
+        if (this.feature) {
+            this.setFeature(this.feature);
         }
+    },
+    
+    applyFeature: function(feature) {
+        var f = Ext.create('Ext.data.Field', {
+            name: "value",
+            defaultValue: undefined // defaultValue defaults to ""
+                                    // in Ext.data.Field, we may 
+                                    // need to change that...
+        });
+        this.model.prototype.fields.add(f);
+        return feature;
     },
 
     /** 

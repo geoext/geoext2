@@ -25,6 +25,65 @@
         'GeoExt.data.reader.Attribute'
     ]);
 
+    function test_ctor(t) {
+        t.plan(3);
+
+        var Model = Ext.Class({
+            extend: 'Ext.data.Model',
+            fields: [
+                'name',
+                'type',
+                'restriction',
+                {name: "nillable", type: "boolean"}
+            ]
+        });
+        
+        var format = new OpenLayers.Format(), 
+            feature = new OpenLayers.Feature.Vector();
+
+        var reader = Ext.create('GeoExt.data.reader.Attribute', {
+            model: Model,
+            ignore: {type: "xsd:string"},
+            feature: feature,
+            format: format
+        });
+        
+        t.eq(reader.ignore, {type: "xsd:string"},
+            "ctor sets the ignore object in the instance");
+
+        t.ok(reader.feature === feature, 
+            "ctor sets the feature in the instance");
+
+        t.ok(reader.format === format, 
+            "ctor sets the format in the instance");
+    }
+    
+    function test_setFeature(t) {
+        t.plan(2);
+
+        var Model = Ext.Class({
+            extend: 'Ext.data.Model',
+            fields: [
+                'name',
+                'type',
+                'restriction',
+                {name: "nillable", type: "boolean"}
+            ]
+        });
+
+        var reader = Ext.create('GeoExt.data.reader.Attribute', {
+            model: Model
+        });
+        var feature = new OpenLayers.Feature.Vector();
+        reader.setFeature(feature);
+        
+        t.ok(reader.feature === feature, 
+            "setFeature sets the feature in the instance");
+            
+        t.ok(Model.prototype.fields.get("value") !== undefined, 
+            "setFeature adds the value field to the model");
+    }
+
     function test_read(t) {
         t.plan(5);
 
