@@ -334,9 +334,14 @@ Ext.define('GeoExt.panel.Map', {
      * @private
      */
     hasRenderableSize: function() {
-        var me = this,
-            size = me.getSize(),
-            width = (size.width === 0) 
+        var me = this;
+        var size;
+        try {
+            size = me.getSize();
+        } catch (e) {
+            return false;
+        }
+        var width = (size.width === 0)
                   ? 0 
                   : size.width - me.body.getBorderWidth("lr"),
             height = (size.height === 0) 
