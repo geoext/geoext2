@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>GeoExt FeatureStore in an Ext Grid</title>
+
+        <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+        <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js"></script>
+
+        <!-- You should definitely consider using a custom single-file version of OpenLayers -->
+        <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+
+        <script type="text/javascript" src="../loader.js"></script>
+        <script type="text/javascript" src="feature-grid.js"></script>
+
+    </head>
+    <body>
+        <h1>Grid Panel configured with a GeoExt.data.FeatureStore</h1>
+
+        <p>This example shows an Ext grid loaded with features read from a
+        GeoJSON document (<a href="summits.json">summits.json</a>).</p>
+
+        <p>Because the layer and the store are bound to each other, the
+        features loaded into the store are automatically added to the layer. A
+        GeoExt feature selection model is also used so that selecting rows in
+        the grid selects features in the layer, and vice-versa.</p>
+
+        <p>In this example, you will also find a example usage of the
+        GeoExt.FeatureRenderer component.</p>
+
+        <p>See <a href="feature-grid.js">feature-grid.js</a>.</p>
+
+        <div id="mainpanel"></div>
+    </body>
+</html>
