@@ -25,7 +25,6 @@ Ext.define('GeoExt.data.LayerModel',{
         }
     },
     fields: [   
-        'id',
         {name: 'title',        type: 'string', mapping: 'name'},
         {name: 'legendURL',    type: 'string', mapping: 'metadata.legendURL'},
         {name: 'hideTitle',    type: 'bool',   mapping: 'metadata.hideTitle'},
@@ -33,7 +32,8 @@ Ext.define('GeoExt.data.LayerModel',{
         {name: 'opacity',      type: 'float'},    
         {name: 'isBaseLayer',  type: 'bool'}, 
         {name: 'visibility',   type: 'bool'},     
-        {name: 'attribution',  type: 'string'}
+        {name: 'attribution',  type: 'string'},
+        {name: 'params'}
     ],
     proxy: {
         type: 'memory',
