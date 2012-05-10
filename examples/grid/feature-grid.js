@@ -60,7 +60,7 @@ Ext.application({
                 'default': style
             }),
             protocol: new OpenLayers.Protocol.HTTP({
-                url: "summits.json",
+                url: "../data/summits.json",
                 format: new OpenLayers.Format.GeoJSON()
             }),
             strategies: [new OpenLayers.Strategy.Fixed()]
