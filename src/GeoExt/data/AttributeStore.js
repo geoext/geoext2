@@ -11,11 +11,21 @@
  */
 
 /**
- * <p>An Attribute Store.</p>
+ * A store to work with DescribeFeatureType responses. This is a regular
+ * Ext store preconfigured with a {@link GeoExt.data.AttributeModel}.
+ *
+ *
+ * Example:
+<pre><code>
+Ext.create('GeoExt.data.AttributeStore', {
+    ignore: {type: 'xsd:string'},
+    url: 'http://host.wfsdescribefeaturetype'
+});
+</code></pre>
  */
 Ext.define('GeoExt.data.AttributeStore', {
     extend: 'Ext.data.Store',
-    requires: ['GeoExt.data.AttributeModel', 'Ext.data.Field'],
+    requires: ['GeoExt.data.AttributeModel'],
     model: 'GeoExt.data.AttributeModel',
 
     config: {
@@ -26,14 +36,16 @@ Ext.define('GeoExt.data.AttributeStore', {
         url: null,
 
         /**
-         * @cfg {Object} format
-         * The Ext.Format passed to the reader. 
+         * @cfg {Object}
+         * The `OpenLayers.Format` passed to the reader. See
+         * {@link GeoExt.data.reader.Attribute}.
          */
         format: null,
         
         /**
-         * @cfg {Object} ignore
-         * The ignore object passed to the reader.
+         * @cfg {Object}
+         * The ignore object passed to the reader. See
+         * {@link GeoExt.data.reader.Attribute}.
          */
         ignore: null
     },
@@ -67,27 +79,27 @@ Ext.define('GeoExt.data.AttributeStore', {
     },
 
     /**
-     * @private
      * We're setting the proxy URL.
      * @param {String} url
+     * @private
      */
     applyUrl: function(url) {
         this.getProxy().url = url;
     },
 
     /**
-     * @private
      * We're setting the ignore property in the reader.
      * @param {Object} ignore
+     * @private
      */
     applyIgnore: function(ignore) {
         this.getProxy().getReader().setIgnore(ignore);
     },
 
     /**
-     * @private
      * We're setting the format property in the reader.
      * @param {OpenLayers.Format} format
+     * @private
      */
     applyFormat: function(format) {
         this.getProxy().getReader().setFormat(format);

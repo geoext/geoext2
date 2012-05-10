@@ -11,9 +11,13 @@
  */
 
 /**
- * <p>A specific model, which is fit for the records created by the 
- * {@link GeoExt.data.reader.Attribute}'s readRecords method.</p>
+ * @class GeoExt.data.AttributeModel
+ * <p>A specific model for WFS DescribeFeatureType records.<p>
+ *
+ * Preconfigured with an Ajax proxy and a
+ * {@link GeoExt.data.reader.Attribute}.
  */
+
 (function() {
 
 // This func is used as the convert function for the auto fields. This
