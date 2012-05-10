@@ -1,7 +1,7 @@
 Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
-    'Ext.tree.Panel',
+    'GeoExt.tree.Panel',
     'Ext.tree.plugin.TreeViewDragDrop',
     'GeoExt.panel.Map',
     'GeoExt.tree.LayerContainer',
@@ -131,7 +131,7 @@ Ext.application({
             root: {
                 expanded: true,
                 children: [
-                    {text: "myplainnode", leaf: true},
+                    {text: "A plain node", leaf: true},
                     {plugins: ['gx_layercontainer']},
                     {plugins: [{
                         ptype: 'gx_layercontainer',
@@ -142,7 +142,7 @@ Ext.application({
         });
 
         // create the tree with the configuration from above
-        tree = Ext.create('Ext.tree.Panel', {
+        tree = Ext.create('GeoExt.tree.Panel', {
             border: true,
             region: "west",
             title: "Layers",
@@ -151,18 +151,6 @@ Ext.application({
             collapsible: true,
             collapseMode: "mini",
             autoScroll: true,
-            columns: [{
-                      xtype: 'gx_treecolumn'
-            }],
-            /*plugins: [
-                new GeoExt.plugins.TreeNodeRadioButton({
-                    listeners: {
-                        "radiochange": function(node) {
-                            alert(node.text + " is now the active layer.");
-                        }
-                    }
-                })
-            ],*/
             store: store,
             rootVisible: false,
             lines: false,
