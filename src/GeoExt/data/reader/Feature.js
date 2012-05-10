@@ -47,7 +47,7 @@ Ext.define('GeoExt.data.reader.Feature', {
                         v = feature.attributes[field.mapping || field.name] || field.defaultValue;
                     }
                     if (field.convert) {
-                        v = field.convert(v, feature);
+                        v = field.convert(v, record);
                     }
                     convertedValues[field.name] = v;
                 }
