@@ -30,4 +30,4 @@ Ext.application({
 /**
  * For dev purpose only
  */
-var ctrl;
+var ctrl, map, mapPanel;

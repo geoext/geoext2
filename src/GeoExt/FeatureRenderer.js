@@ -2,18 +2,20 @@
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
 /**
- * The feature renderer.
+ * @class GeoExt.FeatureRenderer
+ * 
+ * The feature renderer
  */
 Ext.define('GeoExt.FeatureRenderer', {
-    extend : 'Ext.Component',
-    alias : 'widget.gx_renderer',
+    extend: 'Ext.Component',
+    alias: 'widget.gx_renderer',
 
-    statics : {
+    statics: {
         guess : function() {
             var candidates = Ext.ComponentQuery.query("gx_urllegend");
             return ((candidates && candidates.length > 0)
@@ -21,7 +23,6 @@ Ext.define('GeoExt.FeatureRenderer', {
                 : null);
         }
     },
-
 
     /**
      * @cfg {OpenLayers.Feature.Vector}
@@ -165,8 +166,7 @@ Ext.define('GeoExt.FeatureRenderer', {
              *  * renderer - GeoExt.FeatureRenderer This feature renderer.
              */
             "click"
-            );
-
+        );
     },
     /**
      * @private
