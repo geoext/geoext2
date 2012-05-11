@@ -40,9 +40,11 @@ Ext.define('GeoExt.data.proxy.Protocol', {
     response: null,
 
     /**
+     * Send the request.
      * @param {Ext.data.Operation} operation The Ext.data.Operation object
      * @param {Function} callback The callback function to call when the Operation has completed
      * @param {Object} scope The scope in which to execute the callback
+     * @private
      */
     doRequest: function(operation, callback, scope) {
         var me = this,
