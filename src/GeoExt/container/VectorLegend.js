@@ -6,17 +6,25 @@
  * of the license.
  */
 
+/*
+ * @requires GeoExt/container/LayerLegend.js
+ * @include GeoExt/FeatureRenderer.js
+ */
+
 /**
  * Create a vector legend.
  * @class GeoExt.container.VectorLegend
  */
 Ext.define('GeoExt.container.VectorLegend', {
-    extend : 'GeoExt.container.LayerLegend',
-    alias : 'widget.gx_vectorlegend',
-    requires: ['Ext.layout.container.Column', 'GeoExt.FeatureRenderer'],
-    alternateClassName : 'GeoExt.VectorLegend',
+    extend: 'GeoExt.container.LayerLegend',
+    alias: 'widget.gx_vectorlegend',
+    requires: [
+        'Ext.layout.container.Column', 
+        'GeoExt.FeatureRenderer'
+    ],
+    alternateClassName: 'GeoExt.VectorLegend',
     
-    statics : {
+    statics: {
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.Vector ? 1 : 0;
         }

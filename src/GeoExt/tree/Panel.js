@@ -6,6 +6,14 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/tree/Column.js
+ */
+
+/**
+ * @class GeoExt.tree.Panel
+ * An {@link Ext.tree.Panel} pre-configured with a {@link GeoExt.tree.Column}.
+ */
 Ext.define('GeoExt.tree.Panel', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.gx_treepanel',

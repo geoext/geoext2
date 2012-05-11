@@ -6,6 +6,13 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Layer/WMS.js
+ * @include OpenLayers/Util.js
+ * @requires GeoExt/container/LayerLegend.js
+ * @include GeoExt/LegendImage.js
+ */
+
 /**
  *  Show a legend image for a WMS layer. The image can be read from the styles
  *  field of a layer record (if the record comes e.g. from a
@@ -15,12 +22,12 @@
  * @class GeoExt.container.WmsLegend
  */
 Ext.define('GeoExt.container.WmsLegend', {
-    extend : 'GeoExt.container.LayerLegend',
-    alias : 'widget.gx_wmslegend',
+    extend: 'GeoExt.container.LayerLegend',
+    alias: 'widget.gx_wmslegend',
     requires: ['GeoExt.LegendImage'],
-    alternateClassName : 'GeoExt.WMSLegend',
+    alternateClassName: 'GeoExt.WMSLegend',
 
-    statics : {
+    statics: {
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }

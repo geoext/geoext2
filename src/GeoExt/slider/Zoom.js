@@ -6,6 +6,11 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Util.js
+ * @include GeoExt/panel/Map.js
+ */
+
 /**
  * @class GeoExt.slider.Zoom
  *

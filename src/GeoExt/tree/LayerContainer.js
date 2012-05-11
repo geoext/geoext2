@@ -7,7 +7,8 @@
  */
 
 /*
- * @require GeoExt/tree/LayerLoader.js
+ * @include GeoExt/tree/LayerLoader.js
+ * @include GeoExt/data/Loader.js
  */
 
 /**
@@ -23,7 +24,8 @@ Ext.define('GeoExt.tree.LayerContainer', {
     mixins: ['Ext.util.Observable'],
     requires: [
         'Ext.data.NodeInterface',
-        'GeoExt.tree.LayerLoader'
+        'GeoExt.tree.LayerLoader',
+        'GeoExt.data.Loader'
     ],
     alias: 'plugin.gx_layercontainer',
     

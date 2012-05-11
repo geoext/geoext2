@@ -7,7 +7,7 @@
  */
 
 /*
- * @requires GeoExt/data/AttributeModel.js
+ * @include GeoExt/data/AttributeModel.js
  */
 
 /**
