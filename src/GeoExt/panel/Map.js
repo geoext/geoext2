@@ -9,8 +9,6 @@
 /*
  * @include GeoExt/data/LayerStore.js
  * @include OpenLayers/Map.js
- * @include OpenLayers/Control.js
- * @include OpenLayers/Layer.js
  */
 
 /**
@@ -315,7 +313,7 @@ Ext.define('GeoExt.panel.Map', {
     },
 
     /**
-     * Set the initial extend of this panel's map.
+     * Set the initial extent of this panel's map.
      * @private
      */
     setInitialExtent: function() {
