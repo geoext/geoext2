@@ -33,5 +33,7 @@ Ext.define('GX.view.summit.Grid' ,{
             ]
         });
         this.callParent(arguments);
+        // store singleton selection model instance
+        GX.view.summit.Grid.selectionModel = this.getSelectionModel();
     }
 });
