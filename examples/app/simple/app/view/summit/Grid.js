@@ -44,7 +44,6 @@ Ext.define('CF.view.summit.Grid' ,{
                 })
             ]
         });
-        this.getSelectionModel().autoPanMapOnSelection = true;
         this.callParent(arguments);
         // store singleton selection model instance
         CF.view.summit.Grid.selectionModel = this.getSelectionModel();
