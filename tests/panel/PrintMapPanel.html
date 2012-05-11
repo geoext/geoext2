@@ -31,14 +31,14 @@
                 width: 256,
                 height: 256,
                 layers: [new OpenLayers.Layer("Empty",
-                    {isBaseLayer: true}
+                            {isBaseLayer: true}
                 )],
                 center: [146.56, -41.56],
                 zoom: 7
             });
             
             var log = {};
-            var printMapPanel = Ext.create('GeoExt.PrintMapPanel', {
+            var printMapPanel = Ext.create('GeoExt.panel.PrintMap', {
                 renderTo: "printmappanel",
                 height: 256,
                 map: {
