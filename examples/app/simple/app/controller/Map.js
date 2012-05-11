@@ -82,8 +82,6 @@ Ext.define('GX.controller.Map', {
         mapPanel.map.addLayers(layers);
 
         // some more controls
-        mapPanel.map.addControls([new OpenLayers.Control.Zoom()]);
-
         mapPanel.map.addControls([new OpenLayers.Control.DragFeature(vecLayer, {
             autoActivate: true,
             onComplete: function(feature, px) {
