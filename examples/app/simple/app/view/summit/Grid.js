@@ -5,6 +5,7 @@
 Ext.define('GX.view.summit.Grid' ,{
     extend: 'Ext.grid.Panel',
     alias : 'widget.summitgrid',
+    requires: ['GeoExt.selection.FeatureModel'],
     initComponent: function() {
         Ext.apply(this, {
             border: true,
@@ -17,7 +18,8 @@ Ext.define('GX.view.summit.Grid' ,{
             ],
             flex: 1,
             title : 'Summits Grid',
-            store: 'Summits'
+            store: 'Summits',
+            selType: 'featuremodel'
         });
         this.callParent(arguments);
     }
