@@ -33,7 +33,10 @@
  *      
  */
 Ext.define('GeoExt.plugins.PrintExtent', {
-    extend : 'Ext.util.Observable',
+	
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
     requires: ['GeoExt.data.PrintPage'],
     alias : 'widget.gx_printextent',
     alternateClassName : 'GeoExt.PrintExtent',
