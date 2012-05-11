@@ -830,11 +830,6 @@
                     "path": "app/model/"
                 },
                 {
-                    "clsName": "GX.store.Summits",
-                    "name": "Summits.js",
-                    "path": "app/store/"
-                },
-                {
                     "clsName": "Ext.chart.Callout",
                     "name": "Callout.js",
                     "path": "extjs-4.1.0/src/chart/"
@@ -880,14 +875,14 @@
                     "path": "extjs-4.1.0/src/panel/"
                 },
                 {
+                    "clsName": "GeoExt.data.reader.Feature",
+                    "name": "Feature.js",
+                    "path": "../../../src/GeoExt/data/reader/"
+                },
+                {
                     "clsName": "Ext.selection.Model",
                     "name": "Model.js",
                     "path": "extjs-4.1.0/src/selection/"
-                },
-                {
-                    "clsName": "GX.controller.Map",
-                    "name": "Map.js",
-                    "path": "app/controller/"
                 },
                 {
                     "clsName": "Ext.chart.LegendItem",
@@ -1008,6 +1003,21 @@
                     "clsName": "GX.view.summit.Chart",
                     "name": "Chart.js",
                     "path": "app/view/summit/"
+                },
+                {
+                    "clsName": "GeoExt.data.FeatureStore",
+                    "name": "FeatureStore.js",
+                    "path": "../../../src/GeoExt/data/"
+                },
+                {
+                    "clsName": "GX.store.Summits",
+                    "name": "Summits.js",
+                    "path": "app/store/"
+                },
+                {
+                    "clsName": "GX.controller.Map",
+                    "name": "Map.js",
+                    "path": "app/controller/"
                 },
                 {
                     "clsName": "Ext.selection.DataViewModel",

@@ -6,7 +6,10 @@ Ext.Loader.setConfig({
     disableCaching: false,
     paths: {
         GeoExt: "../../../src/GeoExt",
-        Ext: "extjs-4.1.0/src"
+        // for dev use
+        Ext: "http://cdn.sencha.io/ext-4.1.0-gpl/src"
+        // for build purpose
+        //Ext: "extjs-4.1.0/src"
     }
 });
 
@@ -27,4 +30,4 @@ Ext.application({
 /**
  * For dev purpose only
  */
-var ctrl;
+var ctrl, map, mapPanel;

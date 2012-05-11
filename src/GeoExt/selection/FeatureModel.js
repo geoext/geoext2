@@ -20,23 +20,25 @@
  *
  * Sample code to create a feature grid with a feature selection model:
  *
- *      @example
- *      var gridPanel = new Ext.grid.GridPanel({
- *          title: "Feature Grid",
- *          region: "east",
- *          store: store,
- *          width: 320,
- *          columns: [{
- *              header: "Name",
- *              width: 200,
- *              dataIndex: "name"
- *          }, {
- *              header: "Elevation",
- *              width: 100,
- *              dataIndex: "elevation"
- *          }],
- *          selType: 'featuremodel'
+ * Example:
+<pre><code>
+var gridPanel = new Ext.grid.GridPanel({
+    title: "Feature Grid",
+    region: "east",
+    store: store,
+    width: 320,
+    columns: [{
+        header: "Name",
+        width: 200,
+        dataIndex: "name"
+    }, {
+        header: "Elevation",
+        width: 100,
+        dataIndex: "elevation"
+    }],
+    selType: 'featuremodel'
  *     });
+</code></pre>
  */
 
 

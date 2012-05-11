@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -47,19 +47,21 @@ Ext.define('GeoExt.container.WmsLegend', {
      * support vendor-specific parameters in a SLD WMS GetLegendGraphic
      * request. To override the default MIME type of image/gif use the
      * FORMAT parameter in baseParams.
-     * 
-     * @example    
-     * var legendPanel = new GeoExt.LegendPanel({
-     *     map: map,
-     *     title: 'Legend Panel',
-     *     defaults: {
-     *         style: 'padding:5px',
-     *         baseParams: {
-     *             FORMAT: 'image/png',
-     *             LEGEND_OPTIONS: 'forceLabels:on'
-     *         }
-     *     }
-     * });   
+     *
+     * Example:
+<pre><code>
+var legendPanel = new GeoExt.LegendPanel({
+    map: map,
+    title: 'Legend Panel',
+    defaults: {
+        style: 'padding:5px',
+        baseParams: {
+            FORMAT: 'image/png',
+            LEGEND_OPTIONS: 'forceLabels:on'
+        }
+    }
+});
+</code></pre>
      */
     baseParams: null,
 
@@ -71,7 +73,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         layer.events.register("moveend", me, me.onLayerMoveend);
         me.update();
     },
-    
+
     /**
      * @private
      * @param {Object} e
@@ -84,7 +86,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         }
     },
 
-    /** 
+    /**
      * Get the legend URL of a sublayer.
      * @private
      * @param {String} layerName A sublayer.
@@ -151,7 +153,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         return url;
     },
 
-    /** 
+    /**
      * Update the legend, adding, removing or updating
      * the per-sublayer box component.
      * @private
@@ -165,7 +167,7 @@ Ext.define('GeoExt.container.WmsLegend', {
             return;
         }
         this.callParent();
-        
+
         var layerNames, layerName, i, len;
 
         layerNames = [layer.params.LAYERS].join(",").split(",");
