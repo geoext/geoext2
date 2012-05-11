@@ -15,6 +15,24 @@
 
 var store;
 
+OpenLayers.Protocol.CSW.v2_0_2.prototype.read = function(options) {
+    options = OpenLayers.Util.extend({}, options);
+    OpenLayers.Util.applyDefaults(options, this.options || {});
+    var response = new OpenLayers.Protocol.Response({requestType: "read"});
+
+    var data = this.format.write(options.params || options);
+
+    response.priv = OpenLayers.Request.POST({
+        url: options.url,
+        callback: this.createCallback(this.handleRead, response, options),
+        params: options.params,
+        headers: options.headers,
+        data: data
+    });
+
+    return response;
+};
+
 Ext.require([
     'GeoExt.data.reader.CswRecords',
     'GeoExt.data.CswRecordsModel',
@@ -62,7 +80,7 @@ Ext.application({
             }
         });
 
-        // use baseParams so paging takes them into account
+        // use extraParams so paging takes them into account
         store.proxy.extraParams = data;
         store.load();
 

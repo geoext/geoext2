@@ -49,7 +49,8 @@ Ext.define('GeoExt.data.proxy.Protocol', {
             operation: operation,
             request: {
                 callback: callback,
-                scope: scope
+                scope: scope,
+                arg: operation.arg
             },
             reader: this.getReader()
         };
@@ -62,17 +63,12 @@ Ext.define('GeoExt.data.proxy.Protocol', {
             callback: cb,
             scope: this
         };
+        Ext.applyIf(options, operation.arg);
         if (this.setParamsAsOptions === true) {
             Ext.applyIf(options, options.params);
-//            delete options.params;
+            delete options.params;
         }
-        var response = this.protocol.read(options);
-        /*var result = this.getReader().read(me.extractResponseData(response));
-console.log(result);
-
-        if (typeof callback == 'function') {
-            callback.call(scope || me, operation);
-        }*/
+        this.response = this.protocol.read(options);
     },
 
     /** private: method[abortRequest]

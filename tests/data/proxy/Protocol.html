@@ -16,6 +16,7 @@
         });
 
         Ext.require([
+            'GeoExt.data.reader.CswRecords',
             'GeoExt.data.proxy.Protocol'
         ]);
 
@@ -53,9 +54,6 @@
                     o.callback.call(o.scope, response);
                 }
             });
-            proxy = Ext.create("GeoExt.data.proxy.Protocol", {
-                protocol: protocol
-            });
             result = "fake result";
             reader = {
                 read: function(r) {
@@ -64,20 +62,24 @@
                     return result;
                 }
             };
+            proxy = Ext.create("GeoExt.data.proxy.Protocol", {
+                protocol: protocol,
+                reader: reader
+            });
             scope = {fake: "scope"};
             arg = {fake: "arg", filter: filter};
-            callback = function(r, a, s) {
+            callback = function(o) {
                 t.ok(this == scope,
                      "callback called with expected scope");
-                t.eq(r, result,
+                t.eq(o.resultSet, result,
                      "callback called with expected result");
-                t.eq(a, arg,
+                t.eq(o.arg, arg,
                      "callback called with expected arg");
-                t.eq(s, true,
+                t.eq(o.success, true,
                      "callback called with expected success boolean");
             };
             // 8 tests
-            proxy.doRequest({params: params}, callback, scope);
+            proxy.doRequest(Ext.create("Ext.data.Operation", {params: params, arg: arg}), callback, scope);
         }
         
         function test_abort(t) {
@@ -95,10 +97,10 @@
                 protocol: protocol
             });
 
-            proxy.doRequest(); // abort not called because proxy.response is null
-            proxy.doRequest(); // abort called
+            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort not called because proxy.response is null
+            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort called
             proxy.abortPrevious = false;
-            proxy.doRequest(); // abort not called because proxy.abortPrevious is false
+            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort not called because proxy.abortPrevious is false
         }
 
         function test_setParamsAsOptions(t) {
