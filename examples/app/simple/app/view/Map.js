@@ -85,7 +85,11 @@ Ext.define('GX.view.Map', {
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
-                items: items
+                items: items,
+                style: {
+                    border: 0,
+                    padding: 0
+                }
             }]
         });
                 
