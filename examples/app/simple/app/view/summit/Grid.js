@@ -25,12 +25,12 @@ Ext.define('GX.view.summit.Grid' ,{
             flex: 1,
             title : 'Summits Grid',
             store: 'Summits',
-            selType: 'featuremodel'
+            selType: 'featuremodel',
             plugins: [
                 Ext.create('Ext.grid.plugin.CellEditing', {
                     clicksToEdit: 2
                 })
-            ],
+            ]
         });
         this.callParent(arguments);
     }
