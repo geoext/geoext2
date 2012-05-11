@@ -16,6 +16,7 @@ var mapPanel, store, gridPanel, mainPanel;
 
 Ext.require([
     'GeoExt.data.FeatureStore',
+    'GeoExt.grid.column.Symbolizer',
     'GeoExt.selection.FeatureModel',
     'Ext.grid.GridPanel',
     'Ext.layout.container.Border'
@@ -60,7 +61,7 @@ Ext.application({
                 'default': style
             }),
             protocol: new OpenLayers.Protocol.HTTP({
-                url: "summits.json",
+                url: "../data/summits.json",
                 format: new OpenLayers.Format.GeoJSON()
             }),
             strategies: [new OpenLayers.Strategy.Fixed()]
@@ -82,45 +83,17 @@ Ext.application({
         store = Ext.create('GeoExt.data.FeatureStore', {
             layer: vecLayer,
             fields: [
+                {
+                    name: 'symbolizer',
+                    convert: function(v, r) {
+                        return r.raw.layer.styleMap.createSymbolizer(r.raw, 'default');
+                    }
+                },
                 {name: 'name', type: 'string'},
                 {name: 'elevation', type: 'float'}
             ],
             autoLoad: true
         });
-
-        function getSymbolTypeFromFeature(feature) {
-            var type;
-            switch (feature.geometry.CLASS_NAME) {
-                case "OpenLayers.Geometry.MultiLineString":
-                case "OpenLayers.Geometry.LineString":
-                    type = 'Line';
-                    break;
-                case "OpenLayers.Geometry.Point":
-                    type = 'Point';
-                    break;
-                case "OpenLayers.Geometry.Polygon":
-                    type = 'Polygon';
-                    break;
-            }
-            return type;
-        }
-
-        function renderFeature(value, p, r) {
-            var id = Ext.id();
-            var feature = r.raw;
-
-            Ext.defer(function() {
-                var symbolizer = r.store.layer.styleMap.createSymbolizer(feature, 'default');
-                var renderer = Ext.create('GeoExt.FeatureRenderer', {
-                    renderTo: id,
-                    width: 12,
-                    height: 12,
-                    symbolType: getSymbolTypeFromFeature(feature),
-                    symbolizers: [symbolizer]
-                });
-            }, 25);
-            return Ext.String.format('<div id="{0}"></div>', id);
-        }
 
         // create grid panel configured with feature store
         gridPanel = Ext.create('Ext.grid.GridPanel', {
@@ -132,8 +105,8 @@ Ext.application({
                 menuDisabled: true,
                 sortable: false,
                 width: 30,
-                renderer: renderFeature,
-                dataIndex: 'fid'
+                xtype: 'gx_symbolizercolumn',
+                dataIndex: "symbolizer"
             },{
                 header: "Name",
                 width: 200,
