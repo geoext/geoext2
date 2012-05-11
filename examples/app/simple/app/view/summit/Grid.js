@@ -34,7 +34,6 @@ Ext.define('GX.view.summit.Grid' ,{
                 })
             ]
         });
-        this.getSelectionModel().autoPanMapOnSelection = true;
         this.callParent(arguments);
         // store singleton selection model instance
         GX.view.summit.Grid.selectionModel = this.getSelectionModel();
