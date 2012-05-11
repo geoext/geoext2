@@ -194,7 +194,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         this.previewScales = Ext.create('Ext.data.Store', {
             fields: [
                  {name: 'name', type: 'string'},
-                 {name: 'value', type: 'int'},
+                 {name: 'value', type: 'int'}
             ],
             data: this.printProvider.scales.getRange()
         });
@@ -219,7 +219,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         }, this);
 
         this.extent = this.sourceMap.getExtent();
-        
+
         this.callParent(arguments);
     },
     

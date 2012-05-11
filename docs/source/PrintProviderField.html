@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='global-property-'>/**
+</span> * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
+<span id='GeoExt-plugins-PrintProviderField'>/** 
+</span> *  @class GeoExt.plugins.PrintProviderField
+ *  
+ *  A plugin for Ext.form.Field components which provides synchronization
+ *  with a GeoExt.data.PrintProvider.
+ *  
+ *  A form with combo boxes for layout and resolution, and a text field for a
+ *  map title. The latter is a custom parameter to the print module, which is
+ *  a default for all print pages. For setting custom parameters on the page
+ *  level, use GeoExt.plugins.PrintPageField.
+ * 
+ *     
+ *     var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+ *         capabilities: printCapabilities
+ *     });
+ *     Ext.create('Ext.form.FormPanel', {
+ *         renderTo: &quot;form&quot;,
+ *         width: 200,
+ *         height: 300,
+ *         items: [{
+ *             xtype: &quot;combo&quot;,
+ *             displayField: &quot;name&quot;,
+ *             store: printProvider.layouts, // printProvider.layout
+ *             fieldLabel: &quot;Layout&quot;,
+ *             typeAhead: true,
+ *             mode: &quot;local&quot;,
+ *             forceSelection: true,
+ *             triggerAction: &quot;all&quot;,
+ *             selectOnFocus: true,
+ *             plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+ *                 printProvider: printProvider
+ *             })
+ *         }, {
+ *             xtype: &quot;combo&quot;,
+ *             displayField: &quot;name&quot;,
+ *             store: printProvider.dpis, // printProvider.dpi
+ *             fieldLabel: &quot;Resolution&quot;,
+ *             typeAhead: true,
+ *             mode: &quot;local&quot;,
+ *             forceSelection: true,
+ *             triggerAction: &quot;all&quot;,
+ *             selectOnFocus: true,
+ *             plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+ *                 printProvider: printProvider
+ *             })
+ *         }, {
+ *             xtype: &quot;textfield&quot;,
+ *             name: &quot;mapTitle&quot;, // printProvider.customParams.mapTitle
+ *             fieldLabel: &quot;Map Title&quot;,
+ *             plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+ *                 printProvider: printProvider
+ *             })
+ *         }]
+ *     }):
+ */
+Ext.define('GeoExt.plugins.PrintProviderField', {
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
+    requires: ['GeoExt.data.PrintProvider', 'Ext.form.field.ComboBox'],
+    alias : 'widget.gx_printproviderfield',
+    alternateClassName : 'GeoExt.PrintProviderField',
+    
+<span id='GeoExt-plugins-PrintProviderField-cfg-printProvider'>    /** 
+</span>     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * The print provider to use with this
+     * plugin's field. Not required if set on the owner container of the
+     * field.
+     */
+    
+<span id='GeoExt-plugins-PrintProviderField-property-target'>    /**
+</span>     * @private 
+     * @property {Ext.form.Field} target
+     * This plugin's target field.
+     */
+    target: null,
+    
+<span id='GeoExt-plugins-PrintProviderField-method-constructor'>    /** 
+</span>     * @private
+     */
+    constructor: function(config) {
+        this.initialConfig = config;
+        Ext.apply(this, config);
+        
+        this.callParent(arguments);
+    },
+    
+<span id='GeoExt-plugins-PrintProviderField-method-init'>    /** 
+</span>     * @private
+     * @param {Ext.form.Field} target The component that this plugin extends.
+     */
+    init: function(target) {
+        this.target = target;
+        var onCfg = {
+            scope: this,
+            &quot;render&quot;: this.onRender,
+            &quot;beforedestroy&quot;: this.onBeforeDestroy
+        };
+        onCfg[target instanceof Ext.form.ComboBox ? &quot;select&quot; : &quot;change&quot;] =
+            this.onFieldChange;
+        target.on(onCfg);
+    },
+    
+<span id='GeoExt-plugins-PrintProviderField-method-onRender'>    /** 
+</span>     * Handler for the target field's &quot;render&quot; event.
+     *
+     * @private
+     * @param {Ext.Form.Field} field
+     */
+    onRender: function(field) {
+        var printProvider = this.printProvider || field.ownerCt.printProvider;
+        if(field.store === printProvider.layouts) {
+            field.setValue(printProvider.layout.get(field.displayField));
+            printProvider.on({
+                &quot;layoutchange&quot;: this.onProviderChange,
+                scope: this
+            });
+        } else if(field.store === printProvider.dpis) {
+            field.setValue(printProvider.dpi.get(field.displayField));
+            printProvider.on({
+                &quot;dpichange&quot;: this.onProviderChange,
+                scope: this
+            });
+        } else if(field.initialConfig.value === undefined) {
+            field.setValue(printProvider.customParams[field.name]);
+        }
+    },
+    
+<span id='GeoExt-plugins-PrintProviderField-method-onFieldChange'>    /** 
+</span>     * Handler for the target field's &quot;change&quot; or &quot;select&quot; event.
+     * 
+     * @private
+     * @param {Ext.form.Field} field
+     * @param {Ext.data.Record} record Optional.
+     */
+    onFieldChange: function(field, records) {
+        var record;
+        if (Ext.isArray(records)) {
+            record = records[0];
+        } else {
+            record = records;
+        }
+        var printProvider = this.printProvider || field.ownerCt.printProvider;
+        var value = field.getValue();
+        this._updating = true;
+        if(record) {
+            switch(field.store) {
+                case printProvider.layouts:
+                    printProvider.setLayout(record);
+                    break;
+                case printProvider.dpis:
+                    printProvider.setDpi(record);
+                    break;
+            }
+        } else {
+            printProvider.customParams[field.name] = value;
+        }
+        delete this._updating;
+    },
+    
+<span id='GeoExt-plugins-PrintProviderField-method-onProviderChange'>    /** 
+</span>     * Handler for the printProvider's dpichange and layoutchange event
+     *
+     * @private
+     * @param {GeoExt.data.PrintProvider}  printProvider
+     * @param {Ext.data.Record}  rec
+     */
+    onProviderChange: function(printProvider, rec) {
+        if(!this._updating) {
+            this.target.setValue(rec.get(this.target.displayField));
+        }
+    },
+    
+<span id='GeoExt-plugins-PrintProviderField-method-onBeforeDestroy'>    /** 
+</span>     * @private
+     */
+    onBeforeDestroy: function() {
+        var target = this.target;
+        target.un(&quot;beforedestroy&quot;, this.onBeforeDestroy, this);
+        target.un(&quot;render&quot;, this.onRender, this);
+        target.un(&quot;select&quot;, this.onFieldChange, this);
+        target.un(&quot;valid&quot;, this.onFieldChange, this);
+        var printProvider = this.printProvider || target.ownerCt.printProvider;
+        printProvider.un(&quot;layoutchange&quot;, this.onProviderChange, this);
+        printProvider.un(&quot;dpichange&quot;, this.onProviderChange, this);
+    }
+
+});
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>GeoExt PrintPageField and PrintProviderField Example</title>
+
+        <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
+        <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-dev.js"></script>
+    
+        <!-- You should definitely consider using a custom single-file version of OpenLayers -->
+        <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    
+        <script type="text/javascript" src="../loader.js"></script>
+
+        <script type="text/javascript" src="print-form.js"></script>
+        
+        <!-- The script below will load the capabilities of the print service
+             and save them into the global printCapabilities variable. Instead
+             of this, the PrintProvider can be configured with a url and take
+             care of fetching the capabilities. -->
+        <script type="text/javascript" src="http://demo.opengeo.org/geoserver/pdf/info.json?var=printCapabilities"></script>
+
+    </head>
+    <body>
+        <h1>Advanced Printing with Special Form Fields</h1>
+        <p>This example shows the how to accomplish advanced printing, with a
+        form controlling parameters for the
+        <a href="http://trac.mapfish.org/trac/mapfish/wiki/PrintModuleInstallation">MapFish</a>
+        or <a href="http://docs.geoserver.org/stable/en/user/community/printing/">GeoServer</a>
+        print module.</p>
+        <p>The js is not minified so it is readable. See <a href="print-form.js">print-form.js</a>.</p>
+        <div id="content"></div>
+    </body>
+</html>

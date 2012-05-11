@@ -3,7 +3,6 @@
     "-o": "docs",
     "--external": "OpenLayers.Map,OpenLayers.Control,Integer,OpenLayers.Layer,OpenLayers.Bounds,OpenLayers.LonLat,OpenLayers.Rule,OpenLayers.Feature.Vector,OpenLayers.Pixel,OpenLayers.Layer.Vector,OpenLayers.Renderer",
     "--": [
-        "src",
-        "../extjs-4.1.0/src/"
+        "src"
     ]
 }

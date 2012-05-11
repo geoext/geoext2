@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='GeoExt-plugins-PrintPageField'>/**
+</span> * @class GeoExt.plugins.PrintPageField
+ * 
+ * A plugin for `Ext.form.Field` components which provides synchronization
+ *  with a {@link GeoExt.data.PrintPage}. The field name has to match the
+ *  respective property of the printPage (e.g. `scale`, `rotation`).
+ *      
+ * A form with a combo box for the scale and text fields for rotation and a
+ *  page title. The page title is a custom parameter of the print module's
+ *  page configuration:
+ *      
+ *      @example
+ *      var printPage = Ext.create('GeoExt.data.PrintPage'{
+ *          printProvider: Ext.create('GeoExt.data.PrintProvider', {
+ *              capabilities: printCapabilities
+ *          })
+ *      });
+ *      Ext.create('Ext.form.FormPanel', {
+ *          renderTo: &quot;form&quot;,
+ *          width: 200,
+ *          height: 300,
+ *          items: [{
+ *              xtype: &quot;combo&quot;,
+ *              displayField: &quot;name&quot;,
+ *              store: printPage.scales, // printPage.scale
+ *              name: &quot;scale&quot;,
+ *              fieldLabel: &quot;Scale&quot;,
+ *              typeAhead: true,
+ *              mode: &quot;local&quot;,
+ *              forceSelection: true,
+ *              triggerAction: &quot;all&quot;,
+ *              selectOnFocus: true,
+ *              plugins: new GeoExt.plugins.PrintPageField({
+ *                  printPage: printPage
+ *              })
+ *          }, {
+ *              xtype: &quot;textfield&quot;,
+ *              name: &quot;rotation&quot;, // printPage.rotation
+ *              fieldLabel: &quot;Rotation&quot;,
+ *              plugins: new GeoExt.plugins.PrintPageField({
+ *                  printPage: printPage
+ *              })
+ *          }, {
+ *              xtype: &quot;textfield&quot;,
+ *              name: &quot;mapTitle&quot;, // printPage.customParams[&quot;mapTitle&quot;]
+ *              fieldLabel: &quot;Map Title&quot;,
+ *              plugins: new GeoExt.plugins.PrintPageField({
+ *                  printPage: printPage
+ *              })
+ *          }]
+ *      });
+ *      
+ */
+Ext.define('GeoExt.plugins.PrintPageField', {
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
+    requires: ['GeoExt.data.PrintPage', 'Ext.form.field.ComboBox', 'Ext.form.field.Checkbox'],
+    alias : 'widget.gx_printpagefield',
+    alternateClassName : 'GeoExt.PrintPageField',
+    
+
+<span id='GeoExt-plugins-PrintPageField-cfg-printPage'>    /** 
+</span>     * @cfg {GeoExt.data.PrintPage} printPage
+     * The print page to synchronize with.
+     */
+
+<span id='GeoExt-plugins-PrintPageField-property-printPage'>    /** 
+</span>     * @private
+     * @property {GeoExt.data.PrintPage} printPage
+     * The print page to synchronize with.
+     *  Read-only.
+     */
+    printPage: null,
+    
+<span id='GeoExt-plugins-PrintPageField-property-target'>    /** 
+</span>     * @private
+     * @property {Ext.form.Field} target
+     * This plugin's target field.
+     */
+    target: null,
+    
+<span id='GeoExt-plugins-PrintPageField-method-constructor'>    /** 
+</span>     * @private
+     */
+    constructor: function(config) {
+        this.initialConfig = config;
+        Ext.apply(this, config);
+        
+        this.callParent(arguments);
+    },
+    
+<span id='GeoExt-plugins-PrintPageField-method-init'>    /** 
+</span>     * @private
+     * @param {Ext.form.Field} target The component that this plugin
+     *  extends.
+     * @param {Object} target
+     */
+    init: function(target) {
+        
+        this.target = target;
+        var onCfg = {
+            &quot;beforedestroy&quot;: this.onBeforeDestroy,
+            scope: this
+        };
+        
+        // the old 'check' event of 3.x is gone, only 'change' is supported
+        var eventName = &quot;change&quot;;
+        if (target instanceof Ext.form.ComboBox) {
+            eventName = &quot;select&quot;;
+        }
+        
+        onCfg[eventName] = this.onFieldChange;
+        target.on(onCfg);
+        this.printPage.on({
+            &quot;change&quot;: this.onPageChange,
+            scope: this
+        });
+        this.printPage.printProvider.on({
+            &quot;layoutchange&quot;: this.onLayoutChange,
+            scope: this
+        });
+        this.setValue(this.printPage);
+    },
+
+<span id='GeoExt-plugins-PrintPageField-method-onFieldChange'>    /** 
+</span>     * Handler for the target field's &quot;valid&quot; or &quot;select&quot; event.
+     * 
+     * @private
+     * @param {Ext.form.Field} field 
+     * @param {Ext.data.Record[]} records Optional.
+     */
+    onFieldChange: function(field, records) {
+        
+        var record;
+        if (Ext.isArray(records)) {
+            record = records[0];
+        } else {
+            record = records;
+        }
+        
+        var printProvider = this.printPage.printProvider;
+        var value = field.getValue();
+        this._updating = true;
+        if(field.store === printProvider.scales || field.name === &quot;scale&quot;) {
+            this.printPage.setScale(record);
+        } else if(field.name == &quot;rotation&quot;) {
+            !isNaN(value) &amp;&amp; this.printPage.setRotation(value);
+        } else {
+            this.printPage.customParams[field.name] = value;
+        }
+        delete this._updating;
+    },
+
+<span id='GeoExt-plugins-PrintPageField-method-onPageChange'>    /** 
+</span>     * Handler for the &quot;change&quot; event for the page this plugin is configured
+     *  with.
+     *  
+     * @private
+     * @param {GeoExt.data.PrintPage} printPage 
+     */
+    onPageChange: function(printPage) {
+        if(!this._updating) {
+            this.setValue(printPage);
+        }
+    },
+    
+<span id='GeoExt-plugins-PrintPageField-method-onLayoutChange'>    /** 
+</span>     * Handler for the &quot;layoutchange&quot; event of the printProvider.
+     * 
+     * @private
+     * @param {GeoExt.data.PrintProvider} printProvider
+     * @param {Ext.Record} layout 
+     *  
+     */
+    onLayoutChange: function(printProvider, layout) {
+        var t = this.target;
+        t.name == &quot;rotation&quot; &amp;&amp; t.setDisabled(!layout.get(&quot;rotation&quot;));
+    },
+
+<span id='GeoExt-plugins-PrintPageField-method-setValue'>    /** 
+</span>     * Sets the value in the target field.
+     * 
+     * @private
+     * @param {GeoExt.data.PrintPage} printPage 
+     */
+    setValue: function(printPage) {
+        var t = this.target;
+        t.suspendEvents();
+        if(t.store === printPage.printProvider.scales || t.name === &quot;scale&quot;) {
+            if(printPage.scale) {
+                t.setValue(printPage.scale.get(t.displayField));
+            }
+        } else if(t.name == &quot;rotation&quot;) {
+            t.setValue(printPage.rotation);
+        }
+        t.resumeEvents();
+    },
+
+<span id='GeoExt-plugins-PrintPageField-method-onBeforeDestroy'>    /** 
+</span>     * @private
+     */
+    onBeforeDestroy: function() {
+        this.target.un(&quot;beforedestroy&quot;, this.onBeforeDestroy, this);
+        this.target.un(&quot;select&quot;, this.onFieldChange, this);
+        this.target.un(&quot;valid&quot;, this.onFieldChange, this);
+        this.printPage.un(&quot;change&quot;, this.onPageChange, this);
+        this.printPage.printProvider.un(&quot;layoutchange&quot;, this.onLayoutChange,
+            this);
+    }
+});</pre>
+</body>
+</html>
