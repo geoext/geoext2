@@ -166,9 +166,6 @@ Ext.define('GeoExt.panel.Map', {
         var layers  = this.layers;
         if(!layers || layers instanceof Array) {
             this.layers = Ext.create('GeoExt.data.LayerStore', {
-                map: this
-            });
-            this.layers = new GeoExt.data.LayerStore({
                 layers: layers,
                 map: this.map.layers.length > 0 ? this.map : null
             });
