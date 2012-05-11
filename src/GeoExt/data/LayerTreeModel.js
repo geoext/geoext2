@@ -13,7 +13,10 @@
 Ext.define('GeoExt.data.LayerTreeModel',{
     alternateClassName: 'GeoExt.data.LayerTreeRecord',
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    requires: [
+        'Ext.data.proxy.Memory', 
+        'Ext.data.reader.Json'
+    ],
     alias: 'model.gx_layertree',
     fields: [  
         {name: 'text', type: 'string'}, 

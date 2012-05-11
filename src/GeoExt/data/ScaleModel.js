@@ -12,7 +12,10 @@
  */
 Ext.define('GeoExt.data.ScaleModel', {
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    requires: [
+        'Ext.data.proxy.Memory', 
+        'Ext.data.reader.Json'
+    ],
     alias: 'model.gx_scale',
     fields: [
         {name: "level"},

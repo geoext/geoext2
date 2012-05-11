@@ -6,6 +6,12 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Util.js
+ * @include GeoExt/data/ScaleModel.js
+ * @include GeoExt/panel/Map.js
+ */
+
 /**
  * @class GeoExt.data.ScaleStore
  * A store that contains a cache of available zoom levels.  The store can
@@ -13,7 +19,10 @@
  * {GeoExt.panel.Map} object.
  */
 Ext.define('GeoExt.data.ScaleStore', {
-    requires: ['GeoExt.data.ScaleModel', 'GeoExt.panel.Map'],
+    requires: [
+        'GeoExt.data.ScaleModel', 
+        'GeoExt.panel.Map'
+    ],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.ScaleModel',
 

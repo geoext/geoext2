@@ -7,7 +7,7 @@
  */
 
 /*
- * @requires GeoExt/data/reader/Attribute.js
+ * @include GeoExt/data/reader/Attribute.js
  */
 
 /**
