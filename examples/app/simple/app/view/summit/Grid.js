@@ -13,19 +13,29 @@ Ext.define('GX.view.summit.Grid' ,{
     ],
     initComponent: function() {
         Ext.apply(this, {
-            border: true,
+            border: false,
             columns: [
-                {header: '', dataIndex: 'symbolizer', xtype: 'gx_symbolizercolumn', width: 30},
+                {
+                    header: '',
+                    dataIndex: 'symbolizer',
+                    menuDisabled: true,
+                    sortable: false,
+                    xtype: 'gx_symbolizercolumn',
+                    width: 30
+                },
                 {header: 'ID', dataIndex: 'fid', width: 40},
                 {header: 'Name', dataIndex: 'name', flex: 3},
-                {header: 'Elevation', dataIndex: 'elevation', width: 60,
+                {
+                    header: 'Elevation',
+                    dataIndex: 'elevation',
+                    width: 60,
                     editor: {xtype: 'numberfield'}
                 },
                 {header: 'Title', dataIndex: 'title', flex: 4},
-                {header: 'Position', dataIndex: 'position', flex: 4}
+                {header: 'Latitude', dataIndex: 'lat', flex: 2},
+                {header: 'Longitude', dataIndex: 'lon', flex: 2}
             ],
             flex: 1,
-            title : 'Summits Grid',
             store: 'Summits',
             selType: 'featuremodel',
             plugins: [
