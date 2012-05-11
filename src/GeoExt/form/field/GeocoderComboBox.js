@@ -158,6 +158,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
         }
         
         this.on({
+            added: this.findMapPanel,
             select: this.handleSelect,
             focus: function() {
                 this.clearValue();
@@ -264,11 +265,13 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     addToMapPanel: Ext.emptyFn,
     
     beforeDestroy: function() {
-        this.map.events.un({
-            "moveend": this.clearResult,
-            "click": this.removeLocationFeature,
-            scope: this
-        });
+        if (this.map && this.map.events) {
+            this.map.events.un({
+                "moveend": this.clearResult,
+                "click": this.removeLocationFeature,
+                scope: this
+            });
+        }
         this.removeLocationFeature();
         delete this.map;
         delete this.layer;
