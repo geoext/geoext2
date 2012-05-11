@@ -7,13 +7,14 @@
  */
 
 /**
- * The feature renderer.
+ * @class GeoExt.FeatureRenderer
+ * 
  */
 Ext.define('GeoExt.FeatureRenderer', {
-    extend : 'Ext.Component',
-    alias : 'widget.gx_renderer',
+    extend: 'Ext.Component',
+    alias: 'widget.gx_renderer',
 
-    statics : {
+    statics: {
         guess : function() {
             var candidates = Ext.ComponentQuery.query("gx_urllegend");
             return ((candidates && candidates.length > 0)

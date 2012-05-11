@@ -22,7 +22,7 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
     model: 'GeoExt.data.WfsCapabilitiesLayerModel',
     alternateClassName: ['GeoExt.data.WFSCapabilitiesStore','GeoExt.data.WfsCapabilitiesStore'],
     /**
-     * @cfg {Array[{Object}]}
+     * @cfg {Object[]}
      * An array of {Ext.data.Field} configuration objects to create additional fields on the
      * {GeoExt.data.WfsCapabilitiesLayerModel} layer records created by this store when parsing a WFS capabilities document
      */

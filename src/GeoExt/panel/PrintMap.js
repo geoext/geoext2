@@ -128,7 +128,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     previewScales: null,
 
     /**
-     * @cfg {OpenLayers.LonLat/Array(Number)} center
+     * @cfg {OpenLayers.LonLat/Number[]} center
      * A location for the map center.
      * Do not set, as this will be overridden with the `sourceMap`
      *  center.
@@ -143,7 +143,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     zoom: null,
 
     /**
-     * @cfg {`OpenLayers.Bounds/Array(Number)} extent
+     * @cfg {OpenLayers.Bounds/Number[]} extent
      * An initial extent for the map.
      *  Do not set, because the initial extent will be determined by the
      *  `sourceMap`.
