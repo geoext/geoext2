@@ -86,7 +86,7 @@ Ext.define('GeoExt.form.Panel', {
     /**
      * Shortcut to the internal form's search method.
      * @param {Object} options The options passed to the
-     * {GeoExt.form.action.Search} constructor.
+     * GeoExt.form.action.Search constructor.
      *
      */
     search: function(options) {
