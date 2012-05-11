@@ -149,7 +149,7 @@ Ext.define('GeoExt.window.Popup', {
 
 
     initComponent: function() {
-        if(this.map instanceof GeoExt.MapPanel) {
+        if(this.map instanceof GeoExt.panel.Map) {
             this.map = this.map.map;
         }
         if(!this.map && this.location instanceof OpenLayers.Feature.Vector &&
