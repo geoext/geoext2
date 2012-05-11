@@ -23,7 +23,12 @@
     function test_constructor(t) {
         t.plan(3);
 
-        var mapPanel = Ext.create("GeoExt.panel.Map", {renderTo: "mappanel", width: 300, height: 300});
+        var mapPanel = Ext.create("GeoExt.panel.Map", {
+            renderTo: "mappanel", 
+            width: 300, 
+            height: 300,
+            layers: [new OpenLayers.Layer()]
+        });
         var combo = Ext.create("GeoExt.form.field.GeocoderComboBox", {map: mapPanel});
         t.ok(combo.store instanceof Ext.data.JsonStore, "default store created");
         t.ok(combo.map === mapPanel.map, "map set");
@@ -38,6 +43,7 @@
         var mapPanel = Ext.create("GeoExt.panel.Map", {
             renderTo: "mappanel",
             width: 300,
+            layers: [new OpenLayers.Layer()],
             height: 300,
             items: [{
                 xtype: "gx_geocodercombo",
