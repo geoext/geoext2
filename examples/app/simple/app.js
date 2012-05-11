@@ -14,12 +14,12 @@ Ext.Loader.setConfig({
 });
 
 /**
- * GX.app
+ * CF.app
  * A MVC application demo that uses GeoExt and Ext components to display
  * geospatial data.
  */
 Ext.application({
-    name: 'GX',
+    name: 'CF',
     appFolder: 'app',
     controllers: [
         'Map'

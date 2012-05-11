@@ -3,14 +3,14 @@
  * and stuff.
  * @extends GeoExt.panel.Map
  */
-Ext.define('GX.view.Map', {
+Ext.define('CF.view.Map', {
     // Ext.panel.Panel-specific options:
     extend: 'GeoExt.panel.Map',
-    alias : 'widget.gxapp_map',
+    alias : 'widget.cf_mappanel',
     requires: [
         'Ext.window.MessageBox',
         'GeoExt.Action',
-        'GX.view.help.Action'
+        'CF.view.help.Action'
     ],
     border: 'false',
     layout: 'fit',
@@ -75,7 +75,7 @@ Ext.define('GX.view.Map', {
 
         // Help action
         items.push(
-            Ext.create('Ext.button.Button', Ext.create('GX.view.help.Action', {
+            Ext.create('Ext.button.Button', Ext.create('CF.view.help.Action', {
                 windowContentEl: "help"
             }))
         );
