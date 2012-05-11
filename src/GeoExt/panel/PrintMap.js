@@ -6,6 +6,13 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Layer/Vector.js
+ * @requires GeoExt/panel/Map.js
+ * @include GeoExt/data/PrintProvider.js
+ * @include GeoExt/data/PrintPage.js
+ */
+
 /**
  * @class GeoExt.panel.PrintMap
  *
@@ -244,6 +251,10 @@ Ext.define('GeoExt.panel.PrintMap', {
         this.printPage.on("change", this.fitZoom, this);
         this.printProvider.on("layoutchange", this.syncSize, this);
         this.map.events.register("moveend", this, this.updatePage);
+        this.on("resize", function() {
+            this.doComponentLayout();
+            this.map.updateSize();
+        }, this);
         
         this.printPage.fit(this.sourceMap);
 

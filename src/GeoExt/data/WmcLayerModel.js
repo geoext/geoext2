@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/Wmc.js
+ */
+
 /**
  * @class GeoExt.data.WmcLayerModel
  * The model for WMS layers coming from a Web Map Context document.

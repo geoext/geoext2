@@ -6,13 +6,20 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WmsDescribeLayer.js
+ */
+
 /**
  * @class GeoExt.data.WmsDescribeLayerModel
  * The model for the structure returned by SLD WMS DescribeLayer.
  */
 Ext.define('GeoExt.data.WmsDescribeLayerModel',{
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'GeoExt.data.reader.WmsDescribeLayer'],
+    requires: [
+        'Ext.data.proxy.Memory', 
+        'GeoExt.data.reader.WmsDescribeLayer'
+    ],
     alias: 'model.gx_wmsdescribelayer',
     fields: [
         {name: "owsType", type: "string"},

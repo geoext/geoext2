@@ -6,6 +6,13 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Map.js
+ * @include OpenLayers/Control.js
+ * @include OpenLayers/Layer.js
+ * @include GeoExt/data/LayerStore.js
+ */
+
 /**
  * @class GeoExt.panel.Map
  *

@@ -2,17 +2,17 @@
  * The main application viewport, which displays the whole application
  * @extends Ext.Viewport
  */
-Ext.define('GX.view.Viewport', {
+Ext.define('CF.view.Viewport', {
     extend: 'Ext.Viewport',
     layout: 'fit',
 
     requires: [
         'Ext.layout.container.Border',
         'Ext.resizer.Splitter',
-        'GX.view.Header',
-        'GX.view.Map',
-        'GX.view.summit.Chart',
-        'GX.view.summit.Grid'
+        'CF.view.Header',
+        'CF.view.Map',
+        'CF.view.summit.Chart',
+        'CF.view.summit.Grid'
     ],
 
     initComponent: function() {
@@ -21,12 +21,13 @@ Ext.define('GX.view.Viewport', {
         Ext.apply(me, {
             items: [{
                 xtype: 'panel',
+                border: false,
                 layout: 'border',
                 dockedItems: [
-                    Ext.create('GX.view.Header')
+                    Ext.create('CF.view.Header')
                 ],
                 items: [{
-                    xtype: 'gxapp_map'
+                    xtype: 'cf_mappanel'
                 }, {
                     xtype: 'panel',
                     region: 'center',
@@ -37,9 +38,9 @@ Ext.define('GX.view.Viewport', {
                         align: 'stretch'
                     },
                     items: [
-                        Ext.create('GX.view.summit.Grid'),
+                        Ext.create('CF.view.summit.Grid'),
                         {xtype: 'splitter'},
-                        Ext.create('GX.view.summit.Chart')
+                        Ext.create('CF.view.summit.Chart')
                     ]
                 }]
             }]

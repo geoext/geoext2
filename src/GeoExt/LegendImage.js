@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Util.js
+ */
+
 /**
  * The legend image.
  * @class GeoExt.LegendImage

@@ -6,6 +6,11 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WmsCapabilities.js
+ * @requires GeoExt/data/OwsStore.js
+ */
+
 /**
  * @class GeoExt.data.WmsCapabilitiesLayerStore
  *
@@ -17,37 +22,11 @@
  * configure this with your own proxy.
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
-    extend: 'Ext.data.Store',
+    extend: 'GeoExt.data.OwsStore',
     requires: ['GeoExt.data.reader.WmsCapabilities'],
     model: 'GeoExt.data.WmsCapabilitiesLayerModel',
-    alternateClassName: ['GeoExt.data.WMSCapabilitiesStore','GeoExt.data.WmsCapabilitiesStore'],
-
-    config: {
-        /**
-         * @cfg {String} url
-         * The URL from which to retrieve the WMS GetCapabilities document
-         */
-        /**
-         * @property {String} url
-         * The URL from which to retrieve the WMS GetCapabilities document
-         */
-        url: null
-    },
-    /**
-     * @private
-     */
-    constructor: function(config){
-        var me = this;
-        me.callParent([config]);
-
-        if(config.url) { me.setUrl(config.url); }
-    },
-    /**
-     * @private
-     */
-    applyUrl: function(newValue){
-        if(newValue && Ext.isString(newValue)){
-            this.getProxy().url = newValue;
-        }
-    }
+    alternateClassName: [
+        'GeoExt.data.WMSCapabilitiesStore',
+        'GeoExt.data.WmsCapabilitiesStore'
+    ]
 });

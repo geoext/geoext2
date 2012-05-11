@@ -7,18 +7,24 @@
  */
 
 /*
- * @require GeoExt/panel/Map.js
+ * @include GeoExt/panel/Map.js
+ * @include GeoExt/tree/LayerNode.js
+ * @include GeoExt/tree/LayerContainer.js
  */
 
 /**
- * @class
+ * @class 
  * A loader that will load all layers of a GeoExt.data.LayerStore.
  * By default, only layers that have displayInLayerSwitcher set to true will be
  * included. The childrens' iconCls defaults to "gx-tree-layer-icon".
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
-    requires: ['GeoExt.panel.Map', 'GeoExt.tree.LayerNode'],
+    requires: [
+        'GeoExt.panel.Map', 
+        'GeoExt.tree.LayerNode', 
+        'GeoExt.tree.LayerContainer'
+    ],
 
     /**
      * Triggered before loading children. Return false to avoid

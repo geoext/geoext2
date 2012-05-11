@@ -6,6 +6,14 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Geometry/Polygon.js
+ * @include OpenLayers/Geometry/LinearRing.js
+ * @include OpenLayers/Geometry/Point.js
+ * @include OpenLayers/Feature/Vector.js
+ * @include GeoExt/panel/Map.js
+ */
+
 /**
  * @class GeoExt.data.PrintPage
  *

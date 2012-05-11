@@ -7,9 +7,10 @@
  */
 
 /*
- * @require OpenLayers/Control/SelectFeature.js
- * @require OpenLayers/Layer/Vector.js
- * @require OpenLayers/BaseTypes/Class.js
+ * @include OpenLayers/Control/SelectFeature.js
+ * @include OpenLayers/Layer/Vector.js
+ * @include OpenLayers/Util.js
+ * @include OpenLayers/BaseTypes/Class.js
  */
 
 /**

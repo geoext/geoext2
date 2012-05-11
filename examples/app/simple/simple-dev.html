@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <title>MVC simple application example called GX</title>
+        <title>MVC simple application example called CF (Cartography Framework)</title>
         <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
         <link rel="stylesheet" type="text/css" href="http://openlayers.org/api/2.12-rc3/theme/default/style.css" />
-        <link rel="stylesheet" type="text/css" href="resources/css/gx.css" />
+        <link rel="stylesheet" type="text/css" href="resources/css/cf.css" />
 
         <!-- Include OpenLayers.  Isn't managed by Ext.Loader -->
         <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
@@ -63,9 +63,27 @@
         </div>
 
         <div class="cascade">
+          <h2>Select from Chart</h2>
+          <p>
+            When mouse hovering a node, a small tooltip appears.  Clicking on
+            the node also select the according row in the grid.
+          </p>
+        </div>
+
+        <div class="cascade">
           <h2>On store load</h2>
           <p>
             When the store is loaded, the map is recentered on the data extent.
+          </p>
+        </div>
+
+        <div class="cascade">
+          <h2>Customized model</h2>
+          <p>
+            The summit model defines a bunch of customized fields that use
+            the OpenLayers.Feature.Vector properties such as 'fid' and
+            'geometry'.  See
+            <a href="app/model/Summit.js">app/model/Summit.js</a>.
           </p>
         </div>
 

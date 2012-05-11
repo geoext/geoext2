@@ -6,6 +6,15 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/JSON.js
+ * @include OpenLayers/Format/GeoJSON.js
+ * @include OpenLayers/Util.js
+ * @include OpenLayers/Geometry/Point.js
+ * @include OpenLayers/Feature/Vector.js
+ * @include OpenLayers/Layer/Vector.js
+ */
+
 /**
  * @class GeoExt.data.PrintProvider
  *

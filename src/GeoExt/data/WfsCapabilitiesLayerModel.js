@@ -6,13 +6,20 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WfsCapabilities.js
+ */
+
 /**
  * @class GeoExt.data.WfsCapabilitiesLayerModel
  * The model for WFS layers coming from a WFS GetCapabilities document.
  */
 Ext.define('GeoExt.data.WfsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',
-    alternateClassName: ['GeoExt.data.WFSCapabilitiesModel','GeoExt.data.WfsCapabilitiesModel'],
+    alternateClassName: [
+        'GeoExt.data.WFSCapabilitiesModel',
+        'GeoExt.data.WfsCapabilitiesModel'
+    ],
     requires: ['GeoExt.data.reader.WfsCapabilities'],
     alias: 'model.gx_wfscapabilities',
     fields: [
