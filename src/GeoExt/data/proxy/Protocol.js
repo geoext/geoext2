@@ -71,8 +71,9 @@ Ext.define('GeoExt.data.proxy.Protocol', {
         this.response = this.protocol.read(options);
     },
 
-    /** private: method[abortRequest]
-     *  Called to abort any ongoing request.
+    /** 
+     * Called to abort any ongoing request.
+     * @private
      */
     abortRequest: function() {
         if (this.response) {
@@ -81,17 +82,19 @@ Ext.define('GeoExt.data.proxy.Protocol', {
         }
     },
 
-    /** private: method[loadResponse]
-     *  :param o: ``Object``
-     *  :param response: ``OpenLayers.Protocol.Response``
-     *  
-     *  Handle response from the protocol
+    /**
+     * Handle response from the protocol
+     * @private
+     * @param {Object} o
+     * @param {OpenLayers.Protocol.Response} response
      */
     loadResponse: function(o, response) {
         var me = this;
+        var operation = o.operation;
+        var scope = o.request.scope;
+        var callback = o.request.callback;
         if (response.success()) {
             var result = o.reader.read(response);
-            var operation = o.operation;
             Ext.apply(operation, {
                 response: response,
                 resultSet: result
@@ -100,15 +103,12 @@ Ext.define('GeoExt.data.proxy.Protocol', {
             operation.commitRecords(result.records);
             operation.setCompleted();
             operation.setSuccessful();
-            var scope = o.request.scope;
-            var callback = o.request.callback;
-            if (typeof callback == 'function') {
-                callback.call(scope || me, operation);
-            }
         } else {
-            this.fireEvent('exception', this, response);
-            o.request.callback.call(
-                o.request.scope, null, false);
+            me.setException(operation, response);
+            me.fireEvent('exception', this, response, operation);
+        }
+        if (typeof callback == 'function') {
+            callback.call(scope || me, operation);
         }
     }
 });
