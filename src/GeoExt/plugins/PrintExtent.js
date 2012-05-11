@@ -10,7 +10,6 @@
  * Sample code to create a MapPanel with a PrintExtent, and print it
  *  immediately:
  *      
- *      @example
  *      var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
  *          printProvider: new GeoExt.data.PrintProvider({
  *              capabilities: printCapabilities
