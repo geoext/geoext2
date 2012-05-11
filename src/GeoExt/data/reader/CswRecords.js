@@ -92,7 +92,8 @@ Ext.define('GeoExt.data.reader.CswRecords', {
             }
         });
         if (data.SearchResults) {
-            result.totalRecords = data.SearchResults.numberOfRecordsMatched;
+            delete result.totalRecords;
+            result.total = data.SearchResults.numberOfRecordsMatched;
         }
         return result;
     }
