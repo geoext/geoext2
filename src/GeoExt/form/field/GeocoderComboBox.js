@@ -158,7 +158,6 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
         }
         
         this.on({
-            added: this.handleAdded,
             select: this.handleSelect,
             focus: function() {
                 this.clearValue();
@@ -170,12 +169,11 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     },
     
     /** 
-     * When this component is added to a container, see if it has a parent
-     * MapPanel somewhere and set the map
+     * Find the MapPanel somewhere up in the hierarchy and set the map
      * @private
      */
-    handleAdded: function() {
-        var mapPanel = this.findParentByType('gx_mappanel');
+    findMapPanel: function() {
+        var mapPanel = this.up('gx_mappanel');
         if (mapPanel) {
             this.setMap(mapPanel);
         }
@@ -187,6 +185,9 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
      * @private
      */
     handleSelect: function(combo, rec) {                
+        if (!this.map) {
+            this.findMapPanel();
+        }
         var value = this.getValue();
         if (Ext.isArray(value)) {
             var mapProj = this.map.getProjectionObject();
@@ -204,8 +205,8 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
                     Math.max(this.map.getZoom(), this.zoom)
                 );
             }
+            rec = rec[0];
             this.center = this.map.getCenter();
-
             var lonlat = rec.get(this.locationField);
             if (this.layer && lonlat) {
                 var geom = new OpenLayers.Geometry.Point(
@@ -214,12 +215,6 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
                 this.layer.addFeatures([this.locationFeature]);
             }
         }
-        // blur the combo box
-        //TODO Investigate if there is a more elegant way to do this.
-        (function() {
-            this.triggerBlur();
-            this.el.blur();
-        }).defer(100, this);
     },
     
     /** 
@@ -250,7 +245,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
      * @private
      */
     setMap: function(map) {
-        if (map instanceof GeoExt.panelMap) {
+        if (map instanceof GeoExt.panel.Map) {
             map = map.map;
         }
         this.map = map;
