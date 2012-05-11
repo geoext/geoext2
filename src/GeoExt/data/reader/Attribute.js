@@ -68,13 +68,11 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * @param {Object} config (optional) Config object.
      */
     constructor: function(config) {
-        this.callParent([config]);
-        
-        this.setFormat(this.format || new OpenLayers.Format.WFSDescribeFeatureType());
-        
-        if (this.feature) {
-            this.setFeature(this.feature);
+        if (!this.model) {
+            this.model = 'GeoExt.data.AttributeModel';
         }
+        
+        this.callParent([config]);
     },
     
     applyFeature: function(feature) {
@@ -114,12 +112,15 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * name.
      */
     readRecords: function(data) {
+        if (!this.getFormat()) {
+            this.setFormat(new OpenLayers.Format.WFSDescribeFeatureType());
+        }
         var attributes;
         if(data instanceof Array) {
             attributes = data;
         } else {
             // only works with one featureType in the doc
-            attributes = this.format.read(data).featureTypes[0].properties;
+            attributes = this.getFormat().read(data).featureTypes[0].properties;
         }
         var feature = this.feature;
         var fields = this.model.prototype.fields;

@@ -24,84 +24,76 @@ Ext.create('GeoExt.data.AttributeStore', {
 </code></pre>
  */
 Ext.define('GeoExt.data.AttributeStore', {
-    extend: 'Ext.data.Store',
-    requires: ['GeoExt.data.AttributeModel'],
+    extend: 'GeoExt.data.OwsStore',
     model: 'GeoExt.data.AttributeModel',
 
     config: {
         /**
-         * @cfg {String}
-         * The URL from which to retrieve the WFS DescribeFeatureType document.
+         * @cfg {Object} ignore
+         * The ignore object passed to the reader.
          */
-        url: null,
-
-        /**
-         * @cfg {Object}
-         * The `OpenLayers.Format` passed to the reader. See
-         * {@link GeoExt.data.reader.Attribute}.
-         */
-        format: null,
+        ignore: null,
         
         /**
-         * @cfg {Object}
-         * The ignore object passed to the reader. See
-         * {@link GeoExt.data.reader.Attribute}.
+         * @cfg {Object} feature
+         * The OpenLayers.Feature.Vector passed to the reader.
          */
-        ignore: null
+        feature: null
     },
 
     /**
      * @private
      */
     constructor: function(config) {
+        config = Ext.apply({}, config);
         // At this point, we have to copy the complex objects from the config
         // into the prototype. This is because Ext.data.Store's constructor 
         // creates deep copies of these objects.
-        if (config.format) {
-            this.format = config.format;
-            delete config.format;
+        var data;
+        if (config.feature) {
+            this.feature = config.feature;
+            delete config.feature;
+        }
+        // if we have a feature AND data, then we need to remove the data so that
+        // the reader is not called before it is ready. We load the data in the
+        // store AFTER the store & its dependent objects have been constructed
+        if (this.feature && config.data) {
+            data = config.data;
+            delete config.data;
         }
 
         this.callParent([config]);
 
-        if (this.ignore) {
-            this.setIgnore(this.ignore);
-            delete this.ignore;
+        if (config.ignore) {
+            this.setIgnore(config.ignore);
         }
-        if (this.url) {
-            this.setUrl(this.url);
-            delete this.url;
+
+        if (this.feature) {
+            this.setFeature(this.feature);
         }
-        if (this.format) {
-            this.setFormat(this.format);
-            delete this.format;
+        
+        if (data) {
+            this.loadRawData(data);
         }
     },
 
     /**
-     * We're setting the proxy URL.
-     * @param {String} url
      * @private
+     * We're setting the sample feature for the reader
+     * @param {OpenLayers.Feature} feature
      */
-    applyUrl: function(url) {
-        this.getProxy().url = url;
+    applyFeature: function(feature) {
+        var reader = this.getProxy().getReader();
+        if(reader) { reader.setFeature(feature); }
     },
 
     /**
+     * @private
      * We're setting the ignore property in the reader.
      * @param {Object} ignore
-     * @private
      */
     applyIgnore: function(ignore) {
-        this.getProxy().getReader().setIgnore(ignore);
-    },
-
-    /**
-     * We're setting the format property in the reader.
-     * @param {OpenLayers.Format} format
-     * @private
-     */
-    applyFormat: function(format) {
-        this.getProxy().getReader().setFormat(format);
+        var reader = this.getProxy().getReader();
+        if(reader) { reader.setIgnore(ignore); }
     }
 });
