@@ -2,7 +2,7 @@
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
@@ -128,7 +128,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     previewScales: null,
 
     /**
-     * @cfg {OpenLayers.LonLat/Array(Number)} center
+     * @cfg {OpenLayers.LonLat/Number[]} center
      * A location for the map center.
      * Do not set, as this will be overridden with the `sourceMap`
      *  center.
@@ -143,7 +143,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     zoom: null,
 
     /**
-     * @cfg {`OpenLayers.Bounds/Array(Number)} extent
+     * @cfg {OpenLayers.Bounds/Number[]} extent
      * An initial extent for the map.
      *  Do not set, because the initial extent will be determined by the
      *  `sourceMap`.
@@ -377,7 +377,7 @@ Ext.define('GeoExt.panel.PrintMap', {
      *  interact with the printProvider and printPage.
      *
      * @param {Object} options options for
-     *  the {@link GeoExt.data.PrintProvider#print} method.
+     *  the {@link GeoExt.data.PrintProvider#method-print print method}.
      *
      */
     print: function(options) {
