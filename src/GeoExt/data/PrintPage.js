@@ -1,6 +1,14 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
 /**
  * @class GeoExt.data.PrintPage
- * 
+ *
  * Provides a representation of a print page for
  *  {@link GeoExt.data.PrintProvider}. The extent of the page is stored as
  *  `OpenLayers.Feature.Vector`. Widgets can use this to display the print
@@ -11,19 +19,19 @@ Ext.define('GeoExt.data.PrintPage', {
     requires: [
         'GeoExt.panel.Map'
     ],
-    
-    /** 
+
+    /**
      * @cfg {GeoExt.data.PrintProvider} printProvider
      * The print provider to use with this page.
      */
-    
-    /** 
-     * @private 
+
+    /**
+     * @private
      * @property {GeoExt.data.PrintProvider} printProvider
      */
     printProvider: null,
-    
-    /** 
+
+    /**
      * @property {OpenLayers.Feature.Vector} feature
      * Feature representing the page extent. To
      *  get the extent of the print page for a specific map, use
@@ -31,56 +39,56 @@ Ext.define('GeoExt.data.PrintPage', {
      *  Read-only.
      */
     feature: null,
-    
-    /** 
+
+    /**
      * @property {OpenLayers.LonLat} center
      * The current center of the page. Read-only.
      */
     center: null,
-    
-    /** 
+
+    /**
      * @property {Ext.data.Record} scale
      * The current scale record of the page. Read-only.
      */
     scale: null,
-    
-    /** 
+
+    /**
      * @property {Float} rotation
      * The current rotation of the page. Read-only.
      */
     rotation: 0,
-    
-    /** 
+
+    /**
      * @cfg {Object} customParams
      * Key-value pairs of additional parameters that the
      *  printProvider will send to the print service for this page.
      */
 
-    /** 
+    /**
      * @property {Object} customParams
      * Key-value pairs of additional parameters that the
      *  printProvider will send to the print service for this page.
      */
     customParams: null,
-    
+
     /**
      * Private constructor override.
-     * 
+     *
      * @private
      */
     constructor: function(config) {
         this.initialConfig = config;
         Ext.apply(this, config);
-        
+
         if(!this.customParams) {
             this.customParams = {};
         }
-        
-        /** 
+
+        /**
          * @event change
-         * 
+         *
          * Triggered when any of the page properties have changed
-         *  
+         *
          * Listener arguments:
          *
          *  * printPage - {@link GeoExt.data.PrintPage} this printPage
@@ -101,7 +109,7 @@ Ext.define('GeoExt.data.PrintPage', {
                 ])
             ])
         );
-        
+
         if(this.printProvider.capabilities) {
             this.setScale(this.printProvider.scales.getAt(0));
         } else {
@@ -118,11 +126,11 @@ Ext.define('GeoExt.data.PrintPage', {
             scope: this
         });
     },
-    
-    /** 
+
+    /**
      * Gets this page's print extent for the provided map.
-     *  
-     * @param {OpenLayers.Map/GeoExt.MapPanel} map the map to get the print extent for. 
+     *
+     * @param {OpenLayers.Map/GeoExt.MapPanel} map the map to get the print extent for.
      * @return {OpenLayers.Bounds}
      */
     getPrintExtent: function(map) {
@@ -131,18 +139,18 @@ Ext.define('GeoExt.data.PrintPage', {
     },
 
     /**
-     *  
+     *
      * Updates the page geometry to match a given scale. Since this takes the
      *  current layout of the printProvider into account, this can be used to
      *  update the page geometry feature when the layout has changed.
-     *  
+     *
      * @param {Ext.data.Record} scale The new scale record.
      * @param {String} units map units to use for the scale calculation.
      *   Optional if the `feature` is on a layer which is added to a map.
      *   If not found, "dd" will be assumed.
      */
     setScale: function(scale, units) {
-        
+
         var bounds = this.calculatePageBounds(scale, units);
         var geom = bounds.toGeometry();
         var rotation = this.rotation;
@@ -151,27 +159,27 @@ Ext.define('GeoExt.data.PrintPage', {
         }
         this.updateFeature(geom, {scale: scale});
     },
-    
-    /** 
+
+    /**
      * Moves the page extent to a new center.
-     * 
+     *
      * @param {OpenLayers.LonLat} center The new center.
      */
     setCenter: function(center) {
         var geom = this.feature.geometry;
         var oldCenter = geom.getBounds().getCenterLonLat();
-        
+
         var dx = center.lon - oldCenter.lon;
         var dy = center.lat - oldCenter.lat;
         geom.move(dx, dy);
         this.updateFeature(geom, {center: center});
     },
-    
-    /** 
+
+    /**
      * Sets a new rotation for the page geometry.
-     * 
+     *
      * @param {Float} rotation The new rotation.
-     * @param {Boolean} force If set to true, the rotation will also be 
+     * @param {Boolean} force If set to true, the rotation will also be
      *  set when the layout does not support it. Default is false.
      */
     setRotation: function(rotation, force) {
@@ -181,11 +189,11 @@ Ext.define('GeoExt.data.PrintPage', {
             this.updateFeature(geom, {rotation: rotation});
         }
     },
-    
-    /** 
+
+    /**
      *  Fits the page layout to a map or feature extent. If the map extent has
      *  not been centered yet, this will do nothing.
-     * 
+     *
      *  Available options:
      *
      *  * mode - `String` How to calculate the print extent? If `closest`,
@@ -194,15 +202,15 @@ Ext.define('GeoExt.data.PrintPage', {
      *    `fitTo` extent on the printer. If `screen`, it will be the closest
      *    one that is entirely visible inside the `fitTo` extent. Default is
      *    `printer`.
-     *    
-     *  @param {GeoExt.MapPanel/OpenLayers.Map/OpenLayers.Feature.Vector} fitTo 
+     *
+     *  @param {GeoExt.MapPanel/OpenLayers.Map/OpenLayers.Feature.Vector} fitTo
      *      The map or feature to fit the page to.
      *  @param {Object} options Additional options to determine how to fit
-     * 
+     *
      */
     fit: function(fitTo, options) {
         options = options || {};
-        
+
         var map = fitTo, extent;
         if(fitTo instanceof GeoExt.panel.Map) {
             map = fitTo.map;
@@ -224,13 +232,13 @@ Ext.define('GeoExt.data.PrintPage', {
         var closest = Number.POSITIVE_INFINITY;
         var mapWidth = extent.getWidth();
         var mapHeight = extent.getHeight();
-        
+
         this.printProvider.scales.each(function(rec) {
             var bounds = this.calculatePageBounds(rec, units);
-            
+
             if (options.mode == "closest") {
-                
-                var diff = 
+
+                var diff =
                     Math.abs(bounds.getWidth() - mapWidth) +
                     Math.abs(bounds.getHeight() - mapHeight);
                 if (diff < closest) {
@@ -244,11 +252,11 @@ Ext.define('GeoExt.data.PrintPage', {
                 if (contains || (options.mode == "screen" && !contains)) {
                     scale = rec;
                 }
-                
+
                 return contains;
             }
         }, this);
-        
+
         this.setScale(scale, units);
         delete this._updating;
         this.updateFeature(this.feature.geometry, {
@@ -257,10 +265,10 @@ Ext.define('GeoExt.data.PrintPage', {
         });
     },
 
-    /** 
+    /**
      * Updates the page feature with a new geometry and notifies listeners
      *  of changed page properties.
-     *  
+     *
      * @private
      * @param {OpenLayers.Geometry} geometry New geometry for the #feature.
      *    If not provided, the existing geometry will be left unchanged.
@@ -272,7 +280,7 @@ Ext.define('GeoExt.data.PrintPage', {
         var modified = f.geometry !== geometry;
         geometry.id = f.geometry.id;
         f.geometry = geometry;
-        
+
         if(!this._updating) {
             for(var property in mods) {
                 if(mods[property] === this[property]) {
@@ -283,21 +291,21 @@ Ext.define('GeoExt.data.PrintPage', {
                 }
             }
             Ext.apply(this, mods);
-            
+
             f.layer && f.layer.drawFeature(f);
             modified && this.fireEvent("change", this, mods);
         }
-    },    
-    
+    },
+
     /**
      * @private
-     * @param {Ext.data.Record} scale Scale record to calculate the page 
+     * @param {Ext.data.Record} scale Scale record to calculate the page
      *  bounds for.
-     * @param {String} units Map units to use for the scale calculation. 
-     *  Optional if #feature is added to a layer which is added to a 
+     * @param {String} units Map units to use for the scale calculation.
+     *  Optional if #feature is added to a layer which is added to a
      *  map. If not provided, "dd" will be assumed.
      * @return `OpenLayers.Bounds`
-     *  
+     *
      * Calculates the page bounds for a given scale.
      */
     calculatePageBounds: function(scale, units) {
@@ -307,21 +315,21 @@ Ext.define('GeoExt.data.PrintPage', {
         var center = geom.getBounds().getCenterLonLat();
 
         var size = this.printProvider.layout.get("size");
-        
+
         var units = units ||
             (f.layer && f.layer.map && f.layer.map.getUnits()) ||
             "dd";
         var unitsRatio = OpenLayers.INCHES_PER_UNIT[units];
         var w = size.width / 72 / unitsRatio * s / 2;
         var h = size.height / 72 / unitsRatio * s / 2;
-        
+
         return new OpenLayers.Bounds(center.lon - w, center.lat - h,
             center.lon + w, center.lat + h);
     },
-    
-    /** 
+
+    /**
      * Handler for the printProvider's layoutchange event.
-     * 
+     *
      * @private
      */
     onLayoutChange: function() {
@@ -336,12 +344,12 @@ Ext.define('GeoExt.data.PrintPage', {
             this.setScale(this.scale);
         }
     },
-    
-    /** 
+
+    /**
      * @private
      */
     destroy: function() {
         this.printProvider.un("layoutchange", this.onLayoutChange, this);
     }
-    
+
 });
