@@ -11,7 +11,7 @@ Ext.define('GX.view.summit.Chart', {
         Ext.apply(this, {
             flex: 1,
             legend: {
-                position: 'right'  
+                position: 'right'
             },
             shadow: true,
             store: 'Summits',
@@ -33,6 +33,11 @@ Ext.define('GX.view.summit.Chart', {
                 type: 'line',
                 axis: 'left',
                 fill: true,
+                listeners: {
+                    itemmousedown: function(e) {
+                        GX.view.summit.Grid.selectionModel.select(e.storeItem);
+                    }
+                },
                 highlight: {
                     size: 7,
                     radius: 7
@@ -46,10 +51,14 @@ Ext.define('GX.view.summit.Chart', {
                 smooth: true,
                 tips: {
                     trackMouse: true,
-                    width: 100,
-                    height: 28,
+                    width: 130,
+                    height: 40,
                     renderer: function(storeItem, item) {
-                        this.setTitle(item.value[1] + ' meters');
+                        this.setTitle(
+                            storeItem.get('name') +
+                            '<br />' +
+                            item.value[1] + ' meters'
+                        );
                     }
                 },
                 title: [

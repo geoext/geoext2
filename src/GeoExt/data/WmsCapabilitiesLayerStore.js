@@ -1,6 +1,6 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -8,6 +8,7 @@
 
 /**
  * @class GeoExt.data.WmsCapabilitiesLayerStore
+ *
  * Small helper class to make creating stores for remote WMS layer data
  * easier. The store is pre-configured with a built-in
  * {Ext.data.proxy.Ajax} and {GeoExt.data.reader.WmsCapabilities}.
@@ -23,11 +24,11 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
 
     config: {
         /**
-         * @cfg {String}
+         * @cfg {String} url
          * The URL from which to retrieve the WMS GetCapabilities document
          */
         /**
-         * @property {String}
+         * @property {String} url
          * The URL from which to retrieve the WMS GetCapabilities document
          */
         url: null
@@ -38,7 +39,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
     constructor: function(config){
         var me = this;
         me.callParent([config]);
-        
+
         if(config.url) { me.setUrl(config.url); }
     },
     /**
