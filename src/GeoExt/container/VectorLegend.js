@@ -8,7 +8,7 @@
 
 /*
  * @requires GeoExt/container/LayerLegend.js
- * @requires GeoExt/FeatureRenderer.js
+ * @include GeoExt/FeatureRenderer.js
  */
 
 /**
@@ -18,7 +18,10 @@
 Ext.define('GeoExt.container.VectorLegend', {
     extend: 'GeoExt.container.LayerLegend',
     alias: 'widget.gx_vectorlegend',
-    requires: ['Ext.layout.container.Column', 'GeoExt.FeatureRenderer'],
+    requires: [
+        'Ext.layout.container.Column', 
+        'GeoExt.FeatureRenderer'
+    ],
     alternateClassName: 'GeoExt.VectorLegend',
     
     statics: {
