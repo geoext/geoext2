@@ -28,7 +28,10 @@ Ext.namespace("GeoExt.form");
  *      In most cases one would not use this class directly, but
  *      :class:`GeoExt.form.FormPanel` instead.
  */
-GeoExt.form.BasicForm = Ext.extend(Ext.form.BasicForm, {
+Ext.define('GeoExt.form.Basic', {
+    extend: 'Ext.form.Basic',
+    requires: ['GeoExt.form.action.Search'],
+
     /** private: property[protocol]
      *  ``OpenLayers.Protocol`` The protocol configured in this
      *  instance.
@@ -62,14 +65,13 @@ GeoExt.form.BasicForm = Ext.extend(Ext.form.BasicForm, {
     doAction: function(action, options) {
         if(action == "search") {
             options = Ext.applyIf(options || {}, {
+                form: this,
                 protocol: this.protocol,
                 abortPrevious: this.autoAbort
             });
-            action = new GeoExt.form.SearchAction(this, options);
+            action = new GeoExt.form.action.Search(options);
         }
-        return GeoExt.form.BasicForm.superclass.doAction.call(
-            this, action, options
-        );
+        return this.callParent([action, options]);
     },
 
     /** api: method[search]
