@@ -25,6 +25,9 @@ Ext.define('GeoExt.tree.LayerNode', {
      *  @private
      */
     init: function(target) {
+
+        this.target = target;
+
         target.set('checked', this.layer.getVisibility());
         target.set('layer', this.layer);
         target.set('checkedGroup', this.checkedGroup === undefined ?
@@ -36,6 +39,70 @@ Ext.define('GeoExt.tree.LayerNode', {
         
         if(!target.get('iconCls')) {
             target.set('iconCls', "gx-tree-layer-icon");
+        }
+
+        target.on('afteredit', this.onAfterEdit, this);
+        this.layer.events.on({
+            "visibilitychanged": this.onLayerVisibilityChanged,
+            scope: this
+        });
+    },
+
+    onAfterEdit: function(modifiedFields) {
+        var me = this;
+
+        if(~modifiedFields.indexOf('checked')) {
+            this.onCheckChange();
+        }
+    },
+    
+    /** private: method[onLayerVisiilityChanged
+     *  handler for visibilitychanged events on the layer
+     * @scope (Ext.data.NodeInterface) current node
+     */
+    onLayerVisibilityChanged: function() {
+        if(!this._visibilityChanging) {
+            this.target.set('checked', this.target.get('layer').getVisibility());
+        }
+    },
+    
+    /** private: method[onCheckChange]
+     *  :param node: ``GeoExt.tree.LayerNode``
+     *  :param checked: ``Boolean``
+     *
+     *  handler for checkchange events 
+     */
+    onCheckChange: function() {
+        var node = this.target,
+            checked = this.target.get('checked');
+
+        if(checked != node.get('layer').getVisibility()) {
+            node._visibilityChanging = true;
+            var layer = node.get('layer');
+            if(checked && layer.isBaseLayer && layer.map) {
+                layer.map.setBaseLayer(layer);
+            } else {
+                layer.setVisibility(checked);
+            }
+            delete node._visibilityChanging;
+        }
+    },
+    
+    /** private: method[onMapMoveend]
+     *  :param evt: ``OpenLayers.Event``
+     *
+     *  handler for map moveend events to determine if node should be
+     *  disabled or enabled 
+     */
+    onMapMoveend: function(evt){
+        /* scoped to node */
+        if (this.autoDisable) {
+            if (this.layer.inRange === false) {
+                this.disable();
+            }
+            else {
+                this.enable();
+            }
         }
     }
 
