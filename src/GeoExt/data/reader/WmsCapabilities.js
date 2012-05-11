@@ -6,6 +6,12 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/WMSCapabilities.js
+ * @include OpenLayers/Layer/WMS.js
+ * @include OpenLayers/Util.js
+ */
+
 /**
  * @class GeoExt.data.reader.WmsCapabilities
  * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]}

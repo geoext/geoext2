@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/FeatureRenderer.js
+ */
+
 /**
  * @class GeoExt.grid.column.Symbolizer
  *

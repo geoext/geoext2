@@ -7,7 +7,9 @@
  */
 
 /*
- * @require GeoExt/panel/Map.js
+ * @include GeoExt/panel/Map.js
+ * @include GeoExt/tree/LayerNode.js
+ * @include GeoExt/tree/LayerContainer.js
  */
 
 /**
@@ -18,7 +20,11 @@
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
-    requires: ['GeoExt.panel.Map', 'GeoExt.tree.LayerNode'],
+    requires: [
+        'GeoExt.panel.Map', 
+        'GeoExt.tree.LayerNode', 
+        'GeoExt.tree.LayerContainer'
+    ],
 
     /**
      * Triggered before loading children. Return false to avoid

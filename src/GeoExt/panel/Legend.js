@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/container/LayerLegend.js
+ */
+
 /**
  *  A panel showing legends of all layers in a layer store.
  *  Depending on the layer type, a legend renderer will be chosen.

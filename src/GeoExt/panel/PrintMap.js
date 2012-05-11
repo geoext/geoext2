@@ -6,6 +6,13 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Layer/Vector.js
+ * @requires GeoExt/panel/Map.js
+ * @include GeoExt/data/PrintProvider.js
+ * @include GeoExt/data/PrintPage.js
+ */
+
 /**
  * @class GeoExt.panel.PrintMap
  *

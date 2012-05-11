@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Feature/Vector.js
+ */
+
 /**
  * Used to read the attributes of a feature.
  */
