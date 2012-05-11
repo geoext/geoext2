@@ -101,7 +101,6 @@ Ext.application({
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
         
         /*var treeConfig = [
-            {text: "myplainnode", leaf: true},
             {nodeType: 'gx_layercontainer', layerStore: map.layers}
         {
             nodeType: "gx_baselayercontainer"
@@ -133,12 +132,19 @@ Ext.application({
             root: {
                 expanded: true,
                 children: [
-                    {text: "A plain node", leaf: true},
-                    {plugins: ['gx_overlaylayercontainer'], expanded: true},
-                    {plugins: [{
-                        ptype: 'gx_baselayercontainer',
-                        layers: mapPanel.layers
-                    }], text: "Base Maps"}
+                    {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            store: mapPanel.layers
+                        }],
+                        expanded: true
+                    }, {
+                        plugins: ['gx_baselayercontainer'], expanded: true
+                    }, {
+                        plugins: ['gx_overlaylayercontainer'],
+                        text: "Base Maps",
+                        expanded: true
+                    }
                 ]
             }
         });
