@@ -1,6 +1,6 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -44,8 +44,8 @@ Ext.define('GeoExt.data.WmsDescribeLayerStore',{
         var me = this;
         me.callParent([config]);
 
-        if (config.url) { 
-            me.setUrl(config.url); 
+        if (config.url) {
+            me.setUrl(config.url);
         }
         if (config.format) {
             me.setFormat(config.format);

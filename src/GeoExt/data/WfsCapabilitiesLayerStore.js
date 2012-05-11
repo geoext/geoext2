@@ -1,6 +1,6 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -22,18 +22,18 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
     model: 'GeoExt.data.WfsCapabilitiesLayerModel',
     alternateClassName: ['GeoExt.data.WFSCapabilitiesStore','GeoExt.data.WfsCapabilitiesStore'],
     /**
-     * @cfg {Array[{Object}]}
+     * @cfg {Object[]}
      * An array of {Ext.data.Field} configuration objects to create additional fields on the
      * {GeoExt.data.WfsCapabilitiesLayerModel} layer records created by this store when parsing a WFS capabilities document
      */
     fields: null,
     config: {
         /**
-         * @cfg {String}
+         * @cfg {String} url
          * The URL from which to retrieve the WFS GetCapabilities document
          */
         /**
-         * @property {String}
+         * @property {String} url
          * The URL from which to retrieve the WFS GetCapabilities document
          */
         url: null
@@ -44,9 +44,9 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
     constructor: function(config){
         var me = this,
         xtraFields = null;
-        
+
         config = Ext.apply({}, config);
-        
+
         if(config.fields){
             //save a ref to the extra fields but delete them from the config
             //since a fields property passed in a config object can cause some
@@ -55,7 +55,7 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
             delete config.fields;
         }
         me.callParent([config]);
-        
+
         //post process the extra fields. they will be lost if done before the
         //parent constructor is called
         if(xtraFields){

@@ -1,6 +1,6 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -11,15 +11,17 @@
  * Data reader class to create an array of records from a CSW
  * GetRecords response. The raw response from the OpenLayers parser
  * is available through the jsonData property.
- * @example
- *     var store = new Ext.data.Store({
- *         proxy: new GeoExt.data.ProtocolProxy({
- *             protocol: new OpenLayers.Protocol.CSW({
- *                 url: "http://demo.geonode.org/geonetwork/srv/en/csw"
- *             })
- *         }),
- *         reader: new GeoExt.data.reader.CswRecords()
- *     });
+ * Example:
+<pre><code>
+var store = new Ext.data.Store({
+    proxy: new GeoExt.data.ProtocolProxy({
+        protocol: new OpenLayers.Protocol.CSW({
+            url: "http://demo.geonode.org/geonetwork/srv/en/csw"
+        })
+    }),
+    reader: new GeoExt.data.reader.CswRecords()
+});
+</code></pre>
  */
 Ext.define('GeoExt.data.reader.CswRecords', {
     alternateClassName: ['GeoExt.data.CSWRecordsReader'],
@@ -42,9 +44,9 @@ Ext.define('GeoExt.data.reader.CswRecords', {
 
     /*
      * @private
-     * @param {XMLHttpRequest/OpenLayers.Protocol.Response} data If a 
+     * @param {XMLHttpRequest/OpenLayers.Protocol.Response} data If a
      * ProtocolProxy is configured with OpenLayers.Protocol.CSW data will be
-     * {OpenLayers.Protocol.Response}. Otherwise data will be the 
+     * {OpenLayers.Protocol.Response}. Otherwise data will be the
      * {XMLHttpRequest} object.
      * @return  {Object} A data block which is used by an
      * {Ext.data.Store} as a cache of {Ext.data.Model} objects.

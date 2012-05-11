@@ -2,11 +2,11 @@
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
-/**
+/*
  * @require OpenLayers/Control/SelectFeature.js
  * @require OpenLayers/Layer/Vector.js
  * @require OpenLayers/BaseTypes/Class.js
@@ -20,23 +20,25 @@
  *
  * Sample code to create a feature grid with a feature selection model:
  *
- *      @example
- *      var gridPanel = new Ext.grid.GridPanel({
- *          title: "Feature Grid",
- *          region: "east",
- *          store: store,
- *          width: 320,
- *          columns: [{
- *              header: "Name",
- *              width: 200,
- *              dataIndex: "name"
- *          }, {
- *              header: "Elevation",
- *              width: 100,
- *              dataIndex: "elevation"
- *          }],
- *          selType: 'featuremodel'
+ * Example:
+<pre><code>
+var gridPanel = new Ext.grid.GridPanel({
+    title: "Feature Grid",
+    region: "east",
+    store: store,
+    width: 320,
+    columns: [{
+        header: "Name",
+        width: 200,
+        dataIndex: "name"
+    }, {
+        header: "Elevation",
+        width: 100,
+        dataIndex: "elevation"
+    }],
+    selType: 'featuremodel'
  *     });
+</code></pre>
  */
 
 
@@ -172,7 +174,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * @param {Object} options An object with a "controlConfig"
      * property referencing the configuration object to pass to the
      * ``OpenLayers.Control.SelectFeature`` constructor.
-     * @return {OpenLayers.Control.SelectFeatur}
+     * @return {OpenLayers.Control.SelectFeature}
      * The select feature control this selection model uses.
      */
     bind: function(obj, options) {

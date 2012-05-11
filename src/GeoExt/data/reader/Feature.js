@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
@@ -47,7 +47,7 @@ Ext.define('GeoExt.data.reader.Feature', {
                         v = feature.attributes[field.mapping || field.name] || field.defaultValue;
                     }
                     if (field.convert) {
-                        v = field.convert(v, feature);
+                        v = field.convert(v, record);
                     }
                     convertedValues[field.name] = v;
                 }
