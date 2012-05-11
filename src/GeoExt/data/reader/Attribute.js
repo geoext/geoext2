@@ -73,29 +73,6 @@ Ext.define('GeoExt.data.reader.Attribute', {
         }
         
         this.callParent([config]);
-        
-        // At this point, we have to copy the complex objects from the config
-        // into the prototype. This is because Ext.data.Store's constructor 
-        // creates deep copies of these objects.
-        /**
-        if (config.format) {
-            this.format = config.format;
-            delete config.format;
-        }
-        
-        if (config.feature) {
-            this.feature = config.feature;
-            delete config.feature;
-        }
-        
-        this.callParent([config]);
-        
-        this.setFormat(this.format || new OpenLayers.Format.WFSDescribeFeatureType());
-        
-        if (this.feature) {
-            this.setFeature(this.feature);
-        }
-        **/
     },
     
     applyFeature: function(feature) {
