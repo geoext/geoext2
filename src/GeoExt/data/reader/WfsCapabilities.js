@@ -6,6 +6,13 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/WFSCapabilities.js
+ * @include OpenLayers/Protocol/WFS.js
+ * @include OpenLayers/Strategy/Fixed.js
+ * @include OpenLayers/Layer/Vector.js
+ */
+
 /**
  * @class GeoExt.data.reader.WfsCapabilities
  * Data reader class to create {GeoExt.data.WfsCapabilitiesLayerModel[]}

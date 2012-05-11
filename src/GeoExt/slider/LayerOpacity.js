@@ -6,6 +6,11 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Layer.js
+ * @include GeoExt/data/LayerModel.js
+ */
+
 /**
  * @class GeoExt.slider.LayerOpacity
  *
@@ -52,8 +57,9 @@ var panel = new GeoExt.MapPanel({
  */
 Ext.define('GeoExt.slider.LayerOpacity', {
     alternateClassName: "GeoExt.LayerOpacitySlider",
-    extend : 'Ext.slider.Single',
-    alias : 'widget.gx_opacityslider',
+    extend: 'Ext.slider.Single',
+    requires: 'GeoExt.data.LayerModel',
+    alias: 'widget.gx_opacityslider',
 
     /**
      * @cfg {OpenLayers.Layer/GeoExt.data.LayerModel}

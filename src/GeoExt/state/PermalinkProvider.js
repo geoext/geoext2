@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Util.js
+ */
+
 /**
  * @class GeoExt.state.PermalinkProvider
  *

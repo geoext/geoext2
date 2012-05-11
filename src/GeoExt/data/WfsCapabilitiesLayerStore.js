@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WfsCapabilities.js
+ */
+
 /**
  * @class GeoExt.data.WfsCapabilitiesLayerStore
  * Small helper class to make creating stores for remote WFS layer data
@@ -20,13 +24,18 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
     extend: 'Ext.data.Store',
     requires: ['GeoExt.data.reader.WfsCapabilities'],
     model: 'GeoExt.data.WfsCapabilitiesLayerModel',
-    alternateClassName: ['GeoExt.data.WFSCapabilitiesStore','GeoExt.data.WfsCapabilitiesStore'],
+    alternateClassName: [
+        'GeoExt.data.WFSCapabilitiesStore',
+        'GeoExt.data.WfsCapabilitiesStore'
+    ],
+    
     /**
      * @cfg {Object[]}
      * An array of {Ext.data.Field} configuration objects to create additional fields on the
      * {GeoExt.data.WfsCapabilitiesLayerModel} layer records created by this store when parsing a WFS capabilities document
      */
     fields: null,
+
     config: {
         /**
          * @cfg {String} url
@@ -38,6 +47,7 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
          */
         url: null
     },
+
     /**
      * @private
      */

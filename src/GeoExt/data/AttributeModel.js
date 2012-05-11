@@ -7,7 +7,7 @@
  */
 
 /*
- * @requires GeoExt/data/reader/Attribute.js
+ * @include GeoExt/data/reader/Attribute.js
  */
 
 /**
@@ -22,7 +22,10 @@
 Ext.define('GeoExt.data.AttributeModel', {
     alternateClassName: 'GeoExt.data.AttributeRecord',
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Ajax', 'GeoExt.data.reader.Attribute'],
+    requires: [
+        'Ext.data.proxy.Ajax', 
+        'GeoExt.data.reader.Attribute'
+    ],
     alias: 'model.gx_attribute',
     fields: [
         {name: 'name', type: 'string'},
