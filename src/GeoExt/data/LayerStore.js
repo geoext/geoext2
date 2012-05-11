@@ -176,28 +176,23 @@ Ext.define('GeoExt.data.LayerStore', {
          */
         onChangeLayer: function(evt) {
             var layer = evt.layer;
-            var recordIndex = this.findBy(function(rec, id) {
-                return rec.getLayer() === layer;
-            });
-            if(recordIndex > -1) {
-                var record = this.getAt(recordIndex);
-                if(evt.property === "order") {
-                    if(!this._adding && !this._removing) {
-                        var layerIndex = this.map.getLayerIndex(layer);
-                        if(layerIndex !== recordIndex) {
-                            this._removing = true;
-                            this.remove(record);
-                            delete this._removing;
-                            this._adding = true;
-                            this.insert(layerIndex, [record]);
-                            delete this._adding;
-                        }
+            var record = this.getByLayer(layer);
+            var recordIndex = this.indexOf(record);
+            var property = evt.property;
+            if(property === "order") {
+                if(!this._adding && !this._removing) {
+                    var layerIndex = this.map.getLayerIndex(layer);
+                    if(layerIndex !== recordIndex) {
+                        this._removing = true;
+                        this.remove(record);
+                        delete this._removing;
+                        this._adding = true;
+                        this.insert(layerIndex, [record]);
+                        delete this._adding;
                     }
-                } else if(evt.property === "name") {
-                    record.set("title", layer.name);
-                } else {
-                    this.fireEvent("update", this, record, Ext.data.Record.EDIT);
                 }
+            } else {
+                record.updateField(property, layer[property]);
             }
         },
        
@@ -330,6 +325,7 @@ Ext.define('GeoExt.data.LayerStore', {
          * @param {Number} operation
          */
         onUpdate: function(store, record, operation) {
+            /*
             if(operation === Ext.data.Record.EDIT) {
                 if (record.modified && record.modified.title) {
                     var layer = record.getLayer();
@@ -338,7 +334,7 @@ Ext.define('GeoExt.data.LayerStore', {
                         layer.setName(title);
                     }
                 }
-            }
+            }*/
         },
 
         /**
