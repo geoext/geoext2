@@ -2,10 +2,10 @@
  * Help Action
  * @extends Ext.Action
  */
-Ext.define('GX.view.help.Action', {
+Ext.define('CF.view.help.Action', {
     extend: 'Ext.Action',
-    alias : 'widget.gxapp_helpaction',
-    requires: ['GX.view.help.Window'],
+    alias : 'widget.cf_helpaction',
+    requires: ['CF.view.help.Window'],
 
     /**
      * @property {String} windowContentEl
@@ -27,7 +27,7 @@ Ext.define('GX.view.help.Action', {
     /**
      * @private
      *
-     * Create a GX.view.help.Action instance.
+     * Create a CF.view.help.Action instance.
      *
      * @param {Object} config (optional) Config object.
      *
@@ -36,7 +36,7 @@ Ext.define('GX.view.help.Action', {
         Ext.apply(config, {
             handler: function() {
                 if (!this._window) {
-                    this._window = Ext.create('GX.view.help.Window', {
+                    this._window = Ext.create('CF.view.help.Window', {
                         contentEl: this.windowContentEl
                     });
                 }
