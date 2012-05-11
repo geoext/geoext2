@@ -49,17 +49,16 @@ Ext.define('GeoExt.tree.LayerLoader', {
      */
     store: null,
     
-    /** api: config[filter]
-     *  ``Function``
-     *  A function, called in the scope of this loader, with a layer record
-     *  as argument. Is expected to return true for layers to be loaded, false
-     *  otherwise. By default, the filter checks for displayInLayerSwitcher:
+    /**
+     * A function, called in the scope of this loader, with a layer record
+     * as argument. Is expected to return true for layers to be loaded, false
+     * otherwise. By default, the filter checks for displayInLayerSwitcher:
+     * @param {Function} filter
      *  
-     *  .. code-block:: javascript
-     *  
-     *      filter: function(record) {
-     *          return record.getLayer().displayInLayerSwitcher == true
-     *      }
+     * @example
+     * filter: function(record) {
+     *     return record.getLayer().displayInLayerSwitcher == true
+     * }
      */
     filter: function(record) {
         return record.getLayer().displayInLayerSwitcher == true;
@@ -70,17 +69,6 @@ Ext.define('GeoExt.tree.LayerLoader', {
      *  this loader.
      */
     baseAttrs: null,
-    
-    /** api: config[uiProviders]
-     *  ``Object``
-     *  An optional object containing properties which specify custom
-     *  GeoExt.tree.LayerNodeUI implementations. If the optional uiProvider
-     *  attribute for child nodes is a string rather than a reference to a
-     *  TreeNodeUI implementation, then that string value is used as a
-     *  property name in the uiProviders object. If not provided, the
-     *  uiProviders object will be taken from the ownerTree's loader.
-     */
-    uiProviders: null,
     
     /** private: method[load]
      *  :param node: ``Ext.tree.TreeNode`` The node to add children to.
@@ -119,7 +107,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
      */
     onStoreAdd: function(store, records, index, node) {
         if(!this._reordering) {
-            var nodeIndex = node.recordIndexToNodeIndex(index+records.length-1);
+            var nodeIndex = node.get('container').recordIndexToNodeIndex(index+records.length-1, node);
             for(var i=0; i<records.length; ++i) {
                 this.addLayerNode(node, records[i], nodeIndex);
             }
@@ -134,9 +122,9 @@ Ext.define('GeoExt.tree.LayerLoader', {
      *  
      *  Listener for the store's remove event.
      */
-    onStoreRemove: function(store, record, index, node) {
+    onStoreRemove: function(layerRecord, node) {
         if(!this._reordering) {
-            this.removeLayerNode(node, record);
+            this.removeLayerNode(node, layerRecord);
         }
     },
 
@@ -156,21 +144,19 @@ Ext.define('GeoExt.tree.LayerLoader', {
             var child = this.createNode({
                 plugins: [{
                     ptype: 'gx_layer',
-                    layer: layer
                 }],
-                text: layer.name
+                layer: layer,
+                text: layer.name,
+                listeners: {
+                    move: this.onChildMove,
+                    scope: this
+                }
             });
             var sibling = node.childNodes && node.getChildAt(index);
             if(sibling) {
-                node.insertBefore(child, sibling);
-                child.on("move", this.onChildMove, this);
-            } else if (node.isLoaded()) {
-                node.appendChild(child);
+                node.insertChild(index, child);
             } else {
-                if (!node.raw.children) {
-                    node.raw.children = [];
-                }
-                node.raw.children.push(child);
+                node.appendChild(child);
             }
         }
     },
@@ -186,12 +172,11 @@ Ext.define('GeoExt.tree.LayerLoader', {
     removeLayerNode: function(node, layerRecord) {
         if (this.filter(layerRecord) === true) {
             var child = node.findChildBy(function(node) {
-                return node.layer == layerRecord.getLayer();
+                return node.get('layer') == layerRecord.getLayer();
             });
             if(child) {
                 child.un("move", this.onChildMove, this);
                 child.remove();
-                node.reload();
             }
         }
     },
@@ -210,7 +195,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
     onChildMove: function(tree, node, oldParent, newParent, index) {
         this._reordering = true;
         // remove the record and re-insert it at the correct index
-        var record = this.store.getByLayer(node.layer);
+        var record = this.store.getByLayer(node.get('layer'));
 
         if(newParent instanceof GeoExt.tree.LayerContainer && 
                                     this.store === newParent.loader.store) {
@@ -250,10 +235,6 @@ Ext.define('GeoExt.tree.LayerLoader', {
             }
             if(newRecordIndex !== undefined) {
                 this.store.insert(newRecordIndex, [record]);
-                window.setTimeout(function() {
-                    newParent.reload();
-                    oldParent.reload();
-                });
             } else {
                 this.store.insert(oldRecordIndex, [record]);
             }
@@ -268,8 +249,12 @@ Ext.define('GeoExt.tree.LayerLoader', {
     addStoreHandlers: function(node) {
         if(!this._storeHandlers) {
             this._storeHandlers = {
-                "add": this.onStoreAdd.bind(this, [node], true),
-                "remove": this.onStoreRemove.bind(this, [node], true)
+                "add": function(store, layerRecords, index) {
+                    this.onStoreAdd(store, layerRecords, index, node);
+                },
+                "remove": function(parent, removedRecord) {
+                    this.onStoreRemove(removedRecord, node);
+                }
             };
             for(var evt in this._storeHandlers) {
                 this.store.on(evt, this._storeHandlers[evt], this);

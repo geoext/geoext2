@@ -1,20 +1,17 @@
-/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- *
- * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
- */
-
-/*
- * @include GeoExt/tree/LayerLoader.js
- * @include GeoExt/data/Loader.js
+/**
+ * @require GeoExt/tree/LayerLoader.js
  */
 
 /**
  * @class
+<<<<<<< Updated upstream
+ * A subclass of Ext.data.Model decorated with an Ext.data.NodeInterface
+ * that will collect all layers of an OpenLayers map. Only layers that
+ * have displayInLayerSwitcher set to true will be included.
+=======
  * A layer node plugin that will collect all layers of an OpenLayers map. Only
  * layers that have displayInLayerSwitcher set to true will be included.
+>>>>>>> Stashed changes
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
  * text defaults to "Layers".
  */
@@ -23,8 +20,7 @@ Ext.define('GeoExt.tree.LayerContainer', {
     mixins: ['Ext.util.Observable'],
     requires: [
         'Ext.data.NodeInterface',
-        'GeoExt.tree.LayerLoader',
-        'GeoExt.data.Loader'
+        'GeoExt.tree.LayerLoader'
     ],
     alias: 'plugin.gx_layercontainer',
     
@@ -56,8 +52,12 @@ Ext.define('GeoExt.tree.LayerContainer', {
 
         target.set('container', me);
         if (!target.get('text')) {
+<<<<<<< Updated upstream
+            target.set('text', 'Layers');
+=======
             target.set('text', me.defaultText);
             target.commit();
+>>>>>>> Stashed changes
         }
         me.loader.load(target);
         

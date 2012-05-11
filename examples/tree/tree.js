@@ -12,9 +12,10 @@ Ext.require([
     'GeoExt.tree.Panel',
     'Ext.tree.plugin.TreeViewDragDrop',
     'GeoExt.panel.Map',
-    'GeoExt.tree.LayerContainer',
+    'GeoExt.tree.OverlayLayerContainer',
+    'GeoExt.tree.BaseLayerContainer',
     'GeoExt.data.LayerTreeModel',
-    'GeoExt.tree.plugin.LayerTreeView',
+    'GeoExt.tree.View',
     'GeoExt.tree.Column'
 ]);
 
@@ -102,12 +103,12 @@ Ext.application({
                 )
             ]
         });
+        var layer = mapPanel.map.layers[2];
 
         // create our own layer node UI class, using the TreeNodeUIEventMixin
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
         
         /*var treeConfig = [
-            {text: "myplainnode", leaf: true},
             {nodeType: 'gx_layercontainer', layerStore: map.layers}
         {
             nodeType: "gx_baselayercontainer"
@@ -139,12 +140,19 @@ Ext.application({
             root: {
                 expanded: true,
                 children: [
-                    {text: "A plain node", leaf: true},
-                    {plugins: ['gx_layercontainer']},
-                    {plugins: [{
-                        ptype: 'gx_layercontainer',
-                        layers: mapPanel.layers
-                    }], text: "My Layers", expanded: true}
+                    {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            store: mapPanel.layers
+                        }],
+                        expanded: true
+                    }, {
+                        plugins: ['gx_baselayercontainer'], expanded: true
+                    }, {
+                        plugins: ['gx_overlaylayercontainer'],
+                        text: "Base Maps",
+                        expanded: true
+                    }
                 ]
             }
         });
@@ -166,10 +174,19 @@ Ext.application({
                 plugins: [{
                     ptype: 'treeviewdragdrop',
                     appendOnly: false
-                }, {
-                    ptype: 'layertreeview'
                 }]
-            }
+            },
+            tbar: [{
+                text: "remove",
+                handler: function() {
+                    mapPanel.map.removeLayer(layer);
+                }
+            }, {
+                text: "add",
+                handler: function() {
+                    mapPanel.map.addLayer(layer);
+                }
+            }]
         });
     
         Ext.create('Ext.Viewport', {
