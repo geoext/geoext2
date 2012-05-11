@@ -7,10 +7,10 @@
  */
 
 /**
- * Root object.
+ * The GeoExt root object
+ * @class GeoExt
+ * @singleton
  */
-Ext.define('GeoExt', {
-    statics: {
-        version: 'pre-2.0'
-    }
-});
+var GeoExt = GeoExt || {};
+GeoExt.version = 'pre-2.0';
+
