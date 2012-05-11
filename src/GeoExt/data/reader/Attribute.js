@@ -7,7 +7,7 @@
  */
 
 /*
- * @require OpenLayers/Format/WFSDescribeFeatureType.js
+ * @include OpenLayers/Format/WFSDescribeFeatureType.js
  */
 
 /**

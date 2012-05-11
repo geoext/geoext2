@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/CSWGetRecords.js
+ */
+
 /**
  * @class GeoExt.data.reader.CswRecords
  * Data reader class to create an array of records from a CSW

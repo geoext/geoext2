@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/WMSDescribeLayer.js
+ */
+
 /**
  * @class GeoExt.data.reader.WmsDescribeLayer
  * Data reader class to create an array of
