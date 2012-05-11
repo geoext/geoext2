@@ -377,7 +377,7 @@ Ext.define('GeoExt.panel.PrintMap', {
      *  interact with the printProvider and printPage.
      *
      * @param {Object} options options for
-     *  the {@link GeoExt.data.PrintProvider#print} method.
+     *  the {@link GeoExt.data.PrintProvider#method-print print method}.
      *
      */
     print: function(options) {

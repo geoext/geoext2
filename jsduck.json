@@ -1,7 +1,7 @@
 {
     "--title": "GeoExt 2 Docs",
     "-o": "docs",
-    "--warnings": "-extend,-link,-link_ambiguous,-no_doc,-link_auto,-type_name", // later on, remove -no_doc and other warning removals
+    "--warnings": "-extend,-link,-no_doc,-link_auto,-type_name", // later on, remove -no_doc and other warning removals
     "--external": "OpenLayers.Map,OpenLayers.Control,Integer,OpenLayers.Layer,OpenLayers.Bounds,OpenLayers.LonLat,OpenLayers.Rule,OpenLayers.Feature.Vector,OpenLayers.Pixel,OpenLayers.Layer.Vector,OpenLayers.Renderer",
     "--": [
         "src"/*,
