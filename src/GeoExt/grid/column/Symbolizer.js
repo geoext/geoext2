@@ -39,11 +39,15 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
                 }
             }
             window.setTimeout(function() {
-                var renderer = Ext.create('GeoExt.FeatureRenderer', {
-                    renderTo: id,
-                    symbolizers: value instanceof Array ? value : [value],
-                    symbolType: symbolType
-                });
+                var ct = Ext.get(id);
+                // ct for old field may not exist any more during a grid update
+                if (ct) {
+                    var renderer = Ext.create('GeoExt.FeatureRenderer', {
+                        renderTo: ct,
+                        symbolizers: value instanceof Array ? value : [value],
+                        symbolType: symbolType
+                    });
+                }
             }, 0);
             meta.css = "gx-grid-symbolizercol";
             return Ext.String.format('<div id="{0}"></div>', id);
