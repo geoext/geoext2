@@ -39,6 +39,8 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     attributionCls: "gx-attribution",
 
     /**
+     * Gets the records.
+     *
      * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}
