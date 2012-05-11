@@ -31,7 +31,7 @@ var permalinkProvider;
 Ext.application({
     name: 'HelloGeoExt2',
     launch: function() {
-        permalinkProvider = new GeoExt.state.PermalinkProvider({
+        permalinkProvider = Ext.create('GeoExt.state.PermalinkProvider', {
             encodeType: false
         });
         Ext.state.Manager.setProvider(permalinkProvider);
