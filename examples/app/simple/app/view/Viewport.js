@@ -7,8 +7,10 @@ Ext.define('GX.view.Viewport', {
     layout: 'fit',
     
     requires: [
+        'Ext.layout.container.Border',
         'Ext.resizer.Splitter',
         'GX.view.Header',
+        'GX.view.Map',
         'GX.view.summit.Chart',
         'GX.view.summit.Grid'
     ],
@@ -19,20 +21,27 @@ Ext.define('GX.view.Viewport', {
         Ext.apply(me, {
             items: [{
                 xtype: 'panel',
-                border: false,
-                id    : 'viewport',
-                layout: {
-                    type: 'vbox',
-                    align: 'stretch'
-                },
+                layout: 'border',
                 dockedItems: [
                     Ext.create('GX.view.Header')
                 ],
-                items: [
-                    Ext.create('GX.view.summit.Grid'),
-                    {xtype: 'splitter'},
-                    Ext.create('GX.view.summit.Chart')
-                ]
+                items: [{
+                    xtype: 'gxapp_map'
+                }, {
+                    xtype: 'panel',
+                    region: 'center',
+                    border: false,
+                    id    : 'viewport',
+                    layout: {
+                        type: 'vbox',
+                        align: 'stretch'
+                    },
+                    items: [
+                        Ext.create('GX.view.summit.Grid'),
+                        {xtype: 'splitter'},
+                        Ext.create('GX.view.summit.Chart')
+                    ]
+                }]
             }]
         });
                 
