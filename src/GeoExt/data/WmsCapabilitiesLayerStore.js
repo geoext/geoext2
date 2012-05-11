@@ -8,6 +8,7 @@
 
 /**
  * @class GeoExt.data.WmsCapabilitiesLayerStore
+ *
  * Small helper class to make creating stores for remote WMS layer data
  * easier. The store is pre-configured with a built-in
  * {Ext.data.proxy.Ajax} and {GeoExt.data.reader.WmsCapabilities}.
@@ -23,11 +24,11 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
 
     config: {
         /**
-         * @cfg {String}
+         * @cfg {String} url
          * The URL from which to retrieve the WMS GetCapabilities document
          */
         /**
-         * @property {String}
+         * @property {String} url
          * The URL from which to retrieve the WMS GetCapabilities document
          */
         url: null
