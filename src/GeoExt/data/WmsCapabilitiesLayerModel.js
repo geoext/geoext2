@@ -6,13 +6,20 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WmsCapabilities.js
+ */
+
 /**
  * @class GeoExt.data.WmsCapabilitiesLayerModel
  * The model for WMS layers coming from a WMS GetCapabilities document.
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',
-    alternateClassName: ['GeoExt.data.WMSCapabilitiesModel','GeoExt.data.WmsCapabilitiesModel'],
+    alternateClassName: [
+        'GeoExt.data.WMSCapabilitiesModel',
+        'GeoExt.data.WmsCapabilitiesModel'
+    ],
     requires: ['GeoExt.data.reader.WmsCapabilities'],
     alias: 'model.gx_wmscapabilities',
     fields: [

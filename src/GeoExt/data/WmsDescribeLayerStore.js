@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WmsDescribeLayer.js
+ */
+
 /**
  * @class GeoExt.data.WmsDescribeLayerStore
  * Small helper class to make creating stores for remote WMS layer description

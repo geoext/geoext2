@@ -6,6 +6,10 @@
  * of the license.
  */
 
+/*
+ * @include GeoExt/data/reader/WmsCapabilities.js
+ */
+
 /**
  * @class GeoExt.data.WmsCapabilitiesLayerStore
  *
@@ -20,7 +24,10 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
     extend: 'Ext.data.Store',
     requires: ['GeoExt.data.reader.WmsCapabilities'],
     model: 'GeoExt.data.WmsCapabilitiesLayerModel',
-    alternateClassName: ['GeoExt.data.WMSCapabilitiesStore','GeoExt.data.WmsCapabilitiesStore'],
+    alternateClassName: [
+        'GeoExt.data.WMSCapabilitiesStore',
+        'GeoExt.data.WmsCapabilitiesStore'
+    ],
 
     config: {
         /**
@@ -33,6 +40,7 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
          */
         url: null
     },
+
     /**
      * @private
      */
