@@ -20,7 +20,7 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
     extend: 'Ext.grid.column.Column',
     alternateClassName: 'GeoExt.grid.SymbolizerColumn',
     alias: ['widget.gx_symbolizercolumn'],
-    require: ['GeoExt.FeatureRenderer'],
+    requires: ['GeoExt.FeatureRenderer'],
 
     defaultRenderer: function(value, meta, record) {
         if (value) {
