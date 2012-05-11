@@ -1,6 +1,6 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
@@ -8,7 +8,7 @@
 
 /**
  * @class GeoExt.data.reader.WmsCapabilities
- * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]} 
+ * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]}
  * from a WMS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WmsCapabilities', {
@@ -30,7 +30,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         }
     },
 
-    /** 
+    /**
      * @cfg {String}
      * CSS class name for the attribution DOM elements.
      * Element class names append "-link", "-image", and "-title" as
@@ -38,7 +38,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     attributionCls: "gx-attribution",
 
-    /** 
+    /**
+     * Gets the records.
+     *
      * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}
@@ -51,33 +53,33 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         }
         return this.readRecords(data);
     },
-    
+
     /**
      * @private
      * @param {String[]} formats An array of service exception format strings.
      * @return {String} The (supposedly) best service exception format.
      */
     serviceExceptionFormat: function(formats) {
-        if (OpenLayers.Util.indexOf(formats, 
+        if (OpenLayers.Util.indexOf(formats,
             "application/vnd.ogc.se_inimage")>-1) {
             return "application/vnd.ogc.se_inimage";
         }
-        if (OpenLayers.Util.indexOf(formats, 
+        if (OpenLayers.Util.indexOf(formats,
             "application/vnd.ogc.se_xml")>-1) {
             return "application/vnd.ogc.se_xml";
         }
         return formats[0];
     },
-    
-    /** 
+
+    /**
      * @private
      * @param {Object} layer The layer's capabilities object.
-     * @return {String} The (supposedly) best mime type for requesting 
+     * @return {String} The (supposedly) best mime type for requesting
      * tiles.
      */
     imageFormat: function(layer) {
         var formats = layer.formats;
-        if (layer.opaque && 
+        if (layer.opaque &&
             OpenLayers.Util.indexOf(formats, "image/jpeg")>-1) {
             return "image/jpeg";
         }
@@ -123,12 +125,12 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         var version = data.version;
         var capability = data.capability || {};
         var url = capability.request && capability.request.getmap &&
-            capability.request.getmap.href; 
-        var layers = capability.layers; 
+            capability.request.getmap.href;
+        var layers = capability.layers;
         var formats = capability.exception ? capability.exception.formats : [];
         var exceptions = this.serviceExceptionFormat(formats);
         var records = [];
-        
+
         if(url && layers) {
             var fields = this.getFields();
             var layer, metadata, options, params, field, v;
@@ -184,18 +186,18 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     attributionMarkup : function(attribution){
         var markup = [];
-        
+
         if (attribution.logo){
             markup.push("<img class='"+this.attributionCls+"-image' "
                         + "src='" + attribution.logo.href + "' />");
         }
-        
+
         if (attribution.title) {
             markup.push("<span class='"+ this.attributionCls + "-title'>"
                         + attribution.title
                         + "</span>");
         }
-        
+
         if(attribution.href){
             for(var i = 0; i < markup.length; i++){
                 markup[i] = "<a class='"
