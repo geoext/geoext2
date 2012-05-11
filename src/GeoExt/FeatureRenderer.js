@@ -8,7 +8,7 @@
 
 /**
  * @class GeoExt.FeatureRenderer
- * 
+ *
  * The feature renderer
  */
 Ext.define('GeoExt.FeatureRenderer', {
@@ -46,7 +46,7 @@ Ext.define('GeoExt.FeatureRenderer', {
      * @cfg {String}
      *  One of ``"Point"``, ``"Line"``, or ``"Polygon"``.  Only pertinent if
      *  OpenLayers.Symbolizer objects are not used.  If ``feature``
-     *  is provided, it will be preferred.  The default is "Polygon".
+     *  is provided, it will be preferred.
      */
     symbolType: "Polygon",
 
