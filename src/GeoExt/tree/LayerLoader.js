@@ -1,4 +1,4 @@
-/**
+/*
  * @require GeoExt/panel/Map.js
  */
 

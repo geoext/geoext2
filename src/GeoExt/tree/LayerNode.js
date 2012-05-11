@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/**
+ * @class GeoExt.tree.LayerNode
+ * 
+ */
 Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',
     mixins: ['Ext.util.Observable'],
@@ -21,8 +33,13 @@ Ext.define('GeoExt.tree.LayerNode', {
      * @cfg {Boolean} fixedText
      */
     
-    /** 
-     *  @private
+
+    /**
+     * @method
+     * The init method is invoked after initComponent method has been run for the client Component.
+     *
+     * It perform plugin initialization.
+     * @param {Ext.Component} target The client Component which owns this plugin.
      */
     init: function(target) {
         target.raw.checked = "";

@@ -6,7 +6,7 @@
  * of the license.
  */
 
-/**
+/*
  * @require OpenLayers/Control/SelectFeature.js
  * @require OpenLayers/Layer/Vector.js
  * @require OpenLayers/BaseTypes/Class.js
