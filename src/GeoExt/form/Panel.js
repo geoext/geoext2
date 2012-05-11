@@ -1,99 +1,93 @@
-/**
- * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
-/** api: (define)
- *  module = GeoExt.form
- *  class = FormPanel
- *  base_link = `Ext.form.FormPanel <http://dev.sencha.com/deploy/dev/docs/?class=Ext.form.FormPanel>`_
- */
-
-/**
+/*
  * @include GeoExt/form/Basic.js
  */
 
-/** api: example
- *  Sample code showing how to use a GeoExt form panel.
+/**
+ * A specific `Ext.form.Panel` whose internal form is a
+ * {@link GeoExt.form.Basic} instead of `Ext.form.Basic`.
+ * One would use this form to do search requests through
+ * an `OpenLayers.Protocol` object (`OpenLayers.Protocol.WFS`
+ * for example).
  *
- *  .. code-block:: javascript
+ * Look at {@link GeoExt.form.action.Search} to understand how
+ * form fields must be named for appropriate filters to be
+ * passed to the protocol.
  *
- *      var formPanel = new GeoExt.form.FormPanel({
- *          renderTo: "formpanel",
- *          protocol: new OpenLayers.Protocol.WFS({
- *              url: "http://publicus.opengeo.org/geoserver/wfs",
- *              featureType: "tasmania_roads",
- *              featureNS: "http://www.openplans.org/topp"
- *          }),
- *          items: [{
- *              xtype: "textfield",
- *              name: "name__ilike",
- *              value: "mont"
- *          }, {
- *              xtype: "textfield",
- *              name: "elevation__ge",
- *              value: "2000"
- *          }],
- *          listeners: {
- *              actioncomplete: function(form, action) {
- *                  // this listener triggers when the search request
- *                  // is complete, the OpenLayers.Protocol.Response
- *                  // resulting from the request is available
- *                  // in "action.response"
- *              }
- *          }
- *      });
+ * Sample code showing how to use a GeoExt form panel.
  *
- *      formPanel.addButton({
- *          text: "search",
- *          handler: function() {
- *              this.search();
- *          },
- *          scope: formPanel
- *      });
+<pre><code>
+var formPanel = new GeoExt.form.FormPanel({
+    renderTo: "formpanel",
+    protocol: new OpenLayers.Protocol.WFS({
+        url: "http://publicus.opengeo.org/geoserver/wfs",
+        featureType: "tasmania_roads",
+        featureNS: "http://www.openplans.org/topp"
+    }),
+    items: [{
+        xtype: "textfield",
+        name: "name__ilike",
+        value: "mont"
+    }, {
+        xtype: "textfield",
+        name: "elevation__ge",
+        value: "2000"
+    }],
+    listeners: {
+        actioncomplete: function(form, action) {
+            // this listener triggers when the search request
+            // is complete, the OpenLayers.Protocol.Response
+            // resulting from the request is available
+            // in "action.response"
+        }
+    }
+});
+
+formPanel.addButton({
+    text: "search",
+    handler: function() {
+        this.search();
+    },
+    scope: formPanel
+});
+</code></pre>
  */
 
-/** api: constructor
- *  .. class:: FormPanel(config)
- *
- *      A specific ``Ext.form.FormPanel`` whose internal form is a
- *      :class:`GeoExt.form.BasicForm` instead of ``Ext.form.BasicForm``.
- *      One would use this form to do search requests through
- *      an ``OpenLayers.Protocol`` object (``OpenLayers.Protocol.WFS``
- *      for example).
- *
- *      Look at :class:`GeoExt.form.SearchAction` to understand how
- *      form fields must be named for appropriate filters to be
- *      passed to the protocol.
- */
 Ext.define('GeoExt.form.Panel', {
     extend: 'Ext.form.Panel',
     requires: ['GeoExt.form.Basic'],
     alias: 'widget.gx_form',
 
-    /** api: config[protocol]
-     *  ``OpenLayers.Protocol`` The protocol instance this form panel
-     *  is configured with, actions resulting from this form
-     *  will be performed through the protocol.
+    /**
+     * @cfg {OpenLayers.Protocol} protocol
+     * The protocol instance this form panel
+     * is configured with, actions resulting from this form
+     * will be performed through the protocol.
      */
     protocol: null,
 
-    /** private: method[createForm]
-     *  Create the internal :class:`GeoExt.form.BasicForm` instance.
+    /**
+     * Create the internal {GeoExt.form.Basic} instance.
+     * @return {GeoExt.form.Basic} The basic form.
+     * @private
      */
     createForm: function() {
         return new GeoExt.form.Basic(this, Ext.applyIf({listeners: {}},
                                      this.initialConfig));
     },
 
-    /** api: method[search]
-     *  :param options: ``Object`` The options passed to the
-     *      :class:`GeoExt.form.SearchAction` constructor.
+    /**
+     * Shortcut to the internal form's search method.
+     * @param {Object} options The options passed to the
+     * GeoExt.form.action.Search constructor.
      *
-     *  Shortcut to the internal form's search method.
      */
     search: function(options) {
         this.getForm().search(options);
