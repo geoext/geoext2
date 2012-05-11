@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html debug="true">
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+
+    <script type="text/javascript">
+
+    Ext.Loader.setConfig({
+        disableCaching: false,
+        enabled: true,
+        paths: {
+            //Ext: "<PATH_TO_EXT_JS>/src",
+            GeoExt: '../../../src/GeoExt'
+        }
+    });
+
+    function test_constructor(t) {
+        t.plan(1);
+
+        /*
+         * Set up
+         */
+
+        var form, action, protocol;
+
+        form = new Ext.form.BasicForm(Ext.get("form"));
+        protocol = new OpenLayers.Protocol();
+        action = new GeoExt.form.SearchAction(form, {protocol: protocol});
+
+        /*
+         * Test
+         */
+
+        t.ok(action.options.protocol == protocol,
+             "SearchAction constructor properly sets protocol in options");
+    }
+
+    function test_run(t) {
+        t.plan(1);
+
+        /*
+         * Set up
+         */
+
+        var field, form, action, protocol;
+
+        var field = new Ext.form.TextField({
+            name: "foo__eq",
+            value: "bar"
+        });
+
+        form = new Ext.form.FormPanel({
+            renderTo: "form",
+            items: [field]
+        });
+
+        protocol = new OpenLayers.Protocol({
+            read: function(options) {
+                t.ok(options.filter instanceof OpenLayers.Filter.Comparison,
+                     "run calls protocol.read with a comparison filter");
+            }
+        });
+
+        action = new GeoExt.form.SearchAction(form.getForm(), {
+            protocol: protocol,
+            clientValidation: false
+        });
+
+        /*
+         * Test
+         */
+
+        action.run();
+
+        /*
+         * Tear down
+         */
+
+        form.destroy();
+    }
+
+    function test_abort(t) {
+        t.plan(2);
+
+        /*
+         * Set up
+         */
+
+        var field, form, action, protocol, log = {};
+
+        var field = new Ext.form.TextField({
+            name: "foo__eq",
+            value: "bar"
+        });
+
+        form = new Ext.form.FormPanel({
+            renderTo: "form",
+            items: [field]
+        });
+
+        protocol = new OpenLayers.Protocol({
+            read: function(options) {
+                return "something";
+            },
+            abort: function() {
+                log.abort++;
+            }
+        });
+
+        action = new GeoExt.form.SearchAction(form.getForm(), {
+            protocol: protocol,
+            clientValidation: false,
+            abortPrevious: true
+        });
+
+        /*
+         * Test
+         */
+
+        log.abort = 0;
+        action.run();
+        action.run();
+        t.ok(log.abort == 1, "protocol abort called once");
+
+        log.abort = 0;
+        action.options.abortPrevious = false;
+        action.run();
+        t.ok(log.abort == 0, "protocol abort not called");
+
+        /*
+         * Tear down
+         */
+        form.destroy();
+    }
+    </script>
+  <body>
+    <div id="form"></div>
+  </body>
+</html>
