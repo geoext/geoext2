@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/widgets/form.js
+ * @requires GeoExt/Form.js
  */
 
 /**
