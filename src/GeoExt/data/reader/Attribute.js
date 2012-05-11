@@ -73,6 +73,10 @@ Ext.define('GeoExt.data.reader.Attribute', {
         }
         
         this.callParent([config]);
+
+        if (this.feature) {
+            this.setFeature(this.feature);
+        }
     },
     
     applyFeature: function(feature) {
