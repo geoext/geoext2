@@ -125,6 +125,8 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Object} options
      */
     bind: function(layer, options) {
+        options = options || {};
+
         if (this.isLayerBinded) {
             // already bound
             return;
