@@ -174,7 +174,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * @param {Object} options An object with a "controlConfig"
      * property referencing the configuration object to pass to the
      * ``OpenLayers.Control.SelectFeature`` constructor.
-     * @return {OpenLayers.Control.SelectFeatur}
+     * @return {OpenLayers.Control.SelectFeature}
      * The select feature control this selection model uses.
      */
     bind: function(obj, options) {
