@@ -1,6 +1,8 @@
 {
     "--title": "GeoExt 2 Docs",
     "-o": "docs",
+    // the "-extend,-link,-type_name" warning removals are used to prevent warnings 
+    // when the documentation is built without ExtJS
     "--warnings": "-extend,-link,-type_name",
     "--external": [
         "Integer", "Float", 
