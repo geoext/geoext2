@@ -22,6 +22,7 @@ Ext.Loader.setConfig({
 
 Ext.require([
     'Ext.container.Viewport',
+    'Ext.window.MessageBox',
     'GeoExt.panel.Map',
     'GeoExt.state.PermalinkProvider'
 ]);
@@ -71,7 +72,7 @@ Ext.application({
                 items: [{
                     text: 'Current center of the map',
                     handler: function(){
-                        var c = GeoExt.panel.Map.guess().getMap().getCenter();
+                        var c = GeoExt.panel.Map.guess().map.getCenter();
                         Ext.Msg.alert(this.getText(), c.toString());
                     }
                 }]
