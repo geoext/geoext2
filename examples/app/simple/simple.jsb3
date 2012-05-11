@@ -820,12 +820,12 @@
                     "path": "extjs-4.1.0/src/resizer/"
                 },
                 {
-                    "clsName": "GX.view.Header",
+                    "clsName": "CF.view.Header",
                     "name": "Header.js",
                     "path": "app/view/"
                 },
                 {
-                    "clsName": "GX.model.Summit",
+                    "clsName": "CF.model.Summit",
                     "name": "Summit.js",
                     "path": "app/model/"
                 },
@@ -885,7 +885,7 @@
                     "path": "extjs-4.1.0/src/"
                 },
                 {
-                    "clsName": "GX.view.help.Window",
+                    "clsName": "CF.view.help.Window",
                     "name": "Window.js",
                     "path": "app/view/help/"
                 },
@@ -893,6 +893,11 @@
                     "clsName": "Ext.panel.Table",
                     "name": "Table.js",
                     "path": "extjs-4.1.0/src/panel/"
+                },
+                {
+                    "clsName": "GeoExt.FeatureRenderer",
+                    "name": "FeatureRenderer.js",
+                    "path": "../../../src/GeoExt/"
                 },
                 {
                     "clsName": "GeoExt.data.reader.Feature",
@@ -995,7 +1000,7 @@
                     "path": "../../../src/GeoExt/"
                 },
                 {
-                    "clsName": "GX.view.help.Action",
+                    "clsName": "CF.view.help.Action",
                     "name": "Action.js",
                     "path": "app/view/help/"
                 },
@@ -1115,7 +1120,7 @@
                     "path": "extjs-4.1.0/src/chart/series/"
                 },
                 {
-                    "clsName": "GX.view.summit.Chart",
+                    "clsName": "CF.view.summit.Chart",
                     "name": "Chart.js",
                     "path": "app/view/summit/"
                 },
@@ -1125,12 +1130,12 @@
                     "path": "../../../src/GeoExt/data/"
                 },
                 {
-                    "clsName": "GX.store.Summits",
+                    "clsName": "CF.store.Summits",
                     "name": "Summits.js",
                     "path": "app/store/"
                 },
                 {
-                    "clsName": "GX.controller.Map",
+                    "clsName": "CF.controller.Map",
                     "name": "Map.js",
                     "path": "app/controller/"
                 },
@@ -1195,7 +1200,7 @@
                     "path": "extjs-4.1.0/src/window/"
                 },
                 {
-                    "clsName": "GX.view.Map",
+                    "clsName": "CF.view.Map",
                     "name": "Map.js",
                     "path": "app/view/"
                 },
@@ -1300,12 +1305,12 @@
                     "path": "extjs-4.1.0/src/grid/plugin/"
                 },
                 {
-                    "clsName": "GX.view.summit.Grid",
+                    "clsName": "CF.view.summit.Grid",
                     "name": "Grid.js",
                     "path": "app/view/summit/"
                 },
                 {
-                    "clsName": "GX.view.Viewport",
+                    "clsName": "CF.view.Viewport",
                     "name": "Viewport.js",
                     "path": "app/view/"
                 },
