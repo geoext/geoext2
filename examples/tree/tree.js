@@ -7,7 +7,7 @@ Ext.require([
     'GeoExt.tree.OverlayLayerContainer',
     'GeoExt.tree.BaseLayerContainer',
     'GeoExt.data.LayerTreeModel',
-    'GeoExt.tree.plugin.LayerTreeView',
+    'GeoExt.tree.View',
     'GeoExt.tree.Column'
 ]);
 
@@ -160,8 +160,6 @@ Ext.application({
                 plugins: [{
                     ptype: 'treeviewdragdrop',
                     appendOnly: false
-                }, {
-                    ptype: 'layertreeview'
                 }]
             },
             tbar: [{

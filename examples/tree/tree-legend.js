@@ -7,7 +7,8 @@ Ext.require([
     'GeoExt.tree.OverlayLayerContainer',
     'GeoExt.tree.BaseLayerContainer',
     'GeoExt.data.LayerTreeModel',
-    'GeoExt.tree.plugin.LayerTreeView',
+    'GeoExt.tree.View',
+    'GeoExt.container.WmsLegend',
     'GeoExt.tree.Column'
 ]);
 

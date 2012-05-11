@@ -1,6 +1,7 @@
 Ext.define('GeoExt.tree.Panel', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.gx_treepanel',
+    viewType: 'gx_treeview',
     
     initComponent: function() {
         var me = this;
