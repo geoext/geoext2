@@ -9,3 +9,16 @@
     text-shadow: 0 1px 0 #16191D;
     
 }
+
+.gxapp-helpwindow {
+    background-color: #FFFFFF;
+    padding: 5px;
+}
+
+.gxapp-helpwindow div.cascade {
+    padding: 0 0 0 5px;
+}
+
+.gxapp-helpwindow h2 {
+    margin: 2px 0 0 0;
+}
