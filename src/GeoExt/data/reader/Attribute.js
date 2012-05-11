@@ -119,8 +119,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
             attributes = this.format.read(data).featureTypes[0].properties;
         }
         var feature = this.feature;
-        var Model = this.model;
-        var fields = Model.prototype.fields;
+        var fields = this.model.prototype.fields;
         var numFields = fields.length;
         var attr, values, name, record, ignore, value, field, records = [];
         for(var i=0, len=attributes.length; i<len; ++i) {
