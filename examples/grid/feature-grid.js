@@ -15,6 +15,7 @@
 var mapPanel, store, gridPanel, mainPanel;
 
 Ext.require([
+    'GeoExt.panel.Map',
     'GeoExt.data.FeatureStore',
     'GeoExt.grid.column.Symbolizer',
     'GeoExt.selection.FeatureModel',
