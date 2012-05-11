@@ -10,6 +10,7 @@ Ext.require([
     'Ext.container.Viewport',
     'Ext.state.Manager',
     'Ext.state.CookieProvider',
+    'Ext.window.MessageBox',
     'GeoExt.panel.Map'
 ]);
 
