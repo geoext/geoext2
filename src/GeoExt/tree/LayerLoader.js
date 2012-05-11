@@ -35,17 +35,16 @@ Ext.define('GeoExt.tree.LayerLoader', {
      */
     store: null,
     
-    /** api: config[filter]
-     *  ``Function``
-     *  A function, called in the scope of this loader, with a layer record
-     *  as argument. Is expected to return true for layers to be loaded, false
-     *  otherwise. By default, the filter checks for displayInLayerSwitcher:
+    /**
+     * A function, called in the scope of this loader, with a layer record
+     * as argument. Is expected to return true for layers to be loaded, false
+     * otherwise. By default, the filter checks for displayInLayerSwitcher:
+     * @param {Function} filter
      *  
-     *  .. code-block:: javascript
-     *  
-     *      filter: function(record) {
-     *          return record.getLayer().displayInLayerSwitcher == true
-     *      }
+     * @example
+     * filter: function(record) {
+     *     return record.getLayer().displayInLayerSwitcher == true
+     * }
      */
     filter: function(record) {
         return record.getLayer().displayInLayerSwitcher == true;

@@ -4,7 +4,8 @@ Ext.require([
     'GeoExt.tree.Panel',
     'Ext.tree.plugin.TreeViewDragDrop',
     'GeoExt.panel.Map',
-    'GeoExt.tree.LayerContainer',
+    'GeoExt.tree.OverlayLayerContainer',
+    'GeoExt.tree.BaseLayerContainer',
     'GeoExt.data.LayerTreeModel',
     'GeoExt.tree.plugin.LayerTreeView',
     'GeoExt.tree.Column'
@@ -133,11 +134,11 @@ Ext.application({
                 expanded: true,
                 children: [
                     {text: "A plain node", leaf: true},
-                    {plugins: ['gx_layercontainer']},
+                    {plugins: ['gx_overlaylayercontainer'], expanded: true},
                     {plugins: [{
-                        ptype: 'gx_layercontainer',
+                        ptype: 'gx_baselayercontainer',
                         layers: mapPanel.layers
-                    }], text: "My Layers", expanded: true}
+                    }], text: "Base Maps"}
                 ]
             },
             proxy: {
