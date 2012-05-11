@@ -6,6 +6,11 @@
  * of the license.
  */
 
+/*
+ * @requires GeoExt/container/LayerLegend.js
+ * @requires GeoExt/LegendImage.js
+ */
+
 /**
  * Show a legend image in a BoxComponent and make sure load errors are
  * dealt with.
@@ -14,8 +19,8 @@
 Ext.define('GeoExt.container.UrlLegend', {
     extend : 'GeoExt.container.LayerLegend',
     requires: ['GeoExt.LegendImage'],
-    alias : 'widget.gx_urllegend',
-    alternateClassName : 'GeoExt.UrlLegend',
+    alias: 'widget.gx_urllegend',
+    alternateClassName: 'GeoExt.UrlLegend',
 
     statics : {
         supports: function(layerRecord) {
