@@ -15,6 +15,11 @@
             }
         });
 
+        Ext.require([	
+            'GeoExt.panel.Map',
+            'GeoExt.data.LayerStore'
+        ]);
+
         function createSingleMap() {
             return new OpenLayers.Map("map");
         }
