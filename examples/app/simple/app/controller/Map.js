@@ -4,15 +4,15 @@
  */
 Ext.define('GX.controller.Map', {
     extend: 'Ext.app.Controller',
-    
+
     models: ['Summit'],
     stores: ['Summits'],
-    
+
     refs: [
         {ref: 'summitChart', selector: 'summitchart'},
         {ref: 'summitGrid', selector: 'summitgrid'}
     ],
-    
+
     init: function() {
         var me = this;
 
@@ -96,14 +96,14 @@ Ext.define('GX.controller.Map', {
         map = mapPanel.map;
         mapPanel = mapPanel;
     },
-    
+
     onLaunch: function() {
         var me = this;
 
         // for dev purpose
         ctrl = this;
     },
-    
+
     onSummitsStoreLoad: function(store, records) {
         // do custom stuff on summits load if you want, for example here we
         // zoom to summits extent
