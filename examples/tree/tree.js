@@ -139,6 +139,9 @@ Ext.application({
                         layers: mapPanel.layers
                     }], text: "My Layers", expanded: true}
                 ]
+            },
+            proxy: {
+                type: "memory"
             }
         });
 

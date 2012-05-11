@@ -25,21 +25,17 @@ Ext.define('GeoExt.tree.LayerNode', {
      *  @private
      */
     init: function(target) {
-        target.raw.checked = "";
-        target.raw.layer = this.layer;
-        target.raw.checkedGroup = this.checkedGroup === undefined ?
+        target.set('checked', this.layer.getVisibility());
+        target.set('layer', this.layer);
+        target.set('checkedGroup', this.checkedGroup === undefined ?
             this.layer.isBaseLayer ? "gx_baselayer" : "" :
-            "";
-        target.raw.fixedText = !!target.raw.text;
+            "");
+        target.set('fixedText', !!target.text);
         
-        target.raw.leaf = target.raw.leaf || !target.raw.children;
+        target.set('leaf', true);
         
-        if(!target.raw.iconCls && !target.raw.children) {
-            target.raw.iconCls = "gx-tree-layer-icon";
-        }
-        
-        if (target.raw.text) {
-            this.fixedText = true;
+        if(!target.get('iconCls')) {
+            target.set('iconCls', "gx-tree-layer-icon");
         }
     }
 

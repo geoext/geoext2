@@ -43,10 +43,13 @@ Ext.define('GeoExt.tree.LayerContainer', {
         
         me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
             loader : Ext.create('GeoExt.tree.LayerLoader', loader);
-        target.raw.container = me;
+
+        target.set('container', me);
+        if (!target.get('text')) {
+            target.set('text', 'Layers');
+        }
         me.loader.load(target);
         
-        Ext.applyIf(target.raw, {text: 'Layers'});
     },
     
     /**

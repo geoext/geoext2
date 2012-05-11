@@ -19,20 +19,25 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     /**
      * @private
      */
-    constructor: function() {
+    constructor: function(data, id, raw, convertedData) {
         var me = this;
+       
+        me.callParent(arguments);      
+        
+        window.setTimeout(function() {
+            var plugins = me.get('plugins');  
 
-        me.callParent(arguments);
-        if (me.raw && me.raw.plugins) {
-            var plugins = me.raw.plugins,
-                plugin, instance;
-            for (var i=0, ii=plugins.length; i<ii; ++i) {
-                plugin = plugins[i];
-                instance = Ext.PluginMgr.create(Ext.isString(plugin) ? {
-                    ptype: plugin
-                } : plugin);
-                instance.init(me);
+            if (plugins) {
+                var plugin, instance;
+                for (var i=0, ii=plugins.length; i<ii; ++i) {
+                    plugin = plugins[i];
+                    instance = Ext.PluginMgr.create(Ext.isString(plugin) ? {
+                        ptype: plugin
+                    } : plugin);
+                    instance.init(me);
+                }
             }
-        }
+        });
+
     }
 });
