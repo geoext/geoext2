@@ -11,8 +11,8 @@
  */
 
 /**
- * A specific `Ext.form.Panel` whose internal form is a
- * {@link GeoExt.form.Basic} instead of `Ext.form.Basic`.
+ * A specific {@link Ext.form.Panel} whose internal form is a
+ * {@link GeoExt.form.Basic} instead of {@link Ext.form.Basic}.
  * One would use this form to do search requests through
  * an `OpenLayers.Protocol` object (`OpenLayers.Protocol.WFS`
  * for example).
@@ -86,7 +86,7 @@ Ext.define('GeoExt.form.Panel', {
     /**
      * Shortcut to the internal form's search method.
      * @param {Object} options The options passed to the
-     * GeoExt.form.action.Search constructor.
+     * {GeoExt.form.action.Search} constructor.
      *
      */
     search: function(options) {
