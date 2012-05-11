@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
 Ext.require([
     'GeoExt.panel.Map',
     'GeoExt.slider.Zoom',
@@ -29,7 +37,7 @@ Ext.onReady(function() {
             height: 100,
             x: 10,
             y: 20,
-            plugins: new GeoExt.SliderTip({
+            plugins: Ext.create('GeoExt.SliderTip', {
             	getText: function(thumb) {
             		var slider = thumb.slider;
             		var out = '<div>Zoom Level: {0}</div>' +
@@ -46,7 +54,7 @@ Ext.onReady(function() {
         map: panel.map,
         aggressive: true,                                                                                                                                                   
         width: 200,
-        plugins: new GeoExt.SliderTip({
+        plugins: Ext.create('GeoExt.SliderTip', {
         	getText: function(thumb) {
         		return Ext.String.format('<div>Zoom Level: {0}</div>', thumb.slider.getZoom());
         	}
