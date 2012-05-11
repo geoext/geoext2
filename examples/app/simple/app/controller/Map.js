@@ -95,6 +95,11 @@ Ext.define('GX.controller.Map', {
     },
     
     onSummitsStoreLoad: function(store, records) {
-        //do custom stuff on summits load if you want...
+        // do custom stuff on summits load if you want, for example here we
+        // zoom to summits extent
+        var dataExtent = store.layer.getDataExtent();
+        if (dataExtent) {
+            store.layer.map.zoomToExtent(dataExtent);
+        }
     }
-});
+})
