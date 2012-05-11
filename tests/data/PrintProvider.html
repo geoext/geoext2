@@ -19,8 +19,8 @@
             'GeoExt.data.PrintPage', 
             'GeoExt.data.PrintProvider',
             'GeoExt.panel.Legend',
-            'GeoExt.container.WMSLegend',
-            'GeoExt.container.URLLegend',
+            'GeoExt.container.WmsLegend',
+            'GeoExt.container.UrlLegend',
             'GeoExt.container.VectorLegend'
         ]);
         
@@ -113,7 +113,7 @@
             var getAbsoluteUrl = GeoExt.data.PrintProvider.prototype.getAbsoluteUrl;
             var baseUrl = parent.location.href.substr(0, parent.location.href.indexOf("/tests/run-tests.html"));
             t.eq(getAbsoluteUrl("/foo/bar.html"), location.protocol + "//" + location.host + (location.port && ":" + location.port) + "/foo/bar.html", "Relative url converted to absolute url correctly.");
-            t.eq(getAbsoluteUrl("../../../../bar.html"), baseUrl + "/bar.html", "Relative url with relative path converted to absolute url correctly.");
+            t.eq(getAbsoluteUrl("../../bar.html"), baseUrl + "/bar.html", "Relative url with relative path converted to absolute url correctly.");
         }
         
         function test_print(t) {
