@@ -35,7 +35,7 @@
         t.plan(7);
         var reader = Ext.create("GeoExt.data.reader.CswRecords");
         var records = reader.read({responseXML: doc, responseText: true});
-        t.eq(records.totalRecords, 11, "totalRecords taken from the CSW response");
+        t.eq(records.total, 11, "totalRecords taken from the CSW response");
         var record = records.records[0];
         t.eq(records.records.length, 3, "3 records parsed");
         t.eq(record.get("title"), ["College Universities of New York"], "title correctly parsed");
