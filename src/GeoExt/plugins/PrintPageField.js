@@ -52,7 +52,9 @@
  *      
  */
 Ext.define('GeoExt.plugins.PrintPageField', {
-    extend : 'Ext.util.Observable',
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
     requires: ['GeoExt.data.PrintPage', 'Ext.form.field.ComboBox', 'Ext.form.field.Checkbox'],
     alias : 'widget.gx_printpagefield',
     alternateClassName : 'GeoExt.PrintPageField',
@@ -103,9 +105,11 @@ Ext.define('GeoExt.plugins.PrintPageField', {
         };
         
         // the old 'check' event of 3.x is gone, only 'change' is supported
-        var eventName = target instanceof Ext.form.ComboBox ?
-                            "select" : target instanceof Ext.form.Checkbox ?
-                                "change" : "change"; // todo no ternary
+        var eventName = "change";
+        if (target instanceof Ext.form.ComboBox) {
+            eventName = "select";
+        }
+        
         onCfg[eventName] = this.onFieldChange;
         target.on(onCfg);
         this.printPage.on({
