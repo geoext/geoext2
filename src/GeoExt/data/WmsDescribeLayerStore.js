@@ -8,6 +8,7 @@
 
 /*
  * @include GeoExt/data/reader/WmsDescribeLayer.js
+ * @requires GeoExt/data/OwsStore.js
  */
 
 /**
