@@ -68,6 +68,26 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * @param {Object} config (optional) Config object.
      */
     constructor: function(config) {
+        if (!this.model) {
+            this.model = 'GeoExt.data.AttributeModel';
+        }
+        
+        this.callParent([config]);
+        
+        // At this point, we have to copy the complex objects from the config
+        // into the prototype. This is because Ext.data.Store's constructor 
+        // creates deep copies of these objects.
+        /**
+        if (config.format) {
+            this.format = config.format;
+            delete config.format;
+        }
+        
+        if (config.feature) {
+            this.feature = config.feature;
+            delete config.feature;
+        }
+        
         this.callParent([config]);
         
         this.setFormat(this.format || new OpenLayers.Format.WFSDescribeFeatureType());
@@ -75,6 +95,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
         if (this.feature) {
             this.setFeature(this.feature);
         }
+        **/
     },
     
     applyFeature: function(feature) {
@@ -114,12 +135,15 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * name.
      */
     readRecords: function(data) {
+        if (!this.getFormat()) {
+            this.setFormat(new OpenLayers.Format.WFSDescribeFeatureType());
+        }
         var attributes;
         if(data instanceof Array) {
             attributes = data;
         } else {
             // only works with one featureType in the doc
-            attributes = this.format.read(data).featureTypes[0].properties;
+            attributes = this.getFormat().read(data).featureTypes[0].properties;
         }
         var feature = this.feature;
         var fields = this.model.prototype.fields;
