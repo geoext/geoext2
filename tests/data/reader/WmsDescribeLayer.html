@@ -46,17 +46,6 @@
             reader.destroy();
         }
 
-        function test_read_exception(t) {
-            t.plan(1);
-            var reader = Ext.create("GeoExt.data.reader.WmsDescribeLayer");
-            try {
-                var records = reader.read({responseXML: doc2, responseText: true});
-            } catch(e) {
-                t.ok(true, "Exception thrown when getting a service exception");
-            }
-            reader.destroy();
-        }
-
     </script>
   <body>
     <div id="map"></div>
