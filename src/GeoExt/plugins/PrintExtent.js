@@ -149,8 +149,8 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      * Prints all pages as shown on the map.
      * 
      * @param {Object} options Options to send to the PrintProvider's
-     *  print method. See {@link GeoExt.data.PrintProvider#print print-method} of 
-     *  {@link GeoExt.data.PrintProvider}.
+     * print method. See the GeoExt.data.PrintProvider
+     * {@link GeoExt.data.PrintProvider#method-print print method}.
      */
     print: function(options) {
         this.printProvider.print(this.map, this.pages, options);
