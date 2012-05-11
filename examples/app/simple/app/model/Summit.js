@@ -5,6 +5,12 @@ Ext.define('GX.model.Summit', {
     extend: 'Ext.data.Model',
     fields: [
         {
+            name: 'symbolizer',
+            convert: function(v, r) {
+                return r.raw.layer.styleMap.createSymbolizer(r.raw, 'default');
+            }
+        },
+        {
             name: 'fid',
             convert: function(value, record) {
                 // record.raw a OpenLayers.Feature.Vector instance

@@ -8,7 +8,6 @@
 
 /**
  * @class GeoExt.FeatureRenderer
- * 
  * The feature renderer
  */
 Ext.define('GeoExt.FeatureRenderer', {
@@ -26,27 +25,27 @@ Ext.define('GeoExt.FeatureRenderer', {
 
     /**
      * @cfg {OpenLayers.Feature.Vector}
-     *  Optional vector to be drawn.  If not provided, and if ``symbolizers``
-     *  is configured with an array of plain symbolizer objects, ``symbolType``
-     *  should be configured.
+     * Optional vector to be drawn.  If not provided, and if ``symbolizers``
+     * is configured with an array of plain symbolizer objects, ``symbolType``
+     * should be configured.
      */
     feature: undefined,
 
     /**
      * @cfg {Object[]}
-     *  An array of ``OpenLayers.Symbolizer`` instances or plain symbolizer
-     *  objects (in painters order) for rendering a  feature.  If no
-     *  symbolizers are provided, the OpenLayers default will be used. If a
-     *  symbolizer is an instance of ``OpenLayers.Symbolizer``, its type will
-     *  override the symbolType for rendering.
+     * An array of ``OpenLayers.Symbolizer`` instances or plain symbolizer
+     * objects (in painters order) for rendering a  feature.  If no
+     * symbolizers are provided, the OpenLayers default will be used. If a
+     * symbolizer is an instance of ``OpenLayers.Symbolizer``, its type will
+     * override the symbolType for rendering.
      */
     symbolizers: [OpenLayers.Feature.Vector.style["default"]],
 
     /**
      * @cfg {String}
-     *  One of ``"Point"``, ``"Line"``, or ``"Polygon"``.  Only pertinent if
-     *  OpenLayers.Symbolizer objects are not used.  If ``feature``
-     *  is provided, it will be preferred.  The default is "Polygon".
+     * One of ``"Point"``, ``"Line"``, or ``"Polygon"`` or ``"Text"``.  Only
+     * pertinent if OpenLayers.Symbolizer objects are not used.  If ``feature``
+     * is provided, it will be preferred.
      */
     symbolType: "Polygon",
 
@@ -72,41 +71,48 @@ Ext.define('GeoExt.FeatureRenderer', {
     /**
      * @private
      * @property {String[]}
-     *  List of supported Renderer classes. Add to this list to add support for
-     *  additional renderers. The first renderer in the list that returns
-     *  ``true`` for the ``supported`` method will be used, if not defined in
-     *  the ``renderer`` config property.
+     * List of supported Renderer classes. Add to this list to add support for
+     * additional renderers. The first renderer in the list that returns
+     * ``true`` for the ``supported`` method will be used, if not defined in
+     * the ``renderer`` config property.
      */
     renderers: ["SVG", "VML", "Canvas"],
 
     /**
      * @private
      * @property {Object}
-     *  Options for the renderer. See ``OpenLayers.Renderer`` for supported
-     *  options.
+     * Options for the renderer. See ``OpenLayers.Renderer`` for supported
+     * options.
      */
     rendererOptions: null,
 
     /**
      * @private
      * @property {OpenLayers.Feature.Vector}
-     *  Feature with point geometry.
+     * Feature with point geometry.
      */
     pointFeature: undefined,
 
     /**
      * @private
      * @property {OpenLayers.Feature.Vector}
-     *  Feature with LineString geometry.  Default zig-zag is provided.
+     * Feature with LineString geometry.  Default zig-zag is provided.
      */
     lineFeature: undefined,
 
     /**
      * @private
      * @property {OpenLayers.Feature.Vector}
-     *   Feature with Polygon geometry.  Default is a soft cornered rectangle.
+     * Feature with Polygon geometry.  Default is a soft cornered rectangle.
      */
     polygonFeature: undefined,
+
+    /**
+     * @private
+     * @property {OpenLayers.Feature.Vector}
+     * Feature with invisible Point geometry and text label.
+     */
+    textFeature: undefined,
 
     /**
      * @private
@@ -149,7 +155,10 @@ Ext.define('GeoExt.FeatureRenderer', {
                         new OpenLayers.Geometry.Point(-8, 4)
                         ])
                     ])
-                )
+                ),
+            textFeature: new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Point(0, 0)
+            )
         });
         if(!this.feature) {
             this.setFeature(null, {
@@ -341,30 +350,30 @@ Ext.define('GeoExt.FeatureRenderer', {
     drawFeature: function() {
         this.renderer.clear();
         this.setRendererDimensions();
-        // TODO: remove this when OpenLayers.Symbolizer is required
-        var Symbolizer = OpenLayers.Symbolizer;
-        var Text = Symbolizer && Symbolizer.Text;
         var symbolizer, feature, geomType;
         for (var i=0, len=this.symbolizers.length; i<len; ++i) {
             symbolizer = this.symbolizers[i];
             feature = this.feature;
-            // don't render text symbolizers
-            if (!Text || !(symbolizer instanceof Text)) {
-                if (Symbolizer && (symbolizer instanceof Symbolizer)) {
-                    symbolizer = symbolizer.clone();
-                    if (!this.initialConfig.feature) {
-                        geomType = symbolizer.CLASS_NAME.split(".").pop().toLowerCase();
-                        feature = this[geomType + "Feature"];
-                    }
-                } else {
-                    // TODO: remove this when OpenLayers.Symbolizer is used everywhere
-                    symbolizer = Ext.apply({}, symbolizer);
+            if (symbolizer instanceof OpenLayers.Symbolizer) {
+                symbolizer = symbolizer.clone();
+                if (OpenLayers.Symbolizer.Text &&
+                    symbolizer instanceof OpenLayers.Symbolizer.Text &&
+                    symbolizer.graphic === false) {
+                        // hide the point geometry
+                        symbolizer.fill = symbolizer.stroke = false;
                 }
-                this.renderer.drawFeature(
-                    feature.clone(),
-                    symbolizer
-                    );
+                if (!this.initialConfig.feature) {
+                    geomType = symbolizer.CLASS_NAME.split(".").pop().toLowerCase();
+                    feature = this[geomType + "Feature"];
+                }
+            } else {
+                // TODO: remove this when OpenLayers.Symbolizer is used everywhere
+                symbolizer = Ext.apply({}, symbolizer);
             }
+            this.renderer.drawFeature(
+                feature.clone(),
+                symbolizer
+            );
         }
     },
 

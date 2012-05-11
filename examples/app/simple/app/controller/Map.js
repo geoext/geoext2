@@ -4,15 +4,15 @@
  */
 Ext.define('GX.controller.Map', {
     extend: 'Ext.app.Controller',
-    
+
     models: ['Summit'],
     stores: ['Summits'],
-    
+
     refs: [
         {ref: 'summitChart', selector: 'summitchart'},
         {ref: 'summitGrid', selector: 'summitgrid'}
     ],
-    
+
     init: function() {
         var me = this;
 
@@ -82,8 +82,6 @@ Ext.define('GX.controller.Map', {
         mapPanel.map.addLayers(layers);
 
         // some more controls
-        mapPanel.map.addControls([new OpenLayers.Control.Zoom()]);
-
         mapPanel.map.addControls([new OpenLayers.Control.DragFeature(vecLayer, {
             autoActivate: true,
             onComplete: function(feature, px) {
@@ -96,14 +94,14 @@ Ext.define('GX.controller.Map', {
         map = mapPanel.map;
         mapPanel = mapPanel;
     },
-    
+
     onLaunch: function() {
         var me = this;
 
         // for dev purpose
         ctrl = this;
     },
-    
+
     onSummitsStoreLoad: function(store, records) {
         // do custom stuff on summits load if you want, for example here we
         // zoom to summits extent

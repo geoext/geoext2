@@ -3,9 +3,9 @@
  * @extends Ext.Viewport
  */
 Ext.define('GX.view.Viewport', {
-    extend: 'Ext.Viewport',    
+    extend: 'Ext.Viewport',
     layout: 'fit',
-    
+
     requires: [
         'Ext.layout.container.Border',
         'Ext.resizer.Splitter',
@@ -14,10 +14,10 @@ Ext.define('GX.view.Viewport', {
         'GX.view.summit.Chart',
         'GX.view.summit.Grid'
     ],
-    
+
     initComponent: function() {
         var me = this;
-        
+
         Ext.apply(me, {
             items: [{
                 xtype: 'panel',
@@ -44,7 +44,7 @@ Ext.define('GX.view.Viewport', {
                 }]
             }]
         });
-                
+
         me.callParent(arguments);
     }
 });

@@ -7,6 +7,7 @@ Ext.define('GX.view.summit.Grid' ,{
     alias : 'widget.summitgrid',
     requires: [
         'GeoExt.selection.FeatureModel',
+        'GeoExt.grid.column.Symbolizer',
         'Ext.grid.plugin.CellEditing',
         'Ext.form.field.Number'
     ],
@@ -14,6 +15,7 @@ Ext.define('GX.view.summit.Grid' ,{
         Ext.apply(this, {
             border: true,
             columns: [
+                {header: '', dataIndex: 'symbolizer', xtype: 'gx_symbolizercolumn', width: 30},
                 {header: 'ID', dataIndex: 'fid', width: 40},
                 {header: 'Name', dataIndex: 'name', flex: 3},
                 {header: 'Elevation', dataIndex: 'elevation', width: 60,
