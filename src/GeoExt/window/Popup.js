@@ -6,6 +6,12 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Feature/Vector.js
+ * @include OpenLayers/Geometry.js
+ * @include GeoExt/panel/Map.js
+ */
+
 /**
  * @class GeoExt.window.Popup
  * @include GeoExt/panel/Map.js

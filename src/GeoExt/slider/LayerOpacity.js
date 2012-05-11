@@ -6,6 +6,11 @@
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Layer.js
+ * @include GeoExt/data/LayerModel.js
+ */
+
 /**
  * @class GeoExt.slider.LayerOpacity
  *
