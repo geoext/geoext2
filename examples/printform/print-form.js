@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * of the license.
+ */
+
+/** api: example[print-form]
+ *  Print Configuration with a Form
+ *  -------------------------------
+ *  Use form field plugins to control print output.
+ */
+
 Ext.require([
     'Ext.layout.container.Border',
     'Ext.Panel',
@@ -12,7 +26,7 @@ Ext.require([
 var mapPanel, printPage;
 
 Ext.application({
-    name: 'HelloGeoExt2',
+    name: 'PrintPageFieldAndPrintProviderField',
     launch: function() {
 
         // The printProvider that connects us to the print service
@@ -88,12 +102,6 @@ Ext.application({
                 plugins: new GeoExt.plugins.PrintProviderField({
                     printProvider: printProvider
                 })
-                // the plugin will work even if we modify a combo value
-//                setValue: function(v) {
-////                    v = parseInt(v, 10) + " dpi";
-////                    this.callParent(arguments);
-//                    Ext.form.ComboBox.prototype.setValue.apply(this, arguments);
-//                }
             }, {
                 xtype: "combo",
                 store: printProvider.scales,
