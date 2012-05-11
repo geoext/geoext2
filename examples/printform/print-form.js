@@ -86,7 +86,7 @@ Ext.application({
                 typeAhead: true,
                 queryMode: "local",
                 triggerAction: "all",
-                plugins: new GeoExt.plugins.PrintProviderField({
+                plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
                     printProvider: printProvider
                 })
             }, {
@@ -99,7 +99,7 @@ Ext.application({
                 typeAhead: true,
                 queryMode: "local",
                 triggerAction: "all",
-                plugins: new GeoExt.plugins.PrintProviderField({
+                plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
                     printProvider: printProvider
                 })
             }, {
