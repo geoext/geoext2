@@ -56,6 +56,8 @@ Ext.application({
             pageSize: maxRecords,
             model: 'GeoExt.data.CswRecordsModel',
             proxy: Ext.create("GeoExt.data.proxy.Protocol", {
+                startParam: 'startPosition',
+                limitParam: 'maxRecords',
                 setParamsAsOptions: true,
                 protocol: new OpenLayers.Protocol.CSW({
                     url: "http://localhost/csw"
@@ -89,10 +91,6 @@ Ext.application({
         Ext.create("Ext.grid.Panel", {
             border: false,
             bbar: new Ext.PagingToolbar({
-                paramNames: {
-                    start: 'startPosition',
-                    limit: 'maxRecords'
-                },
                 store: store
             }),
             renderTo: 'grid',
