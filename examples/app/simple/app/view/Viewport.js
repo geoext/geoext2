@@ -21,6 +21,7 @@ Ext.define('GX.view.Viewport', {
         Ext.apply(me, {
             items: [{
                 xtype: 'panel',
+                border: false,
                 layout: 'border',
                 dockedItems: [
                     Ext.create('GX.view.Header')

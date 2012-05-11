@@ -13,7 +13,7 @@ Ext.define('GX.view.summit.Grid' ,{
     ],
     initComponent: function() {
         Ext.apply(this, {
-            border: true,
+            border: false,
             columns: [
                 {header: '', dataIndex: 'symbolizer', xtype: 'gx_symbolizercolumn', width: 30},
                 {header: 'ID', dataIndex: 'fid', width: 40},
@@ -25,7 +25,6 @@ Ext.define('GX.view.summit.Grid' ,{
                 {header: 'Position', dataIndex: 'position', flex: 4}
             ],
             flex: 1,
-            title : 'Summits Grid',
             store: 'Summits',
             selType: 'featuremodel',
             plugins: [

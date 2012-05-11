@@ -12,6 +12,7 @@ Ext.define('GX.view.Map', {
         'GeoExt.Action',
         'GX.view.help.Action'
     ],
+    border: 'false',
     layout: 'fit',
     region: 'west',
     width: 600,
