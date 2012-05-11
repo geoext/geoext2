@@ -11,8 +11,17 @@
  */
 
 /**
- * <p>An Attribute Store.
- * TODO: port the original AttributeStore's bind method + callbacks to this new one.</p>
+ * A store to work with DescribeFeatureType responses. This is a regular
+ * Ext store preconfigured with a {@link GeoExt.data.AttributeModel}.
+ *
+ *
+ * Example:
+<pre><code>
+Ext.create('GeoExt.data.AttributeStore', {
+    ignore: {type: 'xsd:string'},
+    url: 'http://host.wfsdescribefeaturetype'
+});
+</code></pre>
  */
 Ext.define('GeoExt.data.AttributeStore', {
     extend: 'GeoExt.data.OwsStore',
