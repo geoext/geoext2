@@ -142,7 +142,7 @@ Ext.application({
             width: 800,
             height: 400,
             items: [mapPanel, legendPanel],
-            tbar: new Ext.Toolbar({
+            tbar: Ext.create('Ext.Toolbar', {
                 items: [
                     {text: 'add/remove', handler: addRemoveLayer},
                     {text: 'movetop/bottom', handler: moveLayer },
