@@ -4,15 +4,15 @@
  */
 Ext.define('GX.view.Header', {
     extend: 'Ext.Component',
-    
+
     dock: 'top',
     baseCls: 'app-header',
-    
+
     initComponent: function() {
         Ext.applyIf(this, {
             html: 'MVC simple application example called GX'
         });
-                
+
         this.callParent(arguments);
     }
 });
