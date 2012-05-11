@@ -16,8 +16,6 @@
  * @include GeoExt/widgets/form.js
  */
 
-Ext.namespace("GeoExt.form");
- 
 /** api: example
  *  Sample code showing how to use a GeoExt SearchAction with an Ext form panel:
  *  
@@ -90,7 +88,12 @@ Ext.namespace("GeoExt.form");
  *      In most cases your would not directly create ``GeoExt.form.SearchAction``
  *      objects, but use :class:`GeoExt.form.FormPanel` instead.
  */
-GeoExt.form.SearchAction = Ext.extend(Ext.form.Action, {
+Ext.define('GeoExt.form.action.Search', {
+    extend: 'Ext.form.Action',
+    alternateClassName: 'GeoExt.form.SearchAction',
+    alias: 'formaction.search',
+    requires: ['GeoExt.Form'],
+
     /** private: property[type]
      *  ``String`` The action type string.
      */
@@ -102,35 +105,30 @@ GeoExt.form.SearchAction = Ext.extend(Ext.form.Action, {
      */
     response: null,
 
-    /** private */
-    constructor: function(form, options) {
-        GeoExt.form.SearchAction.superclass.constructor.call(this, form, options);
-    },
-
     /** private: method[run]
      *  Run the action.
      */
     run: function() {
-        var o = this.options;
-        var f = GeoExt.form.toFilter(this.form, o.logicalOp, o.wildcard);
-        if(o.clientValidation === false || this.form.isValid()){
+        var form = this.form,
+            f = GeoExt.Form.toFilter(form, this.logicalOp, this.wildcard);
+        if(this.clientValidation === false || form.isValid()){
 
-            if (o.abortPrevious && this.form.prevResponse) {
-                o.protocol.abort(this.form.prevResponse);
+            if (this.abortPrevious && form.prevResponse) {
+                this.protocol.abort(form.prevResponse);
             }
 
-            this.form.prevResponse = o.protocol.read(
+            this.form.prevResponse = this.protocol.read(
                 Ext.applyIf({
                     filter: f,
                     callback: this.handleResponse,
                     scope: this
-                }, o)
+                }, this.readOptions)
             );
 
-        } else if(o.clientValidation !== false){
+        } else if(this.clientValidation !== false){
             // client validation failed
-            this.failureType = Ext.form.Action.CLIENT_INVALID;
-            this.form.afterAction(this, false);
+            this.failureType = Ext.form.action.Action.CLIENT_INVALID;
+            form.afterAction(this, false);
         }
     },
 
@@ -141,16 +139,16 @@ GeoExt.form.SearchAction = Ext.extend(Ext.form.Action, {
      *  Handle the response to the search query.
      */
     handleResponse: function(response) {
-        this.form.prevResponse = null;
+        var form = this.form;
+        form.prevResponse = null;
         this.response = response;
         if(response.success()) {
-            this.form.afterAction(this, true);
+            form.afterAction(this, true);
         } else {
-            this.form.afterAction(this, false);
+            form.afterAction(this, false);
         }
-        var o = this.options;
-        if(o.callback) {
-            o.callback.call(o.scope, response);
+        if(this.callback) {
+            this.callback.call(this.scope, response);
         }
     }
 });

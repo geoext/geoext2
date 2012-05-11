@@ -16,6 +16,12 @@
         }
     });
 
+    Ext.require([
+        'Ext.form.Basic',
+        'Ext.form.TextField',
+        'GeoExt.form.action.Search',
+    ]);
+
     function test_constructor(t) {
         t.plan(1);
 
@@ -25,20 +31,21 @@
 
         var form, action, protocol;
 
-        form = new Ext.form.BasicForm(Ext.get("form"));
+        form = Ext.create('Ext.form.Basic', Ext.get("form"));
         protocol = new OpenLayers.Protocol();
-        action = new GeoExt.form.SearchAction(form, {protocol: protocol});
+        action = Ext.create('GeoExt.form.action.Search',
+                            {form: form, protocol: protocol});
 
         /*
          * Test
          */
 
-        t.ok(action.options.protocol == protocol,
-             "SearchAction constructor properly sets protocol in options");
+        t.ok(action.protocol == protocol,
+             "Search Action constructor properly sets protocol in instance");
     }
 
     function test_run(t) {
-        t.plan(1);
+        t.plan(2);
 
         /*
          * Set up
@@ -46,12 +53,12 @@
 
         var field, form, action, protocol;
 
-        var field = new Ext.form.TextField({
+        field = Ext.create('Ext.form.TextField', {
             name: "foo__eq",
             value: "bar"
         });
 
-        form = new Ext.form.FormPanel({
+        form = Ext.create('Ext.form.Panel', {
             renderTo: "form",
             items: [field]
         });
@@ -60,12 +67,16 @@
             read: function(options) {
                 t.ok(options.filter instanceof OpenLayers.Filter.Comparison,
                      "run calls protocol.read with a comparison filter");
+                t.eq(options.some, 'option',
+                     "run calls protocol.read with extra options");
             }
         });
 
-        action = new GeoExt.form.SearchAction(form.getForm(), {
+        action = Ext.create('GeoExt.form.action.Search', {
+            form: form.getForm(),
             protocol: protocol,
-            clientValidation: false
+            clientValidation: false,
+            readOptions: {'some': 'option'}
         });
 
         /*
@@ -90,12 +101,12 @@
 
         var field, form, action, protocol, log = {};
 
-        var field = new Ext.form.TextField({
+        field = Ext.create('Ext.form.TextField', {
             name: "foo__eq",
             value: "bar"
         });
 
-        form = new Ext.form.FormPanel({
+        form = Ext.create('Ext.form.FormPanel', {
             renderTo: "form",
             items: [field]
         });
@@ -109,7 +120,8 @@
             }
         });
 
-        action = new GeoExt.form.SearchAction(form.getForm(), {
+        action = Ext.create('GeoExt.form.SearchAction', {
+            form: form.getForm(),
             protocol: protocol,
             clientValidation: false,
             abortPrevious: true
@@ -125,7 +137,7 @@
         t.ok(log.abort == 1, "protocol abort called once");
 
         log.abort = 0;
-        action.options.abortPrevious = false;
+        action.abortPrevious = false;
         action.run();
         t.ok(log.abort == 0, "protocol abort not called");
 
@@ -134,6 +146,59 @@
          */
         form.destroy();
     }
+
+    function test_handleResponse(t) {
+        t.plan(3);
+
+        /*
+         * Set up
+         */
+
+        var log, field, form, action, response;
+
+        field = Ext.create('Ext.form.TextField', {
+            name: "foo__eq",
+            value: "bar"
+        });
+
+        form = Ext.create('Ext.form.FormPanel', {
+            renderTo: "form",
+            items: [field]
+        });
+
+        action = Ext.create('GeoExt.form.SearchAction', {
+            form: form.getForm(),
+            callback: function(response) {
+                log.response = response;
+                log.scope = this;
+            },
+            scope: {'some': 'scope'}
+        });
+
+        response = new OpenLayers.Protocol.Response({
+            code: OpenLayers.Protocol.Response.SUCCESS
+        });
+
+        /*
+         * Test
+         */
+
+        log = {};
+        action.handleResponse(response);
+
+        t.ok(action.response === response,
+             'handleResponse sets the response in the instance');
+        t.ok(log.response === response,
+             'handleResponse calls callback with expected response');
+        t.eq(log.scope, {'some': 'scope'},
+             'handleResponse calls callback with expected scope');
+
+        /*
+         * Tear down
+         */
+        form.destroy();
+    }
+
     </script>
   <body>
     <div id="form"></div>
