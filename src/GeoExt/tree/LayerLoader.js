@@ -142,13 +142,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
             var sibling = node.childNodes && node.getChildAt(index);
             if(sibling) {
                 node.insertChild(index, child);
-            } else if (node.isLoaded()) {
-                node.appendChild(child);
             } else {
-                if (!node.raw.children) {
-                    node.raw.children = [];
-                }
-                node.raw.children.push(child);
+                node.appendChild(child);
             }
         }
     },

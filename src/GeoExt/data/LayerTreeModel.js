@@ -38,6 +38,10 @@ Ext.define('GeoExt.data.LayerTreeModel',{
                 }
             }
         });
-
+    },
+    
+    afterEdit: function(modifiedFieldNames) {
+        this.callParent(arguments);
+        this.fireEvent('afteredit', modifiedFieldNames);
     }
 });
