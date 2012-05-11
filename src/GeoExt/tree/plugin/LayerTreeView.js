@@ -27,7 +27,7 @@ Ext.define('GeoExt.tree.plugin.LayerTreeView', {
         this.target = view;
 
         view.on('beforerender', this.onViewBeforeRender, this, {single: true});
-        view.on('render', this.onViewRender, this, {single: true});
+        view.on('viewready', this.onViewRender, this, {single: true});
     },
 
     onViewBeforeRender : function(view) {

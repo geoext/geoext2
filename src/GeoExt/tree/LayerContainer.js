@@ -43,9 +43,10 @@ Ext.define('GeoExt.tree.LayerContainer', {
         
         me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
             loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+        target.raw.container = me;
         me.loader.load(target);
         
-        Ext.applyIf(target.raw, {text: "Layers"});
+        Ext.applyIf(target.raw, {text: 'Layers'});
     },
     
     /**
@@ -53,11 +54,11 @@ Ext.define('GeoExt.tree.LayerContainer', {
      * @param {Number} index  The record index in the layer store.
      * @returns {Number} The appropriate child node index for the record.
      */
-    recordIndexToNodeIndex: function(index) {
+    recordIndexToNodeIndex: function(index, node) {
         var me = this;
         var store = me.loader.store;
         var count = store.getCount();
-        var nodeCount = me.childNodes.length;
+        var nodeCount = node.childNodes.length;
         var nodeIndex = -1;
         for(var i=count-1; i>=0; --i) {
             if(me.loader.filter(store.getAt(i)) === true) {

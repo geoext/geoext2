@@ -11,6 +11,7 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         {name: 'text', type: 'string'}, 
         {name: 'plugins'},
         {name: 'layer'},
+        {name: 'container'},
         {name: 'checkedGroup', type: 'string'},
         {name: 'fixedText', type: 'bool'}
     ],
@@ -18,9 +19,10 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     /**
      * @private
      */
-    init: function() {
+    constructor: function() {
         var me = this;
 
+        me.callParent(arguments);
         if (me.raw && me.raw.plugins) {
             var plugins = me.raw.plugins,
                 plugin, instance;

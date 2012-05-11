@@ -94,6 +94,7 @@ Ext.application({
                 )
             ]
         });
+        var layer = mapPanel.map.layers[2];
 
         // create our own layer node UI class, using the TreeNodeUIEventMixin
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
@@ -161,7 +162,18 @@ Ext.application({
                 }, {
                     ptype: 'layertreeview'
                 }]
-            }
+            },
+            tbar: [{
+                text: "remove",
+                handler: function() {
+                    mapPanel.map.removeLayer(layer);
+                }
+            }, {
+                text: "add",
+                handler: function() {
+                    mapPanel.map.addLayer(layer);
+                }
+            }]
         });
     
         Ext.create('Ext.Viewport', {
