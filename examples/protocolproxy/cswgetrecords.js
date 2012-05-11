@@ -50,8 +50,10 @@ Ext.application({
             value: '*USA*'
         });
         
+        var maxRecords = 5;
         // create a new WMS capabilities store
         store = Ext.create('Ext.data.Store', {
+            pageSize: maxRecords,
             model: 'GeoExt.data.CswRecordsModel',
             proxy: Ext.create("GeoExt.data.proxy.Protocol", {
                 setParamsAsOptions: true,
@@ -64,7 +66,7 @@ Ext.application({
 
         var data = {
             "resultType": "results",
-            "maxRecords": 5,
+            "maxRecords": maxRecords,
             "Query": {
                 "typeNames": "gmd:MD_Metadata",
                 "ElementSetName": {
@@ -91,8 +93,7 @@ Ext.application({
                     start: 'startPosition',
                     limit: 'maxRecords'
                 },
-                store: store,
-                pageSize: 5
+                store: store
             }),
             renderTo: 'grid',
             store: store,
