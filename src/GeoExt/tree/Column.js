@@ -7,10 +7,10 @@
  */
 
 /**
- * Provides indentation and folder structure markup for a Tree taking into account
- * depth and position within the tree hierarchy.
- * 
- * @private
+ * @class
+ * A subclass of {@link Ext.tree.Column}, which provides indentation and 
+ * folder structure markup for a Tree, taking into account depth and 
+ * position within the tree hierarchy.
  */
 Ext.define('GeoExt.tree.Column', {
     extend: 'Ext.tree.Column',

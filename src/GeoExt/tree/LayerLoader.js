@@ -13,7 +13,7 @@
  */
 
 /**
- * @class
+ * @class 
  * A loader that will load all layers of a GeoExt.data.LayerStore.
  * By default, only layers that have displayInLayerSwitcher set to true will be
  * included. The childrens' iconCls defaults to "gx-tree-layer-icon".
