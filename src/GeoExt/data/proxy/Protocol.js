@@ -37,9 +37,16 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      * @param {Object} scope The scope in which to execute the callback
      */
     doRequest: function(operation, callback, scope) {
-        var params = operation ? operation.params : {};
+        var me = this,
+            params = Ext.applyIf(operation.params || {}, me.extraParams || {}),
+            request;
+
+        //copy any sorters, filters etc into the params so they can be sent over the wire
+        params = Ext.applyIf(params, me.getParams(operation));
+
         var o = {
             params: params || {},
+            operation: operation,
             request: {
                 callback: callback,
                 scope: scope
@@ -57,9 +64,15 @@ Ext.define('GeoExt.data.proxy.Protocol', {
         };
         if (this.setParamsAsOptions === true) {
             Ext.applyIf(options, options.params);
-            delete options.params;
+//            delete options.params;
         }
-        this.response = this.protocol.read(options);
+        var response = this.protocol.read(options);
+        /*var result = this.getReader().read(me.extractResponseData(response));
+console.log(result);
+
+        if (typeof callback == 'function') {
+            callback.call(scope || me, operation);
+        }*/
     },
 
     /** private: method[abortRequest]
@@ -79,10 +92,23 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      *  Handle response from the protocol
      */
     loadResponse: function(o, response) {
+        var me = this;
         if (response.success()) {
             var result = o.reader.read(response);
-            o.request.callback.call(
-               o.request.scope, result, true);
+            var operation = o.operation;
+            Ext.apply(operation, {
+                response: response,
+                resultSet: result
+            });
+
+            operation.commitRecords(result.records);
+            operation.setCompleted();
+            operation.setSuccessful();
+            var scope = o.request.scope;
+            var callback = o.request.callback;
+            if (typeof callback == 'function') {
+                callback.call(scope || me, operation);
+            }
         } else {
             this.fireEvent('exception', this, response);
             o.request.callback.call(
