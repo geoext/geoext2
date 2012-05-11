@@ -4,11 +4,6 @@ Ext.define('GeoExt.tree.LayerNode', {
     alias: 'plugin.gx_layer',
 
     /**
-     * The layer that the layer node will be bound to.
-     * @cfg {OpenLayers.Layer} layer
-     */
-
-    /**
      * If provided, nodes will be rendered with a radio button instead of a
      * checkbox. All layers represented by nodes with the same checkedGroup are
      * considered mutually exclusive - only one can be visible at a time.
@@ -27,11 +22,11 @@ Ext.define('GeoExt.tree.LayerNode', {
     init: function(target) {
 
         this.target = target;
+        var layer = target.get('layer');
 
-        target.set('checked', this.layer.getVisibility());
-        target.set('layer', this.layer);
+        target.set('checked', layer.getVisibility());
         target.set('checkedGroup', this.checkedGroup === undefined ?
-            this.layer.isBaseLayer ? "gx_baselayer" : "" :
+            layer.isBaseLayer ? "gx_baselayer" : "" :
             "");
         target.set('fixedText', !!target.text);
         
@@ -42,7 +37,7 @@ Ext.define('GeoExt.tree.LayerNode', {
         }
 
         target.on('afteredit', this.onAfterEdit, this);
-        this.layer.events.on({
+        layer.events.on({
             "visibilitychanged": this.onLayerVisibilityChanged,
             scope: this
         });

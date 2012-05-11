@@ -130,8 +130,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
             var child = this.createNode({
                 plugins: [{
                     ptype: 'gx_layer',
-                    layer: layer
                 }],
+                layer: layer,
                 text: layer.name,
                 listeners: {
                     move: this.onChildMove,
