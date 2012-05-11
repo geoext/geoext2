@@ -12,6 +12,7 @@ Ext.define('GX.view.Map', {
         'GeoExt.Action',
         'GX.view.help.Action'
     ],
+    border: 'false',
     layout: 'fit',
     region: 'west',
     width: 600,
@@ -84,7 +85,11 @@ Ext.define('GX.view.Map', {
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
-                items: items
+                items: items,
+                style: {
+                    border: 0,
+                    padding: 0
+                }
             }]
         });
                 
