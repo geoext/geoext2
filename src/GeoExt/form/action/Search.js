@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
@@ -6,87 +6,71 @@
  * of the license.
  */
 
-/** api: (define)
- *  module = GeoExt.form
- *  class = SearchAction
- *  base_link = `Ext.form.Action <http://dev.sencha.com/deploy/dev/docs/?class=Ext.form.Action>`_
- */
-
-/**
+/*
  * @include GeoExt/widgets/form.js
  */
 
-/** api: example
- *  Sample code showing how to use a GeoExt SearchAction with an Ext form panel:
- *  
- *  .. code-block:: javascript
+/**
+ * A specific `Ext.form.action.Action` to be used when using a form to
+ * trigger search requests using an `OpenLayers.Protocol`.
  *
- *      var formPanel = new Ext.form.Panel({
- *          renderTo: "formpanel",
- *          items: [{
- *              xtype: "textfield",
- *              name: "name__like",
- *              value: "mont"
- *          }, {
- *              xtype: "textfield",
- *              name: "elevation__ge",
- *              value: "2000"
- *          }]
- *      });
+ * When run this action builds an `OpenLayers.Filter` from the form
+ * and passes this filter to its protocol's read method. The form fields
+ * must be named after a specific convention, so that an appropriate 
+ * `OpenLayers.Filter.Comparison` filter is created for each
+ * field.
  *
- *      var searchAction = new GeoExt.form.SearchAction(formPanel.getForm(), {
- *          protocol: new OpenLayers.Protocol.WFS({
- *              url: "http://publicus.opengeo.org/geoserver/wfs",
- *              featureType: "tasmania_roads",
- *              featureNS: "http://www.openplans.org/topp"
- *          }),
- *          abortPrevious: true
- *      });
+ * For example a field with the name `foo__like` would result in an
+ * `OpenLayers.Filter.Comparison` of type
+ * `OpenLayers.Filter.Comparison.LIKE` being created.
  *
- *      formPanel.getForm().doAction(searchAction, {
- *          callback: function(response) {
- *              // response.features includes the features read
- *              // from the server through the protocol
- *          }
- *      });
- */
+ * Here is the convention:
+ *
+ * * `<name>__eq: OpenLayers.Filter.Comparison.EQUAL_TO`
+ * * `<name>__ne: OpenLayers.Filter.Comparison.NOT_EQUAL_TO`
+ * * `<name>__lt: OpenLayers.Filter.Comparison.LESS_THAN`
+ * * `<name>__le: OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO`
+ * * `<name>__gt: OpenLayers.Filter.Comparison.GREATER_THAN`
+ * * `<name>__ge: OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO`
+ * * `<name>__like: OpenLayers.Filter.Comparison.LIKE`
+ *
+ * In most cases your would not directly create `GeoExt.form.action.Search`
+ * objects, but use `GeoExt.form.FormPanel` instead.
+ *
+ * Sample code showing how to use a GeoExt Search Action with an Ext
+ * form panel:
+ * 
+<pre><code>
+var formPanel = Ext.create('Ext.form.Panel', {
+    renderTo: "formpanel",
+    items: [{
+        xtype: "textfield",
+        name: "name__like",
+        value: "mont"
+    }, {
+        xtype: "textfield",
+        name: "elevation__ge",
+        value: "2000"
+    }]
+});
 
-/** api: constructor
- *  .. class:: SearchAction(form, options)
- *
- *      A specific ``Ext.form.Action`` to be used when using a form to do
- *      trigger search requests througn an ``OpenLayers.Protocol``.
- *
- *      Arguments:
- *
- *      * form ``Ext.form.BasicForm`` A basic form instance.
- *      * options ``Object`` Options passed to the protocol'read method
- *            One can add an abortPrevious property to these options, if set
- *            to true, the abort method will be called on the protocol if
- *            there's a pending request.
- *
- *      When run this action builds an ``OpenLayers.Filter`` from the form
- *      and passes this filter to its protocol's read method. The form fields
- *      must be named after a specific convention, so that an appropriate 
- *      ``OpenLayers.Filter.Comparison`` filter is created for each
- *      field.
- *
- *      For example a field with the name ``foo__like`` would result in an
- *      ``OpenLayers.Filter.Comparison`` of type
- *      ``OpenLayers.Filter.Comparison.LIKE`` being created.
- *
- *      Here is the convention:
- *
- *      * ``<name>__eq: OpenLayers.Filter.Comparison.EQUAL_TO``
- *      * ``<name>__ne: OpenLayers.Filter.Comparison.NOT_EQUAL_TO``
- *      * ``<name>__lt: OpenLayers.Filter.Comparison.LESS_THAN``
- *      * ``<name>__le: OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO``
- *      * ``<name>__gt: OpenLayers.Filter.Comparison.GREATER_THAN``
- *      * ``<name>__ge: OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO``
- *      * ``<name>__like: OpenLayers.Filter.Comparison.LIKE``
- *
- *      In most cases your would not directly create ``GeoExt.form.SearchAction``
- *      objects, but use :class:`GeoExt.form.FormPanel` instead.
+var searchAction = Ext.create('GeoExt.form.action.Search', {
+    form: formPanel.getForm(),
+    protocol: new OpenLayers.Protocol.WFS({
+        url: "http://publicus.opengeo.org/geoserver/wfs",
+        featureType: "tasmania_roads",
+        featureNS: "http://www.openplans.org/topp"
+    }),
+    abortPrevious: true
+});
+
+formPanel.getForm().doAction(searchAction, {
+    callback: function(response) {
+        // response.features includes the features read
+        // from the server through the protocol
+    }
+});
+</code></pre>
  */
 Ext.define('GeoExt.form.action.Search', {
     extend: 'Ext.form.Action',
@@ -94,19 +78,53 @@ Ext.define('GeoExt.form.action.Search', {
     alias: 'formaction.search',
     requires: ['GeoExt.Form'],
 
-    /** private: property[type]
-     *  ``String`` The action type string.
+    /**
+     * @property {String}
+     * The action type string.
+     * @private
      */
     type: "search",
 
-    /** api: property[response]
-     *  ``OpenLayers.Protocol.Response`` A reference to the response
+    /**
+     * @property {OpenLayers.Protocol.Response} response
+     *  `OpenLayers.Protocol.Response` A reference to the response
      *  resulting from the search request. Read-only.
      */
-    response: null,
 
-    /** private: method[run]
-     *  Run the action.
+    /**
+     * @cfg {OpenLayers.Protocol} protocol
+     * The protocol to use for search requests.
+     */
+    /**
+     * @property {OpenLayers.Protocol} protocol
+     * The protocol.
+     */
+
+    /**
+     * @cfg {Object} readOptions
+     * (optional) Extra options passed to the protocol's read method.
+     */
+
+    /**
+     * @cfg {Function} callback
+     * (optional) Callback function called when the response is
+     * received.
+     */
+
+    /**
+     * @cfg {Object} scope
+     * (optional) Scope {@link #callback}.
+     */
+
+    /**
+     * @cfg {Boolean} abortPrevious
+     * If set to true, the abort method will be called on the protocol
+     * if there's a pending request. Default is `false`.
+     */
+
+    /**
+     * Run the action.
+     * @private
      */
     run: function() {
         var form = this.form,
@@ -132,11 +150,10 @@ Ext.define('GeoExt.form.action.Search', {
         }
     },
 
-    /** private: method[handleResponse]
-     *  :param response: ``OpenLayers.Protocol.Response`` The response
-     *  object.
-     *
-     *  Handle the response to the search query.
+    /**
+     * Handle the response to the search query.
+     * @param {OpenLayers.Protocol.Response} response The response object.
+     * @private
      */
     handleResponse: function(response) {
         var form = this.form;
