@@ -212,10 +212,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         }, this);
 
         this.extent = this.sourceMap.getExtent();
-<<<<<<< HEAD
-=======
-        
->>>>>>> 44a39a261fbb87800f0707e10692d4300a4cce81
+
         this.callParent(arguments);
     },
     
