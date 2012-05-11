@@ -30,13 +30,25 @@ Ext.define('GX.model.Summit', {
         {name: 'name', type: 'string'},
         {name: 'elevation', type: 'int'},
         {
-            name: 'position',
+            name: 'lat',
+            convert: function(value, record) {
+                // record.raw a OpenLayers.Feature.Vector instance
+                if (record.raw instanceof OpenLayers.Feature.Vector &&
+                    record.raw.geometry instanceof OpenLayers.Geometry.Point) {
+                    return record.raw.geometry.y;
+                } else {
+                    return "This is not a Feature or geometry is wrong type";
+                }
+            }
+        },
+        {
+            name: 'lon',
             convert: function(value, record) {
                 // record.raw a OpenLayers.Feature.Vector instance
                 if (record.raw instanceof OpenLayers.Feature.Vector) {
-                    return record.raw.geometry.toString();
+                    return record.raw.geometry.x;
                 } else {
-                    return "This is not a Feature";
+                    return "This is not a Feature or geometry is wrong type";
                 }
             }
         }
