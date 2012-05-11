@@ -13,10 +13,8 @@
  */
 
 /**
- * @include GeoExt/widgets/form/BasicForm.js
+ * @include GeoExt/form/Basic.js
  */
-
-Ext.namespace("GeoExt.form");
 
 /** api: example
  *  Sample code showing how to use a GeoExt form panel.
@@ -71,7 +69,11 @@ Ext.namespace("GeoExt.form");
  *      form fields must be named for appropriate filters to be
  *      passed to the protocol.
  */
-GeoExt.form.FormPanel = Ext.extend(Ext.form.FormPanel, {
+Ext.define('GeoExt.form.Panel', {
+    extend: 'Ext.form.Panel',
+    requires: ['GeoExt.form.Basic'],
+    alias: 'widget.gx_form',
+
     /** api: config[protocol]
      *  ``OpenLayers.Protocol`` The protocol instance this form panel
      *  is configured with, actions resulting from this form
@@ -83,8 +85,8 @@ GeoExt.form.FormPanel = Ext.extend(Ext.form.FormPanel, {
      *  Create the internal :class:`GeoExt.form.BasicForm` instance.
      */
     createForm: function() {
-        delete this.initialConfig.listeners;
-        return new GeoExt.form.BasicForm(null, this.initialConfig);
+        return new GeoExt.form.Basic(this, Ext.applyIf({listeners: {}},
+                                     this.initialConfig));
     },
 
     /** api: method[search]
@@ -97,6 +99,3 @@ GeoExt.form.FormPanel = Ext.extend(Ext.form.FormPanel, {
         this.getForm().search(options);
     }
 });
-
-/** api: xtype = gx_formpanel */
-Ext.reg("gx_formpanel", GeoExt.form.FormPanel);

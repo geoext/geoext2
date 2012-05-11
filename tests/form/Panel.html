@@ -16,6 +16,11 @@
         }
     });
 
+    Ext.require([
+        'GeoExt.form.Panel',
+        'Ext.form.TextField'
+    ]);
+
     function test_constructor(t) {
         t.plan(3);
 
@@ -27,7 +32,7 @@
 
         protocol = new OpenLayers.Protocol();
 
-        form = new GeoExt.form.FormPanel({
+        form = Ext.create('GeoExt.form.Panel', {
            renderTo: "form",
            width: 200,
            protocol: protocol
@@ -39,7 +44,7 @@
 
         t.ok(form.protocol == protocol,
              "FormPanel constructor sets protocol in the instance");
-        t.ok(form.getForm() instanceof GeoExt.form.BasicForm,
+        t.ok(form.getForm() instanceof GeoExt.form.Basic,
              ["FormPanel constructor creates a GeoExt.form.BasicForm as",
               "its internal form"].join(" "));
         t.ok(form.getForm().protocol == protocol,
@@ -67,12 +72,12 @@
             }
         });
 
-        field = new Ext.form.TextField({
+        field = Ext.create('Ext.form.TextField', {
             name: "foo0",
             value: "bar0"
         });
 
-        form = new GeoExt.form.FormPanel({
+        form = Ext.create('GeoExt.form.Panel', {
            renderTo: "form",
            width: 200,
            protocol: protocol,
@@ -118,12 +123,12 @@
             }
         });
 
-        field = new Ext.form.TextField({
+        field = Ext.create('Ext.form.TextField', {
             name: "foo0",
             value: "bar0"
         });
 
-        form = new GeoExt.form.FormPanel({
+        form = Ext.create('GeoExt.form.Panel', {
            renderTo: "form",
            width: 200,
            protocol: protocol,
