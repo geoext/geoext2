@@ -29,11 +29,11 @@ Ext.define('GeoExt.data.WfsCapabilitiesLayerStore',{
     fields: null,
     config: {
         /**
-         * @cfg {String}
+         * @cfg {String} url
          * The URL from which to retrieve the WFS GetCapabilities document
          */
         /**
-         * @property {String}
+         * @property {String} url
          * The URL from which to retrieve the WFS GetCapabilities document
          */
         url: null
