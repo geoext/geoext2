@@ -27,7 +27,10 @@ Ext.define('GeoExt.tree.plugin.LayerTreeView', {
         this.target = view;
 
         view.on('beforerender', this.onViewBeforeRender, this, {single: true});
-        view.on('viewready', this.onViewRender, this, {single: true});
+        view.on('render', this.onViewRender, this, {single: true});
+        view.on('refresh', this.onViewRefresh, this);
+        view.on('itemadd', this.onViewItemAdd, this);
+        view.on('itemupdate', this.onViewItemUpdate, this);
     },
 
     onViewBeforeRender : function(view) {
@@ -41,7 +44,24 @@ Ext.define('GeoExt.tree.plugin.LayerTreeView', {
     onViewRender : function(view) {
         var me = this;
 
-        console.log('render');
+    },
+
+    onViewRefresh : function(view, options) {
+        var me = this;
+
+        view.node.eachChild(function(node) {
+            this.onNodeRendered(node);
+        }, me);
+    },
+
+    onViewItemAdd: function(record, index, htmlNode, options) {
+
+        this.onNodeRendered(record);
+    },
+
+    onViewItemUpdate: function(record, index, htmlNode, options) {
+
+        this.onNodeRendered(record);
     },
 
     setNodeVisibility: function(node) {
@@ -137,5 +157,28 @@ Ext.define('GeoExt.tree.plugin.LayerTreeView', {
                 this.enable();
             }
         }
+    },
+
+    onNodeRendered: function(node) {
+        var me = this;
+
+        var el = Ext.get('tree-record-'+node.id);
+        if(!el) {
+            return;
+        }
+
+        if(node.get('layer'))
+            me.createChild(el, node);
+
+        if(node.hasChildNodes()) {
+            node.eachChild(function(node) {
+                me.onNodeRendered(node);
+            }, me);
+        }
+    },
+
+    createChild: function(el, child) {
+        el.removeCls('gx-tree-component-off');
+        el.createChild('Got it!');
     }
 });
