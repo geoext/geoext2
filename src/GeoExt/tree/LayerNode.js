@@ -8,7 +8,8 @@
 
 /**
  * @class GeoExt.tree.LayerNode
- * 
+ *
+ * The LayerNode plugin
  */
 Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',

@@ -9,6 +9,7 @@
 /**
  * @class GeoExt.FeatureRenderer
  * 
+ * The feature renderer
  */
 Ext.define('GeoExt.FeatureRenderer', {
     extend: 'Ext.Component',
@@ -22,7 +23,6 @@ Ext.define('GeoExt.FeatureRenderer', {
                 : null);
         }
     },
-
 
     /**
      * @cfg {OpenLayers.Feature.Vector}
@@ -166,8 +166,7 @@ Ext.define('GeoExt.FeatureRenderer', {
              *  * renderer - GeoExt.FeatureRenderer This feature renderer.
              */
             "click"
-            );
-
+        );
     },
     /**
      * @private
