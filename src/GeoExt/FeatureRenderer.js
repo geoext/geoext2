@@ -6,6 +6,15 @@
  * of the license.
  */
 
+/*
+ * @requires OpenLayers/Feature/Vector.js
+ * @include OpenLayers/Geometry/Point.js
+ * @include OpenLayers/Geometry/LinearRing.js
+ * @include OpenLayers/Geometry/Polygon.js
+ * @include OpenLayers/Geometry/LineString.js
+ * @include OpenLayers/Renderer/SVG.js
+ */
+
 /**
  * @class GeoExt.FeatureRenderer
  * 

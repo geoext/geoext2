@@ -7,8 +7,8 @@
  */
 
 /*
- * @require OpenLayers/Filter/Comparison.js
- * @require OpenLayers/Filter/Logical.js
+ * @requires OpenLayers/Filter/Comparison.js
+ * @requires OpenLayers/Filter/Logical.js
  */
 
 /**
