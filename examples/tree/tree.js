@@ -140,9 +140,6 @@ Ext.application({
                         layers: mapPanel.layers
                     }], text: "Base Maps"}
                 ]
-            },
-            proxy: {
-                type: "memory"
             }
         });
 

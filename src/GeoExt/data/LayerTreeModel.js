@@ -13,8 +13,12 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         {name: 'layer'},
         {name: 'container'},
         {name: 'checkedGroup', type: 'string'},
-        {name: 'fixedText', type: 'bool'}
+        {name: 'fixedText', type: 'bool'},
+        {name: 'component'}
     ],
+    proxy: {
+        type: "memory"
+    },
     
     /**
      * @private
