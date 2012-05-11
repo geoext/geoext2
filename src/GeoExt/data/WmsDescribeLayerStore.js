@@ -1,9 +1,14 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
+ */
+
+/*
+ * @include GeoExt/data/reader/WmsDescribeLayer.js
+ * @requires GeoExt/data/OwsStore.js
  */
 
 /**
@@ -16,56 +21,8 @@
  * configure this with your own proxy.
  */
 Ext.define('GeoExt.data.WmsDescribeLayerStore',{
-    extend: 'Ext.data.Store',
+    extend: 'GeoExt.data.OwsStore',
     requires: ['GeoExt.data.reader.WmsDescribeLayer'],
     model: 'GeoExt.data.WmsDescribeLayerModel',
-    alternateClassName: ['GeoExt.data.WMSDescribeLayerStore'],
-
-    config: {
-        /**
-         * @cfg {String}
-         * The URL from which to retrieve the WMS DescribeLayer document
-         */
-        url: null,
-
-        /**
-         * @cfg {OpenLayers.Format}
-         * A parser for transforming the XHR response into an array of objects
-         * representing attributes. Defaults to an {OpenLayers.Format.WMSDescribeLayer}
-         * parser.
-         */
-        format: null
-    },
-
-    /**
-     * @private
-     */
-    constructor: function(config){
-        var me = this;
-        me.callParent([config]);
-
-        if (config.url) { 
-            me.setUrl(config.url); 
-        }
-        if (config.format) {
-            me.setFormat(config.format);
-        }
-    },
-
-    /**
-     * @private
-     */
-    applyUrl: function(newValue){
-        if(newValue && Ext.isString(newValue)){
-            this.getProxy().url = newValue;
-        }
-    },
-
-    /**
-     * @private
-     */
-    applyFormat: function(newFormat) {
-        this.getProxy().reader.format = newFormat;
-    }
-
+    alternateClassName: ['GeoExt.data.WMSDescribeLayerStore']
 });

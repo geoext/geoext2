@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include OpenLayers/Util.js
+ * @include GeoExt/data/ScaleModel.js
+ * @include GeoExt/panel/Map.js
+ */
+
 /**
  * @class GeoExt.data.ScaleStore
  * A store that contains a cache of available zoom levels.  The store can
@@ -5,17 +19,20 @@
  * {GeoExt.panel.Map} object.
  */
 Ext.define('GeoExt.data.ScaleStore', {
-    requires: ['GeoExt.data.ScaleModel', 'GeoExt.panel.Map'],
+    requires: [
+        'GeoExt.data.ScaleModel', 
+        'GeoExt.panel.Map'
+    ],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.ScaleModel',
 
-    /** 
+    /**
      * @cfg {OpenLayers.Map/GeoExt.panel.Map}
      * Optional map or map panel from which to derive scale values.
      */
     map: null,
 
-    /** 
+    /**
      * Construct a ScaleStore from a configuration.  The ScaleStore accepts
      * some custom parameters addition to the fields accepted by Ext.Store.
      * @private
@@ -30,7 +47,7 @@ Ext.define('GeoExt.data.ScaleStore', {
         }
     },
 
-    /** 
+    /**
      * Bind this store to a map; that is, maintain the zoom list in sync with
      * the map's current configuration.  If the map does not currently have a
      * set scale list, then the store will remain empty until the map is

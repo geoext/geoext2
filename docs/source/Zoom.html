@@ -15,57 +15,73 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-slider-Zoom'>/**
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include OpenLayers/Util.js
+ * @include GeoExt/panel/Map.js
+ */
+
+<span id='GeoExt-slider-Zoom'>/**
 </span> * @class GeoExt.slider.Zoom
- * 
+ *
  * Sample code to render a slider outside the map viewport:
- * 
- *      @example
- *      var slider = Ext.create('GeoExt.slider.Zoom', {
- *          renderTo: document.body,
- *          width: 200,
- *          map: map
- *      });
- *      
+ *
+ * Example:
+&lt;pre&gt;&lt;code&gt;
+var slider = Ext.create('GeoExt.slider.Zoom', {
+    renderTo: document.body,
+    width: 200,
+    map: map
+});
+&lt;/code&gt;&lt;/pre&gt;
+ *
  *  Sample code to add a slider to a map panel:
- *  
- *      @example
- *      var panel = Ext.create('GeoExt.MapPanel', {
- *          renderTo: document.body,
- *          height: 300,
- *          width: 400,
- *          map: {
- *              controls: [new OpenLayers.Control.Navigation()]
- *          },
- *          layers: [new OpenLayers.Layer.WMS(
- *              &quot;Global Imagery&quot;,
- *              &quot;http://maps.opengeo.org/geowebcache/service/wms&quot;,
- *              {layers: &quot;bluemarble&quot;}
- *          )],
- *          extent: [-5, 35, 15, 55],
- *          items: [{
- *              xtype: &quot;gx_zoomslider&quot;,
- *              aggressive: true,
- *              vertical: true,
- *              height: 100,
- *              x: 10,
- *              y: 20
- *          }]
- *      });
- * 
+ *
+ * Example:
+&lt;pre&gt;&lt;code&gt;
+var panel = Ext.create('GeoExt.MapPanel', {
+    renderTo: document.body,
+    height: 300,
+    width: 400,
+    map: {
+        controls: [new OpenLayers.Control.Navigation()]
+    },
+    layers: [new OpenLayers.Layer.WMS(
+        &quot;Global Imagery&quot;,
+        &quot;http://maps.opengeo.org/geowebcache/service/wms&quot;,
+        {layers: &quot;bluemarble&quot;}
+    )],
+    extent: [-5, 35, 15, 55],
+    items: [{
+        xtype: &quot;gx_zoomslider&quot;,
+        aggressive: true,
+        vertical: true,
+        height: 100,
+        x: 10,
+        y: 20
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
  */
 Ext.define('GeoExt.slider.Zoom', {
     extend : 'Ext.slider.Single',
     requires : ['GeoExt.panel.Map'],
     alias : 'widget.gx_zoomslider',
     alternateClassName : 'GeoExt.ZoomSlider',
-    
+
 <span id='GeoExt-slider-Zoom-cfg-map'>    /**
 </span>     * @cfg {OpenLayers.Map/GeoExt.MapPanel} map
      * The map that the slider controls.
      */
     map: null,
-    
+
 <span id='GeoExt-slider-Zoom-cfg-baseCls'>    /**
 </span>     * @cfg {String} baseCls
      * The CSS class name for the slider elements.  Default is &quot;gx-zoomslider&quot;.
@@ -74,24 +90,24 @@ Ext.define('GeoExt.slider.Zoom', {
 
 <span id='GeoExt-slider-Zoom-cfg-aggressive'>    /**
 </span>     * @cfg {Boolean} aggressive
-     * If set to true, the map is zoomed as soon as the thumb is moved. Otherwise 
+     * If set to true, the map is zoomed as soon as the thumb is moved. Otherwise
      *  the map is zoomed when the thumb is released (default).
      */
     aggressive: false,
-    
+
 <span id='GeoExt-slider-Zoom-property-updating'>    /**
 </span>     * @property {Boolean} updating
      * The slider position is being updated by itself (based on map zoomend).
      */
     updating: false,
-    
+
 <span id='GeoExt-slider-Zoom-method-initComponent'>    /**
 </span>     * Initialize the component.
      * @private
      */
     initComponent: function(){
         this.callParent(arguments);
-        
+
         if(this.map) {
             if(this.map instanceof GeoExt.MapPanel) {
                 this.map = this.map.map;
@@ -104,9 +120,9 @@ Ext.define('GeoExt.slider.Zoom', {
         } else {
             this.on('changecomplete', this.changeHandler, this);
         }
-        this.on(&quot;beforedestroy&quot;, this.unbind, this); 
+        this.on(&quot;beforedestroy&quot;, this.unbind, this);
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-onRender'>    /**
 </span>     * Override onRender to set base css class.
      * @private
@@ -115,7 +131,7 @@ Ext.define('GeoExt.slider.Zoom', {
         this.callParent(arguments);
         this.el.addCls(this.baseCls);
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-afterRender'>    /**
 </span>     * Override afterRender because the render event is fired too early
      *  to call update.
@@ -125,7 +141,7 @@ Ext.define('GeoExt.slider.Zoom', {
         this.callParent(arguments);
         this.update();
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-addToMapPanel'>    /**
 </span>     * Called by a MapPanel if this component is one of the items in the panel.
      * @private
@@ -150,7 +166,7 @@ Ext.define('GeoExt.slider.Zoom', {
             scope: this
         });
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-stopMouseEvents'>    /**
 </span>     * @private
      * @param {Object} e
@@ -158,7 +174,7 @@ Ext.define('GeoExt.slider.Zoom', {
     stopMouseEvents: function(e) {
         e.stopEvent();
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-removeFromMapPanel'>    /**
 </span>     * Called by a MapPanel if this component is one of the items in the panel.
      * @private
@@ -170,7 +186,7 @@ Ext.define('GeoExt.slider.Zoom', {
         el.un(&quot;click&quot;, this.stopMouseEvents, this);
         this.unbind();
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-bind'>    /**
 </span>     * @private
      * @param {OpenLayers.Map}
@@ -187,7 +203,7 @@ Ext.define('GeoExt.slider.Zoom', {
             this.update();
         }
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-unbind'>    /**
 </span>     * @private
      */
@@ -200,7 +216,7 @@ Ext.define('GeoExt.slider.Zoom', {
             });
         }
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-initZoomValues'>    /**
 </span>     * Set the min/max values for the slider if not set in the config.
      * @private
@@ -215,7 +231,7 @@ Ext.define('GeoExt.slider.Zoom', {
                 layer.numZoomLevels - 1 : layer.maxZoomLevel;
         }
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-getZoom'>    /**
 </span>     * Get the zoom level for the associated map based on the slider value.
      * @return {Number} The map zoom level.
@@ -223,7 +239,7 @@ Ext.define('GeoExt.slider.Zoom', {
     getZoom: function() {
         return this.getValue();
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-getScale'>    /**
 </span>     * Get the scale denominator for the associated map based on the slider value.
      * @return {Number} The map scale denominator.
@@ -234,7 +250,7 @@ Ext.define('GeoExt.slider.Zoom', {
             this.map.getUnits()
         );
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-getResolution'>    /**
 </span>     * Get the resolution for the associated map based on the slider value.
      * @return {Number} The map resolution.
@@ -242,7 +258,7 @@ Ext.define('GeoExt.slider.Zoom', {
     getResolution: function() {
         return this.map.getResolutionForZoom(this.getValue());
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-changeHandler'>    /**
 </span>     * Registered as a listener for slider changecomplete. Zooms the map.
      * @private
@@ -252,9 +268,9 @@ Ext.define('GeoExt.slider.Zoom', {
             this.map.zoomTo(this.getValue());
         }
     },
-    
+
 <span id='GeoExt-slider-Zoom-method-update'>    /**
-</span>     * Registered as a listener for map zoomend. 
+</span>     * Registered as a listener for map zoomend.
      * Updates the value of the slider.
      * @private
      */

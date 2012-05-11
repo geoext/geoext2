@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @requires OpenLayers/Filter/Comparison.js
+ * @requires OpenLayers/Filter/Logical.js
+ */
+
+<span id='GeoExt-Form'>/**
+</span> * @class GeoExt.Form
+ * @singleton
+ * @markdown
+ *
+ * A set of useful static functions to work with forms.
+ */
+
+(function() {
+
+    var FILTER_MAP = {
+        &quot;eq&quot;: OpenLayers.Filter.Comparison.EQUAL_TO,
+        &quot;ne&quot;: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
+        &quot;lt&quot;: OpenLayers.Filter.Comparison.LESS_THAN,
+        &quot;le&quot;: OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO,
+        &quot;gt&quot;: OpenLayers.Filter.Comparison.GREATER_THAN,
+        &quot;ge&quot;: OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO,
+        &quot;like&quot;: OpenLayers.Filter.Comparison.LIKE
+    };
+
+    var REGEXES = {
+        &quot;text&quot;: new RegExp(
+            &quot;^(text|string)$&quot;, &quot;i&quot;
+        ),
+        &quot;number&quot;: new RegExp(
+            &quot;^(number|float|decimal|double|int|long|integer|short)$&quot;, &quot;i&quot;
+        ),
+        &quot;boolean&quot;: new RegExp(
+            &quot;^(boolean)$&quot;, &quot;i&quot;
+        ),
+        &quot;date&quot;: new RegExp(
+            &quot;^(date|dateTime)$&quot;, &quot;i&quot;
+        )
+    };
+
+    Ext.define('GeoExt.Form', {
+        singleton: true,
+
+<span id='GeoExt-Form-property-ENDS_WITH'>        /**
+</span>         * @property {Number} ENDS_WITH
+         * Use `GeoExt.Form.ENDS_WITH` as the `wildcard` param to `toFilter`
+         * if you want wildcards to be prepended to LIKE field values.
+         */
+        ENDS_WITH: 1,
+
+<span id='GeoExt-Form-property-STARTS_WITH'>        /**
+</span>         * @property {Number} STARTS_WITH
+         * Use `GeoExt.Form.STARTS_WITH` as the `wildcard` param to `toFilter`
+         * if you want wildcards to be appended to LIKE field values.
+         */
+        STARTS_WITH: 2,
+
+<span id='GeoExt-Form-property-CONTAINS'>        /**
+</span>         * @property {Number} CONTAINS
+         * Use `GeoExt.Form.CONTAINS` as the `wildcard` param to `toFilter`
+         * if you want a wildcards to be both prepended and appended to LIKE
+         * field values.
+         */
+        CONTAINS: 3,
+
+<span id='GeoExt-Form-method-toFilter'>        /**
+</span>         * Create an `OpenLayers.Filter` object from a `Ext.form.Basic`
+         * or a `Ext.form.Panel` instance.
+         * @param {Ext.form.Form/Ext.form.Panel} form The form.
+         * @param {String} logicalOp  Either `OpenLayers.Filter.Logical.AND` or
+         * `OpenLayers.Filter.Logical.OR`. Set to `OpenLayers.Filter.Logical.AND`
+         * if null or undefined
+         * @param {Integer} Determines the wildcard behaviour of LIKE
+         * queries. See {@link #ENDS_WITH}, {@link #STARTS_WITH} and
+         * {@link #CONTAINS}.
+         * @return `OpenLayers.Filter`
+         */
+        toFilter: function(form, logicalOp, wildcard) {
+            if(form instanceof Ext.form.Panel) {
+                form = form.getForm();
+            }
+            var filters = [], values = form.getValues(false);
+            for(var prop in values) {
+                var s = prop.split(&quot;__&quot;);
+
+                var value = values[prop], type;
+
+                if(s.length &gt; 1 &amp;&amp; 
+                   (type = FILTER_MAP[s[1]]) !== undefined) {
+                    prop = s[0];
+                } else {
+                    type = OpenLayers.Filter.Comparison.EQUAL_TO;
+                }
+
+                if (type === OpenLayers.Filter.Comparison.LIKE) {
+                    switch(wildcard) {
+                        case GeoExt.Form.ENDS_WITH:
+                            value = '.*' + value;
+                            break;
+                        case GeoExt.Form.STARTS_WITH:
+                            value += '.*';
+                            break;
+                        case GeoExt.Form.CONTAINS:
+                            value = '.*' + value + '.*';
+                            break;
+                        default:
+                            // do nothing, just take the value
+                            break;
+                    }
+                }
+
+                filters.push(
+                    new OpenLayers.Filter.Comparison({
+                        type: type,
+                        value: value,
+                        property: prop
+                    })
+                );
+            }
+
+            return filters.length == 1 &amp;&amp;
+                        logicalOp != OpenLayers.Filter.Logical.NOT ?
+                filters[0] :
+                new OpenLayers.Filter.Logical({
+                    type: logicalOp || OpenLayers.Filter.Logical.AND,
+                    filters: filters
+                });
+        },
+
+<span id='GeoExt-Form-method-recordToField'>        /**
+</span>         * This function can be used to create an `Ext.form.Field` from
+         * an `Ext.data.Model` object containing `name`, `type`,
+         * `restriction` and `label` fields.
+         *
+         * @param {Ext.data.Model} record Typically from an Attribute Store.
+         * @param {Object} options Optional object litteral. Valid options:
+         *
+         *  * `checkboxLabelProperty` - `String` The name of the property used to set
+         *  the label in the checkbox. Only applies if the record is of the &quot;boolean&quot;
+         *  type. Possible values are &quot;boxLabel&quot; and &quot;fieldLabel&quot;. Default is &quot;boxLabel&quot;.
+         *  * `mandatoryFieldLabelStyle` - `String` A CSS style specification string
+         *  to apply to the field label if the field is not nillable (that is,
+         *  the corresponding record has the &quot;nillable&quot; attribute set to `false`).
+         *  Default is `&quot;font-weigth: bold;&quot;`.
+         *  * `labelTpl` - `Ext.Template` or `String` or `Array` If set, 
+         *  the field label is obtained by applying the record's data hash to this 
+         *  template. This allows for very customizable field labels. 
+         *  See for instance :
+         *
+         *      var formPanel = Ext.create('Ext.form.Form', {
+         *          autoScroll: true,
+         *          plugins: [
+         *              new GeoExt.plugins.AttributeForm({
+         *                  attributeStore: store,
+         *                  recordToFieldOptions: {
+         *                      mandatoryFieldLabelStyle: 'font-style:italic;',
+         *                      labelTpl: new Ext.XTemplate(
+         *                          '&lt;span ext:qtip=&quot;{[this.getTip(values)]}&quot;&gt;{name}&lt;/span&gt;', {
+         *                              compiled: true,
+         *                              disableFormats: true,
+         *                              getTip: function(v) {
+         *                                  if (!v.type) {
+         *                                      return '';
+         *                                  }
+         *                                  var type = v.type.split(&quot;:&quot;).pop();
+         *                                  return OpenLayers.i18n(type) + 
+         *                                      (v.nillable ? '' : ' (required)');
+         *                              }
+         *                          }
+         *                      )
+         *                  }
+         *              })
+         *          ]
+         *      });
+         *
+         *  @return `Object` An object literal with a xtype property, use
+         *  `Ext.ComponentMgr.create` (or `Ext.create` in Ext 3) to create
+         *  an `Ext.form.Field` from this object.
+         */
+        recordToField: function(record, options) {
+
+            options = options || {};
+
+            var type = record.get(&quot;type&quot;);
+            if(typeof type === &quot;object&quot; &amp;&amp; type.xtype) {
+                // we have an xtype'd object literal in the type
+                // field, just return it
+                return type;
+            }
+            type = type.split(&quot;:&quot;).pop(); // remove ns prefix
+            
+            var field;
+            var name = record.get(&quot;name&quot;);
+            var restriction = record.get(&quot;restriction&quot;) || {};
+            var nillable = record.get(&quot;nillable&quot;) || false;
+            
+            var label = record.get(&quot;label&quot;);
+            var labelTpl = options.labelTpl;
+            if (labelTpl) {
+                var tpl = (labelTpl instanceof Ext.Template) ?
+                    labelTpl :
+                    new Ext.XTemplate(labelTpl);
+                label = tpl.apply(record.data);
+            } else if (label == null) {
+                // use name for label if label isn't defined in the record
+                label = name;
+            }
+            
+            var baseOptions = {
+                name: name,
+                labelStyle: nillable ? '' : 
+                                options.mandatoryFieldLabelStyle != null ? 
+                                    options.mandatoryFieldLabelStyle : 
+                                    'font-weight:bold;'
+            };
+
+            var r = REGEXES;
+
+            if (restriction.enumeration) {
+                field = Ext.apply({
+                    xtype: &quot;combo&quot;,
+                    fieldLabel: label,
+                    mode: &quot;local&quot;,
+                    forceSelection: true,
+                    triggerAction: &quot;all&quot;,
+                    editable: false,
+                    store: restriction.enumeration
+                }, baseOptions);
+            } else if(type.match(r[&quot;text&quot;])) {
+                var maxLength = restriction[&quot;maxLength&quot;] !== undefined ?
+                    parseFloat(restriction[&quot;maxLength&quot;]) : undefined;
+                var minLength = restriction[&quot;minLength&quot;] !== undefined ?
+                    parseFloat(restriction[&quot;minLength&quot;]) : undefined;
+                field = Ext.apply({
+                    xtype: &quot;textfield&quot;,
+                    fieldLabel: label,
+                    maxLength: maxLength,
+                    minLength: minLength
+                }, baseOptions);
+            } else if(type.match(r[&quot;number&quot;])) {
+                var maxValue = restriction[&quot;maxInclusive&quot;] !== undefined ?
+                    parseFloat(restriction[&quot;maxInclusive&quot;]) : undefined;
+                var minValue = restriction[&quot;minInclusive&quot;] !== undefined ?
+                    parseFloat(restriction[&quot;minInclusive&quot;]) : undefined;
+                field = Ext.apply({
+                    xtype: &quot;numberfield&quot;,
+                    fieldLabel: label,
+                    maxValue: maxValue,
+                    minValue: minValue
+                }, baseOptions);
+            } else if(type.match(r[&quot;boolean&quot;])) {
+                field = Ext.apply({
+                    xtype: &quot;checkbox&quot;
+                }, baseOptions);
+                var labelProperty = options.checkboxLabelProperty || &quot;boxLabel&quot;;
+                field[labelProperty] = label;
+            } else if(type.match(r[&quot;date&quot;])) {
+                field = Ext.apply({
+                    xtype: &quot;datefield&quot;,
+                    fieldLabel: label,
+                    format: 'c'
+                }, baseOptions);
+            }
+
+            return field;
+        }
+    });
+})();
+</pre>
+</body>
+</html>

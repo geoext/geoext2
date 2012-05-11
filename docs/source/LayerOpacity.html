@@ -15,58 +15,76 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-slider-LayerOpacity'>/**
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include OpenLayers/Layer.js
+ * @include GeoExt/data/LayerModel.js
+ */
+
+<span id='GeoExt-slider-LayerOpacity'>/**
 </span> * @class GeoExt.slider.LayerOpacity
  *
  *  Sample code to render a slider outside the map viewport:
  *
- *      @example
- *      var slider = new GeoExt.LayerOpacitySlider({
- *          renderTo: document.body,
- *          width: 200,
- *          layer: layer
- *      });
+ * Example:
+&lt;pre&gt;&lt;code&gt;
+var slider = new GeoExt.LayerOpacitySlider({
+    renderTo: document.body,
+    width: 200,
+    layer: layer
+});
+&lt;/code&gt;&lt;/pre&gt;$
  *
  *  Sample code to add a slider to a map panel:
  *
- *      @example
- *      var layer = new OpenLayers.Layer.WMS(
- *          &quot;Global Imagery&quot;,
- *          &quot;http://maps.opengeo.org/geowebcache/service/wms&quot;,
- *          {layers: &quot;bluemarble&quot;}
- *      );
- *      var panel = new GeoExt.MapPanel({
- *          renderTo: document.body,
- *          height: 300,
- *          width: 400,
- *          map: {
- *              controls: [new OpenLayers.Control.Navigation()]
- *          },
- *          layers: [layer],
- *          extent: [-5, 35, 15, 55],
- *          items: [{
- *              xtype: &quot;gx_opacityslider&quot;,
- *              layer: layer,
- *              aggressive: true,
- *              vertical: true,
- *              height: 100,
- *              x: 10,
- *              y: 20
- *          }]
- *      });
+ * Example:
+&lt;pre&gt;&lt;code&gt;
+var layer = new OpenLayers.Layer.WMS(
+    &quot;Global Imagery&quot;,
+    &quot;http://maps.opengeo.org/geowebcache/service/wms&quot;,
+    {layers: &quot;bluemarble&quot;}
+);
+var panel = new GeoExt.MapPanel({
+    renderTo: document.body,
+    height: 300,
+    width: 400,
+    map: {
+        controls: [new OpenLayers.Control.Navigation()]
+    },
+    layers: [layer],
+    extent: [-5, 35, 15, 55],
+    items: [{
+        xtype: &quot;gx_opacityslider&quot;,
+        layer: layer,
+        aggressive: true,
+        vertical: true,
+        height: 100,
+        x: 10,
+        y: 20
+    }]
+});
+&lt;/code&gt;&lt;/pre&gt;
  */
 Ext.define('GeoExt.slider.LayerOpacity', {
     alternateClassName: &quot;GeoExt.LayerOpacitySlider&quot;,
-    extend : 'Ext.slider.Single',
-    alias : 'widget.gx_opacityslider',
+    extend: 'Ext.slider.Single',
+    requires: 'GeoExt.data.LayerModel',
+    alias: 'widget.gx_opacityslider',
 
-<span id='GeoExt-slider-LayerOpacity-cfg-layer'>    /** 
+<span id='GeoExt-slider-LayerOpacity-cfg-layer'>    /**
 </span>     * @cfg {OpenLayers.Layer/GeoExt.data.LayerModel}
      * The layer this slider changes the opacity of. (required)
      */
     layer: null,
 
-<span id='GeoExt-slider-LayerOpacity-cfg-complementaryLayer'>    /** 
+<span id='GeoExt-slider-LayerOpacity-cfg-complementaryLayer'>    /**
 </span>     * @cfg {OpenLayers.Layer/GeoExt.data.LayerModel}
      * If provided, a layer that will be made invisible (its visibility is
      * set to false) when the slider value is set to its max value. If this
@@ -77,7 +95,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      */
     complementaryLayer: null,
 
-<span id='GeoExt-slider-LayerOpacity-cfg-delay'>    /** 
+<span id='GeoExt-slider-LayerOpacity-cfg-delay'>    /**
 </span>     * @cfg {Number}
      * Time in milliseconds before setting the opacity value to the
      * layer. If the value change again within that time, the original value
@@ -130,7 +148,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      */
     inverse: false,
 
-<span id='GeoExt-slider-LayerOpacity-method-constructor'>    /** 
+<span id='GeoExt-slider-LayerOpacity-method-constructor'>    /**
 </span>     * Construct the component.
      * @private
      */
@@ -143,7 +161,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
             if (config.inverse !== undefined) {
                 this.inverse = config.inverse;
             }
-            config.value = (config.value !== undefined) ? 
+            config.value = (config.value !== undefined) ?
                 config.value : this.getOpacityValue(this.layer);
             delete config.layer;
             delete config.complementaryLayer;
@@ -151,7 +169,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         this.callParent([config]);
     },
 
-<span id='GeoExt-slider-LayerOpacity-method-bind'>    /** 
+<span id='GeoExt-slider-LayerOpacity-method-bind'>    /**
 </span>     * Bind the slider to the layer.
      * @private
      */
@@ -199,7 +217,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         this.bind();
     },
 
-<span id='GeoExt-slider-LayerOpacity-method-getOpacityValue'>    /** 
+<span id='GeoExt-slider-LayerOpacity-method-getOpacityValue'>    /**
 </span>     * Returns the opacity value for the layer.
      * @private
      * @param {OpenLayers.Layer/GeoExt.data.LayerModel} layer
@@ -218,8 +236,8 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         return value;
     },
 
-<span id='GeoExt-slider-LayerOpacity-method-getLayer'>    /** 
-</span>     * Returns the OpenLayers layer object for a layer record or a plain layer 
+<span id='GeoExt-slider-LayerOpacity-method-getLayer'>    /**
+</span>     * Returns the OpenLayers layer object for a layer record or a plain layer
      * object.
      * @private
      * @param {OpenLayers.Layer/GeoExt.data.LayerModel} layer
@@ -242,8 +260,8 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         this.callParent();
 
         if (this.changeVisibility &amp;&amp; this.layer &amp;&amp;
-            (this.layer.opacity == 0 || 
-            (this.inverse === false &amp;&amp; this.value == this.minValue) || 
+            (this.layer.opacity == 0 ||
+            (this.inverse === false &amp;&amp; this.value == this.minValue) ||
             (this.inverse === true &amp;&amp; this.value == this.maxValue))) {
             this.layer.setVisibility(false);
         }
@@ -277,7 +295,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         this.on(&quot;beforedestroy&quot;, this.unbind, this);
     },
 
-<span id='GeoExt-slider-LayerOpacity-method-changeLayerOpacity'>    /** 
+<span id='GeoExt-slider-LayerOpacity-method-changeLayerOpacity'>    /**
 </span>     * Updates the ``OpenLayers.Layer`` opacity value.
      * @private
      * @param {GeoExt.LayerOpacitySlider} slider
@@ -295,7 +313,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         }
     },
 
-<span id='GeoExt-slider-LayerOpacity-method-changeLayerVisibility'>    /** 
+<span id='GeoExt-slider-LayerOpacity-method-changeLayerVisibility'>    /**
 </span>     * Updates the ``OpenLayers.Layer`` visibility.
      * @private
      * @param {GeoExt.LayerOpacitySlider} slider
@@ -333,7 +351,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         }
     },
 
-<span id='GeoExt-slider-LayerOpacity-method-addToMapPanel'>    /** 
+<span id='GeoExt-slider-LayerOpacity-method-addToMapPanel'>    /**
 </span>     * Called by a MapPanel if this component is one of the items in the panel.
      * @private
      * @param {GeoExt.panel.Map} panel

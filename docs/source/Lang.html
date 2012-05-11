@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+<span id='GeoExt-Lang'>/**
+</span> * The GeoExt.Lang singleton is created when the library is loaded.
+ * Include all relevant language files after this file in your build.
+ * @class GeoExt.Lang
+ */
+Ext.define('GeoExt.Lang', {
+    extend: 'Ext.util.Observable',
+    singleton: true,
+
+<span id='GeoExt-Lang-cfg-locale'>    /** 
+</span>     * @cfg {String}
+     * The current language tag.  Use :meth:`set` to set the locale.  Defaults
+     * to the browser language where available.
+     */
+    locale: navigator.language || navigator.userLanguage,
+
+<span id='GeoExt-Lang-property-dict'>    /** 
+</span>     * @property {Object}
+     * @private
+     * Dictionary of string lookups per language.
+     */
+    dict: null,
+
+<span id='GeoExt-Lang-method-constructor'>    /**
+</span>     * @private
+     * Construct the Lang singleton.
+     */
+    constructor: function() {
+        this.addEvents(
+<span id='GeoExt-Lang-property-localize'>            /** api: event[localize]
+</span>             *  Fires when localized strings are set.  Listeners will receive a
+             *  single ``locale`` event with the language tag.
+             */
+            &quot;localize&quot;
+        );
+        this.dict = {};
+        this.callParent();
+    },
+
+<span id='GeoExt-Lang-method-add'>    /** 
+</span>     * Add translation strings to the dictionary.  This method can be called
+     * multiple times with the same language tag (locale argument) to extend
+     * a single dictionary.
+     * @param {String} locale A language tag that follows the &quot;en-CA&quot;
+     * convention (http://www.ietf.org/rfc/rfc3066.txt).
+     * @param {Object} lookup An object with properties that are dot
+     * delimited names of objects with localizable strings (e.g.
+     * &quot;GeoExt.VectorLegend.prototype&quot;).  The values for these properties
+     * are objects that will be used to extend the target objects with
+     * localized strings (e.g. {untitledPrefix: &quot;Untitiled &quot;})
+     */
+    add: function(locale, lookup) {
+        var obj = this.dict[locale];
+        if (!obj) {
+            this.dict[locale] = Ext.apply({}, lookup);
+        } else {
+            for (var key in lookup) {
+                obj[key] = Ext.apply(obj[key] || {}, lookup[key]);
+            }
+        }
+        if (!locale || locale === this.locale) {
+            this.set(locale);
+        } else if (this.locale.indexOf(locale + &quot;-&quot;) === 0) {
+            // current locale is regional variation of added strings
+            // call set so newly added strings are used where appropriate
+            this.set(this.locale);
+        }
+    },
+
+<span id='GeoExt-Lang-method-set'>    /**
+</span>     * Set the language for all GeoExt components.  This will use any localized
+     * strings in the dictionary (set with the :meth:`add` method) that
+     * correspond to the complete matching language tag or any &quot;higher order&quot;
+     * tag (e.g. setting &quot;en-CA&quot; will use strings from the &quot;en&quot; dictionary if
+     * matching strings are not found in the &quot;en-CA&quot; dictionary).
+     * @param {String} locale Language identifier tag following recommendations
+     *     at http://www.ietf.org/rfc/rfc3066.txt.
+     */
+    set: function(locale) {
+        // compile lookup based on primary and all subtags
+        var tags = locale ? locale.split(&quot;-&quot;) : [];
+        var id = &quot;&quot;;
+        var lookup = {}, parent, str, i, ii;
+        for (i=0, ii=tags.length; i&lt;ii; ++i) {
+            id += (id &amp;&amp; &quot;-&quot; || &quot;&quot;) + tags[i];
+            if (id in this.dict) {
+                parent = this.dict[id];
+                for (str in parent) {
+                    if (str in lookup) {
+                        Ext.apply(lookup[str], parent[str]);
+                    } else {
+                        lookup[str] = Ext.apply({}, parent[str]);
+                    }
+                }
+            }
+        }
+
+        // now extend all objects given by dot delimited names in lookup
+        for (str in lookup) {
+            var obj = window;
+            var parts = str.split(&quot;.&quot;);
+            var missing = false;
+            for (i=0, ii=parts.length; i&lt;ii; ++i) {
+                var name = parts[i];
+                if (name in obj) {
+                    obj = obj[name];
+                } else {
+                    missing = true;
+                    break;
+                }
+            }
+            if (!missing) {
+                Ext.apply(obj, lookup[str]);
+            }
+        }
+        this.locale = locale;
+        this.fireEvent(&quot;localize&quot;, locale);
+    }
+});
+</pre>
+</body>
+</html>

@@ -15,12 +15,16 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='global-property-'>/**
-</span> * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
+ */
+
+/*
+ * @include OpenLayers/Format/CSWGetRecords.js
  */
 
 <span id='GeoExt-data-reader-CswRecords'>/**
@@ -28,15 +32,17 @@
  * Data reader class to create an array of records from a CSW
  * GetRecords response. The raw response from the OpenLayers parser
  * is available through the jsonData property.
- * @example
- *     var store = new Ext.data.Store({
- *         proxy: new GeoExt.data.ProtocolProxy({
- *             protocol: new OpenLayers.Protocol.CSW({
- *                 url: &quot;http://demo.geonode.org/geonetwork/srv/en/csw&quot;
- *             })
- *         }),
- *         reader: new GeoExt.data.reader.CswRecords()
- *     });
+ * Example:
+&lt;pre&gt;&lt;code&gt;
+var store = new Ext.data.Store({
+    proxy: new GeoExt.data.ProtocolProxy({
+        protocol: new OpenLayers.Protocol.CSW({
+            url: &quot;http://demo.geonode.org/geonetwork/srv/en/csw&quot;
+        })
+    }),
+    reader: new GeoExt.data.reader.CswRecords()
+});
+&lt;/code&gt;&lt;/pre&gt;
  */
 Ext.define('GeoExt.data.reader.CswRecords', {
     alternateClassName: ['GeoExt.data.CSWRecordsReader'],
@@ -59,9 +65,9 @@ Ext.define('GeoExt.data.reader.CswRecords', {
 
     /*
      * @private
-     * @param {XMLHttpRequest/OpenLayers.Protocol.Response} data If a 
+     * @param {XMLHttpRequest/OpenLayers.Protocol.Response} data If a
      * ProtocolProxy is configured with OpenLayers.Protocol.CSW data will be
-     * {OpenLayers.Protocol.Response}. Otherwise data will be the 
+     * {OpenLayers.Protocol.Response}. Otherwise data will be the
      * {XMLHttpRequest} object.
      * @return  {Object} A data block which is used by an
      * {Ext.data.Store} as a cache of {Ext.data.Model} objects.
@@ -107,7 +113,8 @@ Ext.define('GeoExt.data.reader.CswRecords', {
             }
         });
         if (data.SearchResults) {
-            result.totalRecords = data.SearchResults.numberOfRecordsMatched;
+            delete result.totalRecords;
+            result.total = data.SearchResults.numberOfRecordsMatched;
         }
         return result;
     }

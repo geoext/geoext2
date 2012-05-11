@@ -15,17 +15,24 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='global-property-'>/**
-</span> * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/WFSCapabilities.js
+ * @include OpenLayers/Protocol/WFS.js
+ * @include OpenLayers/Strategy/Fixed.js
+ * @include OpenLayers/Layer/Vector.js
+ */
+
 <span id='GeoExt-data-reader-WfsCapabilities'>/**
 </span> * @class GeoExt.data.reader.WfsCapabilities
- * Data reader class to create {GeoExt.data.WfsCapabilitiesLayerModel[]} 
+ * Data reader class to create {GeoExt.data.WfsCapabilitiesLayerModel[]}
  * from a WFS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WfsCapabilities', {
@@ -47,8 +54,10 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
         }
     },
 
-<span id='GeoExt-data-reader-WfsCapabilities-method-getResponseData'>    /** 
-</span>     * @param {Object} request The XHR object which contains the parsed XML
+<span id='GeoExt-data-reader-WfsCapabilities-method-getResponseData'>    /**
+</span>     * Gets the records.
+     *
+     * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}
      * as a cache of {Ext.data.Model} objects.
@@ -108,7 +117,7 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
                     featureNS: featureType.featureNS
                 };
                 if(this.protocolOptions) {
-                    Ext.apply(protocolOptions, this.protocolOptions, 
+                    Ext.apply(protocolOptions, this.protocolOptions,
                         protocolDefaults);
                 } else {
                     Ext.apply(protocolOptions, {}, protocolDefaults);

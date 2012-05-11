@@ -1,8 +1,8 @@
-/**
- * Copyright (c) 2008-2009 The Open Source Geospatial Foundation
- *
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
@@ -22,6 +22,7 @@ Ext.Loader.setConfig({
 
 Ext.require([
     'Ext.container.Viewport',
+    'Ext.window.MessageBox',
     'GeoExt.panel.Map',
     'GeoExt.state.PermalinkProvider'
 ]);
@@ -31,7 +32,7 @@ var permalinkProvider;
 Ext.application({
     name: 'HelloGeoExt2',
     launch: function() {
-        permalinkProvider = new GeoExt.state.PermalinkProvider({
+        permalinkProvider = Ext.create('GeoExt.state.PermalinkProvider', {
             encodeType: false
         });
         Ext.state.Manager.setProvider(permalinkProvider);
@@ -71,7 +72,7 @@ Ext.application({
                 items: [{
                     text: 'Current center of the map',
                     handler: function(){
-                        var c = GeoExt.panel.Map.guess().getMap().getCenter();
+                        var c = GeoExt.panel.Map.guess().map.getCenter();
                         Ext.Msg.alert(this.getText(), c.toString());
                     }
                 }]

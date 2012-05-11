@@ -1,11 +1,10 @@
-/**
- * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
-
 
 /** api: example[wms-capabilities]
  *  WMS Capabilities Store
@@ -16,6 +15,7 @@
 var store;
 
 Ext.require([
+    'Ext.data.writer.Json',
     'Ext.grid.Panel',
     'GeoExt.data.reader.WmsCapabilities',
     'GeoExt.data.WmsCapabilitiesLayerStore',

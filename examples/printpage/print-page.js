@@ -1,8 +1,8 @@
- /**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
@@ -69,7 +69,7 @@ Ext.application({
     var includeLegend; // controlled by the "Include legend?" checkbox
      
     // The main panel
-    new Ext.Panel({
+    Ext.create('Ext.Panel', {
         renderTo: "content",
         layout: "border",
         width: 700,

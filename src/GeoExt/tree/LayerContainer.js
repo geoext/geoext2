@@ -1,12 +1,20 @@
-/**
- * @require GeoExt/tree/LayerLoader.js
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include GeoExt/tree/LayerLoader.js
+ * @include GeoExt/data/Loader.js
  */
 
 /**
  * @class
- * A subclass of Ext.data.Model decorated with an Ext.data.NodeInterface
- * that will collect all layers of an OpenLayers map. Only layers that
- * have displayInLayerSwitcher set to true will be included.
+ * A layer node plugin that will collect all layers of an OpenLayers map. Only
+ * layers that have displayInLayerSwitcher set to true will be included.
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
  * text defaults to "Layers".
  */
@@ -15,7 +23,8 @@ Ext.define('GeoExt.tree.LayerContainer', {
     mixins: ['Ext.util.Observable'],
     requires: [
         'Ext.data.NodeInterface',
-        'GeoExt.tree.LayerLoader'
+        'GeoExt.tree.LayerLoader',
+        'GeoExt.data.Loader'
     ],
     alias: 'plugin.gx_layercontainer',
     
@@ -29,9 +38,10 @@ Ext.define('GeoExt.tree.LayerContainer', {
      */
     
     /**
-     * The text for the target node.
+     * @private
+     * The default text for the target node.
      */
-    text: 'Layers',
+    defaultText: 'Layers',
     
     /**
      * @private
@@ -43,9 +53,14 @@ Ext.define('GeoExt.tree.LayerContainer', {
         
         me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
             loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+
+        target.set('container', me);
+        if (!target.get('text')) {
+            target.set('text', me.defaultText);
+            target.commit();
+        }
         me.loader.load(target);
         
-        Ext.applyIf(target.raw, {text: "Layers"});
     },
     
     /**
@@ -53,11 +68,11 @@ Ext.define('GeoExt.tree.LayerContainer', {
      * @param {Number} index  The record index in the layer store.
      * @returns {Number} The appropriate child node index for the record.
      */
-    recordIndexToNodeIndex: function(index) {
+    recordIndexToNodeIndex: function(index, node) {
         var me = this;
         var store = me.loader.store;
         var count = store.getCount();
-        var nodeCount = me.childNodes.length;
+        var nodeCount = node.childNodes.length;
         var nodeIndex = -1;
         for(var i=count-1; i>=0; --i) {
             if(me.loader.filter(store.getAt(i)) === true) {
@@ -68,17 +83,5 @@ Ext.define('GeoExt.tree.LayerContainer', {
             }
         }
         return nodeIndex;
-    },
-    
-    /**
-     * @private
-     */
-    destroy: function() {
-        var me = this;
-        if (!(me.initialConfig.loader instanceof GeoExt.data.Loader)) {
-            me.loader.destroy();
-        }
-        delete me.loader;
-        me.callParent();
     }
 });

@@ -15,17 +15,23 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='global-property-'>/**
-</span> * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/WMSCapabilities.js
+ * @include OpenLayers/Layer/WMS.js
+ * @include OpenLayers/Util.js
+ */
+
 <span id='GeoExt-data-reader-WmsCapabilities'>/**
 </span> * @class GeoExt.data.reader.WmsCapabilities
- * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]} 
+ * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]}
  * from a WMS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WmsCapabilities', {
@@ -47,7 +53,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         }
     },
 
-<span id='GeoExt-data-reader-WmsCapabilities-cfg-attributionCls'>    /** 
+<span id='GeoExt-data-reader-WmsCapabilities-cfg-attributionCls'>    /**
 </span>     * @cfg {String}
      * CSS class name for the attribution DOM elements.
      * Element class names append &quot;-link&quot;, &quot;-image&quot;, and &quot;-title&quot; as
@@ -55,8 +61,10 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     attributionCls: &quot;gx-attribution&quot;,
 
-<span id='GeoExt-data-reader-WmsCapabilities-method-getResponseData'>    /** 
-</span>     * @param {Object} request The XHR object which contains the parsed XML
+<span id='GeoExt-data-reader-WmsCapabilities-method-getResponseData'>    /**
+</span>     * Gets the records.
+     *
+     * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}
      * as a cache of {Ext.data.Model} objects.
@@ -68,33 +76,33 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         }
         return this.readRecords(data);
     },
-    
+
 <span id='GeoExt-data-reader-WmsCapabilities-method-serviceExceptionFormat'>    /**
 </span>     * @private
      * @param {String[]} formats An array of service exception format strings.
      * @return {String} The (supposedly) best service exception format.
      */
     serviceExceptionFormat: function(formats) {
-        if (OpenLayers.Util.indexOf(formats, 
+        if (OpenLayers.Util.indexOf(formats,
             &quot;application/vnd.ogc.se_inimage&quot;)&gt;-1) {
             return &quot;application/vnd.ogc.se_inimage&quot;;
         }
-        if (OpenLayers.Util.indexOf(formats, 
+        if (OpenLayers.Util.indexOf(formats,
             &quot;application/vnd.ogc.se_xml&quot;)&gt;-1) {
             return &quot;application/vnd.ogc.se_xml&quot;;
         }
         return formats[0];
     },
-    
-<span id='GeoExt-data-reader-WmsCapabilities-method-imageFormat'>    /** 
+
+<span id='GeoExt-data-reader-WmsCapabilities-method-imageFormat'>    /**
 </span>     * @private
      * @param {Object} layer The layer's capabilities object.
-     * @return {String} The (supposedly) best mime type for requesting 
+     * @return {String} The (supposedly) best mime type for requesting
      * tiles.
      */
     imageFormat: function(layer) {
         var formats = layer.formats;
-        if (layer.opaque &amp;&amp; 
+        if (layer.opaque &amp;&amp;
             OpenLayers.Util.indexOf(formats, &quot;image/jpeg&quot;)&gt;-1) {
             return &quot;image/jpeg&quot;;
         }
@@ -140,12 +148,12 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         var version = data.version;
         var capability = data.capability || {};
         var url = capability.request &amp;&amp; capability.request.getmap &amp;&amp;
-            capability.request.getmap.href; 
-        var layers = capability.layers; 
+            capability.request.getmap.href;
+        var layers = capability.layers;
         var formats = capability.exception ? capability.exception.formats : [];
         var exceptions = this.serviceExceptionFormat(formats);
         var records = [];
-        
+
         if(url &amp;&amp; layers) {
             var fields = this.getFields();
             var layer, metadata, options, params, field, v;
@@ -201,18 +209,18 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     attributionMarkup : function(attribution){
         var markup = [];
-        
+
         if (attribution.logo){
             markup.push(&quot;&lt;img class='&quot;+this.attributionCls+&quot;-image' &quot;
                         + &quot;src='&quot; + attribution.logo.href + &quot;' /&gt;&quot;);
         }
-        
+
         if (attribution.title) {
             markup.push(&quot;&lt;span class='&quot;+ this.attributionCls + &quot;-title'&gt;&quot;
                         + attribution.title
                         + &quot;&lt;/span&gt;&quot;);
         }
-        
+
         if(attribution.href){
             for(var i = 0; i &lt; markup.length; i++){
                 markup[i] = &quot;&lt;a class='&quot;

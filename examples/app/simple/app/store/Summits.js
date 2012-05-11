@@ -1,8 +1,8 @@
 /**
  * The store used for summits
  */
-Ext.define('GX.store.Summits', {
+Ext.define('CF.store.Summits', {
     extend: 'GeoExt.data.FeatureStore',
-    model: 'GX.model.Summit',
-    autoLoad: true
+    model: 'CF.model.Summit',
+    autoLoad: false
 });

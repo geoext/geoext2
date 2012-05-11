@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include GeoExt/Form.js
+ */
+
+<span id='GeoExt-form-action-Search'>/**
+</span> * A specific `Ext.form.action.Action` to be used when using a form to
+ * trigger search requests using an `OpenLayers.Protocol`.
+ *
+ * When run this action builds an `OpenLayers.Filter` from the form
+ * and passes this filter to its protocol's read method. The form fields
+ * must be named after a specific convention, so that an appropriate 
+ * `OpenLayers.Filter.Comparison` filter is created for each
+ * field.
+ *
+ * For example a field with the name `foo__like` would result in an
+ * `OpenLayers.Filter.Comparison` of type
+ * `OpenLayers.Filter.Comparison.LIKE` being created.
+ *
+ * Here is the convention:
+ *
+ * * `&lt;name&gt;__eq: OpenLayers.Filter.Comparison.EQUAL_TO`
+ * * `&lt;name&gt;__ne: OpenLayers.Filter.Comparison.NOT_EQUAL_TO`
+ * * `&lt;name&gt;__lt: OpenLayers.Filter.Comparison.LESS_THAN`
+ * * `&lt;name&gt;__le: OpenLayers.Filter.Comparison.LESS_THAN_OR_EQUAL_TO`
+ * * `&lt;name&gt;__gt: OpenLayers.Filter.Comparison.GREATER_THAN`
+ * * `&lt;name&gt;__ge: OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO`
+ * * `&lt;name&gt;__like: OpenLayers.Filter.Comparison.LIKE`
+ *
+ * In most cases your would not directly create `GeoExt.form.action.Search`
+ * objects, but use `GeoExt.form.FormPanel` instead.
+ *
+ * Sample code showing how to use a GeoExt Search Action with an Ext
+ * form panel:
+ * 
+&lt;pre&gt;&lt;code&gt;
+var formPanel = Ext.create('Ext.form.Panel', {
+    renderTo: &quot;formpanel&quot;,
+    items: [{
+        xtype: &quot;textfield&quot;,
+        name: &quot;name__like&quot;,
+        value: &quot;mont&quot;
+    }, {
+        xtype: &quot;textfield&quot;,
+        name: &quot;elevation__ge&quot;,
+        value: &quot;2000&quot;
+    }]
+});
+
+var searchAction = Ext.create('GeoExt.form.action.Search', {
+    form: formPanel.getForm(),
+    protocol: new OpenLayers.Protocol.WFS({
+        url: &quot;http://publicus.opengeo.org/geoserver/wfs&quot;,
+        featureType: &quot;tasmania_roads&quot;,
+        featureNS: &quot;http://www.openplans.org/topp&quot;
+    }),
+    abortPrevious: true
+});
+
+formPanel.getForm().doAction(searchAction, {
+    callback: function(response) {
+        // response.features includes the features read
+        // from the server through the protocol
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+ */
+Ext.define('GeoExt.form.action.Search', {
+    extend: 'Ext.form.Action',
+    alternateClassName: 'GeoExt.form.SearchAction',
+    alias: 'formaction.search',
+    requires: ['GeoExt.Form'],
+
+<span id='GeoExt-form-action-Search-property-type'>    /**
+</span>     * @property {String}
+     * The action type string.
+     * @private
+     */
+    type: &quot;search&quot;,
+
+<span id='GeoExt-form-action-Search-property-response'>    /**
+</span>     * @property {OpenLayers.Protocol.Response} response
+     *  `OpenLayers.Protocol.Response` A reference to the response
+     *  resulting from the search request. Read-only.
+     */
+
+<span id='GeoExt-form-action-Search-cfg-protocol'>    /**
+</span>     * @cfg {OpenLayers.Protocol} protocol
+     * The protocol to use for search requests.
+     */
+<span id='GeoExt-form-action-Search-property-protocol'>    /**
+</span>     * @property {OpenLayers.Protocol} protocol
+     * The protocol.
+     */
+
+<span id='GeoExt-form-action-Search-cfg-readOptions'>    /**
+</span>     * @cfg {Object} readOptions
+     * (optional) Extra options passed to the protocol's read method.
+     */
+
+<span id='GeoExt-form-action-Search-cfg-callback'>    /**
+</span>     * @cfg {Function} callback
+     * (optional) Callback function called when the response is
+     * received.
+     */
+
+<span id='GeoExt-form-action-Search-cfg-scope'>    /**
+</span>     * @cfg {Object} scope
+     * (optional) Scope {@link #callback}.
+     */
+
+<span id='GeoExt-form-action-Search-cfg-abortPrevious'>    /**
+</span>     * @cfg {Boolean} abortPrevious
+     * If set to true, the abort method will be called on the protocol
+     * if there's a pending request. Default is `false`.
+     */
+
+<span id='GeoExt-form-action-Search-method-run'>    /**
+</span>     * Run the action.
+     * @private
+     */
+    run: function() {
+        var form = this.form,
+            f = GeoExt.Form.toFilter(form, this.logicalOp, this.wildcard);
+        if(this.clientValidation === false || form.isValid()){
+
+            if (this.abortPrevious &amp;&amp; form.prevResponse) {
+                this.protocol.abort(form.prevResponse);
+            }
+
+            this.form.prevResponse = this.protocol.read(
+                Ext.applyIf({
+                    filter: f,
+                    callback: this.handleResponse,
+                    scope: this
+                }, this.readOptions)
+            );
+
+        } else if(this.clientValidation !== false){
+            // client validation failed
+            this.failureType = Ext.form.action.Action.CLIENT_INVALID;
+            form.afterAction(this, false);
+        }
+    },
+
+<span id='GeoExt-form-action-Search-method-handleResponse'>    /**
+</span>     * Handle the response to the search query.
+     * @param {OpenLayers.Protocol.Response} response The response object.
+     * @private
+     */
+    handleResponse: function(response) {
+        var form = this.form;
+        form.prevResponse = null;
+        this.response = response;
+        if(response.success()) {
+            form.afterAction(this, true);
+        } else {
+            form.afterAction(this, false);
+        }
+        if(this.callback) {
+            this.callback.call(this.scope, response);
+        }
+    }
+});
+</pre>
+</body>
+</html>

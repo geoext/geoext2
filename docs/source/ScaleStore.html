@@ -15,24 +15,41 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-data-ScaleStore'>/**
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include OpenLayers/Util.js
+ * @include GeoExt/data/ScaleModel.js
+ * @include GeoExt/panel/Map.js
+ */
+
+<span id='GeoExt-data-ScaleStore'>/**
 </span> * @class GeoExt.data.ScaleStore
  * A store that contains a cache of available zoom levels.  The store can
  * optionally be kept synchronized with an {OpenLayers.Map} or
  * {GeoExt.panel.Map} object.
  */
 Ext.define('GeoExt.data.ScaleStore', {
-    requires: ['GeoExt.data.ScaleModel', 'GeoExt.panel.Map'],
+    requires: [
+        'GeoExt.data.ScaleModel', 
+        'GeoExt.panel.Map'
+    ],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.ScaleModel',
 
-<span id='GeoExt-data-ScaleStore-cfg-map'>    /** 
+<span id='GeoExt-data-ScaleStore-cfg-map'>    /**
 </span>     * @cfg {OpenLayers.Map/GeoExt.panel.Map}
      * Optional map or map panel from which to derive scale values.
      */
     map: null,
 
-<span id='GeoExt-data-ScaleStore-method-constructor'>    /** 
+<span id='GeoExt-data-ScaleStore-method-constructor'>    /**
 </span>     * Construct a ScaleStore from a configuration.  The ScaleStore accepts
      * some custom parameters addition to the fields accepted by Ext.Store.
      * @private
@@ -47,7 +64,7 @@ Ext.define('GeoExt.data.ScaleStore', {
         }
     },
 
-<span id='GeoExt-data-ScaleStore-method-bind'>    /** 
+<span id='GeoExt-data-ScaleStore-method-bind'>    /**
 </span>     * Bind this store to a map; that is, maintain the zoom list in sync with
      * the map's current configuration.  If the map does not currently have a
      * set scale list, then the store will remain empty until the map is

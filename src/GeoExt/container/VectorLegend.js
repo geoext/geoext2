@@ -1,9 +1,14 @@
 /*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
+ */
+
+/*
+ * @requires GeoExt/container/LayerLegend.js
+ * @include GeoExt/FeatureRenderer.js
  */
 
 /**
@@ -11,12 +16,15 @@
  * @class GeoExt.container.VectorLegend
  */
 Ext.define('GeoExt.container.VectorLegend', {
-    extend : 'GeoExt.container.LayerLegend',
-    alias : 'widget.gx_vectorlegend',
-    requires: ['Ext.layout.container.Column', 'GeoExt.FeatureRenderer'],
-    alternateClassName : 'GeoExt.VectorLegend',
+    extend: 'GeoExt.container.LayerLegend',
+    alias: 'widget.gx_vectorlegend',
+    requires: [
+        'Ext.layout.container.Column', 
+        'GeoExt.FeatureRenderer'
+    ],
+    alternateClassName: 'GeoExt.VectorLegend',
     
-    statics : {
+    statics: {
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.Vector ? 1 : 0;
         }

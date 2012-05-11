@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='global-property-'>/**
+</span> * @require GeoExt/tree/LayerContainer.js
+ */
+
+<span id='GeoExt-tree-BaseLayerContainer'>/**
+</span> * @class
+ * A layer node plugin that will collect all base layers of an OpenLayers
+ * map. Only layers that have displayInLayerSwitcher set to true will be
+ * included. The childrens' iconCls defaults to
+ * &quot;gx-tree-baselayer-icon&quot; and the node' text defaults to
+ * &quot;Base Layer&quot;.
+ * 
+ * Children will be rendered with a radio button instead of a checkbox,
+ * showing the user that only one base layer can be active at a time.
+ * 
+ * To use this node plugin in a tree node config, configure a node like this:
+ *
+ * @example
+ * {plugins: &quot;gx_baselayercontainer&quot;, text: &quot;My base layers&quot;} 
+ */
+Ext.define('GeoExt.tree.BaseLayerContainer', {
+    extend: 'GeoExt.tree.LayerContainer',
+    alias: 'plugin.gx_baselayercontainer',
+    
+<span id='GeoExt-tree-BaseLayerContainer-property-defaultText'>    /**
+</span>     * @private
+     * The default text for the target node.
+     */
+    defaultText: 'Base Layers',
+    
+<span id='GeoExt-tree-BaseLayerContainer-method-init'>    /**
+</span>     * @private
+     */
+    init: function(target) {
+        var me = this;
+        
+        var loader = me.loader;
+
+        me.loader = Ext.applyIf(loader || {}, {
+            baseAttrs: Ext.applyIf((loader &amp;&amp; loader.baseAttrs) || {}, {
+                iconCls: 'gx-tree-baselayer-icon',
+                checkedGroup: 'baselayer'
+            }),
+            filter: function(record) {
+                var layer = record.getLayer();
+                return layer.displayInLayerSwitcher === true &amp;&amp;
+                    layer.isBaseLayer === true;
+            }
+        });
+        me.callParent(arguments);
+    }
+});
+</pre>
+</body>
+</html>

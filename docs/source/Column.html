@@ -15,11 +15,19 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-tree-Column'>/**
-</span> * Provides indentation and folder structure markup for a Tree taking into account
- * depth and position within the tree hierarchy.
- * 
- * @private
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+<span id='GeoExt-tree-Column'>/**
+</span> * @class
+ * A subclass of {@link Ext.tree.Column}, which provides indentation and 
+ * folder structure markup for a Tree, taking into account depth and 
+ * position within the tree hierarchy.
  */
 Ext.define('GeoExt.tree.Column', {
     extend: 'Ext.tree.Column',
@@ -30,7 +38,7 @@ Ext.define('GeoExt.tree.Column', {
 
         me.callParent();
 
-        var parentRenderer = this.renderer;
+        var parentRenderer = me.renderer;
 
         this.renderer = function(value, metaData, record, rowIdx, colIdx, store, view) {
 
@@ -40,6 +48,10 @@ Ext.define('GeoExt.tree.Column', {
             if(record.get('checkedGroup')) {
                 buf[0] = buf[0].replace(/class=&quot;([^-]+)-tree-checkbox([^&quot;]+)?&quot;/, 'class=&quot;$1-tree-checkbox$2 gx-tree-radio&quot;'); //&quot;
             }
+
+            // Addd a hook to add other components in the tree like legend icons
+            buf.push('&lt;div class=&quot;gx-tree-component gx-tree-component-off&quot; id=&quot;tree-record-'+record.id+'&quot;&gt;&lt;/div&gt;');
+
 
             if(record.uiProvider &amp;&amp; record.uiProvider instanceof 'string') {
                 

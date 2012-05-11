@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include OpenLayers/Format/WFSDescribeFeatureType.js
+ */
+
+<span id='GeoExt-data-reader-Attribute'>/**
+</span> * A reader to create model objects from a DescribeFeatureType structure. Uses
+ * `OpenLayers.Format.WFSDescribeFeatureType` internally for the parsing.
+ *
+ * Example:
+&lt;pre&gt;&lt;code&gt;
+Ext.define('My.model.Model', {
+    field: ['name', 'type'],
+    proxy: {
+        type: 'ajax',
+        url: 'http://wftgetfeaturetype',
+        reader: {
+            type: 'gx_attribute'
+        }
+    }
+});
+&lt;/code&gt;&lt;/pre&gt; 
+ * `gx_attribute` is the alias to the Attribute reader.
+ *
+ * 
+ */
+
+Ext.define('GeoExt.data.reader.Attribute', {
+    extend: 'Ext.data.reader.Json',
+    requires: ['Ext.data.Field'],
+    alternateClassName: 'GeoExt.data.AttributeReader',
+    alias: 'reader.gx_attribute',
+
+    config: {
+<span id='GeoExt-data-reader-Attribute-cfg-format'>        /**
+</span>         * @cfg {OpenLayers.Format} format
+         * A parser for transforming the XHR response
+         * into an array of objects representing attributes.  Defaults to
+         * `OpenLayers.Format.WFSDescribeFeatureType` parser.
+         */
+        format: null,
+
+<span id='GeoExt-data-reader-Attribute-cfg-ignore'>        /**
+</span>         * @cfg {Object} ignore
+         * Properties of the ignore object should be field names.
+         * Values are either arrays or regular expressions.
+         */
+        ignore: null,
+
+<span id='GeoExt-data-reader-Attribute-cfg-feature'>        /**
+</span>         * @cfg {OpenLayers.Feature.Vector} feature
+         * A vector feature. If provided records created by the reader will
+         * include a field named &quot;value&quot; referencing the attribute value as
+         * set in the feature.
+         */
+        feature: null
+    },
+    
+<span id='GeoExt-data-reader-Attribute-method-constructor'>    /**
+</span>     * Create a new reader.
+     * @param {Object} config (optional) Config object.
+     */
+    constructor: function(config) {
+        if (!this.model) {
+            this.model = 'GeoExt.data.AttributeModel';
+        }
+        
+        this.callParent([config]);
+
+        if (this.feature) {
+            this.setFeature(this.feature);
+        }
+    },
+    
+    applyFeature: function(feature) {
+        var f = Ext.create('Ext.data.Field', {
+            name: &quot;value&quot;,
+            defaultValue: undefined // defaultValue defaults to &quot;&quot;
+                                    // in Ext.data.Field, we may 
+                                    // need to change that...
+        });
+        this.model.prototype.fields.add(f);
+        return feature;
+    },
+
+<span id='GeoExt-data-reader-Attribute-method-getResponseData'>    /** 
+</span>     * Function called by the parent to deserialize a DescribeFeatureType
+     * response into Model objects.
+     * @param {Object} request The XHR object that contains the
+     * DescribeFeatureType response.
+     */
+    getResponseData: function(request) {
+        var data = request.responseXML;
+        if(!data || !data.documentElement) {
+            data = request.responseText;
+        }
+        return this.readRecords(data);
+    },
+
+<span id='GeoExt-data-reader-Attribute-method-readRecords'>    /**
+</span>     * Function called by 
+     * {@link Ext.data.reader.Reader#read Ext.data.reader.Reader's read method} 
+     * to do the actual deserialization.
+     *
+     * @param {DOMElement/String/Array} data A document element or XHR
+     * response string.  As an alternative to fetching attributes data from
+     * a remote source, an array of attribute objects can be provided given
+     * that the properties of each attribute object map to a provided field
+     * name.
+     */
+    readRecords: function(data) {
+        if (!this.getFormat()) {
+            this.setFormat(new OpenLayers.Format.WFSDescribeFeatureType());
+        }
+        var attributes;
+        if(data instanceof Array) {
+            attributes = data;
+        } else {
+            // only works with one featureType in the doc
+            attributes = this.getFormat().read(data).featureTypes[0].properties;
+        }
+        var feature = this.feature;
+        var fields = this.model.prototype.fields;
+        var numFields = fields.length;
+        var attr, values, name, record, ignore, value, field, records = [];
+        for(var i=0, len=attributes.length; i&lt;len; ++i) {
+            ignore = false;
+            attr = attributes[i];
+            values = {};
+            for(var j=0; j&lt;numFields; ++j) {
+                field = fields.items[j];
+                name = field.name;
+                value = attr[name];
+                if(this.ignoreAttribute(name, value)) {
+                    ignore = true;
+                    break;
+                }
+                values[name] = value;
+            }
+            if(feature) {
+                value = feature.attributes[values.name];
+                if(value !== undefined) {
+                    if(this.ignoreAttribute(&quot;value&quot;, value)) {
+                        ignore = true;
+                    } else {
+                        values.value = value;
+                    }
+                }
+            }
+            if(!ignore) {
+                records[records.length] = values;
+            }
+        }
+        return this.callParent([records]);
+    },
+
+<span id='GeoExt-data-reader-Attribute-method-ignoreAttribute'>    /** 
+</span>     * Determine if the attribute should be ignored.
+     * @param {String} name The field name.
+     * @param {String} value The field value.
+     * @return {Boolean} True if the attribute should be ignored.
+     */
+    ignoreAttribute: function(name, value) {
+        var ignore = false;
+        if(this.ignore &amp;&amp; this.ignore[name]) {
+            var matches = this.ignore[name];
+            if(typeof matches == &quot;string&quot;) {
+                ignore = (matches === value);
+            } else if(matches instanceof Array) {
+                ignore = (matches.indexOf(value) &gt; -1);
+            } else if(matches instanceof RegExp) {
+                ignore = (matches.test(value));
+            }
+        }
+        return ignore;
+    }
+});
+</pre>
+</body>
+</html>

@@ -1,14 +1,21 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
+/*
+ * @include OpenLayers/Format/WFSCapabilities.js
+ * @include OpenLayers/Protocol/WFS.js
+ * @include OpenLayers/Strategy/Fixed.js
+ * @include OpenLayers/Layer/Vector.js
+ */
+
 /**
  * @class GeoExt.data.reader.WfsCapabilities
- * Data reader class to create {GeoExt.data.WfsCapabilitiesLayerModel[]} 
+ * Data reader class to create {GeoExt.data.WfsCapabilitiesLayerModel[]}
  * from a WFS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WfsCapabilities', {
@@ -30,7 +37,9 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
         }
     },
 
-    /** 
+    /**
+     * Gets the records.
+     *
      * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}
@@ -91,7 +100,7 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
                     featureNS: featureType.featureNS
                 };
                 if(this.protocolOptions) {
-                    Ext.apply(protocolOptions, this.protocolOptions, 
+                    Ext.apply(protocolOptions, this.protocolOptions,
                         protocolDefaults);
                 } else {
                     Ext.apply(protocolOptions, {}, protocolDefaults);
