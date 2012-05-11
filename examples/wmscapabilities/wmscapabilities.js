@@ -15,6 +15,7 @@
 var store;
 
 Ext.require([
+    'Ext.data.writer.Json',
     'Ext.grid.Panel',
     'GeoExt.data.reader.WmsCapabilities',
     'GeoExt.data.WmsCapabilitiesLayerStore',
