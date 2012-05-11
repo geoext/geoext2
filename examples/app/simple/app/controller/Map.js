@@ -29,6 +29,8 @@ Ext.define('GX.controller.Map', {
     },
 
     onMapPanelBeforeRender: function(mapPanel, options) {
+        var me = this;
+
         var layers = [];
 
         // OpenLayers object creating
@@ -75,12 +77,20 @@ Ext.define('GX.controller.Map', {
         layers.push(vecLayer);
 
         // manually bind store to layer
-        this.getSummitsStore().bind(vecLayer);
+        me.getSummitsStore().bind(vecLayer);
 
         mapPanel.map.addLayers(layers);
 
         // some more controls
         mapPanel.map.addControls([new OpenLayers.Control.Zoom()]);
+
+        mapPanel.map.addControls([new OpenLayers.Control.DragFeature(vecLayer, {
+            autoActivate: true,
+            onComplete: function(feature, px) {
+                var store = me.getSummitsStore();
+                store.fireEvent('update', store, store.getByFeature(feature));
+            }
+        })]);
 
         // for dev purpose
         map = mapPanel.map;
