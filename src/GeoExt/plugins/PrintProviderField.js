@@ -6,71 +6,61 @@
  * of the license.
  */
 
-/** api: (define)
- *  module = GeoExt.plugins
- *  class = PrintProviderField
- *  base_link = `Ext.util.Observable <http://dev.sencha.com/deploy/dev/docs/?class=Ext.util.Observable>`_
- */
-
-/** api: example
+/** 
+ *  @class GeoExt.plugins.PrintProviderField
+ *  
+ *  A plugin for Ext.form.Field components which provides synchronization
+ *  with a GeoExt.data.PrintProvider.
+ *  
  *  A form with combo boxes for layout and resolution, and a text field for a
  *  map title. The latter is a custom parameter to the print module, which is
  *  a default for all print pages. For setting custom parameters on the page
- *  level, use :class:`GeoExt.plugins.PrintPageField`):
+ *  level, use GeoExt.plugins.PrintPageField.
  * 
- *  .. code-block:: javascript
  *     
- *      var printProvider = new GeoExt.data.PrintProvider({
- *          capabilities: printCapabilities
- *      });
- *      new Ext.form.FormPanel({
- *          renderTo: "form",
- *          width: 200,
- *          height: 300,
- *          items: [{
- *              xtype: "combo",
- *              displayField: "name",
- *              store: printProvider.layouts, // printProvider.layout
- *              fieldLabel: "Layout",
- *              typeAhead: true,
- *              mode: "local",
- *              forceSelection: true,
- *              triggerAction: "all",
- *              selectOnFocus: true,
- *              plugins: new GeoExt.plugins.PrintProviderField({
- *                  printProvider: printProvider
- *              })
- *          }, {
- *              xtype: "combo",
- *              displayField: "name",
- *              store: printProvider.dpis, // printProvider.dpi
- *              fieldLabel: "Resolution",
- *              typeAhead: true,
- *              mode: "local",
- *              forceSelection: true,
- *              triggerAction: "all",
- *              selectOnFocus: true,
- *              plugins: new GeoExt.plugins.PrintProviderField({
- *                  printProvider: printProvider
- *              })
- *          }, {
- *              xtype: "textfield",
- *              name: "mapTitle", // printProvider.customParams.mapTitle
- *              fieldLabel: "Map Title",
- *              plugins: new GeoExt.plugins.PrintProviderField({
- *                  printProvider: printProvider
- *              })
- *          }]
- *      }):
+ *     var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+ *         capabilities: printCapabilities
+ *     });
+ *     Ext.create('Ext.form.FormPanel', {
+ *         renderTo: "form",
+ *         width: 200,
+ *         height: 300,
+ *         items: [{
+ *             xtype: "combo",
+ *             displayField: "name",
+ *             store: printProvider.layouts, // printProvider.layout
+ *             fieldLabel: "Layout",
+ *             typeAhead: true,
+ *             mode: "local",
+ *             forceSelection: true,
+ *             triggerAction: "all",
+ *             selectOnFocus: true,
+ *             plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+ *                 printProvider: printProvider
+ *             })
+ *         }, {
+ *             xtype: "combo",
+ *             displayField: "name",
+ *             store: printProvider.dpis, // printProvider.dpi
+ *             fieldLabel: "Resolution",
+ *             typeAhead: true,
+ *             mode: "local",
+ *             forceSelection: true,
+ *             triggerAction: "all",
+ *             selectOnFocus: true,
+ *             plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+ *                 printProvider: printProvider
+ *             })
+ *         }, {
+ *             xtype: "textfield",
+ *             name: "mapTitle", // printProvider.customParams.mapTitle
+ *             fieldLabel: "Map Title",
+ *             plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+ *                 printProvider: printProvider
+ *             })
+ *         }]
+ *     }):
  */
-
-/** api: constructor
- *  .. class:: PrintProviderField
- * 
- *  A plugin for ``Ext.form.Field`` components which provides synchronization
- *  with a :class:`GeoExt.data.PrintProvider`.
- */
-
 Ext.define('GeoExt.plugins.PrintProviderField', {
     mixins: {
         observable: 'Ext.util.Observable'
@@ -79,18 +69,22 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
     alias : 'widget.gx_printproviderfield',
     alternateClassName : 'GeoExt.PrintProviderField',
     
-    /** api: config[printProvider]
-     *  ``GeoExt.data.PrintProvider`` The print provider to use with this
-     *  plugin's field. Not required if set on the owner container of the
-     *  field.
+    /** 
+     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * The print provider to use with this
+     * plugin's field. Not required if set on the owner container of the
+     * field.
      */
     
-    /** private: property[target]
-     *  ``Ext.form.Field`` This plugin's target field.
+    /**
+     * @private 
+     * @property {Ext.form.Field} target
+     * This plugin's target field.
      */
     target: null,
     
-    /** private: method[constructor]
+    /** 
+     * @private
      */
     constructor: function(config) {
         this.initialConfig = config;
@@ -99,9 +93,9 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         this.callParent(arguments);
     },
     
-    /** private: method[init]
-     *  :param target: ``Ext.form.Field`` The component that this plugin
-     *      extends.
+    /** 
+     * @private
+     * @param {Ext.form.Field} target The component that this plugin extends.
      */
     init: function(target) {
         this.target = target;
@@ -115,10 +109,11 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         target.on(onCfg);
     },
     
-    /** private: method[onRender]
-     *  :param field: ``Ext.Form.Field``
-     *  
-     *  Handler for the target field's "render" event.
+    /** 
+     * Handler for the target field's "render" event.
+     *
+     * @private
+     * @param {Ext.Form.Field} field
      */
     onRender: function(field) {
         var printProvider = this.printProvider || field.ownerCt.printProvider;
@@ -139,11 +134,12 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         }
     },
     
-    /** private: method[onFieldChange]
-     *  :param field: ``Ext.form.Field``
-     *  :param record: ``Ext.data.Record`` Optional.
-     *  
-     *  Handler for the target field's "valid" or "select" event.
+    /** 
+     * Handler for the target field's "change" or "select" event.
+     * 
+     * @private
+     * @param {Ext.form.Field} field
+     * @param {Ext.data.Record} record Optional.
      */
     onFieldChange: function(field, records) {
         var record;
@@ -170,11 +166,12 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         delete this._updating;
     },
     
-    /** private: method[onProviderChange]
-     *  :param printProvider: :class:`GeoExt.data.PrintProvider`
-     *  :param rec: ``Ext.data.Record``
-     *  
-     *  Handler for the printProvider's dpichange and layoutchange event
+    /** 
+     * Handler for the printProvider's dpichange and layoutchange event
+     *
+     * @private
+     * @param {GeoExt.data.PrintProvider}  printProvider
+     * @param {Ext.data.Record}  rec
      */
     onProviderChange: function(printProvider, rec) {
         if(!this._updating) {
@@ -182,7 +179,8 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         }
     },
     
-    /** private: method[onBeforeDestroy]
+    /** 
+     * @private
      */
     onBeforeDestroy: function() {
         var target = this.target;
