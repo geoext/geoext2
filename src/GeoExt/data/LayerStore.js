@@ -261,13 +261,13 @@ Ext.define('GeoExt.data.LayerStore', {
             if (!Ext.isArray(records)) {
                 records = [records];
             }
-            this._removing = true;
-            for (var i = this.map.layers.length - 1; i >= 0; i--) {
-                this.map.removeLayer(this.map.layers[i]);
+            if(!this._addRecords) {
+                this._removing = true;
+                for (var i = this.map.layers.length - 1; i >= 0; i--) {
+                    this.map.removeLayer(this.map.layers[i]);
+                }
+                delete this._removing;
             }
-            delete this._removing;
-
-            // layers has already been added to map on "add" event
             var len = records.length;
             if (len > 0) {
                 var layers = new Array(len);
@@ -279,6 +279,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 delete this._adding;
             }
         }
+        delete this._addRecords;
     },
 
     /**
@@ -396,6 +397,20 @@ Ext.define('GeoExt.data.LayerStore', {
         var me = this;
         me.unbind();
         me.callParent();
+    },
+
+    /**
+     * Overload loadRecords to set a flag if `addRecords` is `true`
+     * in the load options. Ext JS does not pass the load options to
+     * "load" callbacks, so this is how we provide that information
+     * to `onLoad`.
+     * @private
+     */
+    loadRecords: function(records, options) {
+        if(options && options.addRecords) {
+            this._addRecords = true;
+        }
+        this.callParent(arguments);
     },
 
     /**
