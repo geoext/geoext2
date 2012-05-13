@@ -25,17 +25,17 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * Triggered before loading children. Return false to avoid
      * loading children.
      * @event beforeload
-     * @param {GeoExt.tree.LayerLoader} this loader
-     * @param {Ext.data.NodeInterface} the node that this loader is configured
-     *     with
+     * @param {GeoExt.tree.LayerLoader} this This loader.
+     * @param {Ext.data.NodeInterface} node The node that this loader is
+     * configured with.
      */
 
     /**
      * Triggered after children were loaded.
      * @event load
-     * @param {GeoExt.tree.LayerLoader} this loader
-     * @param {Ext.data.NodeInterface} the node that this loader is configured
-     *     with
+     * @param {GeoExt.tree.LayerLoader} loader This loader.
+     * @param {Ext.data.NodeInterface} node The node that this loader is
+     * configured with.
      */
 
     /**
@@ -54,10 +54,9 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * as argument. Is expected to return true for layers to be loaded, false
      * otherwise. By default, the filter checks for displayInLayerSwitcher:
      *  
-     * @example
-     * filter: function(record) {
-     *     return record.getLayer().displayInLayerSwitcher === true
-     * }
+     *     filter: function(record) {
+     *         return record.getLayer().displayInLayerSwitcher === true
+     *     }
      */
     filter: function(record) {
         return record.getLayer().displayInLayerSwitcher === true;
@@ -133,9 +132,9 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * Adds a child node representing a layer of the map
      *
      * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
-     *     will be added to as child.
+     * will be added to as child.
      * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
-     *     the layer to be added.
+     * the layer to be added.
      * @param {Integer} index Optional index for the new layer.  Default is 0.
      *
      * @private
@@ -167,9 +166,9 @@ Ext.define('GeoExt.tree.LayerLoader', {
     /**
      * Removes a child node representing a layer of the map
      * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
-     *     will be removed from as child.
+     * will be removed from as child.
      * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
-     *     the layer to be removed.
+     * the layer to be removed.
      *
      * @private
      */
