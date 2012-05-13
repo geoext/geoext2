@@ -20,11 +20,8 @@
  */
 Ext.define('GeoExt.tree.LayerContainer', {
     extend: 'Ext.AbstractPlugin',
-    mixins: ['Ext.util.Observable'],
     requires: [
-        'Ext.data.NodeInterface',
-        'GeoExt.tree.LayerLoader',
-        'GeoExt.data.Loader'
+        'GeoExt.tree.LayerLoader'
     ],
     alias: 'plugin.gx_layercontainer',
     
@@ -52,7 +49,7 @@ Ext.define('GeoExt.tree.LayerContainer', {
         var loader = me.loader;
         
         me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
-            loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+            loader : new GeoExt.tree.LayerLoader(loader);
 
         target.set('container', me);
         if (!target.get('text')) {

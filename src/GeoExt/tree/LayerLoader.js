@@ -7,9 +7,7 @@
  */
 
 /*
- * @include GeoExt/panel/Map.js
  * @include GeoExt/tree/LayerNode.js
- * @include GeoExt/tree/LayerContainer.js
  */
 
 /**
@@ -21,9 +19,7 @@
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
     requires: [
-        'GeoExt.panel.Map', 
-        'GeoExt.tree.LayerNode', 
-        'GeoExt.tree.LayerContainer'
+        'GeoExt.tree.LayerNode'
     ],
 
     /**
@@ -57,11 +53,11 @@ Ext.define('GeoExt.tree.LayerLoader', {
      *  
      * @example
      * filter: function(record) {
-     *     return record.getLayer().displayInLayerSwitcher == true
+     *     return record.getLayer().displayInLayerSwitcher === true
      * }
      */
     filter: function(record) {
-        return record.getLayer().displayInLayerSwitcher == true;
+        return record.getLayer().displayInLayerSwitcher === true;
     },
     
     /** api: config[baseAttrs]
@@ -143,7 +139,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             var layer = layerRecord.getLayer();
             var child = this.createNode({
                 plugins: [{
-                    ptype: 'gx_layer',
+                    ptype: 'gx_layer'
                 }],
                 layer: layer,
                 text: layer.name,
@@ -193,7 +189,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
      *  changed parents.
      */
     onChildMove: function(tree, node, oldParent, newParent, index) {
-        this._reordering = true;
+        /*this._reordering = true;
         // remove the record and re-insert it at the correct index
         var record = this.store.getByLayer(node.get('layer'));
 
@@ -240,7 +236,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             }
             delete newParent.loader._reordering;
         }
-        delete this._reordering;
+        delete this._reordering;*/
     },
     
     /** private: method[addStoreHandlers]
