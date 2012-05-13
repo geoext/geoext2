@@ -146,10 +146,11 @@ Ext.application({
                         }],
                         expanded: true
                     }, {
-                        plugins: ['gx_baselayercontainer'], expanded: true
+                        plugins: ['gx_baselayercontainer'],
+                        expanded: true,
+                        text: "Base Maps"
                     }, {
                         plugins: ['gx_overlaylayercontainer'],
-                        text: "Base Maps",
                         expanded: true
                     }
                 ]
