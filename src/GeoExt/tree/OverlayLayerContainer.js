@@ -13,12 +13,7 @@
 /**
  * A layer node plugin that will collect all base layers of an OpenLayers
  * map. Only layers that have displayInLayerSwitcher set to true will be
- * included. The childrens' iconCls defaults to
- * "gx-tree-baselayer-icon" and the node' text defaults to
- * "Base Layer".
- * 
- * Children will be rendered with a radio button instead of a checkbox,
- * showing the user that only one base layer can be active at a time.
+ * included. The node's text defaults to 'Overlays'.
  * 
  * To use this node plugin in a tree node config, configure a node like this:
  *     {plugins: "gx_overlaylayercontainer", text: "My overlays"} 
@@ -42,10 +37,6 @@ Ext.define('GeoExt.tree.OverlayLayerContainer', {
         var loader = me.loader;
 
         me.loader = Ext.applyIf(loader || {}, {
-            baseAttrs: Ext.applyIf((loader && loader.baseAttrs) || {}, {
-                iconCls: 'gx-tree-baselayer-icon',
-                checkedGroup: 'baselayer'
-            }),
             filter: function(record) {
                 var layer = record.getLayer();
                 return !(layer.displayInLayerSwitcher === true &&
