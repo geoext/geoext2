@@ -755,6 +755,72 @@
             t.ok(mapPanel.items.get(0).getEl().dom.parentNode === Ext.query(".olMapViewport", mapPanel.map.div)[0], "MapPanel item has the map's viewport div as parent.");
             mapPanel.destroy();
         }
+        function test_destroyInTabbedPanelTest(t) {
+
+            t.plan(3);
+
+         var layers = [ new OpenLayers.Layer("foo", {
+             visibility : true
+         }), new OpenLayers.Layer("bar", {
+             visibility : false
+         }) ];
+         
+         var panel = Ext.create('Ext.tab.Panel', {
+             renderTo : 'mappanel',
+             config : {
+                 items : [  ]
+             }
+         });
+         
+         var mappanel = Ext.create('GeoExt.panel.Map', {
+             stateId : "map",
+             height : 400,
+             width : 600,
+             layers : layers,
+             center : [ 5, 45 ],
+             zoom : 6,
+             items : {
+                 xtype : "gx_zoomslider",
+                 ref : "zoomSlider"
+             }
+         });
+         
+         panel.add(mappanel);
+         panel.removeAll();
+         mappanel.destroy();
+         t.eq(panel.items.length, 0,
+         "Panel destroy was successful");
+         
+         layers = [ new OpenLayers.Layer("foo", {
+             visibility : true
+         }), new OpenLayers.Layer("bar", {
+             visibility : false
+         }) ];
+         mappanel = Ext.create('GeoExt.panel.Map', {
+             stateId : "map",
+             height : 400,
+             width : 600,
+             layers : layers,
+             center : [ 5, 45 ],
+             zoom : 6,
+             items : {
+                 xtype : "gx_zoomslider",
+                 ref : "zoomSlider"
+             }
+         });
+         panel.add(mappanel);
+         t.eq(panel.items.length, 1,
+         "Panel added successful");
+         panel.removeAll();
+         mappanel.destroy();
+         t.eq(panel.items.length, 0,
+         "Panel destroy was successful");
+         
+         
+          
+
+     }
+
     </script>
   </head>
   <body>
