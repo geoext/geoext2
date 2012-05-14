@@ -14,6 +14,25 @@
  * A loader that will load layers from a GeoExt.data.LayerStore.
  * By default, only layers that have displayInLayerSwitcher set to true will be
  * included. The childrens' iconCls defaults to "gx-tree-layer-icon".
+ *
+ * Example:
+ *     var loader = Ext.create('GeoExt.tree.LayerLoader', {
+ *         baseAttrs: {
+ *             iconCls: 'baselayer-icon',
+ *             checkedGroup: 'baselayer'
+ *         },
+ *         filter: function(record) {
+ *             var layer = record.getLayer();
+ *             return
+ *                 layer.displayInLayerSwitcher === true &&
+ *                 layer.isBaseLayer === true;
+ *         }
+ *     });
+ *
+ * The above creates a loader which only loads base layers, and configures
+ * its nodes with the 'baselayer-icon' icon class and the 'baselayer' group.
+ * This is basically the same loader that the GeoExt.tree.BaseLayerContainer
+ * uses.
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
