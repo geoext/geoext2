@@ -83,12 +83,12 @@ Ext.application({
             title: "Layers",
             width: 250,
             autoScroll: true,
-            // apply the tree node component plugin to layer nodes
-            /*viewConfig: {
+            viewConfig: {
                 plugins: [{
-                    ptype: 'gx_treenodecomponent'
+                    ptype: 'treeviewdragdrop',
+                    appendOnly: false
                 }]
-            },*/
+            },
             store: store,
             rootVisible: false,
             lines: false

@@ -172,12 +172,6 @@ Ext.application({
             store: store,
             rootVisible: false,
             lines: false,
-            viewConfig: {
-                plugins: [{
-                    ptype: 'treeviewdragdrop',
-                    appendOnly: false
-                }]
-            },
             tbar: [{
                 text: "remove",
                 handler: function() {
