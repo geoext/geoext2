@@ -17,6 +17,25 @@
  * layers that have displayInLayerSwitcher set to true will be included.
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
  * text defaults to "Layers".
+ *
+ * To create a tree node that holds the layers of a tree, it needs to be
+ * configured with the gx_layercontainer plugin that this class provides - like
+ * the root node in the example below:
+ *
+ *     var mapPanel = Ext.create('GeoExt.panel.Map', {
+ *         layers: [new OpenLayers.Layer('foo)]
+ *     });
+ *     
+ *     var treeStore = Ext.create('Ext.data.TreeStore', {
+ *         model: 'GeoExt.data.LayerTreeModel',
+ *         root: {
+ *             plugins: [{
+ *                 ptype: 'gx_layercontainer',
+ *                 loader: {store: mapPanel.layers}
+ *             }],
+ *             expanded: true
+ *         }
+ *     });
  */
 Ext.define('GeoExt.tree.LayerContainer', {
     extend: 'Ext.AbstractPlugin',

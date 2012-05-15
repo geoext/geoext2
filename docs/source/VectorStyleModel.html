@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
+ * of the license.
+ */
+
+/*
+ * @include OpenLayers/Format/CQL.js
+ */
+
+<span id='GeoExt-data-VectorStyleModel'>/**
+</span> * @class GeoExt.data.VectorStyleModel
+ * &lt;p&gt;A specific model for CQL Style Rules&lt;p&gt;
+ *
+ * Preconfigured with an Ajax proxy and a JSON reader
+ */
+
+Ext.define('GeoExt.data.VectorStyleModel', {
+    extend : 'Ext.data.Model',
+    requires : ['Ext.data.JsonReader'],
+    fields : [
+        {name: &quot;elseFilter&quot;, defaultValue: null},
+        {name: &quot;symbolizers&quot;, defaultValue: null}, 
+        {name : &quot;label&quot;, mapping : &quot;title&quot; },
+        {name: &quot;filter&quot;, convertor: function(filter){
+            if (typeof filter === &quot;string&quot;) {
+                filter = filter ? OpenLayers.Format.CQL.prototype.read(filter) : null;
+            }
+            return filter;}
+        }, 
+        &quot;name&quot;, 
+        &quot;description&quot;, 
+        &quot;minScaleDenominator&quot;, 
+        &quot;maxScaleDenominator&quot;
+    ],
+    proxy : {
+        type : 'memory',
+        reader : {
+            type : 'json',
+            root : &quot;rules&quot;
+        }
+    }
+});</pre>
+</body>
+</html>
