@@ -28,25 +28,25 @@
  * reported by the print service:
  *
  * Example:
- *    var mapPanel = Ext.create('GeoExt.panel.Map', {
- *        renderTo: "mappanel",
- *        layers: [new OpenLayers.Layer.WMS("wms", "/geoserver/wms",
- *            {layers: "topp:tasmania_state_boundaries"})],
- *        center: [146.56, -41.56],
- *        zoom: 7
- *    });
- *    var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
- *        url: "/geoserver/pdf",
- *        listeners: {
- *            "loadcapabilities": function() {
- *                var printPage = new GeoExt.data.PrintPage({
- *                    printProvider: printProvider
- *                });
- *                printPage.fit(mapPanel, true);
- *                printProvider.print(mapPanel, printPage);
- *            }
- *        }
- *    });
+ *     var mapPanel = Ext.create('GeoExt.panel.Map', {
+ *         renderTo: "mappanel",
+ *         layers: [new OpenLayers.Layer.WMS("wms", "/geoserver/wms",
+ *             {layers: "topp:tasmania_state_boundaries"})],
+ *         center: [146.56, -41.56],
+ *         zoom: 7
+ *     });
+ *     var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
+ *         url: "/geoserver/pdf",
+ *         listeners: {
+ *             "loadcapabilities": function() {
+ *                 var printPage = Ext.create('GeoExt.data.PrintPage', {
+ *                     printProvider: printProvider
+ *                 });
+ *                 printPage.fit(mapPanel, true);
+ *                 printProvider.print(mapPanel, printPage);
+ *             }
+ *         }
+ *     });
  */
 Ext.define('GeoExt.data.MapfishPrintProvider', {
 	extend: 'Ext.util.Observable',
