@@ -18,7 +18,7 @@
         Ext.require([
             'Ext.Window',
             'GeoExt.panel.Map',
-            'GeoExt.data.PrintProvider',
+            'GeoExt.data.MapfishPrintProvider',
             'GeoExt.panel.PrintMap',
             'GeoExt.plugins.PrintExtent'
         ]);
@@ -31,7 +31,7 @@
         function test_ctor(t) {
             t.plan(1);
 
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             })
             
@@ -47,7 +47,7 @@
             t.plan(2);
 
             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -79,7 +79,7 @@
                      rotate: false,
                      renderIntent: "foobar"
                  },
-                 printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                 printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                      capabilities: printCapabilities
                  })
              });
@@ -107,7 +107,7 @@
             t.plan(3);
 
             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -137,7 +137,7 @@
             t.plan(4);
 
             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -189,7 +189,7 @@
  
             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
                 layer: new OpenLayers.Layer.Vector("hello world"),
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -222,7 +222,7 @@
             t.plan(2);
 
             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -270,7 +270,7 @@
             };
 
             var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 }),
                 pages: [page] 
@@ -319,7 +319,7 @@
             });
 
             printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
