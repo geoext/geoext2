@@ -16,7 +16,7 @@
  */
 
 /**
- * @class GeoExt.data.PrintProvider
+ * @class GeoExt.data.MapfishPrintProvider
  *
  * Provides an interface to a Mapfish or GeoServer print module. For printing,
  * one or more instances of {@link GeoExt.data.PrintPage} are also required
@@ -28,30 +28,28 @@
  * reported by the print service:
  *
  * Example:
-<pre><code>
-var mapPanel = Ext.create('GeoExt.MapPanel', {
-    renderTo: "mappanel",
-    layers: [new OpenLayers.Layer.WMS("wms", "/geoserver/wms",
-        {layers: "topp:tasmania_state_boundaries"})],
-    center: [146.56, -41.56],
-    zoom: 7
-});
-var printProvider = Ext.create('GeoExt.data.PrintProvider', {
-    url: "/geoserver/pdf",
-    listeners: {
-        "loadcapabilities": function() {
-            var printPage = new GeoExt.data.PrintPage({
-                printProvider: printProvider
-            });
-            printPage.fit(mapPanel, true);
-            printProvider.print(mapPanel, printPage);
-        }
-    }
-});
-</code></pre>
+ *     var mapPanel = Ext.create('GeoExt.panel.Map', {
+ *         renderTo: "mappanel",
+ *         layers: [new OpenLayers.Layer.WMS("wms", "/geoserver/wms",
+ *             {layers: "topp:tasmania_state_boundaries"})],
+ *         center: [146.56, -41.56],
+ *         zoom: 7
+ *     });
+ *     var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
+ *         url: "/geoserver/pdf",
+ *         listeners: {
+ *             "loadcapabilities": function() {
+ *                 var printPage = Ext.create('GeoExt.data.PrintPage', {
+ *                     printProvider: printProvider
+ *                 });
+ *                 printPage.fit(mapPanel, true);
+ *                 printProvider.print(mapPanel, printPage);
+ *             }
+ *         }
+ *     });
  */
-Ext.define('GeoExt.data.PrintProvider', {
-    extend: 'Ext.util.Observable',
+Ext.define('GeoExt.data.MapfishPrintProvider', {
+	extend: 'Ext.util.Observable',
     requires: ['Ext.data.JsonStore'],
 
     /**
@@ -208,7 +206,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * capabilities - `Object` the capabilities
          */
@@ -218,7 +216,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * layout - {@link Ext.data.Record} the new layout
          */
@@ -228,7 +226,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * dpi - {@link Ext.data.Record} the new dpi record
          */
@@ -239,7 +237,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * map - `OpenLayers.Map` the map being printed
          *  * pages - Array of {@link GeoExt.data.PrintPage} the print
@@ -252,7 +250,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * url - `String` the url of the print document
          */
@@ -263,7 +261,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * response - `Object` the response object of the XHR
          */
@@ -275,7 +273,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * layer - `OpenLayers.Layer` the layer which is about to be
          *    encoded.
@@ -288,7 +286,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * layer - `OpenLayers.Layer` the layer which is about to be
          *    encoded.
@@ -304,7 +302,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *  has been renamed to beforeencode.
          *
          *  Listener arguments:
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * url - `String` the url of the print document
          */
@@ -318,7 +316,7 @@ Ext.define('GeoExt.data.PrintProvider', {
          *
          *  Listener arguments:
          *
-         *  * printProvider - {@link GeoExt.data.PrintProvider} this
+         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
          *    PrintProvider
          *  * jsonData - `Object` The data that will be sent to the print
          *    server. Can be used to populate jsonData.legends.

@@ -1,4 +1,4 @@
-Ext.define('GX.view.summit.Chart', {
+Ext.define('CF.view.summit.Chart', {
     extend: 'Ext.chart.Chart',
     alias : 'widget.summitchart',
     requires: ['Ext.chart.*'],
@@ -35,7 +35,7 @@ Ext.define('GX.view.summit.Chart', {
                 fill: true,
                 listeners: {
                     itemmousedown: function(e) {
-                        GX.view.summit.Grid.selectionModel.select(e.storeItem);
+                        CF.view.summit.Grid.selectionModel.select(e.storeItem);
                     }
                 },
                 highlight: {

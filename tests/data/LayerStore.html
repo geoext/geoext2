@@ -15,6 +15,11 @@
             }
         });
 
+        Ext.require([	
+            'GeoExt.panel.Map',
+            'GeoExt.data.LayerStore'
+        ]);
+
         function createSingleMap() {
             return new OpenLayers.Map("map");
         }
@@ -83,10 +88,11 @@
         }
 
         function test_store_to_map(t) {
-
-            t.plan(8);
+            t.plan(10);
             
             var map = new OpenLayers.Map();
+            map.addLayer(new OpenLayers.Layer.Vector("z"));
+
             var layers = [new OpenLayers.Layer.Vector("a"),
                           new OpenLayers.Layer.Vector("b"),
                           new OpenLayers.Layer.Vector("c")];
@@ -96,17 +102,20 @@
                 layers: layers
             });
 
-            t.eq(store.getCount(), 3, "three layers in store");
-            t.eq(map.layers.length, 3, "three layers on map");
+            t.eq(store.getCount(), 4, "four layers in store");
+            t.eq(map.layers.length, 4, "four layers on map");
 
             t.eq(store.getAt(0).getLayer().name, "a", "first layer correct in store");
-            t.eq(map.layers[0].name, "a", "first layer correct on map");
+            t.eq(map.layers[0].name, "z", "first layer correct on map");
 
             t.eq(store.getAt(1).getLayer().name, "b", "second layer correct in store");
-            t.eq(map.layers[1].name, "b", "second layer correct on map");
+            t.eq(map.layers[1].name, "a", "second layer correct on map");
 
             t.eq(store.getAt(2).getLayer().name, "c", "third layer correct in store");
-            t.eq(map.layers[2].name, "c", "third layer correct on map");
+            t.eq(map.layers[2].name, "b", "third layer correct on map");
+
+            t.eq(store.getAt(3).getLayer().name, "z", "fourth layer correct in store");
+            t.eq(map.layers[3].name, "c", "fourth layer correct on map");
 
             store.destroy();
             map.destroy();
@@ -465,6 +474,86 @@
             map.destroy();
             
             t.eq(count, 1, "store's remove handler called once");
+        }
+
+        function test_addLayers(t) {
+            t.plan(3);
+
+            /*
+             * Set up
+             */
+
+            var map = new OpenLayers.Map();
+
+            var store = Ext.create('GeoExt.data.LayerStore', {
+                map: map
+            });
+
+            /*
+             * Test
+             */
+
+            var foo = new OpenLayers.Layer('foo');
+            store.addLayers([foo]);
+
+            var bar = new OpenLayers.Layer('bar');
+            store.addLayers([bar]);
+
+            t.eq(map.layers.length, 2, 'addLayers appends layers to map');
+            t.eq(map.layers[0].name, 'foo', '-> 1st layer in map is as expected');
+            t.eq(map.layers[1].name, 'bar', '-> 2nd layer in map is as expected');
+
+            /*
+             * Tear down
+             */
+
+            map.destroy();
+        }
+
+        function test_load(t) {
+            t.plan(7);
+
+            /*
+             * Set up
+             */
+
+            var map = new OpenLayers.Map();
+            var foo = new OpenLayers.Layer('foo');
+            map.addLayer(foo);
+
+            var bar = new OpenLayers.Layer('bar');
+            var proxy = Ext.create('Ext.data.proxy.Memory', {
+                data: [bar],
+                reader: {
+                    type: 'json'
+                }
+            });
+
+            var store = Ext.create('GeoExt.data.LayerStore', {
+                map: map,
+                proxy: proxy
+            });
+
+            t.eq(store.getCount(), 1, 'store includes one record at init state');
+            t.eq(store.getAt(0).get('title'), 'foo', '1st record in store is as expected');
+            t.eq(map.layers.length, 1, 'map includes one layer at init state');
+            t.eq(map.layers[0].name, 'foo', '1st layer in map is as expected');
+
+            /*
+             * Test
+             */
+
+            store.load({addRecords: true});
+
+            t.eq(map.layers.length, 2, 'map has two layers');
+            t.eq(map.layers[0].name, 'foo', '1st layer in map is as expected');
+            t.eq(map.layers[1].name, 'bar', '1st layer in map is as expected');
+
+            /*
+             * Tear down
+             */
+
+            map.destroy();
         }
 
     </script>

@@ -18,7 +18,7 @@
  * @class GeoExt.data.PrintPage
  *
  * Provides a representation of a print page for
- *  {@link GeoExt.data.PrintProvider}. The extent of the page is stored as
+ *  {@link GeoExt.data.MapfishPrintProvider}. The extent of the page is stored as
  *  `OpenLayers.Feature.Vector`. Widgets can use this to display the print
  *  extent on the map.
  */
@@ -29,13 +29,13 @@ Ext.define('GeoExt.data.PrintPage', {
     ],
 
     /**
-     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * @cfg {GeoExt.data.MapfishPrintProvider} printProvider
      * The print provider to use with this page.
      */
 
     /**
      * @private
-     * @property {GeoExt.data.PrintProvider} printProvider
+     * @property {GeoExt.data.MapfishPrintProvider} printProvider
      */
     printProvider: null,
 

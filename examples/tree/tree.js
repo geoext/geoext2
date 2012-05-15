@@ -1,8 +1,8 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
  * of the license.
  */
 
@@ -12,9 +12,10 @@ Ext.require([
     'GeoExt.tree.Panel',
     'Ext.tree.plugin.TreeViewDragDrop',
     'GeoExt.panel.Map',
-    'GeoExt.tree.LayerContainer',
+    'GeoExt.tree.OverlayLayerContainer',
+    'GeoExt.tree.BaseLayerContainer',
     'GeoExt.data.LayerTreeModel',
-    'GeoExt.tree.plugin.LayerTreeView',
+    'GeoExt.tree.View',
     'GeoExt.tree.Column'
 ]);
 
@@ -107,7 +108,6 @@ Ext.application({
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
         
         /*var treeConfig = [
-            {text: "myplainnode", leaf: true},
             {nodeType: 'gx_layercontainer', layerStore: map.layers}
         {
             nodeType: "gx_baselayercontainer"
@@ -139,15 +139,25 @@ Ext.application({
             root: {
                 expanded: true,
                 children: [
-                    {text: "A plain node", leaf: true},
-                    {plugins: ['gx_layercontainer']},
-                    {plugins: [{
-                        ptype: 'gx_layercontainer',
-                        layers: mapPanel.layers
-                    }], text: "My Layers", expanded: true}
+                    {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            store: mapPanel.layers
+                        }],
+                        expanded: true
+                    }, {
+                        plugins: ['gx_baselayercontainer'],
+                        expanded: true,
+                        text: "Base Maps"
+                    }, {
+                        plugins: ['gx_overlaylayercontainer'],
+                        expanded: true
+                    }
                 ]
             }
         });
+        
+        var layer;
 
         // create the tree with the configuration from above
         tree = Ext.create('GeoExt.tree.Panel', {
@@ -162,14 +172,18 @@ Ext.application({
             store: store,
             rootVisible: false,
             lines: false,
-            viewConfig: {
-                plugins: [{
-                    ptype: 'treeviewdragdrop',
-                    appendOnly: false
-                }, {
-                    ptype: 'layertreeview'
-                }]
-            }
+            tbar: [{
+                text: "remove",
+                handler: function() {
+                    layer = mapPanel.map.layers[2];
+                    mapPanel.map.removeLayer(layer);
+                }
+            }, {
+                text: "add",
+                handler: function() {
+                    mapPanel.map.addLayer(layer);
+                }
+            }]
         });
     
         Ext.create('Ext.Viewport', {

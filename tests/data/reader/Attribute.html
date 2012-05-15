@@ -137,9 +137,8 @@
         reader = Ext.create('GeoExt.data.reader.Attribute', {
             model: Model,
             feature: feature
-
         });
-        records = reader.read({responseXML : doc, responseText: 'foo'});
+        records = reader.read({responseXML: doc, responseText: 'foo'});
         record = records.records[2];
         t.eq(record.get("value"), "foo", "[1] correct attribute value");
         record = records.records[1];

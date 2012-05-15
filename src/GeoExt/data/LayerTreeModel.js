@@ -7,8 +7,41 @@
  */
 
 /**
- * Model used for trees that use GeoExt tree components.
- * @class
+ * Model for trees that use GeoExt tree components. It can also hold plain
+ * Ext JS layer nodes.
+ *
+ * This model adds several fields that are specific to tree extensions
+ * provided by GeoExt:
+ *
+ * * **plugins** Object[]: The plugins for this node.
+ * * **layer** OpenLayers.Layer: The layer this node is connected to.
+ * * **container** Ext.AbstractPlugin: The instance of a container plugin.
+ *   Read only.
+ * * **checkedGroup** String: An identifier for a group of mutually exclusive
+ *   layers. If set, the node will render with a radio button instead of a
+ *   checkbox.
+ * * **fixedText** Boolean: Used to determine if a node's name should change.
+ *   dynamically if the name of the connected layer changes, if any. Read only.
+ * * **component** Ext.Component: The component to be rendered with this node,
+ *   if any.
+ *
+ * A typical configuration that makes use of some of these extended sttings
+ * could look like this:
+ *     {
+ *         plugins: [{ptype: 'gx_layer'}],
+ *         layer: myLayerRecord.getLayer(),
+ *         checkedGroup: 'natural',
+ *         component: {
+ *             xtype: "gx_wmslegend",
+ *             layerRecord: myLayerRecord,
+ *             showTitle: false
+ *         }
+ *     }
+ *
+ * The above creates a node with a GeoExt.tree.LayerNode plugin, and connects
+ * it to a layer record that was previously assigned to the myLayerRecord
+ * variable. The node will be rendered with a GeoExt.container.WmsLegend,
+ * configured with the same layer.
  */
 Ext.define('GeoExt.data.LayerTreeModel',{
     alternateClassName: 'GeoExt.data.LayerTreeRecord',
@@ -22,26 +55,53 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         {name: 'text', type: 'string'}, 
         {name: 'plugins'},
         {name: 'layer'},
+        {name: 'container'},
         {name: 'checkedGroup', type: 'string'},
-        {name: 'fixedText', type: 'bool'}
+        {name: 'fixedText', type: 'bool'},
+        {name: 'component'}
     ],
+    proxy: {
+        type: "memory"
+    },
+    
+    /**
+     * @event afteredit
+     * Fires after the node's fields were modified.
+     * @param {GeoExt.data.LayerTreeModel} this This model instance.
+     * @param {String[]} modifiedFieldNames The names of the fields that were
+     * edited.
+     */
     
     /**
      * @private
      */
-    init: function() {
+    constructor: function(data, id, raw, convertedData) {
         var me = this;
+       
+        me.callParent(arguments);      
+        
+        window.setTimeout(function() {
+            var plugins = me.get('plugins');  
 
-        if (me.raw && me.raw.plugins) {
-            var plugins = me.raw.plugins,
-                plugin, instance;
-            for (var i=0, ii=plugins.length; i<ii; ++i) {
-                plugin = plugins[i];
-                instance = Ext.PluginMgr.create(Ext.isString(plugin) ? {
-                    ptype: plugin
-                } : plugin);
-                instance.init(me);
+            if (plugins) {
+                var plugin, instance;
+                for (var i=0, ii=plugins.length; i<ii; ++i) {
+                    plugin = plugins[i];
+                    instance = Ext.PluginMgr.create(Ext.isString(plugin) ? {
+                        ptype: plugin
+                    } : plugin);
+                    instance.init(me);
+                }
             }
-        }
+        });
+    },
+    
+    /**
+     * @private
+     */
+    afterEdit: function(modifiedFieldNames) {
+        var me = this;
+        me.callParent(arguments);
+        me.fireEvent('afteredit', this, modifiedFieldNames);
     }
 });

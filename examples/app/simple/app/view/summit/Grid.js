@@ -2,7 +2,7 @@
  * The grid in which summits are displayed
  * @extends Ext.grid.Panel
  */
-Ext.define('GX.view.summit.Grid' ,{
+Ext.define('CF.view.summit.Grid' ,{
     extend: 'Ext.grid.Panel',
     alias : 'widget.summitgrid',
     requires: [
@@ -44,9 +44,8 @@ Ext.define('GX.view.summit.Grid' ,{
                 })
             ]
         });
-        this.getSelectionModel().autoPanMapOnSelection = true;
         this.callParent(arguments);
         // store singleton selection model instance
-        GX.view.summit.Grid.selectionModel = this.getSelectionModel();
+        CF.view.summit.Grid.selectionModel = this.getSelectionModel();
     }
 });

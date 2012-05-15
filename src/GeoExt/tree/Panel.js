@@ -8,6 +8,7 @@
 
 /*
  * @include GeoExt/tree/Column.js
+ * @include GeoExt/tree/View.js
  */
 
 /**
@@ -17,6 +18,8 @@
 Ext.define('GeoExt.tree.Panel', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.gx_treepanel',
+    requires: ['GeoExt.tree.Column', 'GeoExt.tree.View'],
+    viewType: 'gx_treeview',
     
     initComponent: function() {
         var me = this;

@@ -1,11 +1,11 @@
 {
     "--title": "GeoExt 2 Docs",
     "-o": "docs",
-    // the "-extend,-link,-type_name" warning removals are used to prevent warnings 
+    // the "-extend,-link,-type_name" warning removals are used to prevent warnings
     // when the documentation is built without ExtJS
     "--warnings": "-extend,-link,-type_name",
     "--external": [
-        "Integer", "Float", 
+        "Integer", "Float",
         "OpenLayers.BaseTypes.Class",
         "OpenLayers.Util",
         "OpenLayers.Animation",
@@ -151,14 +151,14 @@
         "OpenLayers.Filter.Logical",
         "OpenLayers.Filter.Comparison",
         "OpenLayers.Filter.Spatial",
-        "OpenLayers.Filter.Function",                
+        "OpenLayers.Filter.Function",
         "OpenLayers.Protocol",
         "OpenLayers.Protocol.HTTP",
         "OpenLayers.Protocol.WFS",
         "OpenLayers.Protocol.WFS.v1",
         "OpenLayers.Protocol.WFS.v1_0_0",
         "OpenLayers.Protocol.WFS.v1_1_0",
-        "OpenLayers.Protocol.CSW", 
+        "OpenLayers.Protocol.CSW",
         "OpenLayers.Protocol.CSW.v2_0_2",
         "OpenLayers.Protocol.Script",
         "OpenLayers.Protocol.SOS",

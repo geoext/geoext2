@@ -12,20 +12,35 @@
  */
 
 /**
- * @class GeoExt.tree.LayerContainer
- * A subclass of Ext.data.Model decorated with an Ext.data.NodeInterface
- * that will collect all layers of an OpenLayers map. Only layers that
- * have displayInLayerSwitcher set to true will be included.
+ * @class
+ * A layer node plugin that will collect all layers of an OpenLayers map. Only
+ * layers that have displayInLayerSwitcher set to true will be included.
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
  * text defaults to "Layers".
+ *
+ * To create a tree node that holds the layers of a tree, it needs to be
+ * configured with the gx_layercontainer plugin that this class provides - like
+ * the root node in the example below:
+ *
+ *     var mapPanel = Ext.create('GeoExt.panel.Map', {
+ *         layers: [new OpenLayers.Layer('foo)]
+ *     });
+ *     
+ *     var treeStore = Ext.create('Ext.data.TreeStore', {
+ *         model: 'GeoExt.data.LayerTreeModel',
+ *         root: {
+ *             plugins: [{
+ *                 ptype: 'gx_layercontainer',
+ *                 loader: {store: mapPanel.layers}
+ *             }],
+ *             expanded: true
+ *         }
+ *     });
  */
 Ext.define('GeoExt.tree.LayerContainer', {
     extend: 'Ext.AbstractPlugin',
-    mixins: ['Ext.util.Observable'],
     requires: [
-        'Ext.data.NodeInterface',
-        'GeoExt.tree.LayerLoader',
-        'GeoExt.data.Loader'
+        'GeoExt.tree.LayerLoader'
     ],
     alias: 'plugin.gx_layercontainer',
     
@@ -39,9 +54,10 @@ Ext.define('GeoExt.tree.LayerContainer', {
      */
     
     /**
-     * The text for the target node.
+     * @private
+     * The default text for the target node.
      */
-    text: 'Layers',
+    defaultText: 'Layers',
     
     /**
      * @private
@@ -52,10 +68,15 @@ Ext.define('GeoExt.tree.LayerContainer', {
         var loader = me.loader;
         
         me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
-            loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+            loader : new GeoExt.tree.LayerLoader(loader);
+
+        target.set('container', me);
+        if (!target.get('text')) {
+            target.set('text', me.defaultText);
+            target.commit();
+        }
         me.loader.load(target);
         
-        Ext.applyIf(target.raw, {text: "Layers"});
     },
     
     /**
@@ -63,11 +84,11 @@ Ext.define('GeoExt.tree.LayerContainer', {
      * @param {Number} index  The record index in the layer store.
      * @returns {Number} The appropriate child node index for the record.
      */
-    recordIndexToNodeIndex: function(index) {
+    recordIndexToNodeIndex: function(index, node) {
         var me = this;
         var store = me.loader.store;
         var count = store.getCount();
-        var nodeCount = me.childNodes.length;
+        var nodeCount = node.childNodes.length;
         var nodeIndex = -1;
         for(var i=count-1; i>=0; --i) {
             if(me.loader.filter(store.getAt(i)) === true) {
@@ -78,17 +99,5 @@ Ext.define('GeoExt.tree.LayerContainer', {
             }
         }
         return nodeIndex;
-    },
-    
-    /**
-     * @private
-     */
-    destroy: function() {
-        var me = this;
-        if (!(me.initialConfig.loader instanceof GeoExt.data.Loader)) {
-            me.loader.destroy();
-        }
-        delete me.loader;
-        me.callParent();
     }
 });

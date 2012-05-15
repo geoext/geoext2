@@ -2,7 +2,7 @@
  * Map controller
  * Used to manage map layers and showing their related views
  */
-Ext.define('GX.controller.Map', {
+Ext.define('CF.controller.Map', {
     extend: 'Ext.app.Controller',
 
     models: ['Summit'],
@@ -22,7 +22,7 @@ Ext.define('GX.controller.Map', {
         });
 
         this.control({
-            'gxapp_map': {
+            'cf_mappanel': {
                 'beforerender': this.onMapPanelBeforeRender
             }
         }, this);

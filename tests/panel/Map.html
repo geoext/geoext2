@@ -132,7 +132,7 @@
         }
 
         function test_extent(t) {
-            t.plan(6);
+            t.plan(4);
 
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
@@ -186,26 +186,6 @@
                 extent: new OpenLayers.Bounds(1, 2, 3, 4)
             });
             t.eq(log.extent.toArray(), [1, 2, 3, 4], "map extent set with Bounds");
-            // since we created the map, we destroy it
-            map.destroy();
-            panel.destroy();
-            
-            map = createMap();
-            var container = new Ext.Panel({
-                renderTo: document.body,
-                layout: "fit",
-                width: 0,
-                height: 0,
-                items: [Ext.create('GeoExt.panel.Map', {
-                    map: map,
-                    extent: new OpenLayers.Bounds(1, 2, 3, 4)
-                })]
-            });
-            
-            t.eq(map.getExtent(), null, "no map extent set for a zero dimension map");
-            container.setSize(100, 100);
-            container.doLayout();
-            t.ok(map.getExtent(), "map extent set when layout is finished");
             // since we created the map, we destroy it
             map.destroy();
             panel.destroy();
@@ -328,56 +308,6 @@
                 t.fail("panel.destroy causes problems: " + err);
             }
             t.ok(!panel.map, "panel has no reference to a map");
-
-            hiddenSpan.style.display = "none";
-        }
-
-        function test_layout(t) {
-            t.plan(1);
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
-
-            var map, panel, layout = 0;
-
-            map = new OpenLayers.Map({
-                render: function() {
-                    OpenLayers.Map.prototype.render.apply(this, arguments);
-                    t.ok(layout, 1,
-                         "the OpenLayers map is rendered once the container " +
-                         "has its final dimensions");
-                    // hide the span again, which we made visible in test_extent
-                    hiddenSpan.style.display = "none";
-                },
-                allOverlays: true
-            });
-            
-            panel = new Ext.Panel({
-                layout: "border",
-                renderTo: "mappanel",
-                forceLayout: true, // for some reason the test fails
-                                   // with Ext 3 w/o this
-                width: 200,
-                height: 200,
-                listeners: {
-                    afterlayout: function() {
-                        layout++;
-                    }
-                },
-                items: [{
-                    region: "center",
-                    xtype: "gx_mappanel",
-                    map: map,
-                    layers: [
-                        new OpenLayers.Layer("")
-                    ]
-                }]
-            });
-
-            map.destroy();
-            panel.destroy();
 
             hiddenSpan.style.display = "none";
         }
@@ -752,7 +682,9 @@
                     ref: "zoomSlider"
                 }
             });
-            t.ok(mapPanel.items.get(0).getEl().dom.parentNode === Ext.query(".olMapViewport", mapPanel.map.div)[0], "MapPanel item has the map's viewport div as parent.");
+            t.ok(mapPanel.items.get(0).getEl().dom.parentNode ===
+                    Ext.query(".olMapViewport", mapPanel.map.div)[0],
+                 "Map Panel item has the map's viewport div as parent.");
             mapPanel.destroy();
         }
     </script>
