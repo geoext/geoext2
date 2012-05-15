@@ -12,6 +12,7 @@
  */
 Ext.define('GeoExt.data.proxy.Protocol', {
     extend: 'Ext.data.proxy.Server',
+    alias: 'proxy.gx_protocol',
 
     /** 
      * @cfg {OpenLayers.Protocol}
