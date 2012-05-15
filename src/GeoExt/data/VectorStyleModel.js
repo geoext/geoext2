@@ -60,5 +60,34 @@ Ext.define('GeoExt.data.VectorStyleModel', {
             type : 'json',
             root : "rules"
         }
+    },
+    /**
+     * Ensure that the symbolizers property is an array
+     * of OpenLayer.Symbolizer instances
+     * @private
+     */
+    processSymbolizers : function(symbolizers, rec) {
+        //symbolizers should be an array of OpenLayers.Symbolizer objects
+        symbolizers = ( symbolizers instanceof Array) ? symbolizers : [symbolizers];
+        for(var i = 0; i < symbolizers.length; i++) {
+            var symbolizer = symbolizers[i];
+            //due to the way that the initial data provided to a store is processed,
+            //the instanceof test no longer works and we need to clone the symbolizer
+            //for it to be recognized as a symbolizer class again
+            if(!( symbolizer instanceof OpenLayers.Symbolizer) && symbolizer.CLASS_NAME && symbolizer.clone) {
+                symbolizers[i] = symbolizer.clone();
+            }
+        }
+        return symbolizers;
+    },
+    /**
+     * Convert string CQL filters to actual CQL filter objects
+     * @private
+     */
+    processFilter : function(filter) {
+        if( typeof filter === "string") {
+            filter = filter ? OpenLayers.Format.CQL.prototype.read(filter) : null;
+        }
+        return filter;
     }
 });
