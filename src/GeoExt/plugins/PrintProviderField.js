@@ -10,7 +10,7 @@
  *  @class GeoExt.plugins.PrintProviderField
  *  
  *  A plugin for Ext.form.Field components which provides synchronization
- *  with a GeoExt.data.PrintProvider.
+ *  with a GeoExt.data.MapfishPrintProvider.
  *  
  *  A form with combo boxes for layout and resolution, and a text field for a
  *  map title. The latter is a custom parameter to the print module, which is
@@ -18,7 +18,7 @@
  *  level, use GeoExt.plugins.PrintPageField.
  * 
  *     
- *     var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+ *     var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
  *         capabilities: printCapabilities
  *     });
  *     Ext.create('Ext.form.FormPanel', {
@@ -65,12 +65,12 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    requires: ['GeoExt.data.PrintProvider', 'Ext.form.field.ComboBox'],
+    requires: ['GeoExt.data.MapfishPrintProvider', 'Ext.form.field.ComboBox'],
     alias : 'widget.gx_printproviderfield',
     alternateClassName : 'GeoExt.PrintProviderField',
     
     /** 
-     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * @cfg {GeoExt.data.MapfishPrintProvider} printProvider
      * The print provider to use with this
      * plugin's field. Not required if set on the owner container of the
      * field.
@@ -170,7 +170,7 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
      * Handler for the printProvider's dpichange and layoutchange event
      *
      * @private
-     * @param {GeoExt.data.PrintProvider}  printProvider
+     * @param {GeoExt.data.MapfishPrintProvider}  printProvider
      * @param {Ext.data.Record}  rec
      */
     onProviderChange: function(printProvider, rec) {

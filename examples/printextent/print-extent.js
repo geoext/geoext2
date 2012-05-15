@@ -8,7 +8,7 @@
 
 Ext.require([
     'GeoExt.panel.Map',
-    'GeoExt.data.PrintProvider',
+    'GeoExt.data.MapfishPrintProvider',
     'GeoExt.plugins.PrintExtent'
 ]);
 
@@ -20,7 +20,7 @@ Ext.application({
     launch: function() {
             
         // The printProvider that connects us to the print service
-        printProvider = Ext.create('GeoExt.data.PrintProvider', {
+        printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
             method: "GET", // "POST" recommended for production use
             capabilities: printCapabilities, // from the info.json script in the html
             customParams: {
