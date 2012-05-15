@@ -11,7 +11,7 @@
  *      
  *      @example
  *      var printPage = Ext.create('GeoExt.data.PrintPage'{
- *          printProvider: Ext.create('GeoExt.data.PrintProvider', {
+ *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
  *              capabilities: printCapabilities
  *          })
  *      });
@@ -169,7 +169,7 @@ Ext.define('GeoExt.plugins.PrintPageField', {
      * Handler for the "layoutchange" event of the printProvider.
      * 
      * @private
-     * @param {GeoExt.data.PrintProvider} printProvider
+     * @param {GeoExt.data.MapfishPrintProvider} printProvider
      * @param {Ext.Record} layout 
      *  
      */

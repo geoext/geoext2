@@ -18,7 +18,7 @@
         Ext.require([
             'Ext.Window',
             'GeoExt.panel.Map',
-            'GeoExt.data.PrintProvider',
+            'GeoExt.data.MapfishPrintProvider',
             'GeoExt.panel.PrintMap',
             'GeoExt.plugins.PrintExtent',
             'GeoExt.plugins.PrintProviderField'
@@ -33,7 +33,7 @@
             t.plan(2);
             
             var log = {};
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             });
             var plugin = Ext.create('GeoExt.plugins.PrintProviderField', {
@@ -58,7 +58,7 @@
             t.plan(2);
             
             var log = {};
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             });
             var plugin = Ext.create('GeoExt.plugins.PrintProviderField', {
@@ -89,7 +89,7 @@
             
             var log = {};
 
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             });
             var plugin = Ext.create('GeoExt.plugins.PrintProviderField', {
@@ -122,7 +122,7 @@
             t.plan(2);
 
             var log = {};
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities,
                 customParams: {foo: "bar"}
             });
@@ -152,7 +152,7 @@
         function test_onFieldChange(t) {
             t.plan(2);
 
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities,
                 customParams: {foo: "bar"}
             });
@@ -182,7 +182,7 @@
             t.plan(3);
             
             var log = {};
-            var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities,
                 customParams: {foo: "bar"}
             });
