@@ -47,16 +47,16 @@ Ext.define('GeoExt.data.StyleStore', {
         'GeoExt.data.RasterStyleModel'
     ],
     alias: 'store.gx_style',
-    sorters: [{
-        property: 'filter',
-        direction: 'ASC'
-    }],
-
     constructor: function(config){
         config = Ext.apply({}, config);
         if(config.data && !config.model){
             if (config.data instanceof OpenLayers.Symbolizer.Raster) {
                 config.model = 'GeoExt.data.RasterStyleModel';
+                config.sorters = [{
+                    property: 'filter',
+                    direction: 'ASC',
+                    root: 'data'
+                }];
             } else {
                 config.model = 'GeoExt.data.VectorStyleModel';
             }            
