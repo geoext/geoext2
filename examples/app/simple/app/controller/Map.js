@@ -110,4 +110,4 @@ Ext.define('CF.controller.Map', {
             store.layer.map.zoomToExtent(dataExtent);
         }
     }
-})
+});
