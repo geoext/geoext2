@@ -28,7 +28,7 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
             var symbolType = "Polygon";
             if (record) {
                 var symbolType = "Line";
-                var className = record.raw.geometry.CLASS_NAME;
+                var className = record.raw.geometry ? record.raw.geometry.CLASS_NAME : null;
                 if (className == "OpenLayers.Geometry.Point" ||
                         className == "OpenLayers.Geometry.MultiPoint") {
                     symbolType = "Point";

@@ -30,7 +30,7 @@ Ext.define('GeoExt.data.RasterStyleModel',{
                     stroke: false
                 };
             }, defaultValue: null},
-            {name: "filter", mapping: "quantity", type: "float"},
+            {name: "filter", mapping: "quantity", type: "float", sortType: 'asFloat', sortDir: 'ASC'},
             {name: "label", mapping: function(v) {
                 // fill label with quantity if empty
                 return v.label || v.quantity;
@@ -41,6 +41,14 @@ Ext.define('GeoExt.data.RasterStyleModel',{
             reader: {
                 type: 'json',
                 root: 'colorMap'
+            }
+        },
+        listeners:{
+            idchanged:function(rec){
+                for(var i=0;i<rec.stores.length;i++){
+                    var store = rec.stores[i];
+                    store.sort();
+                }
             }
         }
 });
