@@ -47,14 +47,12 @@ Ext.application({
             height: 300,
             width: 650,
             listeners: {
-                rowdblclick: mapPreview
+                itemdblclick: mapPreview
             }
         });
         
-        function mapPreview(grid, index) {
-            var record = grid.getStore().getAt(index);
+        function mapPreview(grid, record) {
             var layer = record.getLayer().clone();
-            
             var win = Ext.create('Ext.Window', {
                 title: "Preview: " + record.get("title"),
                 width: 512,
