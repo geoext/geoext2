@@ -23,15 +23,6 @@ Ext.define('GeoExt.FeatureRenderer', {
     extend: 'Ext.Component',
     alias: 'widget.gx_renderer',
 
-    statics: {
-        guess : function() {
-            var candidates = Ext.ComponentQuery.query("gx_urllegend");
-            return ((candidates && candidates.length > 0)
-                ? candidates[0]
-                : null);
-        }
-    },
-
     /**
      * @cfg {OpenLayers.Feature.Vector}
      * Optional vector to be drawn.  If not provided, and if ``symbolizers``
@@ -294,18 +285,15 @@ Ext.define('GeoExt.FeatureRenderer', {
      *  and assign the first one whose ``supported`` method returns ``true``.
      */
     assignRenderer: function()  {
-
-//        return true;
-        this.renderer = new OpenLayers.Renderer.SVG(this.el, this.rendererOptions);
-//        for(var i=0, len=this.renderers.length; i<len; ++i) {
-//            var Renderer = OpenLayers.Renderer[this.renderers[i]];
-//            if(Renderer && Renderer.prototype.supported()) {
-//                this.renderer = new Renderer(
-//                    this.el, this.rendererOptions
-//                    );
-//                break;
-//            }
-//        }
+        for(var i=0, len=this.renderers.length; i<len; ++i) {
+            var Renderer = OpenLayers.Renderer[this.renderers[i]];
+            if(Renderer && Renderer.prototype.supported()) {
+                this.renderer = new Renderer(
+                    this.el, this.rendererOptions
+                    );
+                break;
+            }
+        }
     },
 
     /**
