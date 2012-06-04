@@ -604,7 +604,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     getRuleTitle: function(rule) {
         var title = rule.title || rule.name || "";
         if (!title && this.untitledPrefix) {
-            title = this.untitledPrefix + (this.rules.indexOf(rule) + 1);
+            title = this.untitledPrefix + (Ext.Array.indexOf(this.rules, rule) + 1);
         }
         return title;
     },

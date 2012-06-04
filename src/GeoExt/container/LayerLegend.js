@@ -37,7 +37,7 @@ Ext.define('GeoExt.container.LayerLegend', {
                 score = GeoExt.LayerLegend.types[type].supports(layerRecord);
                 if(score > 0) {
                     // add to scoredTypes if not preferred
-                    if (types.indexOf(type) == -1) {
+                    if (Ext.Array.indexOf(types, type) == -1) {
                         scoredTypes.push({
                             type: type,
                             score: score
