@@ -33,8 +33,8 @@ Ext.define('GeoExt.container.LayerLegend', {
         getTypes: function(layerRecord, preferredTypes) {
             var types = (preferredTypes || []).concat(),
                 scoredTypes = [], score, type;
-            for (type in GeoExt.LayerLegend.types) {
-                score = GeoExt.LayerLegend.types[type].supports(layerRecord);
+            for (type in GeoExt.container.LayerLegend.types) {
+                score = GeoExt.container.LayerLegend.types[type].supports(layerRecord);
                 if(score > 0) {
                     // add to scoredTypes if not preferred
                     if (Ext.Array.indexOf(types, type) == -1) {
