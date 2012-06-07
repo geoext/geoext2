@@ -23,14 +23,14 @@ Ext.define('GeoExt.data.reader.Feature', {
      */
     buildExtractors: function() {
         this.callParent(arguments);
-        this.convertRecordData = this.convertFreatureRecordData;
+        this.convertRecordData = this.convertFeatureRecordData;
     },
 
     /**
      * Copy feature attribute to record.
      * @private
      */
-    convertFreatureRecordData: function(convertedValues, feature, record) {
+    convertFeatureRecordData: function(convertedValues, feature, record) {
         var records = [];
 
         if (feature) {
