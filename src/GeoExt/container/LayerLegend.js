@@ -68,7 +68,7 @@ Ext.define('GeoExt.container.LayerLegend', {
         supports: function(layerRecord) {
             // to be implemented by subclasses
         },
-        /** @cfg {Array}
+        /** @cfg {Object}
          * An object containing a name-class mapping of LayerLegend subclasses.
          * To register as LayerLegend, a subclass should add itself to this object:
          *  
@@ -78,7 +78,7 @@ Ext.define('GeoExt.container.LayerLegend', {
          * GeoExt.LayerLegend.types["getlegendgraphic"] =
          *     GeoExt.GetLegendGraphicLegend;
          */
-        types: []
+        types: {} 
     },
 
     /** @cfg {GeoExt.data.LayerRecord}
