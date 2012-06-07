@@ -554,15 +554,8 @@ Ext.define('GeoExt.container.VectorLegend', {
     update: function() {
         this.callParent(arguments);
         if (this.symbolType && this.rules) {
-            var i;
-            if (this.rulesContainer.items) {
-                var comp;
-                for (i=this.rulesContainer.items.length-1; i>=0; --i) {
-                    comp = this.rulesContainer.getComponent(i);
-                    this.rulesContainer.remove(comp, true);
-                }
-            }
-            for (i=0, ii=this.rules.length; i<ii; ++i) {
+            this.rulesContainer.removeAll(false);
+            for (var i=0, ii=this.rules.length; i<ii; ++i) {
                 this.addRuleEntry(this.rules[i], true);
             }
             this.doLayout();
