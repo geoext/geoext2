@@ -267,7 +267,7 @@ Ext.define('GeoExt.Action', {
                cs[i].rendered ?
                    cs[i][fnName].apply(cs[i], args) :
                    cs[i].on({
-                       "render": cs[i][fnName].bind(cs[i], args),
+                       "render": Ext.Function.bind(cs[i][fnName], cs[i], args),
                        single: true
                    });
            }
