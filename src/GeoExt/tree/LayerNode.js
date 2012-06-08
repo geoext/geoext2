@@ -61,7 +61,7 @@ Ext.define('GeoExt.tree.LayerNode', {
     onAfterEdit: function(node, modifiedFields) {
         var me = this;
 
-        if(~modifiedFields.indexOf('checked')) {
+        if(~Ext.Array.indexOf(modifiedFields, 'checked')) {
             me.onCheckChange();
         }
     },
