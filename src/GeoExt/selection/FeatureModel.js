@@ -198,8 +198,6 @@ Ext.define('GeoExt.selection.FeatureModel', {
                     scope: this
                 });
             }
-            this.on("rowselect", this.rowSelected, this);
-            this.on("rowdeselect", this.rowDeselected, this);
             this.bound = true;
         }
         return this.selectControl;
@@ -222,8 +220,6 @@ Ext.define('GeoExt.selection.FeatureModel', {
                     scope: this
                 });
             }
-            this.un("rowselect", this.rowSelected, this);
-            this.un("rowdeselect", this.rowDeselected, this);
             if (this.autoActivateControl) {
                 selectControl.deactivate();
             }
