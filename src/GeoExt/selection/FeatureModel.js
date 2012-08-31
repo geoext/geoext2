@@ -283,7 +283,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
             var layers = this.getLayers();
             if (isSelected) {
                 for (var i = 0, len = layers.length; i < len; i++) {
-                    if (layers[i].selectedFeatures.indexOf(feature) == -1) {
+                    if (Ext.Array.indexOf(layers[i].selectedFeatures, feature) == -1) {
                         this._selecting = true;
                         this.selectControl.select(feature);
                         this._selecting = false;
@@ -297,7 +297,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
             }
             else {
                 for (var i = 0, len = layers.length; i < len; i++) {
-                    if (layers[i].selectedFeatures.indexOf(feature) != -1) {
+                    if (Ext.Array.indexOf(layers[i].selectedFeatures, feature) != -1) {
                         this._selecting = true;
                         this.selectControl.unselect(feature);
                         this._selecting = false;
