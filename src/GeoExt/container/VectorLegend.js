@@ -420,7 +420,7 @@ Ext.define('GeoExt.container.VectorLegend', {
         var types = [this.symbolType, "Point", "Line", "Polygon"];
         var type, haveType;
         var symbolizers = rule.symbolizers;
-        var i;
+        var i, len;
         if (!symbolizers) {
             // TODO: remove this when OpenLayers.Symbolizer is used everywhere
             var symbolizer = rule.symbolizer;
