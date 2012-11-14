@@ -94,7 +94,6 @@ Ext.define('GeoExt.plugins.PrintPageField', {
      * @private
      * @param {Ext.form.Field} target The component that this plugin
      *  extends.
-     * @param {Object} target
      */
     init: function(target) {
         
