@@ -205,7 +205,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         page = page || Ext.create('GeoExt.data.PrintPage', {
             printProvider: this.printProvider
         });
-        if(this.pages.indexOf(page) === -1) {
+        if(Ext.Array.indexOf(this.pages, page) === -1) {
             this.pages.push(page);
         }
         this.layer.addFeatures([page.feature]);
