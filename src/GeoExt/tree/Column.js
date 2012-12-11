@@ -18,14 +18,12 @@ Ext.define('GeoExt.tree.Column', {
 
     initComponent: function() {
         var me = this;
-
         me.callParent();
+    },
+    
+    treeRenderer: function(value, metaData, record, rowIdx, colIdx, store, view) {
 
-        var parentRenderer = me.renderer;
-
-        this.renderer = function(value, metaData, record, rowIdx, colIdx, store, view) {
-
-            var buf   = [parentRenderer(value, metaData, record, rowIdx, colIdx, store, view)];
+            var buf   = [this.callParent(arguments)];
 
             // Replace all base layers from checkbox to radio
             if(record.get('checkedGroup')) {
@@ -41,8 +39,6 @@ Ext.define('GeoExt.tree.Column', {
             }
 
             return buf.join('');
-        };
-
     },
 
     defaultRenderer: function(value) {
