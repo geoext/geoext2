@@ -182,8 +182,6 @@ Ext.define('GeoExt.window.Popup', {
         this.elements += ',anc';
 
         this.callParent(arguments);
-
-        window.a = this;
     },
 
     /**
