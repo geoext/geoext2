@@ -263,6 +263,103 @@
 
         }
 
+        function test_unanchorPopupConstraints(t) {
+            var popupClsProtype = GeoExt.window.Popup.prototype,
+                context = setupContext(),
+                popNoConstrain,
+                popHeaderConstrain,
+                popConstrain,
+                undef;
+
+            t.plan( 9 );
+
+            // no constraints on the popup
+            // 3 tests
+            popNoConstrain = popup(context.feature, context.mapPanel)
+            popNoConstrain.show();
+            popNoConstrain.unanchorPopup();
+
+            t.eq(
+                popNoConstrain.dd.constrain,
+                popupClsProtype.constrain,
+                "Without specifing constrain-options, the new dd property has " +
+                    "the expected value for constrain " +
+                    "(" + popupClsProtype.constrain + ")."
+            );
+            t.eq(
+                popNoConstrain.dd.constrainDelegate,
+                popupClsProtype.constrainHeader,
+                "Without specifing constrain-options, the new dd property has " +
+                    "the expected value for constrainDelegate " +
+                    "(" + popupClsProtype.constrainHeader + ")."
+            );
+            t.eq(
+                popNoConstrain.dd.constrainTo,
+                undef,
+                "Without specifing constrain-options, the new dd property has " +
+                    "constrainTo undefined."
+            );
+            tearDown(context);
+
+            // now constrain only the header
+            // 3 tests
+            context = setupContext();
+
+            popHeaderConstrain = popup(context.feature, context.mapPanel, { constrainHeader: true });
+            popHeaderConstrain.show();
+            popHeaderConstrain.unanchorPopup();
+
+            t.eq(
+                popHeaderConstrain.dd.constrain,
+                popupClsProtype.constrain,
+                "When specifing constrainHeader-option, the new dd property has " +
+                    "the expected value for constrain " +
+                    "(" + popupClsProtype.constrain + ")."
+            );
+            t.eq(
+                popHeaderConstrain.dd.constrainDelegate,
+                "#" + popHeaderConstrain.header.id,
+                "When specifing constrainHeader-option, the new dd property has " +
+                    "the expected value for constrainDelegate " +
+                    "(" + popHeaderConstrain.header.id + ")."
+            );
+            t.eq(
+                popHeaderConstrain.dd.constrainTo.id,
+                Ext.getBody().id,
+                "When specifing constrainHeader-option, the new dd property has " +
+                    "constrainTo set to the <body id='" + Ext.getBody().id + "'> of the page."
+            );
+            tearDown(context);
+
+            // now constrain the full popup
+            // 3 tests
+            context = setupContext();
+            popConstrain = popup(context.feature, context.mapPanel, { constrain: true });
+            popConstrain.show();
+            popConstrain.unanchorPopup();
+
+            t.eq(
+                popConstrain.dd.constrain,
+                true,
+                "When specifing constrain-option, the new dd property has " +
+                    "that value for constrain passed through (true)."
+            );
+            t.eq(
+                popConstrain.dd.constrainDelegate,
+                popupClsProtype.constrainHeader,
+                "When specifing constrain-option, the new dd property has " +
+                    "the expected value for constrainDelegate " +
+                    "(" + popupClsProtype.constrainHeader + ")."
+            );
+            t.eq(
+                popConstrain.dd.constrainTo.id,
+                Ext.getBody().id,
+                "When specifing constrain-option, the new dd property has " +
+                    "constrainTo set to the <body id='" + Ext.getBody().id + "'> of the page."
+            );
+            tearDown(context);
+        }
+
         function test_maximize(t) {
             t.plan(2);
 

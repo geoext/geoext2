@@ -23,8 +23,38 @@
     </head>
     <body>
         <h1>Popup Example</h1>
-        <p>Click on the point in the map panel to open a popup.
-        The js is not minified so it is readable. See <a href="popup.js">popup.js</a>.</p>
+        <p>Click on the point in the map panel to open a popup.</p>
+
+        <p>
+            When unanchored, the next popup to be created ...
+            <ul>
+                <li>
+                    <label>
+                        <input type='radio' name='constrainOpt' value="no-constrain" checked>
+                        ... can be dragged outside of the
+                        <code>&lt;body&gt;</code>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type='radio' name='constrainOpt' value="constrain-header">
+                        ... can be dragged outside of the
+                        <code>&lt;body&gt;</code>, its header not
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type='radio' name='constrainOpt' value="constrain-full">
+                        ... cannot be dragged outside of the
+                        <code>&lt;body&gt;</code>
+                    </label>
+                </li>
+            </ul>
+        </p>
+
+        <p>The js is not minified so it is readable.
+        See <a href="popup.js">popup.js</a>.</p>
+
         <div id="container"></div>
     </body>
 </html>
