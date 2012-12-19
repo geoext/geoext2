@@ -84,8 +84,8 @@ Ext.onReady(function() {
         closeAction: "hide",
         width: 600,
         height: 400,
-        x: 300,
-        y: 20,
+        x: 20,
+        y: 250,
         items: {
             xtype: "gx_mappanel",
             border: false,
