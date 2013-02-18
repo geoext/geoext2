@@ -53,7 +53,6 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     alias: 'model.gx_layertree',
     fields: [  
         {name: 'text', type: 'string'}, 
-        {name: 'plugins'},
         {name: 'layer'},
         {name: 'container'},
         {name: 'checkedGroup', type: 'string'},
@@ -81,7 +80,7 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         me.callParent(arguments);      
         
         window.setTimeout(function() {
-            var plugins = me.get('plugins');  
+            var plugins = me.plugins;
 
             if (plugins) {
                 var plugin, instance;
