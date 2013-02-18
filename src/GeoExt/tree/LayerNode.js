@@ -38,7 +38,8 @@ Ext.define('GeoExt.tree.LayerNode', {
             }
             target.set('fixedText', !!target.text);
             
-            target.set('leaf', true);
+            if ( !target.childNodes.length )
+                target.set('leaf', true);
             
             if(!target.get('iconCls')) {
                 target.set('iconCls', "gx-tree-layer-icon");
