@@ -123,6 +123,17 @@ Ext.define('GeoExt.panel.Map', {
     map: null,
 
     /**
+     * @cfg {OpenLayers.Map/Object} layout
+     * In order for child items to be correctly sized and positioned,
+     * typically a layout manager must be specified through the layout configuration option.
+     */
+    /**
+     * @property {OpenLayers.Map/Object} layout
+     * A layout or layout configuration.
+     */
+    layout: 'fit',
+
+    /**
      * @cfg {GeoExt.data.LayerStore/OpenLayers.Layer[]} layers
      * The layers provided here will be added to this Map's
      * {@link #property-map}.
