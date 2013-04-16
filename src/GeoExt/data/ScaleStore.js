@@ -20,7 +20,7 @@
  */
 Ext.define('GeoExt.data.ScaleStore', {
     requires: [
-        'GeoExt.data.ScaleModel', 
+        'GeoExt.data.ScaleModel',
         'GeoExt.panel.Map'
     ],
     extend: 'Ext.data.Store',
