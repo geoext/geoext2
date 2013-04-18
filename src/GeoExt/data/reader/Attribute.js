@@ -174,7 +174,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
             if(typeof matches == "string") {
                 ignore = (matches === value);
             } else if(matches instanceof Array) {
-                ignore = (matches.indexOf(value) > -1);
+                ignore = (Ext.Array.indexOf(matches, value) > -1);
             } else if(matches instanceof RegExp) {
                 ignore = (matches.test(value));
             }
