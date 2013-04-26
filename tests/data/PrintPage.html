@@ -154,7 +154,14 @@
             });
             
             printPage.fit(mapPanel, {mode: "printer"});
-            t.eq(printPage.center.toString(), center.toString(), "Print page centered correctly.");
+
+            // helper function for lonlat comparisons
+            var toRoundedShortString = function(lonlat, precision){
+                var prec = precision || 3;
+                return (lonlat.lon.toFixed(prec) + ", " + lonlat.lat.toFixed(prec));
+            };
+
+            t.eq(toRoundedShortString(printPage.center), toRoundedShortString(center), "Print page centered correctly.");
             t.eq(printPage.scale.get("value"), 4000000, "Print scale set correctly.");
 
             printPage.fit(mapPanel, {mode: "closest"});
