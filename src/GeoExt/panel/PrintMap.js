@@ -388,7 +388,9 @@ Ext.define('GeoExt.panel.PrintMap', {
                     rec: rec,
                     diff: diff
                 };
-                zooms.indexOf(zoom) == -1 && zooms.push(zoom);
+                if (Ext.Array.indexOf(zooms, zoom) === -1) {
+                    zooms.push(zoom);
+                }
             }
         }, this);
 
