@@ -73,7 +73,8 @@
             var page = printMapPanel.printPage;
             var scale = page.scale;
             var scales = printMapPanel.previewScales;
-            page.setScale(scales.getAt(scales.indexOf(scale)+1));
+            var scaleIdx = Ext.Array.indexOf(scales, scale);
+            page.setScale(scales.getAt(scaleIdx + 1));
             t.ok(!printMapPanel.map.getExtent().containsBounds(printExtent), "After zooming in, preview does not contain the extent of the source map any more.");
 
             printMapPanel.destroy();

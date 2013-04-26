@@ -310,7 +310,8 @@ Ext.define('GeoExt.container.VectorLegend', {
      * @return {Ext.Container}
      */
     getRuleEntry: function(rule) {
-        return this.rulesContainer.items.get(this.rules.indexOf(rule));
+        var idxOfRule = Ext.Array.indexOf(this.rules, rule);
+        return this.rulesContainer.items.get(idxOfRule);
     },
 
     /** 
@@ -512,8 +513,8 @@ Ext.define('GeoExt.container.VectorLegend', {
             onDragEnter: function(e, targetId) {
                 var target = Ext.getCmp(targetId);
                 var cls;
-                var sourcePos = ct.items.indexOf(component);
-                var targetPos = ct.items.indexOf(target);
+                var sourcePos = Ext.Array.indexOf(ct.items, component);
+                var targetPos = Ext.Array.indexOf(ct.items, target);
                 if (sourcePos > targetPos) {
                     cls = "gx-ruledrag-insert-above";
                 } else if (sourcePos < targetPos) {
@@ -523,8 +524,10 @@ Ext.define('GeoExt.container.VectorLegend', {
                 return Ext.dd.DragZone.prototype.onDragEnter.apply(this, arguments);
             },
             onDragDrop: function(e, targetId) {
-                panel.moveRule(ct.items.indexOf(component),
-                    ct.items.indexOf(Ext.getCmp(targetId)));
+                var indexOf = Ext.Array.indexOf,
+                    idxOfComp = indexOf(ct.items, component),
+                    idxOfTarget = indexOf(ct.items, Ext.getCmp(targetId));
+                panel.moveRule(idxOfComp, idxOfTarget);
                 return Ext.dd.DragZone.prototype.onDragDrop.apply(this, arguments);
             },
             getDragData: function(e) {
