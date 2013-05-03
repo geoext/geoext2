@@ -68,7 +68,11 @@ var mapPanel = new GeoExt.MapPanel({
  */
 Ext.define('GeoExt.panel.PrintMap', {
     extend : 'GeoExt.panel.Map',
-    requires: ['GeoExt.data.PrintPage'],
+    requires: [
+        'Ext.data.Store',
+        'GeoExt.data.MapfishPrintProvider',
+        'GeoExt.data.PrintPage'
+    ],
     alias : 'widget.gx_printmappanel',
     alternateClassName : 'GeoExt.PrintMapPanel',
 
@@ -219,7 +223,6 @@ Ext.define('GeoExt.panel.PrintMap', {
         }, this);
 
         this.extent = this.sourceMap.getExtent();
-
         this.callParent(arguments);
     },
     
@@ -270,19 +273,24 @@ Ext.define('GeoExt.panel.PrintMap', {
      * @private
      */
     afterRender: function() {
-        
-        this.callParent(arguments);
-        this.doComponentLayout();
-        if (!this.ownerCt) {
-            this.bind();
-        } else {
-            this.ownerCt.on({
+        var me = this,
+            listenerSpec = {
                 "afterlayout": {
-                    fn: this.bind,
-                    scope: this,
+                    fn: me.bind,
+                    scope: me,
                     single: true
                 }
-            });
+            };
+
+        me.callParent(arguments);
+        me.doComponentLayout();
+
+        // binding will happen when either we or our container are finished
+        // doing the layout.
+        if (!me.ownerCt) {
+            me.on(listenerSpec);
+        } else {
+            me.ownerCt.on(listenerSpec);
         }
     },
 
@@ -334,7 +342,7 @@ Ext.define('GeoExt.panel.PrintMap', {
             var printBounds = this.printPage.getPrintExtent(this.map);
             this.currentZoom = this.map.getZoomForExtent(printBounds);
             this.map.zoomToExtent(printBounds, false);
-            
+
             delete this._updating;
         }
     },
