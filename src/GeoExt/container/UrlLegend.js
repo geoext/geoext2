@@ -8,7 +8,7 @@
 
 /*
  * @requires GeoExt/container/LayerLegend.js
- * @include GeoExt/LegendImage.js
+ * @requires GeoExt/LegendImage.js
  */
 
 /**

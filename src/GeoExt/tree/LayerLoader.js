@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/tree/LayerNode.js
+ * @requires GeoExt/tree/LayerNode.js
  */
 
 /**

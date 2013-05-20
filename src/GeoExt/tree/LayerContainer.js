@@ -7,8 +7,7 @@
  */
 
 /*
- * @include GeoExt/tree/LayerLoader.js
- * @include GeoExt/data/Loader.js
+ * @requires GeoExt/tree/LayerLoader.js
  */
 
 /**

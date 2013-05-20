@@ -7,7 +7,8 @@
  */
 
 /*
- * @include GeoExt/data/reader/WmsDescribeLayer.js
+ * @requires GeoExt/data/reader/WmsDescribeLayer.js
+ * @requires GeoExt/data/WmsDescribeLayerModel.js
  * @requires GeoExt/data/OwsStore.js
  */
 
