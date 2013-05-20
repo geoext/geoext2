@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/widgets/form/action/Search.js
+ * @include GeoExt/form/action/Search.js
  */
 
 /**
