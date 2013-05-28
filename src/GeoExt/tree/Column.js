@@ -25,7 +25,7 @@ Ext.define('GeoExt.tree.Column', {
 
         this.renderer = function(value, metaData, record, rowIdx, colIdx, store, view) {
 
-            var buf   = [parentRenderer(value, metaData, record, rowIdx, colIdx, store, view)];
+            var buf   = [parentRenderer.call(this, value, metaData, record, rowIdx, colIdx, store, view)];
 
             // Replace all base layers from checkbox to radio
             if(record.get('checkedGroup')) {
