@@ -63,8 +63,8 @@ Ext.define('GeoExt.tree.View', {
     },
 
     createChild: function(el, node) {
-
-        var component = node.get('component');
+        var component = node.get('component'),
+            cmpObj;
 
         if(component) {
             cmpObj = Ext.ComponentManager.create(component);
