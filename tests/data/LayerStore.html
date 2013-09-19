@@ -79,12 +79,11 @@
             t.eq(map.layers.length,0,"removeLayer on MapPanel's LayerStore removes layer from map");
             t.eq(mapPanel.layers.getCount(),0,"removeLayer on MapPanel's LayerStore removes layer from map");
 
-            mapPanel.layers.addLayers([layer]);
+            mapPanel.layers.add(GeoExt.data.LayerModel.createFromLayer(layer));
             t.eq(map.layers.length,1,"Adding layer to MapPanel's LayerStore adds only one layer to map");
             t.eq(mapPanel.layers.getCount(),1,"Adding layers to MapPanel's LayerStore does not create duplicate layers");
 
             mapPanel.destroy();
-            map.destroy();
         }
 
         function test_store_to_map(t) {
@@ -223,7 +222,7 @@
                 map: map
             });
 
-            store.addLayers([layer]);
+            store.add(GeoExt.data.LayerModel.createFromLayer(layer));
             t.eq(store.getCount(), 1, "adding a single record to the store adds one record");
             var record = store.getAt(0);
             
@@ -256,7 +255,11 @@
                 map: map
             });
             
-            store.addLayers([a, b, c]);
+            store.add([
+                GeoExt.data.LayerModel.createFromLayer(a),
+                GeoExt.data.LayerModel.createFromLayer(b),
+                GeoExt.data.LayerModel.createFromLayer(c)
+            ]);
 
             t.eq(store.getCount(), 3, "[a, b, c] three layers in store");
             t.eq(store.getAt(0).getLayer().name, "a", "[a, b, c] first layer correct in store");
@@ -309,7 +312,11 @@
                 map: map
             });
             
-            store.addLayers([a, b, c]);
+            store.add([
+                GeoExt.data.LayerModel.createFromLayer(a),
+                GeoExt.data.LayerModel.createFromLayer(b),
+                GeoExt.data.LayerModel.createFromLayer(c)
+            ]);
             
             // insert d into second position
             store.insert(1, GeoExt.data.LayerModel.createFromLayer(d));
@@ -474,40 +481,6 @@
             map.destroy();
             
             t.eq(count, 1, "store's remove handler called once");
-        }
-
-        function test_addLayers(t) {
-            t.plan(3);
-
-            /*
-             * Set up
-             */
-
-            var map = new OpenLayers.Map();
-
-            var store = Ext.create('GeoExt.data.LayerStore', {
-                map: map
-            });
-
-            /*
-             * Test
-             */
-
-            var foo = new OpenLayers.Layer('foo');
-            store.addLayers([foo]);
-
-            var bar = new OpenLayers.Layer('bar');
-            store.addLayers([bar]);
-
-            t.eq(map.layers.length, 2, 'addLayers appends layers to map');
-            t.eq(map.layers[0].name, 'foo', '-> 1st layer in map is as expected');
-            t.eq(map.layers[1].name, 'bar', '-> 2nd layer in map is as expected');
-
-            /*
-             * Tear down
-             */
-
-            map.destroy();
         }
 
         function test_load(t) {
