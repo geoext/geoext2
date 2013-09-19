@@ -2,8 +2,8 @@
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /* api: example[style-grid]
@@ -25,9 +25,10 @@ var vectorGrid, rasterGrid;
 
 Ext.require([
     'GeoExt.data.StyleStore',
-    //'GeoExt.grid.column.Symbolizer',
+    'GeoExt.grid.column.Symbolizer',
     'Ext.grid.GridPanel',
-    'Ext.grid.plugin.RowEditing'
+    'Ext.grid.plugin.RowEditing',
+    'Ext.grid.plugin.DragDrop'
 ]);
 
 Ext.application({
@@ -35,31 +36,37 @@ Ext.application({
     launch: function() {
     
     var columns = [
-        //{dataIndex: "symbolizers", width: 26, xtype: "gx_symbolizercolumn"},
+        {dataIndex: "symbolizers", width: 30, xtype: "gx_symbolizercolumn"},
         {header: "Label", dataIndex: "label", editor: {xtype: "textfield"}},
-        {header: "Filter", dataIndex: "filter", editor: {xtype: "textfield"}}
+        {header: "Filter", dataIndex: "filter", editor: {xtype: "textfield"},flex: 1}
     ];
     
         
     vectorGrid = Ext.create('Ext.grid.GridPanel',{
         width: 220,
-        height: 115,
+        height: 200,
         columns: columns.concat(),
-        viewConfig: {autoFill: true},
-        plugins: [
-            Ext.create('Ext.grid.plugin.RowEditing', {
-                clicksToEdit: 1
-            })
-        ],
-        store: Ext.create('GeoExt.data.StyleStore',
-            {data: vectorStyle }
-        ),
-        renderTo: "vectorgrid"
-        /*enableDragDrop: true,
-        ddGroup: "vgrid",
+        viewConfig: {
+            autoFill: true,
+            plugins: {
+                ptype: 'gridviewdragdrop',
+                dragText: 'Drag and drop to reorganize'
+            }
+        },
+        plugins: {
+            ptype: 'rowediting', 
+            clicksToEdit: 1
+        },
+        store: Ext.create('GeoExt.data.StyleStore', {
+            data: vectorStyle,
+            storeId: 'vectorstyle'
+        }),
+        renderTo: "vectorgrid",
+        enableDragDrop: true,
+        //ddGroup: "vgrid",
         listeners: {
-            //afteredit: function(e) {e.grid.store.commitChanges();},
-            render: function makeDD(grid) {
+            edit: function(g,e,opt) {e.record.commit();},
+/*            render: function makeDD(grid) {
                 store = grid.store;
                 new Ext.dd.DropTarget(grid.getView().mainBody, {
                     ddGroup : "vgrid",
@@ -77,9 +84,9 @@ Ext.application({
                         }  
                     }
                 });
-            },
+            },*/
             scope: this
-        }*/
+        }
     });
     rasterGrid = Ext.create('Ext.grid.GridPanel',{
         width: 220,
@@ -92,13 +99,14 @@ Ext.application({
                 clicksToEdit: 1
             })
         ],
-        store: Ext.create('GeoExt.data.StyleStore',
-            {data: rasterStyle.rules[0].symbolizers[0]}
-        ), 
-        renderTo: "rastergrid"//,
-        //listeners: {
-        //    afteredit: function(e) {e.grid.store.commitChanges();}
-        //}
+        store: Ext.create('GeoExt.data.StyleStore', {
+            data: rasterStyle.rules[0].symbolizers[0],
+            storeId: 'rasterstyle'
+        }), 
+        renderTo: "rastergrid",
+        listeners: {
+            edit: function(g,e,opt) {e.record.commit();}
+        }
     });
 }
 });

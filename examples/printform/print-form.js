@@ -2,8 +2,8 @@
  * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /** api: example[print-form]
@@ -16,7 +16,7 @@ Ext.require([
     'Ext.layout.container.Border',
     'Ext.Panel',
     'Ext.form.FormPanel',
-    'GeoExt.data.PrintProvider',
+    'GeoExt.data.MapfishPrintProvider',
     'GeoExt.panel.Map',
     'GeoExt.data.PrintPage',
     'GeoExt.plugins.PrintPageField',
@@ -30,7 +30,7 @@ Ext.application({
     launch: function() {
 
         // The printProvider that connects us to the print service
-        var printProvider = Ext.create('GeoExt.data.PrintProvider', {
+        var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
             method: "GET", // "POST" recommended for production use
             capabilities: printCapabilities, // from the info.json script in the html
             customParams: {

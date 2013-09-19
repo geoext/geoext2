@@ -2,8 +2,8 @@
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /** api: example[wms-capabilities]
@@ -47,14 +47,12 @@ Ext.application({
             height: 300,
             width: 650,
             listeners: {
-                rowdblclick: mapPreview
+                itemdblclick: mapPreview
             }
         });
         
-        function mapPreview(grid, index) {
-            var record = grid.getStore().getAt(index);
+        function mapPreview(grid, record) {
             var layer = record.getLayer().clone();
-            
             var win = Ext.create('Ext.Window', {
                 title: "Preview: " + record.get("title"),
                 width: 512,

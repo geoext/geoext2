@@ -2,8 +2,8 @@
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /** api: example[popup]
@@ -40,15 +40,23 @@ Ext.onReady(function() {
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
     
     function createPopup(feature) {
-        popup = Ext.create('GeoExt.window.Popup', {
-            title: 'My Popup',
-            location: feature,
-            width:200,
-            html: bogusMarkup,
-            maximizable: true,
-            collapsible: true,
-            anchorPosition: 'auto'
-        });
+        var checkConstrOpt = Ext.DomQuery.select('input[name="constrainOpt"]:checked')[0].value,
+            undef,
+            constrainOpts = {
+                constrain: (checkConstrOpt === 'constrain-full') ? true : undef,
+                constrainHeader: (checkConstrOpt === 'constrain-header') ? true : undef
+            },
+            popupOpts = Ext.apply({
+                title: 'My Popup',
+                location: feature,
+                width:200,
+                html: bogusMarkup,
+                maximizable: true,
+                collapsible: true,
+                anchorPosition: 'auto'
+            }, constrainOpts);
+
+        popup = Ext.create('GeoExt.window.Popup', popupOpts);
         // unselect feature when the popup
         // is closed
         popup.on({
@@ -74,10 +82,10 @@ Ext.onReady(function() {
         layout: "fit",
         title: "Map",
         closeAction: "hide",
-        width: 650,
-        height: 356,
-        x: 50,
-        y: 100,
+        width: 600,
+        height: 400,
+        x: 20,
+        y: 250,
         items: {
             xtype: "gx_mappanel",
             border: false,
