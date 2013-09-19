@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -35,15 +35,15 @@ Ext.define('GeoExt.data.CswRecordsModel',{
     extend: 'Ext.data.Model',
     requires: ['Ext.data.proxy.Memory', 'GeoExt.data.reader.CswRecords'],
     alias: 'model.gx_cswrecords',
-    fields: [
-        {name: &quot;title&quot;},
+<span id='GeoExt-data-CswRecordsModel-property-fields'>    fields: [
+</span>        {name: &quot;title&quot;},
         {name: &quot;subject&quot;},
         {name: &quot;URI&quot;},
         {name: &quot;bounds&quot;},
         {name: &quot;projection&quot;, type: &quot;string&quot;}
     ],
-    proxy: {
-        type: 'memory',
+<span id='GeoExt-data-CswRecordsModel-property-proxy'>    proxy: {
+</span>        type: 'memory',
         reader: {
             type: 'gx_cswrecords'
         }

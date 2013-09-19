@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -96,8 +96,8 @@ Ext.define('GeoExt.data.reader.Attribute', {
         }
     },
     
-    applyFeature: function(feature) {
-        var f = Ext.create('Ext.data.Field', {
+<span id='GeoExt-data-reader-Attribute-method-applyFeature'>    applyFeature: function(feature) {
+</span>        var f = Ext.create('Ext.data.Field', {
             name: &quot;value&quot;,
             defaultValue: undefined // defaultValue defaults to &quot;&quot;
                                     // in Ext.data.Field, we may 
@@ -191,7 +191,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
             if(typeof matches == &quot;string&quot;) {
                 ignore = (matches === value);
             } else if(matches instanceof Array) {
-                ignore = (matches.indexOf(value) &gt; -1);
+                ignore = (Ext.Array.indexOf(matches, value) &gt; -1);
             } else if(matches instanceof RegExp) {
                 ignore = (matches.test(value));
             }

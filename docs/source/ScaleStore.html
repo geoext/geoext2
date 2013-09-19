@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -37,12 +37,12 @@
  */
 Ext.define('GeoExt.data.ScaleStore', {
     requires: [
-        'GeoExt.data.ScaleModel', 
+        'GeoExt.data.ScaleModel',
         'GeoExt.panel.Map'
     ],
     extend: 'Ext.data.Store',
-    model: 'GeoExt.data.ScaleModel',
-
+<span id='GeoExt-data-ScaleStore-property-model'>    model: 'GeoExt.data.ScaleModel',
+</span>
 <span id='GeoExt-data-ScaleStore-cfg-map'>    /**
 </span>     * @cfg {OpenLayers.Map/GeoExt.panel.Map}
      * Optional map or map panel from which to derive scale values.
@@ -132,8 +132,8 @@ Ext.define('GeoExt.data.ScaleStore', {
         this.loadData(zooms);
     },
 
-    destroy: function() {
-        this.unbind();
+<span id='GeoExt-data-ScaleStore-method-destroy'>    destroy: function() {
+</span>        this.unbind();
         this.callParent(arguments);
     }
 });

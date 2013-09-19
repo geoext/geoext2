@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -38,26 +38,34 @@
 Ext.define('GeoExt.data.RasterStyleModel',{
         extend: 'Ext.data.Model',
         requires : ['Ext.data.JsonReader'],
-        idProperty: &quot;filter&quot;,
-        fields: [
-            {name: &quot;symbolizers&quot;, mapping: function(v) {
+<span id='GeoExt-data-RasterStyleModel-property-idProperty'>        idProperty: &quot;filter&quot;,
+</span><span id='GeoExt-data-RasterStyleModel-property-fields'>        fields: [
+</span>            {name: &quot;symbolizers&quot;, mapping: function(v) {
                 return {
                     fillColor: v.color,
                     fillOpacity: v.opacity,
                     stroke: false
                 };
             }, defaultValue: null},
-            {name: &quot;filter&quot;, mapping: &quot;quantity&quot;, type: &quot;float&quot;},
+            {name: &quot;filter&quot;, mapping: &quot;quantity&quot;, type: &quot;float&quot;, sortType: 'asFloat', sortDir: 'ASC'},
             {name: &quot;label&quot;, mapping: function(v) {
                 // fill label with quantity if empty
                 return v.label || v.quantity;
             }}
         ],
-        proxy: {
-            type: 'memory',
+<span id='GeoExt-data-RasterStyleModel-property-proxy'>        proxy: {
+</span>            type: 'memory',
             reader: {
                 type: 'json',
                 root: 'colorMap'
+            }
+        },
+<span id='GeoExt-data-RasterStyleModel-property-listeners'>        listeners:{
+</span>            idchanged:function(rec){
+                for(var i=0;i&lt;rec.stores.length;i++){
+                    var store = rec.stores[i];
+                    store.sort();
+                }
             }
         }
 });

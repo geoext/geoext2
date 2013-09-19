@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -35,8 +35,8 @@
 Ext.define('GeoExt.data.LayerStore', {
     requires: ['GeoExt.data.LayerModel'],
     extend: 'Ext.data.Store',
-    model: 'GeoExt.data.LayerModel',
-
+<span id='GeoExt-data-LayerStore-property-model'>    model: 'GeoExt.data.LayerModel',
+</span>
     statics: {
 <span id='GeoExt-data-LayerStore-static-property-MAP_TO_STORE'>        /**
 </span>         * @static
@@ -428,15 +428,6 @@ Ext.define('GeoExt.data.LayerStore', {
             this._addRecords = true;
         }
         this.callParent(arguments);
-    },
-
-<span id='GeoExt-data-LayerStore-method-addLayers'>    /**
-</span>     * Build layer records out of an array of layers and appends them to the
-     * store.
-     * @param {OpenLayers.Layer[]} layers
-     */
-    addLayers: function(layers) {
-        return this.loadRawData(layers, true);
     }
 });
 </pre>

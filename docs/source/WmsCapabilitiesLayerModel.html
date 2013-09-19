@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -39,8 +39,8 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     ],
     requires: ['GeoExt.data.reader.WmsCapabilities'],
     alias: 'model.gx_wmscapabilities',
-    fields: [
-        {name: &quot;name&quot;, type: &quot;string&quot;, mapping: &quot;metadata.name&quot;},
+<span id='GeoExt-data-WmsCapabilitiesLayerModel-property-fields'>    fields: [
+</span>        {name: &quot;name&quot;, type: &quot;string&quot;, mapping: &quot;metadata.name&quot;},
         {name: &quot;abstract&quot;, type: &quot;string&quot;, mapping: &quot;metadata.abstract&quot;},
         {name: &quot;queryable&quot;, type: &quot;boolean&quot;, mapping: &quot;metadata.queryable&quot;},
         {name: &quot;opaque&quot;, type: &quot;boolean&quot;, mapping: &quot;metadata.opaque&quot;},
@@ -64,8 +64,8 @@ Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
         {name: &quot;authorityURLs&quot;, mapping: &quot;metadata.authorityURLs&quot;}, // object
         {name: &quot;metadataURLs&quot;, mapping: &quot;metadata.metadataURLs&quot;} // array
     ],
-    proxy: {
-        type: 'ajax',
+<span id='GeoExt-data-WmsCapabilitiesLayerModel-property-proxy'>    proxy: {
+</span>        type: 'ajax',
         reader: {
             type: 'gx_wmscapabilities'
         }

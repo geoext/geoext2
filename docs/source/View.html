@@ -15,7 +15,15 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-tree-View'>/**
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+<span id='GeoExt-tree-View'>/**
 </span> * This plugin provides basic tree - map synchronisation functionality for a TreeView.
  *
  * It creates a specialized instance of modify the nodes on the fly and adds
@@ -31,8 +39,8 @@ Ext.define('GeoExt.tree.View', {
     extend: 'Ext.tree.View',
     alias: 'widget.gx_treeview',
 
-    initComponent : function() {
-        var me = this;
+<span id='GeoExt-tree-View-method-initComponent'>    initComponent : function() {
+</span>        var me = this;
 
         me.on('itemupdate', this.onItem, this);
         me.on('itemadd', this.onItem, this);
@@ -41,8 +49,8 @@ Ext.define('GeoExt.tree.View', {
         return me.callParent(arguments);
     },
 
-    onItem: function(records, index, node, options) {
-        var me = this;
+<span id='GeoExt-tree-View-method-onItem'>    onItem: function(records, index, node, options) {
+</span>        var me = this;
 
         if(!(records instanceof Array)) {
             records = [records]
@@ -53,8 +61,8 @@ Ext.define('GeoExt.tree.View', {
         }
     },
 
-    onNodeRendered: function(node) {
-        var me = this;
+<span id='GeoExt-tree-View-method-onNodeRendered'>    onNodeRendered: function(node) {
+</span>        var me = this;
 
         var el = Ext.get('tree-record-'+node.id);
         if(!el) {
@@ -71,9 +79,9 @@ Ext.define('GeoExt.tree.View', {
         }
     },
 
-    createChild: function(el, node) {
-
-        var component = node.get('component');
+<span id='GeoExt-tree-View-method-createChild'>    createChild: function(el, node) {
+</span>        var component = node.get('component'),
+            cmpObj;
 
         if(component) {
             cmpObj = Ext.ComponentManager.create(component);

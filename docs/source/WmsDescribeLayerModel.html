@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -38,13 +38,13 @@ Ext.define('GeoExt.data.WmsDescribeLayerModel',{
         'GeoExt.data.reader.WmsDescribeLayer'
     ],
     alias: 'model.gx_wmsdescribelayer',
-    fields: [
-        {name: &quot;owsType&quot;, type: &quot;string&quot;},
+<span id='GeoExt-data-WmsDescribeLayerModel-property-fields'>    fields: [
+</span>        {name: &quot;owsType&quot;, type: &quot;string&quot;},
         {name: &quot;owsURL&quot;, type: &quot;string&quot;},
         {name: &quot;typeName&quot;, type: &quot;string&quot;}
     ],
-    proxy: {
-        type: 'memory',
+<span id='GeoExt-data-WmsDescribeLayerModel-property-proxy'>    proxy: {
+</span>        type: 'memory',
         reader: {
             type: 'gx_wmsdescribelayer'
         }

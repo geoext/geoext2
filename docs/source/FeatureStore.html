@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -220,12 +220,12 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
-    addFeatures: function(features) {
-        return this.loadRawData(features, true);
+<span id='GeoExt-data-FeatureStore-method-addFeatures'>    addFeatures: function(features) {
+</span>        return this.loadRawData(features, true);
     },
 
-    removeFeatures: function(features) {
-        //accept both a single-argument array of records, or any number of record arguments
+<span id='GeoExt-data-FeatureStore-method-removeFeatures'>    removeFeatures: function(features) {
+</span>        //accept both a single-argument array of records, or any number of record arguments
         if (!Ext.isArray(features)) {
             features = Array.prototype.slice.apply(arguments);
         } else {

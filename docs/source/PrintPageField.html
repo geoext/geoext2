@@ -15,7 +15,15 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js"><span id='GeoExt-plugins-PrintPageField'>/**
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+<span id='GeoExt-plugins-PrintPageField'>/**
 </span> * @class GeoExt.plugins.PrintPageField
  * 
  * A plugin for `Ext.form.Field` components which provides synchronization
@@ -28,7 +36,7 @@
  *      
  *      @example
  *      var printPage = Ext.create('GeoExt.data.PrintPage'{
- *          printProvider: Ext.create('GeoExt.data.PrintProvider', {
+ *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
  *              capabilities: printCapabilities
  *          })
  *      });
@@ -111,7 +119,6 @@ Ext.define('GeoExt.plugins.PrintPageField', {
 </span>     * @private
      * @param {Ext.form.Field} target The component that this plugin
      *  extends.
-     * @param {Object} target
      */
     init: function(target) {
         
@@ -186,7 +193,7 @@ Ext.define('GeoExt.plugins.PrintPageField', {
 </span>     * Handler for the &quot;layoutchange&quot; event of the printProvider.
      * 
      * @private
-     * @param {GeoExt.data.PrintProvider} printProvider
+     * @param {GeoExt.data.MapfishPrintProvider} printProvider
      * @param {Ext.Record} layout 
      *  
      */

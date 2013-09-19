@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 <span id='GeoExt-tree-Column'>/**
@@ -33,8 +33,8 @@ Ext.define('GeoExt.tree.Column', {
     extend: 'Ext.tree.Column',
     alias: 'widget.gx_treecolumn',
 
-    initComponent: function() {
-        var me = this;
+<span id='GeoExt-tree-Column-method-initComponent'>    initComponent: function() {
+</span>        var me = this;
 
         me.callParent();
 
@@ -42,7 +42,7 @@ Ext.define('GeoExt.tree.Column', {
 
         this.renderer = function(value, metaData, record, rowIdx, colIdx, store, view) {
 
-            var buf   = [parentRenderer(value, metaData, record, rowIdx, colIdx, store, view)];
+            var buf   = [parentRenderer.call(this, value, metaData, record, rowIdx, colIdx, store, view)];
 
             // Replace all base layers from checkbox to radio
             if(record.get('checkedGroup')) {
@@ -62,8 +62,8 @@ Ext.define('GeoExt.tree.Column', {
 
     },
 
-    defaultRenderer: function(value) {
-        return value;
+<span id='GeoExt-tree-Column-method-defaultRenderer'>    defaultRenderer: function(value) {
+</span>        return value;
     }
 });
 </pre>

@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -40,8 +40,8 @@ Ext.define('GeoExt.container.UrlLegend', {
     alternateClassName: 'GeoExt.UrlLegend',
 
     statics : {
-        supports: function(layerRecord) {
-            return Ext.isEmpty(layerRecord.get(&quot;legendURL&quot;)) ? 0 : 10;
+<span id='GeoExt-container-UrlLegend-static-method-supports'>        supports: function(layerRecord) {
+</span>            return Ext.isEmpty(layerRecord.get(&quot;legendURL&quot;)) ? 0 : 10;
         }
     },
 
@@ -84,8 +84,8 @@ var legendPanel = new GeoExt.LegendPanel({
      */
     baseParams: null,
 
-    initComponent: function(){
-        var me = this;
+<span id='GeoExt-container-UrlLegend-method-initComponent'>    initComponent: function(){
+</span>        var me = this;
         me.callParent(arguments);
         this.add(Ext.create('GeoExt.LegendImage', {
             url: this.layerRecord.get(&quot;legendURL&quot;)

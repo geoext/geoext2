@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -45,8 +45,8 @@ Ext.define('GeoExt.container.WmsLegend', {
     alternateClassName: 'GeoExt.WMSLegend',
 
     statics: {
-        supports: function(layerRecord) {
-            return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
+<span id='GeoExt-container-WmsLegend-static-method-supports'>        supports: function(layerRecord) {
+</span>            return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }
     },
 
@@ -89,8 +89,8 @@ var legendPanel = new GeoExt.LegendPanel({
      */
     baseParams: null,
 
-    initComponent: function(){
-        var me = this;
+<span id='GeoExt-container-WmsLegend-method-initComponent'>    initComponent: function(){
+</span>        var me = this;
         me.callParent();
         var layer = me.layerRecord.getLayer();
         me._noMap = !layer.map;
@@ -127,7 +127,7 @@ var legendPanel = new GeoExt.LegendPanel({
 
         var styleNames = layer.params.STYLES &amp;&amp;
         [layer.params.STYLES].join(&quot;,&quot;).split(&quot;,&quot;);
-        var idx = layerNames.indexOf(layerName);
+        var idx = Ext.Array.indexOf(layerNames, layerName);
         var styleName = styleNames &amp;&amp; styleNames[idx];
         // check if we have a legend URL in the record's
         // &quot;styles&quot; data field
@@ -199,7 +199,7 @@ var legendPanel = new GeoExt.LegendPanel({
         var destroyList = [];
         var textCmp = this.items.get(0);
         this.items.each(function(cmp) {
-            i = layerNames.indexOf(cmp.itemId);
+            i = Ext.Array.indexOf(layerNames, cmp.itemId);
             if(i &lt; 0 &amp;&amp; cmp != textCmp) {
                 destroyList.push(cmp);
             } else if(cmp !== textCmp){
@@ -231,8 +231,8 @@ var legendPanel = new GeoExt.LegendPanel({
         this.doLayout();
     },
 
-    beforeDestroy: function() {
-        if (this.useScaleParameter === true) {
+<span id='GeoExt-container-WmsLegend-method-beforeDestroy'>    beforeDestroy: function() {
+</span>        if (this.useScaleParameter === true) {
             var layer = this.layerRecord.getLayer();
             layer &amp;&amp; layer.events &amp;&amp;
             layer.events.unregister(&quot;moveend&quot;, this, this.onLayerMoveend);

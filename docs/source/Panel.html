@@ -16,98 +16,45 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
- * @include GeoExt/form/Basic.js
+ * @include GeoExt/tree/Column.js
+ * @include GeoExt/tree/View.js
  */
 
-<span id='GeoExt-form-Panel'>/**
-</span> * A specific {@link Ext.form.Panel} whose internal form is a
- * {@link GeoExt.form.Basic} instead of {@link Ext.form.Basic}.
- * One would use this form to do search requests through
- * an `OpenLayers.Protocol` object (`OpenLayers.Protocol.WFS`
- * for example).
- *
- * Look at {@link GeoExt.form.action.Search} to understand how
- * form fields must be named for appropriate filters to be
- * passed to the protocol.
- *
- * Sample code showing how to use a GeoExt form panel.
- *
-&lt;pre&gt;&lt;code&gt;
-var formPanel = new GeoExt.form.FormPanel({
-    renderTo: &quot;formpanel&quot;,
-    protocol: new OpenLayers.Protocol.WFS({
-        url: &quot;http://publicus.opengeo.org/geoserver/wfs&quot;,
-        featureType: &quot;tasmania_roads&quot;,
-        featureNS: &quot;http://www.openplans.org/topp&quot;
-    }),
-    items: [{
-        xtype: &quot;textfield&quot;,
-        name: &quot;name__ilike&quot;,
-        value: &quot;mont&quot;
-    }, {
-        xtype: &quot;textfield&quot;,
-        name: &quot;elevation__ge&quot;,
-        value: &quot;2000&quot;
-    }],
-    listeners: {
-        actioncomplete: function(form, action) {
-            // this listener triggers when the search request
-            // is complete, the OpenLayers.Protocol.Response
-            // resulting from the request is available
-            // in &quot;action.response&quot;
+<span id='GeoExt-tree-Panel'>/**
+</span> * @class GeoExt.tree.Panel
+ * An {@link Ext.tree.Panel} pre-configured with a {@link GeoExt.tree.Column}.
+ */
+Ext.define('GeoExt.tree.Panel', {
+    extend: 'Ext.tree.Panel',
+    alias: 'widget.gx_treepanel',
+    requires: ['GeoExt.tree.Column', 'GeoExt.tree.View'],
+<span id='GeoExt-tree-Panel-property-viewType'>    viewType: 'gx_treeview',
+</span>    
+<span id='GeoExt-tree-Panel-method-initComponent'>    initComponent: function() {
+</span>        var me = this;
+
+        if (!me.columns) {
+            if (me.initialConfig.hideHeaders === undefined) {
+                me.hideHeaders = true;
+            }
+            me.addCls(Ext.baseCSSPrefix + 'autowidth-table');
+            me.columns = [{
+                xtype    : 'gx_treecolumn',
+                text     : 'Name',
+                width    : Ext.isIE6 ? null : 10000,
+                dataIndex: me.displayField         
+            }];
         }
-    }
-});
 
-formPanel.addButton({
-    text: &quot;search&quot;,
-    handler: function() {
-        this.search();
-    },
-    scope: formPanel
-});
-&lt;/code&gt;&lt;/pre&gt;
- */
-
-Ext.define('GeoExt.form.Panel', {
-    extend: 'Ext.form.Panel',
-    requires: ['GeoExt.form.Basic'],
-    alias: 'widget.gx_form',
-
-<span id='GeoExt-form-Panel-cfg-protocol'>    /**
-</span>     * @cfg {OpenLayers.Protocol} protocol
-     * The protocol instance this form panel
-     * is configured with, actions resulting from this form
-     * will be performed through the protocol.
-     */
-    protocol: null,
-
-<span id='GeoExt-form-Panel-method-createForm'>    /**
-</span>     * Create the internal {GeoExt.form.Basic} instance.
-     * @return {GeoExt.form.Basic} The basic form.
-     * @private
-     */
-    createForm: function() {
-        return new GeoExt.form.Basic(this, Ext.applyIf({listeners: {}},
-                                     this.initialConfig));
-    },
-
-<span id='GeoExt-form-Panel-method-search'>    /**
-</span>     * Shortcut to the internal form's search method.
-     * @param {Object} options The options passed to the
-     * GeoExt.form.action.Search constructor.
-     *
-     */
-    search: function(options) {
-        this.getForm().search(options);
+        me.callParent();
     }
 });
 </pre>

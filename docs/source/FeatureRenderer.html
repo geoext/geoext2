@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -39,15 +39,6 @@
 Ext.define('GeoExt.FeatureRenderer', {
     extend: 'Ext.Component',
     alias: 'widget.gx_renderer',
-
-    statics: {
-        guess : function() {
-            var candidates = Ext.ComponentQuery.query(&quot;gx_urllegend&quot;);
-            return ((candidates &amp;&amp; candidates.length &gt; 0)
-                ? candidates[0]
-                : null);
-        }
-    },
 
 <span id='GeoExt-FeatureRenderer-cfg-feature'>    /**
 </span>     * @cfg {OpenLayers.Feature.Vector}
@@ -146,8 +137,8 @@ Ext.define('GeoExt.FeatureRenderer', {
      */
     renderer: null,
 
-    initComponent: function(){
-        var me = this;
+<span id='GeoExt-FeatureRenderer-method-initComponent'>    initComponent: function(){
+</span>        var me = this;
 
         this.autoEl = {
             tag: &quot;div&quot;,
@@ -311,18 +302,15 @@ Ext.define('GeoExt.FeatureRenderer', {
      *  and assign the first one whose ``supported`` method returns ``true``.
      */
     assignRenderer: function()  {
-
-//        return true;
-        this.renderer = new OpenLayers.Renderer.SVG(this.el, this.rendererOptions);
-//        for(var i=0, len=this.renderers.length; i&lt;len; ++i) {
-//            var Renderer = OpenLayers.Renderer[this.renderers[i]];
-//            if(Renderer &amp;&amp; Renderer.prototype.supported()) {
-//                this.renderer = new Renderer(
-//                    this.el, this.rendererOptions
-//                    );
-//                break;
-//            }
-//        }
+        for(var i=0, len=this.renderers.length; i&lt;len; ++i) {
+            var Renderer = OpenLayers.Renderer[this.renderers[i]];
+            if(Renderer &amp;&amp; Renderer.prototype.supported()) {
+                this.renderer = new Renderer(
+                    this.el, this.rendererOptions
+                    );
+                break;
+            }
+        }
     },
 
 <span id='GeoExt-FeatureRenderer-method-setSymbolizers'>    /**

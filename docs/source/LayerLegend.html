@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 <span id='GeoExt-container-LayerLegend'>/**
@@ -35,7 +35,7 @@ Ext.define('GeoExt.container.LayerLegend', {
     alternateClassName : 'GeoExt.LayerLegend',
     
     statics : {
-<span id='GeoExt-container-LayerLegend-method-getTypes'>        /**
+<span id='GeoExt-container-LayerLegend-static-method-getTypes'>        /**
 </span>         * Gets an array of legend xtypes that support the provided layer record,
          * with optionally provided preferred types listed first.
          * @param {GeoExt.data.LayerRecord} layerRecord A layer record to get
@@ -50,11 +50,11 @@ Ext.define('GeoExt.container.LayerLegend', {
         getTypes: function(layerRecord, preferredTypes) {
             var types = (preferredTypes || []).concat(),
                 scoredTypes = [], score, type;
-            for (type in GeoExt.LayerLegend.types) {
-                score = GeoExt.LayerLegend.types[type].supports(layerRecord);
+            for (type in this.types) {
+                score = this.types[type].supports(layerRecord);
                 if(score &gt; 0) {
                     // add to scoredTypes if not preferred
-                    if (types.indexOf(type) == -1) {
+                    if (Ext.Array.indexOf(types, type) == -1) {
                         scoredTypes.push({
                             type: type,
                             score: score
@@ -75,7 +75,7 @@ Ext.define('GeoExt.container.LayerLegend', {
             // take the remaining preferred types, and add other good types 
             return types.concat(goodTypes);
         },
-<span id='GeoExt-container-LayerLegend-method-supports'>        /**
+<span id='GeoExt-container-LayerLegend-static-method-supports'>        /**
 </span>         * Checks whether this legend type supports the provided layerRecord.
          * @param {GeoExt.data.LayerRecord} layerRecord The layer record
          * to check support for.
@@ -85,7 +85,7 @@ Ext.define('GeoExt.container.LayerLegend', {
         supports: function(layerRecord) {
             // to be implemented by subclasses
         },
-<span id='GeoExt-container-LayerLegend-cfg-types'>        /** @cfg {Array}
+<span id='GeoExt-container-LayerLegend-static-cfg-types'>        /** @cfg {Object}
 </span>         * An object containing a name-class mapping of LayerLegend subclasses.
          * To register as LayerLegend, a subclass should add itself to this object:
          *  
@@ -95,7 +95,7 @@ Ext.define('GeoExt.container.LayerLegend', {
          * GeoExt.LayerLegend.types[&quot;getlegendgraphic&quot;] =
          *     GeoExt.GetLegendGraphicLegend;
          */
-        types: []
+        types: {} 
     },
 
 <span id='GeoExt-container-LayerLegend-cfg-layerRecord'>    /** @cfg {GeoExt.data.LayerRecord}
@@ -125,8 +125,8 @@ Ext.define('GeoExt.container.LayerLegend', {
      */
     layerStore: null,
     
-    initComponent: function(){
-        var me = this;
+<span id='GeoExt-container-LayerLegend-method-initComponent'>    initComponent: function(){
+</span>        var me = this;
         me.callParent(arguments);
         me.autoEl = {};
         me.add({
@@ -236,8 +236,8 @@ Ext.define('GeoExt.container.LayerLegend', {
         return title;
     },
     
-    beforeDestroy: function() {
-        if (this.layerStore) {
+<span id='GeoExt-container-LayerLegend-method-beforeDestroy'>    beforeDestroy: function() {
+</span>        if (this.layerStore) {
             this.layerStore.un(&quot;update&quot;, this.onStoreUpdate, this);
             this.layerStore.un(&quot;remove&quot;, this.onStoreRemove, this);
             this.layerStore.un(&quot;add&quot;, this.onStoreAdd, this);
@@ -245,8 +245,8 @@ Ext.define('GeoExt.container.LayerLegend', {
         this.callParent();
     },
 
-    onDestroy: function() {
-        this.layerRecord = null;
+<span id='GeoExt-container-LayerLegend-method-onDestroy'>    onDestroy: function() {
+</span>        this.layerRecord = null;
         this.layerStore = null;
         this.callParent(arguments);
     }

@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 <span id='GeoExt-data-LayerModel'>/**
@@ -43,15 +43,15 @@ Ext.define('GeoExt.data.LayerModel',{
             return this.proxy.reader.readRecords([layer]).records[0];
         }
     },
-    fields: [
-        'id',
+<span id='GeoExt-data-LayerModel-property-fields'>    fields: [
+</span>        'id',
         {name: 'title', type: 'string', mapping: 'name'},
         {name: 'legendURL', type: 'string', mapping: 'metadata.legendURL'},
         {name: 'hideTitle', type: 'bool', mapping: 'metadata.hideTitle'},
         {name: 'hideInLegend', type: 'bool', mapping: 'metadata.hideInLegend'}
     ],
-    proxy: {
-        type: 'memory',
+<span id='GeoExt-data-LayerModel-property-proxy'>    proxy: {
+</span>        type: 'memory',
         reader: {
             type: 'json'
         }

@@ -16,11 +16,11 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -36,16 +36,16 @@ Ext.define('GeoExt.data.WmcLayerModel',{
     alternateClassName: ['GeoExt.data.WMCLayerModel'],
     requires: ['GeoExt.data.reader.Wmc'],
     alias: 'model.gx_wmc',
-    fields: [
-        {name: &quot;name&quot;, type: &quot;string&quot;, mapping: &quot;metadata.name&quot;},
+<span id='GeoExt-data-WmcLayerModel-property-fields'>    fields: [
+</span>        {name: &quot;name&quot;, type: &quot;string&quot;, mapping: &quot;metadata.name&quot;},
         {name: &quot;abstract&quot;, type: &quot;string&quot;, mapping: &quot;metadata.abstract&quot;},
         {name: &quot;metadataURL&quot;, type: &quot;string&quot;, mapping: &quot;metadata.metadataURL&quot;},
         {name: &quot;queryable&quot;, type: &quot;boolean&quot;, mapping: &quot;metadata.queryable&quot;},
         {name: &quot;formats&quot;, mapping: &quot;metadata.formats&quot;}, // array
         {name: &quot;styles&quot;, mapping: &quot;metadata.styles&quot;} // array
     ],
-    proxy: {
-        type: 'ajax',
+<span id='GeoExt-data-WmcLayerModel-property-proxy'>    proxy: {
+</span>        type: 'ajax',
         reader: {
             type: 'gx_wmc'
         }
