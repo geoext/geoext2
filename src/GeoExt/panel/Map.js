@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -121,6 +121,17 @@ Ext.define('GeoExt.panel.Map', {
      * A map or map configuration.
      */
     map: null,
+
+    /**
+     * @cfg {OpenLayers.Map/Object} layout
+     * In order for child items to be correctly sized and positioned,
+     * typically a layout manager must be specified through the layout configuration option.
+     */
+    /**
+     * @property {OpenLayers.Map/Object} layout
+     * A layout or layout configuration.
+     */
+    layout: 'fit',
 
     /**
      * @cfg {GeoExt.data.LayerStore/OpenLayers.Layer[]} layers

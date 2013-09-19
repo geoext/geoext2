@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -174,7 +174,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
             if(typeof matches == "string") {
                 ignore = (matches === value);
             } else if(matches instanceof Array) {
-                ignore = (matches.indexOf(value) > -1);
+                ignore = (Ext.Array.indexOf(matches, value) > -1);
             } else if(matches instanceof RegExp) {
                 ignore = (matches.test(value));
             }

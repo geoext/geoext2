@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txttxt for the full
+ * text of the license.
  */
 
 /**
@@ -47,16 +47,16 @@ Ext.define('GeoExt.data.StyleStore', {
         'GeoExt.data.RasterStyleModel'
     ],
     alias: 'store.gx_style',
-    sorters: [{
-        property: 'filter',
-        direction: 'ASC'
-    }],
-
     constructor: function(config){
         config = Ext.apply({}, config);
         if(config.data && !config.model){
             if (config.data instanceof OpenLayers.Symbolizer.Raster) {
                 config.model = 'GeoExt.data.RasterStyleModel';
+                config.sorters = [{
+                    property: 'filter',
+                    direction: 'ASC',
+                    root: 'data'
+                }];
             } else {
                 config.model = 'GeoExt.data.VectorStyleModel';
             }            

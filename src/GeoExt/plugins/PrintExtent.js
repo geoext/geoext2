@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -25,7 +25,7 @@
  *  immediately:
  *      
  *      var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
- *          printProvider: new GeoExt.data.PrintProvider({
+ *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
  *              capabilities: printCapabilities
  *          })
  *      });
@@ -63,12 +63,12 @@ Ext.define('GeoExt.plugins.PrintExtent', {
     initialConfig: null,
 
     /** 
-     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * @cfg {GeoExt.data.MapfishPrintProvider} printProvider
      * The print provider this form
      *  is connected to. Optional if pages are provided.
      */
     /** 
-     * @property {GeoExt.data.PrintProvider} printProvider
+     * @property {GeoExt.data.MapfishPrintProvider} printProvider
      * The print provider this form
      *  is connected to. Read-only.
      */
@@ -163,8 +163,8 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      * Prints all pages as shown on the map.
      * 
      * @param {Object} options Options to send to the PrintProvider's
-     * print method. See the GeoExt.data.PrintProvider
-     * {@link GeoExt.data.PrintProvider#method-print print method}.
+     * print method. See the GeoExt.data.MapfishPrintProvider
+     * {@link GeoExt.data.MapfishPrintProvider#method-print print method}.
      */
     print: function(options) {
         this.printProvider.print(this.map, this.pages, options);
@@ -205,7 +205,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         page = page || Ext.create('GeoExt.data.PrintPage', {
             printProvider: this.printProvider
         });
-        if(this.pages.indexOf(page) === -1) {
+        if(Ext.Array.indexOf(this.pages, page) === -1) {
             this.pages.push(page);
         }
         this.layer.addFeatures([page.feature]);

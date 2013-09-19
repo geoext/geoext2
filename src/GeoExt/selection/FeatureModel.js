@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -198,8 +198,6 @@ Ext.define('GeoExt.selection.FeatureModel', {
                     scope: this
                 });
             }
-            this.on("rowselect", this.rowSelected, this);
-            this.on("rowdeselect", this.rowDeselected, this);
             this.bound = true;
         }
         return this.selectControl;
@@ -222,8 +220,6 @@ Ext.define('GeoExt.selection.FeatureModel', {
                     scope: this
                 });
             }
-            this.un("rowselect", this.rowSelected, this);
-            this.un("rowdeselect", this.rowDeselected, this);
             if (this.autoActivateControl) {
                 selectControl.deactivate();
             }
@@ -287,7 +283,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
             var layers = this.getLayers();
             if (isSelected) {
                 for (var i = 0, len = layers.length; i < len; i++) {
-                    if (layers[i].selectedFeatures.indexOf(feature) == -1) {
+                    if (Ext.Array.indexOf(layers[i].selectedFeatures, feature) == -1) {
                         this._selecting = true;
                         this.selectControl.select(feature);
                         this._selecting = false;
@@ -301,7 +297,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
             }
             else {
                 for (var i = 0, len = layers.length; i < len; i++) {
-                    if (layers[i].selectedFeatures.indexOf(feature) != -1) {
+                    if (Ext.Array.indexOf(layers[i].selectedFeatures, feature) != -1) {
                         this._selecting = true;
                         this.selectControl.unselect(feature);
                         this._selecting = false;

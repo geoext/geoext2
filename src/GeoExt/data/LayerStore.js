@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -411,14 +411,5 @@ Ext.define('GeoExt.data.LayerStore', {
             this._addRecords = true;
         }
         this.callParent(arguments);
-    },
-
-    /**
-     * Build layer records out of an array of layers and appends them to the
-     * store.
-     * @param {OpenLayers.Layer[]} layers
-     */
-    addLayers: function(layers) {
-        return this.loadRawData(layers, true);
     }
 });

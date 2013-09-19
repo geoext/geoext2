@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -68,7 +68,11 @@ var mapPanel = new GeoExt.MapPanel({
  */
 Ext.define('GeoExt.panel.PrintMap', {
     extend : 'GeoExt.panel.Map',
-    requires: ['GeoExt.data.PrintPage'],
+    requires: [
+        'Ext.data.Store',
+        'GeoExt.data.MapfishPrintProvider',
+        'GeoExt.data.PrintPage'
+    ],
     alias : 'widget.gx_printmappanel',
     alternateClassName : 'GeoExt.PrintMapPanel',
 
@@ -92,7 +96,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     sourceMap: null,
 
     /**
-     * @cfg {GeoExt.data.PrintProvider/Object} printProvider
+     * @cfg {GeoExt.data.MapfishPrintProvider/Object} printProvider
      * PrintProvider to use for printing. If an `Object` is provided, a new PrintProvider will
      *  be created and configured with the object.
      *
@@ -101,12 +105,12 @@ Ext.define('GeoExt.panel.PrintMap', {
      *    configured with an `Object` as `printProvider` will only work
      *    when `capabilities` is provided in the printProvider's
      *    configuration object. If `printProvider` is provided as an instance
-     *    of :class:`GeoExt.data.PrintProvider`, the capabilities must be
+     *    of {@link GeoExt.data.MapfishPrintProvider}, the capabilities must be
      *    loaded before PrintMapPanel initialization.
      */
 
     /**
-     * @property {GeoExt.data.PrintProvider} printProvider
+     * @property {GeoExt.data.MapfishPrintProvider} printProvider
      * PrintProvider for this PrintMapPanel.
      */
     printProvider: null,
@@ -183,8 +187,8 @@ Ext.define('GeoExt.panel.PrintMap', {
             units: this.sourceMap.getUnits()
         });
 
-        if(!(this.printProvider instanceof GeoExt.data.PrintProvider)) {
-            this.printProvider = Ext.create('GeoExt.data.PrintProvider', 
+        if(!(this.printProvider instanceof GeoExt.data.MapfishPrintProvider)) {
+            this.printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', 
                 this.printProvider);
         }
         this.printPage = Ext.create('GeoExt.data.PrintPage', {
@@ -219,7 +223,6 @@ Ext.define('GeoExt.panel.PrintMap', {
         }, this);
 
         this.extent = this.sourceMap.getExtent();
-
         this.callParent(arguments);
     },
     
@@ -270,19 +273,24 @@ Ext.define('GeoExt.panel.PrintMap', {
      * @private
      */
     afterRender: function() {
-        
-        this.callParent(arguments);
-        this.doComponentLayout();
-        if (!this.ownerCt) {
-            this.bind();
-        } else {
-            this.ownerCt.on({
+        var me = this,
+            listenerSpec = {
                 "afterlayout": {
-                    fn: this.bind,
-                    scope: this,
+                    fn: me.bind,
+                    scope: me,
                     single: true
                 }
-            });
+            };
+
+        me.callParent(arguments);
+        me.doComponentLayout();
+
+        // binding will happen when either we or our container are finished
+        // doing the layout.
+        if (!me.ownerCt) {
+            me.on(listenerSpec);
+        } else {
+            me.ownerCt.on(listenerSpec);
         }
     },
 
@@ -334,7 +342,7 @@ Ext.define('GeoExt.panel.PrintMap', {
             var printBounds = this.printPage.getPrintExtent(this.map);
             this.currentZoom = this.map.getZoomForExtent(printBounds);
             this.map.zoomToExtent(printBounds, false);
-            
+
             delete this._updating;
         }
     },
@@ -388,7 +396,9 @@ Ext.define('GeoExt.panel.PrintMap', {
                     rec: rec,
                     diff: diff
                 };
-                zooms.indexOf(zoom) == -1 && zooms.push(zoom);
+                if (Ext.Array.indexOf(zooms, zoom) === -1) {
+                    zooms.push(zoom);
+                }
             }
         }, this);
 
@@ -418,7 +428,7 @@ Ext.define('GeoExt.panel.PrintMap', {
      *  interact with the printProvider and printPage.
      *
      * @param {Object} options options for
-     *  the {@link GeoExt.data.PrintProvider#method-print print method}.
+     *  the {@link GeoExt.data.MapfishPrintProvider#method-print print method}.
      *
      */
     print: function(options) {

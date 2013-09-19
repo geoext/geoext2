@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
 /**
  * @class GeoExt.plugins.PrintPageField
  * 
@@ -11,7 +19,7 @@
  *      
  *      @example
  *      var printPage = Ext.create('GeoExt.data.PrintPage'{
- *          printProvider: Ext.create('GeoExt.data.PrintProvider', {
+ *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
  *              capabilities: printCapabilities
  *          })
  *      });
@@ -94,7 +102,6 @@ Ext.define('GeoExt.plugins.PrintPageField', {
      * @private
      * @param {Ext.form.Field} target The component that this plugin
      *  extends.
-     * @param {Object} target
      */
     init: function(target) {
         
@@ -169,7 +176,7 @@ Ext.define('GeoExt.plugins.PrintPageField', {
      * Handler for the "layoutchange" event of the printProvider.
      * 
      * @private
-     * @param {GeoExt.data.PrintProvider} printProvider
+     * @param {GeoExt.data.MapfishPrintProvider} printProvider
      * @param {Ext.Record} layout 
      *  
      */

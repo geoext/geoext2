@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -110,7 +110,7 @@ var legendPanel = new GeoExt.LegendPanel({
 
         var styleNames = layer.params.STYLES &&
         [layer.params.STYLES].join(",").split(",");
-        var idx = layerNames.indexOf(layerName);
+        var idx = Ext.Array.indexOf(layerNames, layerName);
         var styleName = styleNames && styleNames[idx];
         // check if we have a legend URL in the record's
         // "styles" data field
@@ -182,7 +182,7 @@ var legendPanel = new GeoExt.LegendPanel({
         var destroyList = [];
         var textCmp = this.items.get(0);
         this.items.each(function(cmp) {
-            i = layerNames.indexOf(cmp.itemId);
+            i = Ext.Array.indexOf(layerNames, cmp.itemId);
             if(i < 0 && cmp != textCmp) {
                 destroyList.push(cmp);
             } else if(cmp !== textCmp){

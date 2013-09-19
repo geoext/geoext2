@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -182,8 +182,6 @@ Ext.define('GeoExt.window.Popup', {
         this.elements += ',anc';
 
         this.callParent(arguments);
-
-        window.a = this;
     },
 
     /**
@@ -351,10 +349,16 @@ Ext.define('GeoExt.window.Popup', {
         //make the window draggable
         this.draggable = true;
         this.header.addCls("x-window-header-draggable");
-        var ddConfig = Ext.applyIf({
-            el: this.el,
-            delegate: '#' + Ext.escapeId(this.header.id)
-        }, this.draggable);
+        var ddDelegate = '#' + Ext.escapeId(this.header.id),
+            ddConfig = Ext.applyIf({
+                el: this.el,
+                delegate: ddDelegate,
+                constrain: this.constrain,
+                // `constrainHeader` in an Ext.window.Window maps
+                // to `constrainDelegate` of the Ext.util.ComponentDragger
+                constrainDelegate: this.constrainHeader ? ddDelegate : false,
+                constrainTo: this.constrainTo
+            }, this.draggable);
         this.dd = new Ext.util.ComponentDragger(this, ddConfig);
 
         //remove anchor

@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -28,7 +28,7 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
             var symbolType = "Polygon";
             if (record) {
                 var symbolType = "Line";
-                var className = record.raw.geometry.CLASS_NAME;
+                var className = record.raw.geometry ? record.raw.geometry.CLASS_NAME : null;
                 if (className == "OpenLayers.Geometry.Point" ||
                         className == "OpenLayers.Geometry.MultiPoint") {
                     symbolType = "Point";

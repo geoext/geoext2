@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /*
@@ -23,14 +23,14 @@ Ext.define('GeoExt.data.reader.Feature', {
      */
     buildExtractors: function() {
         this.callParent(arguments);
-        this.convertRecordData = this.convertFreatureRecordData;
+        this.convertRecordData = this.convertFeatureRecordData;
     },
 
     /**
      * Copy feature attribute to record.
      * @private
      */
-    convertFreatureRecordData: function(convertedValues, feature, record) {
+    convertFeatureRecordData: function(convertedValues, feature, record) {
         var records = [];
 
         if (feature) {
