@@ -157,14 +157,18 @@
             t.fail("removing a vector layer causes problems: " + err);
         }
 
-        t.ok(legend.currentScaleDenominator !== map.getScale(), "zoomend handler disconnected");
+        t.delay_call(1, function() {
+            t.ok(legend.currentScaleDenominator !== map.getScale(), "zoomend handler disconnected");
 
-        map.addLayer(layer);
-        map.zoomIn();
-        t.ok(legend.currentScaleDenominator === map.getScale(), "zoomend handler connected again");
+            map.addLayer(layer);
+            map.zoomIn();
+            t.delay_call(1, function() {
+                t.ok(legend.currentScaleDenominator === map.getScale(), "zoomend handler connected again");
 
-        legend.destroy();
-        map.destroy();
+                legend.destroy();
+                map.destroy();
+            });
+        });
     }
 
     function test_createRuleRenderer(t) {
