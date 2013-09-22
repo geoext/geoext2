@@ -28,7 +28,10 @@ Ext.require([
     'GeoExt.grid.column.Symbolizer',
     'Ext.grid.GridPanel',
     'Ext.grid.plugin.RowEditing',
-    'Ext.grid.plugin.DragDrop'
+    'Ext.grid.plugin.DragDrop',
+    // We need to require this class, even though it is used by Ext.EventObjectImpl
+    // see: http://www.sencha.com/forum/showthread.php?262124-Missed-(-)-dependency-reference-to-a-Ext.util.Point-in-Ext.EventObjectImpl
+    'Ext.util.Point'
 ]);
 
 Ext.application({
