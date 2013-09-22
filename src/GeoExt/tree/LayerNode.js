@@ -93,7 +93,7 @@ Ext.define('GeoExt.tree.LayerNode', {
             } else if(!checked && layer.isBaseLayer && layer.map && 
                       layer.map.baseLayer && layer.id == layer.map.baseLayer.id) {
                 // Must prevent the unchecking of radio buttons
-                this.target.set('checked', this.target.get('layer').getVisibility());
+                node.set('checked', layer.getVisibility());
             } else {
                 layer.setVisibility(checked);
             }
