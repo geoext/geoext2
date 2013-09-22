@@ -1,21 +1,21 @@
- /**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /** api: example[print-page]
  *  Print Your Map
  *  --------------
- *  Print the visible extent of a MapPanel with PrintPage and PrintProvider.
+ *  Print the visible extent of a MapPanel with PrintPage and MapfishPrintProvider.
  */
 
 Ext.require([
     'Ext.layout.container.Border',
     'Ext.form.field.Checkbox',
-    'GeoExt.data.PrintProvider',
+    'GeoExt.data.MapfishPrintProvider',
     'GeoExt.data.PrintPage',
     'GeoExt.panel.Map',
     'GeoExt.panel.Legend',
@@ -29,8 +29,8 @@ var mapPanel, printPage, printProvider;
 Ext.application({
     name: 'PrintPage and PrintProvider - GeoExt2',
     launch: function() {
-        // The printProvider that connects us to the print service
-    printProvider = Ext.create('GeoExt.data.PrintProvider', {
+    // The MapfishPrintProvider that connects us to the print service
+    printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
         method: "GET", // "POST" recommended for production use
         capabilities: printCapabilities, // from the info.json script in the html
         customParams: {
@@ -38,7 +38,7 @@ Ext.application({
             comment: "This is a simple map printed from GeoExt."
         }
     });
-    // Our print page. Tells the PrintProvider about the scale and center of
+    // Our print page. Tells the printProvider about the scale and center of
     // our page.
     printPage = Ext.create('GeoExt.data.PrintPage', {
         printProvider: printProvider
@@ -69,7 +69,7 @@ Ext.application({
     var includeLegend; // controlled by the "Include legend?" checkbox
      
     // The main panel
-    new Ext.Panel({
+    Ext.create('Ext.Panel', {
         renderTo: "content",
         layout: "border",
         width: 700,

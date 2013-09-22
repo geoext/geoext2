@@ -1,9 +1,16 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Layer/WMS.js
+ * @include OpenLayers/Util.js
+ * @requires GeoExt/container/LayerLegend.js
+ * @include GeoExt/LegendImage.js
  */
 
 /**
@@ -15,12 +22,12 @@
  * @class GeoExt.container.WmsLegend
  */
 Ext.define('GeoExt.container.WmsLegend', {
-    extend : 'GeoExt.container.LayerLegend',
-    alias : 'widget.gx_wmslegend',
+    extend: 'GeoExt.container.LayerLegend',
+    alias: 'widget.gx_wmslegend',
     requires: ['GeoExt.LegendImage'],
-    alternateClassName : 'GeoExt.WMSLegend',
+    alternateClassName: 'GeoExt.WMSLegend',
 
-    statics : {
+    statics: {
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }
@@ -47,19 +54,21 @@ Ext.define('GeoExt.container.WmsLegend', {
      * support vendor-specific parameters in a SLD WMS GetLegendGraphic
      * request. To override the default MIME type of image/gif use the
      * FORMAT parameter in baseParams.
-     * 
-     * @example    
-     * var legendPanel = new GeoExt.LegendPanel({
-     *     map: map,
-     *     title: 'Legend Panel',
-     *     defaults: {
-     *         style: 'padding:5px',
-     *         baseParams: {
-     *             FORMAT: 'image/png',
-     *             LEGEND_OPTIONS: 'forceLabels:on'
-     *         }
-     *     }
-     * });   
+     *
+     * Example:
+<pre><code>
+var legendPanel = new GeoExt.LegendPanel({
+    map: map,
+    title: 'Legend Panel',
+    defaults: {
+        style: 'padding:5px',
+        baseParams: {
+            FORMAT: 'image/png',
+            LEGEND_OPTIONS: 'forceLabels:on'
+        }
+    }
+});
+</code></pre>
      */
     baseParams: null,
 
@@ -71,7 +80,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         layer.events.register("moveend", me, me.onLayerMoveend);
         me.update();
     },
-    
+
     /**
      * @private
      * @param {Object} e
@@ -84,7 +93,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         }
     },
 
-    /** 
+    /**
      * Get the legend URL of a sublayer.
      * @private
      * @param {String} layerName A sublayer.
@@ -101,7 +110,7 @@ Ext.define('GeoExt.container.WmsLegend', {
 
         var styleNames = layer.params.STYLES &&
         [layer.params.STYLES].join(",").split(",");
-        var idx = layerNames.indexOf(layerName);
+        var idx = Ext.Array.indexOf(layerNames, layerName);
         var styleName = styleNames && styleNames[idx];
         // check if we have a legend URL in the record's
         // "styles" data field
@@ -151,7 +160,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         return url;
     },
 
-    /** 
+    /**
      * Update the legend, adding, removing or updating
      * the per-sublayer box component.
      * @private
@@ -165,7 +174,7 @@ Ext.define('GeoExt.container.WmsLegend', {
             return;
         }
         this.callParent();
-        
+
         var layerNames, layerName, i, len;
 
         layerNames = [layer.params.LAYERS].join(",").split(",");
@@ -173,7 +182,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         var destroyList = [];
         var textCmp = this.items.get(0);
         this.items.each(function(cmp) {
-            i = layerNames.indexOf(cmp.itemId);
+            i = Ext.Array.indexOf(layerNames, cmp.itemId);
             if(i < 0 && cmp != textCmp) {
                 destroyList.push(cmp);
             } else if(cmp !== textCmp){

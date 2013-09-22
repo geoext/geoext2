@@ -1,6 +1,24 @@
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include GeoExt/tree/Column.js
+ * @include GeoExt/tree/View.js
+ */
+
+/**
+ * @class GeoExt.tree.Panel
+ * An {@link Ext.tree.Panel} pre-configured with a {@link GeoExt.tree.Column}.
+ */
 Ext.define('GeoExt.tree.Panel', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.gx_treepanel',
+    requires: ['GeoExt.tree.Column', 'GeoExt.tree.View'],
     viewType: 'gx_treeview',
     
     initComponent: function() {

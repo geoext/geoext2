@@ -1,9 +1,9 @@
-/**
- * Copyright (c) 2008-2010 The Open Source Geospatial Foundation
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /** api: example[legendpanel]
@@ -102,7 +102,7 @@ Ext.application({
         // functions for interacting with the map's layers to show how the
         // legend instantly reflects changes
         function addRemoveLayer() {
-            if(map.layers.indexOf(water) == -1) {
+            if(Ext.Array.indexOf(map.layers, water) == -1) {
                 map.addLayer(water);
             } else {
                 map.removeLayer(water);
@@ -110,7 +110,7 @@ Ext.application({
         }        
         function moveLayer() {
             var layer = layerRec0.getLayer();
-            var idx = map.layers.indexOf(layer) === 0 ?
+            var idx = Ext.Array.indexOf(map.layers, layer) === 0 ?
                 map.layers.length : 0;
             map.setLayerIndex(layerRec0.getLayer(), idx);
         }
@@ -142,7 +142,7 @@ Ext.application({
             width: 800,
             height: 400,
             items: [mapPanel, legendPanel],
-            tbar: new Ext.Toolbar({
+            tbar: Ext.create('Ext.Toolbar', {
                 items: [
                     {text: 'add/remove', handler: addRemoveLayer},
                     {text: 'movetop/bottom', handler: moveLayer },

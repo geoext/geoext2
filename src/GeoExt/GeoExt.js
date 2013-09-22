@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /**
- * Root object.
+ * The GeoExt root object
+ * @class GeoExt
+ * @singleton
  */
-Ext.define('GeoExt', {
-    statics: {
-        version: 'pre-2.0'
-    }
-});
+var GeoExt = GeoExt || {};
+GeoExt.version = 'pre-2.0';
+

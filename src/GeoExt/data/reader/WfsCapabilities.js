@@ -1,9 +1,16 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Format/WFSCapabilities.js
+ * @include OpenLayers/Protocol/WFS.js
+ * @include OpenLayers/Strategy/Fixed.js
+ * @include OpenLayers/Layer/Vector.js
  */
 
 /**
@@ -31,6 +38,8 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
     },
 
     /**
+     * Gets the records.
+     *
      * @param {Object} request The XHR object which contains the parsed XML
      * document.
      * @return {Object} A data block which is used by an {Ext.data.Store}

@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
 Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
@@ -95,7 +103,6 @@ Ext.application({
                 )
             ]
         });
-        var layer = mapPanel.map.layers[2];
 
         // create our own layer node UI class, using the TreeNodeUIEventMixin
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
@@ -139,15 +146,18 @@ Ext.application({
                         }],
                         expanded: true
                     }, {
-                        plugins: ['gx_baselayercontainer'], expanded: true
+                        plugins: ['gx_baselayercontainer'],
+                        expanded: true,
+                        text: "Base Maps"
                     }, {
                         plugins: ['gx_overlaylayercontainer'],
-                        text: "Base Maps",
                         expanded: true
                     }
                 ]
             }
         });
+        
+        var layer;
 
         // create the tree with the configuration from above
         tree = Ext.create('GeoExt.tree.Panel', {
@@ -162,15 +172,10 @@ Ext.application({
             store: store,
             rootVisible: false,
             lines: false,
-            viewConfig: {
-                plugins: [{
-                    ptype: 'treeviewdragdrop',
-                    appendOnly: false
-                }]
-            },
             tbar: [{
                 text: "remove",
                 handler: function() {
+                    layer = mapPanel.map.layers[2];
                     mapPanel.map.removeLayer(layer);
                 }
             }, {

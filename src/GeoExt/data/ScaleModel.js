@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /**
@@ -12,7 +12,10 @@
  */
 Ext.define('GeoExt.data.ScaleModel', {
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    requires: [
+        'Ext.data.proxy.Memory', 
+        'Ext.data.reader.Json'
+    ],
     alias: 'model.gx_scale',
     fields: [
         {name: "level"},

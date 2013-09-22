@@ -1,9 +1,14 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Feature/Vector.js
+ * @include GeoExt/data/reader/Feature.js
  */
 
 /**
@@ -17,12 +22,14 @@ Ext.define('GeoExt.data.FeatureStore', {
     statics: {
         /**
          * @static
-         * @property {Number}
+         * @property {Number} LAYER_TO_STORE
+         * Bitfield specifying the layer to store sync direction.
          */
         LAYER_TO_STORE: 1,
         /**
          * @static
-         * @property {Number}
+         * @property {Number} STORE_TO_LAYER
+         * Bitfield specifying the store to layer sync direction.
          */
         STORE_TO_LAYER: 2
     },
@@ -125,6 +132,8 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Object} options
      */
     bind: function(layer, options) {
+        options = options || {};
+
         if (this.isLayerBinded) {
             // already bound
             return;
@@ -212,7 +221,9 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * @return The model instance corresponding to a feature.
+     * Returns the record corresponding to a feature.
+     * @param {OpenLayers.Feature} feature An OpenLayers.Feature.Vector object.
+     * @return {String} The model instance corresponding to a feature.
      */
     getByFeature: function(feature) {
         return this.getAt(this.findBy(function(record, id) {
@@ -220,6 +231,11 @@ Ext.define('GeoExt.data.FeatureStore', {
         }));
     },
 
+    /**
+     * Returns the record corresponding to a feature id.
+     * @param {String} id An OpenLayers.Feature.Vector id string.
+     * @return {String} The model instance corresponding to the given id.
+     */
     getById: function(id) {
         return (this.snapshot || this.data).findBy(function(record) {
             return record.raw.id === id;

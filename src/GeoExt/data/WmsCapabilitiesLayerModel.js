@@ -1,9 +1,13 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include GeoExt/data/reader/WmsCapabilities.js
  */
 
 /**
@@ -12,7 +16,10 @@
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',
-    alternateClassName: ['GeoExt.data.WMSCapabilitiesModel','GeoExt.data.WmsCapabilitiesModel'],
+    alternateClassName: [
+        'GeoExt.data.WMSCapabilitiesModel',
+        'GeoExt.data.WmsCapabilitiesModel'
+    ],
     requires: ['GeoExt.data.reader.WmsCapabilities'],
     alias: 'model.gx_wmscapabilities',
     fields: [

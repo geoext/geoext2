@@ -1,14 +1,21 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Layer/Vector.js
+ * @requires GeoExt/panel/Map.js
+ * @include GeoExt/data/PrintProvider.js
+ * @include GeoExt/data/PrintPage.js
  */
 
 /**
  * @class GeoExt.panel.PrintMap
- * 
+ *
  * A map panel that controls scale and center of a print page. Based on the
  *  current view (i.e. layers and extent) of a source map, this panel will be
  *  sized according to the aspect ratio of the print page. As the user zooms
@@ -17,108 +24,113 @@
  *  (e.g. by setting it using a combo box with a
  *  {@link GeoExt.plugins.PrintPageField}), the extent of the
  *  {@link GeoExt.PrintMapPanel} will be updated to match the page bounds.
- *  
+ *
  *      The #zoom, #center and #extent config options will have
  *      no affect, as they will be determined by the #sourceMap.
- *      
- *      
+ *
+ *
  *  A map with a "Print..." button. If clicked, a dialog containing a
  *  PrintMapPanel will open, with a "Create PDF" button.
- *      
- *      @example
- *      var mapPanel = new GeoExt.MapPanel({
- *          renderTo: "map",
- *          layers: [new OpenLayers.Layer.WMS("Tasmania State Boundaries",
- *              "http://demo.opengeo.org/geoserver/wms",
- *              {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
- *          center: [146.56, -41.56],
- *          zoom: 6,
- *          bbar: [{
- *              text: "Print...",
- *              handler: function() {
- *                  var printDialog = new Ext.Window({
- *                      autoHeight: true,
- *                      width: 350,
- *                      items: [new GeoExt.PrintMapPanel({
- *                          sourceMap: mapPanel,
- *                          printProvider: {
- *                              capabilities: printCapabilities
- *                          }
- *                      })],
- *                      bbar: [{
- *                          text: "Create PDF",
- *                          handler: function() {
- *                              printDialog.items.get(0).print();
- *                          }
- *                      }]
- *                  });
- *                  printDialog.show();
- *              }
- *          }]
- *      });
- *      
- *      
+ *
+ * Example:
+<pre><code>
+var mapPanel = new GeoExt.MapPanel({
+    renderTo: "map",
+    layers: [new OpenLayers.Layer.WMS("Tasmania State Boundaries",
+        "http://demo.opengeo.org/geoserver/wms",
+        {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
+    center: [146.56, -41.56],
+    zoom: 6,
+    bbar: [{
+        text: "Print...",
+        handler: function() {
+            var printDialog = new Ext.Window({
+                autoHeight: true,
+                width: 350,
+                items: [new GeoExt.PrintMapPanel({
+                    sourceMap: mapPanel,
+                    printProvider: {
+                        capabilities: printCapabilities
+                    }
+                })],
+                bbar: [{
+                    text: "Create PDF",
+                    handler: function() {
+                        printDialog.items.get(0).print();
+                    }
+                }]
+            });
+            printDialog.show();
+        }
+    }]
+});
+</code></pre>
  */
 Ext.define('GeoExt.panel.PrintMap', {
     extend : 'GeoExt.panel.Map',
+    requires: [
+        'Ext.data.Store',
+        'GeoExt.data.MapfishPrintProvider',
+        'GeoExt.data.PrintPage'
+    ],
     alias : 'widget.gx_printmappanel',
     alternateClassName : 'GeoExt.PrintMapPanel',
-    
-    /** 
+
+    /**
      * @cfg {Object} map
      * Optional configuration for the `OpenLayers.Map` object
      *  that this PrintMapPanel creates. Useful e.g. to configure a map with a
      *  custom set of controls, or to add a `preaddlayer` listener for
      *  filtering out layer types that cannot be printed.
      */
-    
-    /** 
+
+    /**
      * @cfg {GeoExt.MapPanel/OpenLayers.Map} sourceMap
      * The map that is to be printed.
      */
-    
-    /** 
+
+    /**
      * @private
      * @property {OpenLayers.Map} sourceMap
      */
     sourceMap: null,
-    
-    /** 
-     * @cfg {GeoExt.data.PrintProvider/Object} printProvider
+
+    /**
+     * @cfg {GeoExt.data.MapfishPrintProvider/Object} printProvider
      * PrintProvider to use for printing. If an `Object` is provided, a new PrintProvider will
      *  be created and configured with the object.
-     *  
+     *
      *    The PrintMapPanel requires the printProvider's capabilities
      *    to be available upon initialization. This means that a PrintMapPanel
      *    configured with an `Object` as `printProvider` will only work
      *    when `capabilities` is provided in the printProvider's
      *    configuration object. If `printProvider` is provided as an instance
-     *    of :class:`GeoExt.data.PrintProvider`, the capabilities must be
+     *    of {@link GeoExt.data.MapfishPrintProvider}, the capabilities must be
      *    loaded before PrintMapPanel initialization.
      */
-    
-    /** 
-     * @property {GeoExt.data.PrintProvider} printProvider
+
+    /**
+     * @property {GeoExt.data.MapfishPrintProvider} printProvider
      * PrintProvider for this PrintMapPanel.
      */
     printProvider: null,
-    
-    /** 
+
+    /**
      * @property {GeoExt.data.PrintPage} printPage
      * PrintPage for this PrintMapPanel.
      *  Read-only.
      */
     printPage: null,
-    
-    /** 
+
+    /**
      * @cfg {Boolean} limitScales
      * If set to true, the printPage cannot be set to scales that
-     *  would generate a preview in this :class:`GeoExt.PrintMapPanel` with a
+     *  would generate a preview in this {@link GeoExt.PrintMapPanel} with a
      *  completely different extent than the one that would appear on the
      *  printed map. Default is false.
      */
-     
-    /** 
+
+    /**
      * @property {Ext.data.Store} previewScales
      * A data store with a subset of the printProvider's
      *  scales. By default, this contains all the scales of the printProvider.
@@ -126,36 +138,36 @@ Ext.define('GeoExt.panel.PrintMap', {
      *  that can properly be previewed with this :class:`GeoExt.PrintMapPanel`.
      */
     previewScales: null,
-    
-    /** 
-     * @cfg {OpenLayers.LonLat/Array(Number)} center
-     * A location for the map center. 
+
+    /**
+     * @cfg {OpenLayers.LonLat/Number[]} center
+     * A location for the map center.
      * Do not set, as this will be overridden with the `sourceMap`
      *  center.
      */
     center: null,
 
-    /** 
+    /**
      * @cfg {Number} zoom
      * An initial zoom level for the map. Do not set, because the
      *  initial extent will be determined by the `sourceMap`.
      */
     zoom: null,
 
-    /** 
-     * @cfg {`OpenLayers.Bounds/Array(Number)} extent
+    /**
+     * @cfg {OpenLayers.Bounds/Number[]} extent
      * An initial extent for the map.
      *  Do not set, because the initial extent will be determined by the
      *  `sourceMap`.
      */
     extent: null,
-    
-    /** 
+
+    /**
      * @private
      * @property {Number} currentZoom
      */
     currentZoom: null,
-    
+
     /**
      * @private
      */
@@ -167,23 +179,29 @@ Ext.define('GeoExt.panel.PrintMap', {
         if (!this.map) {
             this.map = {};
         }
+        
         Ext.applyIf(this.map, {
             projection: this.sourceMap.getProjection(),
             maxExtent: this.sourceMap.getMaxExtent(),
             maxResolution: this.sourceMap.getMaxResolution(),
             units: this.sourceMap.getUnits()
         });
-        
-        if(!(this.printProvider instanceof GeoExt.data.PrintProvider)) {
-            this.printProvider = new GeoExt.data.PrintProvider(
+
+        if(!(this.printProvider instanceof GeoExt.data.MapfishPrintProvider)) {
+            this.printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', 
                 this.printProvider);
         }
-        this.printPage = new GeoExt.data.PrintPage({
+        this.printPage = Ext.create('GeoExt.data.PrintPage', {
             printProvider: this.printProvider
         });
         
-        this.previewScales = new Ext.data.Store();
-        this.previewScales.add(this.printProvider.scales.getRange());
+        this.previewScales = Ext.create('Ext.data.Store', {
+            fields: [
+                 {name: 'name', type: 'string'},
+                 {name: 'value', type: 'int'}
+            ],
+            data: this.printProvider.scales.getRange()
+        });
 
         this.layers = [];
         var layer;
@@ -205,18 +223,42 @@ Ext.define('GeoExt.panel.PrintMap', {
         }, this);
 
         this.extent = this.sourceMap.getExtent();
-        
-        GeoExt.PrintMapPanel.superclass.initComponent.call(this);
+        this.callParent(arguments);
     },
     
+    /**
+     * Calls the internal adjustSize-function and resizes
+     * this {@link GeoExt.panel.PrintMap PrintMapPanel} due
+     * to the needed size, defined by the current layout of the #printProvider.
+     * 
+     * The Function was removed from Ext.Panel in ExtJS 4 and is
+     * now implemented here.
+     * 
+     * @private
+     * 
+     */
+    syncSize: function() {
+        var s = this.adjustSize(this.map.size.w, this.map.size.h);
+        this.setSize(s.width, s.height);
+    },
+
     /**
      * @private
      */
     bind: function() {
+        
+        // we have to call syncSize here because of changed
+        // rendering order in ExtJS4
+        this.syncSize();
+        
         this.printPage.on("change", this.fitZoom, this);
         this.printProvider.on("layoutchange", this.syncSize, this);
         this.map.events.register("moveend", this, this.updatePage);
-
+        this.on("resize", function() {
+            this.doComponentLayout();
+            this.map.updateSize();
+        }, this);
+        
         this.printPage.fit(this.sourceMap);
 
         if (this.initialConfig.limitScales === true) {
@@ -224,39 +266,45 @@ Ext.define('GeoExt.panel.PrintMap', {
             this.calculatePreviewScales();
         }
     },
-    
-    /** 
+
+    /**
      * Private method called after the panel has been rendered.
-     * 
+     *
      * @private
      */
     afterRender: function() {
-        GeoExt.PrintMapPanel.superclass.afterRender.apply(this, arguments);
-        this.syncSize();
-        if (!this.ownerCt) {
-            this.bind();
-        } else {
-            this.ownerCt.on({
+        var me = this,
+            listenerSpec = {
                 "afterlayout": {
-                    fn: this.bind,
-                    scope: this,
+                    fn: me.bind,
+                    scope: me,
                     single: true
                 }
-            });
+            };
+
+        me.callParent(arguments);
+        me.doComponentLayout();
+
+        // binding will happen when either we or our container are finished
+        // doing the layout.
+        if (!me.ownerCt) {
+            me.on(listenerSpec);
+        } else {
+            me.ownerCt.on(listenerSpec);
         }
     },
-    
+
     /**
      * Private override - sizing this component always takes the aspect ratio
      *  of the print page into account.
-     * 
+     *
      * @private
      * @param {Number} width If not provided or 0, initialConfig.width will
      *  be used.
      * @param {Number} height If not provided or 0, initialConfig.height
      *  will be used.
      */
-    adjustSize: function(width, height) {        
+    adjustSize: function(width, height) {
         var printSize = this.printProvider.layout.get("size");
         var ratio = printSize.width / printSize.height;
         // respect width & height when sizing according to the print page's
@@ -282,10 +330,10 @@ Ext.define('GeoExt.panel.PrintMap', {
 
         return {width: width, height: height};
     },
-    
-    /** 
+
+    /**
      *  Fits this PrintMapPanel's zoom to the print scale.
-     *  
+     *
      *  @private
      */
     fitZoom: function() {
@@ -293,14 +341,15 @@ Ext.define('GeoExt.panel.PrintMap', {
             this._updating = true;
             var printBounds = this.printPage.getPrintExtent(this.map);
             this.currentZoom = this.map.getZoomForExtent(printBounds);
-            this.map.zoomToExtent(printBounds);
+            this.map.zoomToExtent(printBounds, false);
+
             delete this._updating;
         }
     },
 
     /**
      * Updates the print page to match this PrintMapPanel's center and scale.
-     * 
+     *
      * @private
      */
     updatePage: function() {
@@ -316,7 +365,7 @@ Ext.define('GeoExt.panel.PrintMap', {
             this.currentZoom = zoom;
         }
     },
-    
+
     /**
      * @private
      */
@@ -347,10 +396,12 @@ Ext.define('GeoExt.panel.PrintMap', {
                     rec: rec,
                     diff: diff
                 };
-                zooms.indexOf(zoom) == -1 && zooms.push(zoom);
+                if (Ext.Array.indexOf(zooms, zoom) === -1) {
+                    zooms.push(zoom);
+                }
             }
         }, this);
-        
+
         // add only the preview scales that closely fit print extents
         for (var i=0, ii=zooms.length; i<ii; ++i) {
             this.previewScales.add(scalesByZoom[zooms[i]].rec);
@@ -371,19 +422,19 @@ Ext.define('GeoExt.panel.PrintMap', {
 
         this.fitZoom();
     },
-    
-    /** 
+
+    /**
      * Convenience method for printing the map, without the need to
      *  interact with the printProvider and printPage.
-     *  
+     *
      * @param {Object} options options for
-     *  the {@link GeoExt.data.PrintProvider#print} method.
-     *  
+     *  the {@link GeoExt.data.MapfishPrintProvider#method-print print method}.
+     *
      */
     print: function(options) {
         this.printProvider.print(this.map, [this.printPage], options);
     },
-    
+
     /**
      * @private
      */
@@ -391,6 +442,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         this.map.events.unregister("moveend", this, this.updatePage);
         this.printPage.un("change", this.fitZoom, this);
         this.printProvider.un("layoutchange", this.syncSize, this);
-        GeoExt.PrintMapPanel.superclass.beforeDestroy.apply(this, arguments);
+        
+        this.callParent(arguments);
     }
 });

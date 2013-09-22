@@ -1,73 +1,105 @@
-/**
- * @require GeoExt/panel/Map.js
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include GeoExt/tree/LayerNode.js
  */
 
 /**
- * @class
- * A loader that will load all layers of a GeoExt.data.LayerStore.
+ * A loader that will load layers from a GeoExt.data.LayerStore.
  * By default, only layers that have displayInLayerSwitcher set to true will be
  * included. The childrens' iconCls defaults to "gx-tree-layer-icon".
+ *
+ * Example:
+ *     var loader = Ext.create('GeoExt.tree.LayerLoader', {
+ *         baseAttrs: {
+ *             iconCls: 'baselayer-icon',
+ *             checkedGroup: 'baselayer'
+ *         },
+ *         filter: function(record) {
+ *             var layer = record.getLayer();
+ *             return
+ *                 layer.displayInLayerSwitcher === true &&
+ *                 layer.isBaseLayer === true;
+ *         }
+ *     });
+ *
+ * The above creates a loader which only loads base layers, and configures
+ * its nodes with the 'baselayer-icon' icon class and the 'baselayer' group.
+ * This is basically the same loader that the GeoExt.tree.BaseLayerContainer
+ * uses.
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
-    requires: ['GeoExt.panel.Map', 'GeoExt.tree.LayerNode'],
+    requires: [
+        'GeoExt.tree.LayerNode'
+    ],
 
     /**
      * Triggered before loading children. Return false to avoid
      * loading children.
      * @event beforeload
-     * @param {GeoExt.tree.LayerLoader} this loader
-     * @param {Ext.data.NodeInterface} the node that this loader is configured
-     *     with
+     * @param {GeoExt.tree.LayerLoader} this This loader.
+     * @param {Ext.data.NodeInterface} node The node that this loader is
+     * configured with.
      */
 
     /**
      * Triggered after children were loaded.
      * @event load
-     * @param {GeoExt.tree.LayerLoader} this loader
-     * @param {Ext.data.NodeInterface} the node that this loader is configured
-     *     with
+     * @param {GeoExt.tree.LayerLoader} loader This loader.
+     * @param {Ext.data.NodeInterface} node The node that this loader is
+     * configured with.
      */
 
-    /** api: config[store]
-     *  :class:`GeoExt.data.LayerStore`
-     *  The layer store containing layers to be added by this loader.
+    /**
+     * @cfg {GeoExt.data.LayerStore} store
+     * The layer store containing layers to be added by this loader.
      */
-    store: null,
+    /**
+     * @property {GeoExt.data.LayerStore} store
+     * The layer store containing layers to be added by this loader.
+     */
+     store: null,
     
     /**
+     * @property {Function} filter
      * A function, called in the scope of this loader, with a layer record
      * as argument. Is expected to return true for layers to be loaded, false
      * otherwise. By default, the filter checks for displayInLayerSwitcher:
-     * @param {Function} filter
      *  
-     * @example
-     * filter: function(record) {
-     *     return record.getLayer().displayInLayerSwitcher == true
-     * }
+     *     filter: function(record) {
+     *         return record.getLayer().displayInLayerSwitcher === true
+     *     }
      */
     filter: function(record) {
-        return record.getLayer().displayInLayerSwitcher == true;
+        return record.getLayer().displayInLayerSwitcher === true;
     },
     
-    /** api: config[baseAttrs]
-     *  An object containing attributes to be added to all nodes created by
-     *  this loader.
+    /**
+     * @cfg
+     * An object containing attributes to be added to all nodes created by
+     * this loader.
      */
     baseAttrs: null,
     
-    /** private: method[load]
-     *  :param node: ``Ext.tree.TreeNode`` The node to add children to.
-     *  :param callback: ``Function``
+    /**
+     * @param {GeoExt.data.LayerTreeModel} node The node to add children to.
+     * @private
      */
-    load: function(node, callback) {
-        if(this.fireEvent("beforeload", this, node)) {
+    load: function(node) {
+        if (this.fireEvent("beforeload", this, node)) {
             this.removeStoreHandlers();
             while (node.firstChild) {
                 node.removeChild(node.firstChild);
             }
             
-            if(!this.store) {
+            if (!this.store) {
                 this.store = GeoExt.MapPanel.guess().layers;
             }
             this.store.each(function(record) {
@@ -75,53 +107,56 @@ Ext.define('GeoExt.tree.LayerLoader', {
             }, this);
             this.addStoreHandlers(node);
     
-            if(typeof callback == "function"){
-                callback();
-            }
-            
             this.fireEvent("load", this, node);
         }
     },
     
-    /** private: method[onStoreAdd]
-     *  :param store: ``Ext.data.Store``
-     *  :param records: ``Array(Ext.data.Record)``
-     *  :param index: ``Number``
-     *  :param node: ``Ext.tree.TreeNode``
+    /**
+     * Listener for the store's add event.
+     *
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.Record[]} records
+     * @param {Number} index
+     * @param {GeoExt.data.LayerTreeModel} node
      *  
-     *  Listener for the store's add event.
+     * @private
      */
     onStoreAdd: function(store, records, index, node) {
-        if(!this._reordering) {
-            var nodeIndex = node.get('container').recordIndexToNodeIndex(index+records.length-1, node);
-            for(var i=0; i<records.length; ++i) {
+        if (!this._reordering) {
+            var nodeIndex = node.get('container')
+                .recordIndexToNodeIndex(index+records.length-1, node);
+            for (var i=0, ii=records.length; i<ii; ++i) {
                 this.addLayerNode(node, records[i], nodeIndex);
             }
         }
     },
     
-    /** private: method[onStoreRemove]
-     *  :param store: ``Ext.data.Store``
-     *  :param record: ``Ext.data.Record``
-     *  :param index: ``Number``
-     *  :param node: ``Ext.tree.TreeNode``
-     *  
-     *  Listener for the store's remove event.
+    /**
+     * Listener for the store's remove event.
+     *
+     * @param {Ext.data.Store} store
+     * @param {Ext.data.Record} record
+     * @param {Integer} index
+     * @param {GeoExt.data.LayerTreeModel} node
+     *
+     * @private
      */
     onStoreRemove: function(layerRecord, node) {
-        if(!this._reordering) {
+        if (!this._reordering) {
             this.removeLayerNode(node, layerRecord);
         }
     },
 
-    /** private: method[addLayerNode]
-     *  :param node: ``Ext.tree.TreeNode`` The node that the layer node will
-     *      be added to as child.
-     *  :param layerRecord: ``Ext.data.Record`` The layer record containing the
-     *      layer to be added.
-     *  :param index: ``Number`` Optional index for the new layer.  Default is 0.
-     *  
-     *  Adds a child node representing a layer of the map
+    /**
+     * Adds a child node representing a layer of the map
+     *
+     * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
+     * will be added to as child.
+     * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
+     * the layer to be added.
+     * @param {Integer} index Optional index for the new layer.  Default is 0.
+     *
+     * @private
      */
     addLayerNode: function(node, layerRecord, index) {
         index = index || 0;
@@ -129,7 +164,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             var layer = layerRecord.getLayer();
             var child = this.createNode({
                 plugins: [{
-                    ptype: 'gx_layer',
+                    ptype: 'gx_layer'
                 }],
                 layer: layer,
                 text: layer.name,
@@ -138,102 +173,115 @@ Ext.define('GeoExt.tree.LayerLoader', {
                     scope: this
                 }
             });
-            var sibling = node.childNodes && node.getChildAt(index);
-            if(sibling) {
+            if (index !== undefined) {
                 node.insertChild(index, child);
             } else {
                 node.appendChild(child);
             }
+            node.getChildAt(index).on("move", this.onChildMove, this);
         }
     },
 
-    /** private: method[removeLayerNode]
-     *  :param node: ``Ext.tree.TreeNode`` The node that the layer node will
-     *      be removed from as child.
-     *  :param layerRecord: ``Ext.data.Record`` The layer record containing the
-     *      layer to be removed.
-     * 
-     *  Removes a child node representing a layer of the map
+    /**
+     * Removes a child node representing a layer of the map
+     * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
+     * will be removed from as child.
+     * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
+     * the layer to be removed.
+     *
+     * @private
      */
     removeLayerNode: function(node, layerRecord) {
         if (this.filter(layerRecord) === true) {
             var child = node.findChildBy(function(node) {
                 return node.get('layer') == layerRecord.getLayer();
             });
-            if(child) {
+            if (child) {
                 child.un("move", this.onChildMove, this);
                 child.remove();
             }
         }
     },
     
-    /** private: method[onChildMove]
-     *  :param tree: ``Ext.data.Tree``
-     *  :param node: ``Ext.tree.TreeNode``
-     *  :param oldParent: ``Ext.tree.TreeNode``
-     *  :param newParent: ``Ext.tree.TreeNode``
-     *  :param index: ``Number``
-     *  
-     *  Listener for child node "move" events.  This updates the order of
-     *  records in the store based on new node order if the node has not
-     *  changed parents.
+    /**
+     * Listener for child node "move" events.  This updates the order of
+     * records in the store based on new node order if the node has not
+     * changed parents.
+     *
+     * @param {GeoExt.data.LayerTreeModel} node
+     * @param {GeoExt.data.LayerTreeModel} oldParent
+     * @param {GeoExt.data.LayerTreeModel} newParent
+     * @param {Integer} index
+     *
+     * @private
      */
-    onChildMove: function(tree, node, oldParent, newParent, index) {
-        this._reordering = true;
-        // remove the record and re-insert it at the correct index
-        var record = this.store.getByLayer(node.get('layer'));
+    onChildMove: function(node, oldParent, newParent, index) {
+        var me = this,
+            record = me.store.getByLayer(node.get('layer')),
+            container = newParent.get('container'),
+            parentLoader = container.loader;
 
-        if(newParent instanceof GeoExt.tree.LayerContainer && 
-                                    this.store === newParent.loader.store) {
-            newParent.loader._reordering = true;
-            this.store.remove(record);
+        // remove the record and re-insert it at the correct index
+        me._reordering = true;
+        if (parentLoader instanceof me.self && me.store === parentLoader.store) {
+            parentLoader._reordering = true;
+            me.store.remove(record);
             var newRecordIndex;
-            if(newParent.childNodes.length > 1) {
+            if (newParent.childNodes.length > 1) {
                 // find index by neighboring node in the same container
                 var searchIndex = (index === 0) ? index + 1 : index - 1;
-                newRecordIndex = this.store.findBy(function(r) {
-                    return newParent.childNodes[searchIndex].layer === r.getLayer();
+                newRecordIndex = me.store.findBy(function(r) {
+                    return newParent.childNodes[searchIndex]
+                        .get('layer') === r.getLayer();
                 });
-                index === 0 && newRecordIndex++;
-            } else if(oldParent.parentNode === newParent.parentNode){
+                if (index === 0) {
+                    newRecordIndex++;
+                }
+            } else if (oldParent.parentNode === newParent.parentNode) {
                 // find index by last node of a container above
                 var prev = newParent;
                 do {
                     prev = prev.previousSibling;
-                } while (prev && !(prev instanceof GeoExt.tree.LayerContainer && prev.lastChild));
-                if(prev) {
-                    newRecordIndex = this.store.findBy(function(r) {
-                        return prev.lastChild.layer === r.getLayer();
+                } while (prev &&
+                    !(prev.get('container') instanceof container.self &&
+                    prev.lastChild));
+                if (prev) {
+                    newRecordIndex = me.store.findBy(function(r) {
+                        return prev.lastChild.get('layer') === r.getLayer();
                     });
                 } else {
                     // find indext by first node of a container below
                     var next = newParent;
                     do {
                         next = next.nextSibling;
-                    } while (next && !(next instanceof GeoExt.tree.LayerContainer && next.firstChild));
-                    if(next) {
-                        newRecordIndex = this.store.findBy(function(r) {
-                            return next.firstChild.layer === r.getLayer();
+                    } while (next &&
+                        !(next.get('container') instanceof container.self &&
+                        next.firstChild));
+                    if (next) {
+                        newRecordIndex = me.store.findBy(function(r) {
+                            return next.firstChild.get('layer') === r.getLayer();
                         });
                     }
                     newRecordIndex++;
                 }
             }
-            if(newRecordIndex !== undefined) {
-                this.store.insert(newRecordIndex, [record]);
+            if (newRecordIndex !== undefined) {
+                me.store.insert(newRecordIndex, [record]);
             } else {
-                this.store.insert(oldRecordIndex, [record]);
+                me.store.insert(oldRecordIndex, [record]);
             }
-            delete newParent.loader._reordering;
+            delete parentLoader._reordering;
         }
-        delete this._reordering;
+        delete me._reordering;
     },
     
-    /** private: method[addStoreHandlers]
-     *  :param node: :class:`GeoExt.tree.LayerNode`
+    /**
+     * @param {GeoExt.data.LayerTreeModel} node
+     *
+     * @private
      */
     addStoreHandlers: function(node) {
-        if(!this._storeHandlers) {
+        if (!this._storeHandlers) {
             this._storeHandlers = {
                 "add": function(store, layerRecords, index) {
                     this.onStoreAdd(store, layerRecords, index, node);
@@ -242,38 +290,39 @@ Ext.define('GeoExt.tree.LayerLoader', {
                     this.onStoreRemove(removedRecord, node);
                 }
             };
-            for(var evt in this._storeHandlers) {
+            for (var evt in this._storeHandlers) {
                 this.store.on(evt, this._storeHandlers[evt], this);
             }
         }
     },
     
-    /** private: method[removeStoreHandlers]
+    /**
+     * @private
      */
     removeStoreHandlers: function() {
-        if(this._storeHandlers) {
-            for(var evt in this._storeHandlers) {
+        if (this._storeHandlers) {
+            for (var evt in this._storeHandlers) {
                 this.store.un(evt, this._storeHandlers[evt], this);
             }
             delete this._storeHandlers;
         }
     },
 
-    /** api: method[createNode]
-     *  :param attr: ``Object`` attributes for the new node
+    /**
+     * Extend this function to modify the node attributes at creation time.
      *
-     *  Override this function for custom TreeNode node implementation, or to
-     *  modify the attributes at creation time.
+     * @param {Object} attr attributes for the new node
      */
     createNode: function(attr) {
-        if(this.baseAttrs){
+        if (this.baseAttrs){
             Ext.apply(attr, this.baseAttrs);
         }
         
         return attr;
     },
 
-    /** private: method[destroy]
+    /**
+     * @private
      */
     destroy: function() {
         this.removeStoreHandlers();

@@ -1,9 +1,9 @@
-/**
+/*
  * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /** api: example[layeropacityslider]
@@ -32,7 +32,7 @@ Ext.application({
         );
 
         // create a map panel with an embedded slider
-        panel1 = new GeoExt.MapPanel({
+        panel1 = Ext.create('GeoExt.panel.Map', {
             title: "Map 1",
             renderTo: "map1-container",
             height: 300,
@@ -57,7 +57,7 @@ Ext.application({
             }]
         });
         // create a separate slider bound to the map but displayed elsewhere
-        slider = new GeoExt.slider.LayerOpacity({
+        slider = Ext.create('GeoExt.slider.LayerOpacity', {
             layer: wms,
             aggressive: true, 
             width: 200,
@@ -78,7 +78,7 @@ Ext.application({
             "http://vmap0.tiles.osgeo.org/wms/vmap0",
             {layers: 'basic'}
         );
-        panel2 = new GeoExt.MapPanel({
+        panel2 = Ext.create('GeoExt.panel.Map', {
             title: "Map 2",
             renderTo: "map2-container",
             height: 300,
@@ -105,15 +105,5 @@ Ext.application({
                 })
             }]
         });
-    
-        /*var tree = new Ext.tree.TreePanel({
-            width: 145,
-            height: 300,
-            renderTo: "tree",
-            root: new GeoExt.tree.LayerContainer({
-                layerStore: panel2.layers,
-                expanded: true
-            })
-        });*/
     }
 });

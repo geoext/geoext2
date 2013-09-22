@@ -1,13 +1,14 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
-/**
- * @require GeoExt/tree/LayerLoader.js
+/*
+ * @include GeoExt/tree/LayerLoader.js
+ * @include GeoExt/data/Loader.js
  */
 
 /**
@@ -16,12 +17,29 @@
  * layers that have displayInLayerSwitcher set to true will be included.
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
  * text defaults to "Layers".
+ *
+ * To create a tree node that holds the layers of a tree, it needs to be
+ * configured with the gx_layercontainer plugin that this class provides - like
+ * the root node in the example below:
+ *
+ *     var mapPanel = Ext.create('GeoExt.panel.Map', {
+ *         layers: [new OpenLayers.Layer('foo')]
+ *     });
+ *     
+ *     var treeStore = Ext.create('Ext.data.TreeStore', {
+ *         model: 'GeoExt.data.LayerTreeModel',
+ *         root: {
+ *             plugins: [{
+ *                 ptype: 'gx_layercontainer',
+ *                 loader: {store: mapPanel.layers}
+ *             }],
+ *             expanded: true
+ *         }
+ *     });
  */
 Ext.define('GeoExt.tree.LayerContainer', {
     extend: 'Ext.AbstractPlugin',
-    mixins: ['Ext.util.Observable'],
     requires: [
-        'Ext.data.NodeInterface',
         'GeoExt.tree.LayerLoader'
     ],
     alias: 'plugin.gx_layercontainer',
@@ -50,7 +68,7 @@ Ext.define('GeoExt.tree.LayerContainer', {
         var loader = me.loader;
         
         me.loader = (loader && loader instanceof GeoExt.tree.LayerLoader) ?
-            loader : Ext.create('GeoExt.tree.LayerLoader', loader);
+            loader : new GeoExt.tree.LayerLoader(loader);
 
         target.set('container', me);
         if (!target.get('text')) {

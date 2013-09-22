@@ -1,7 +1,16 @@
+/*
+ * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * 
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
 Ext.require([
     'Ext.container.Viewport',
     'Ext.state.Manager',
     'Ext.state.CookieProvider',
+    'Ext.window.MessageBox',
     'GeoExt.panel.Map'
 ]);
 

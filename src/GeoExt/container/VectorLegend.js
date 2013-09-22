@@ -1,9 +1,14 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @requires GeoExt/container/LayerLegend.js
+ * @include GeoExt/FeatureRenderer.js
  */
 
 /**
@@ -11,12 +16,15 @@
  * @class GeoExt.container.VectorLegend
  */
 Ext.define('GeoExt.container.VectorLegend', {
-    extend : 'GeoExt.container.LayerLegend',
-    alias : 'widget.gx_vectorlegend',
-    requires: ['Ext.layout.container.Column', 'GeoExt.FeatureRenderer'],
-    alternateClassName : 'GeoExt.VectorLegend',
+    extend: 'GeoExt.container.LayerLegend',
+    alias: 'widget.gx_vectorlegend',
+    requires: [
+        'Ext.layout.container.Column', 
+        'GeoExt.FeatureRenderer'
+    ],
+    alternateClassName: 'GeoExt.VectorLegend',
     
-    statics : {
+    statics: {
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.Vector ? 1 : 0;
         }
@@ -302,7 +310,8 @@ Ext.define('GeoExt.container.VectorLegend', {
      * @return {Ext.Container}
      */
     getRuleEntry: function(rule) {
-        return this.rulesContainer.items.get(this.rules.indexOf(rule));
+        var idxOfRule = Ext.Array.indexOf(this.rules, rule);
+        return this.rulesContainer.items.get(idxOfRule);
     },
 
     /** 
@@ -412,7 +421,7 @@ Ext.define('GeoExt.container.VectorLegend', {
         var types = [this.symbolType, "Point", "Line", "Polygon"];
         var type, haveType;
         var symbolizers = rule.symbolizers;
-        var i;
+        var i, len;
         if (!symbolizers) {
             // TODO: remove this when OpenLayers.Symbolizer is used everywhere
             var symbolizer = rule.symbolizer;
@@ -504,8 +513,8 @@ Ext.define('GeoExt.container.VectorLegend', {
             onDragEnter: function(e, targetId) {
                 var target = Ext.getCmp(targetId);
                 var cls;
-                var sourcePos = ct.items.indexOf(component);
-                var targetPos = ct.items.indexOf(target);
+                var sourcePos = Ext.Array.indexOf(ct.items, component);
+                var targetPos = Ext.Array.indexOf(ct.items, target);
                 if (sourcePos > targetPos) {
                     cls = "gx-ruledrag-insert-above";
                 } else if (sourcePos < targetPos) {
@@ -515,8 +524,10 @@ Ext.define('GeoExt.container.VectorLegend', {
                 return Ext.dd.DragZone.prototype.onDragEnter.apply(this, arguments);
             },
             onDragDrop: function(e, targetId) {
-                panel.moveRule(ct.items.indexOf(component),
-                    ct.items.indexOf(Ext.getCmp(targetId)));
+                var indexOf = Ext.Array.indexOf,
+                    idxOfComp = indexOf(ct.items, component),
+                    idxOfTarget = indexOf(ct.items, Ext.getCmp(targetId));
+                panel.moveRule(idxOfComp, idxOfTarget);
                 return Ext.dd.DragZone.prototype.onDragDrop.apply(this, arguments);
             },
             getDragData: function(e) {
@@ -546,15 +557,8 @@ Ext.define('GeoExt.container.VectorLegend', {
     update: function() {
         this.callParent(arguments);
         if (this.symbolType && this.rules) {
-            var i;
-            if (this.rulesContainer.items) {
-                var comp;
-                for (i=this.rulesContainer.items.length-1; i>=0; --i) {
-                    comp = this.rulesContainer.getComponent(i);
-                    this.rulesContainer.remove(comp, true);
-                }
-            }
-            for (i=0, ii=this.rules.length; i<ii; ++i) {
+            this.rulesContainer.removeAll(false);
+            for (var i=0, ii=this.rules.length; i<ii; ++i) {
                 this.addRuleEntry(this.rules[i], true);
             }
             this.doLayout();
@@ -596,7 +600,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     getRuleTitle: function(rule) {
         var title = rule.title || rule.name || "";
         if (!title && this.untitledPrefix) {
-            title = this.untitledPrefix + (this.rules.indexOf(rule) + 1);
+            title = this.untitledPrefix + (Ext.Array.indexOf(this.rules, rule) + 1);
         }
         return title;
     },

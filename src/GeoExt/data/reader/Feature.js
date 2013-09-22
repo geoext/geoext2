@@ -1,9 +1,13 @@
 /*
- * Copyright (c) 2012-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Feature/Vector.js
  */
 
 /**
@@ -19,14 +23,14 @@ Ext.define('GeoExt.data.reader.Feature', {
      */
     buildExtractors: function() {
         this.callParent(arguments);
-        this.convertRecordData = this.convertFreatureRecordData;
+        this.convertRecordData = this.convertFeatureRecordData;
     },
 
     /**
      * Copy feature attribute to record.
      * @private
      */
-    convertFreatureRecordData: function(convertedValues, feature, record) {
+    convertFeatureRecordData: function(convertedValues, feature, record) {
         var records = [];
 
         if (feature) {

@@ -17,10 +17,10 @@
         
         Ext.require([
             'GeoExt.data.PrintPage', 
-            'GeoExt.data.PrintProvider',
+            'GeoExt.data.MapfishPrintProvider',
             'GeoExt.panel.Legend',
-            'GeoExt.container.WMSLegend',
-            'GeoExt.container.URLLegend',
+            'GeoExt.container.WmsLegend',
+            'GeoExt.container.UrlLegend',
             'GeoExt.container.VectorLegend'
         ]);
         
@@ -33,10 +33,10 @@
             t.plan(3);
             var log = {};
             
-            var printProvider = new GeoExt.data.PrintProvider({
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             });
-            var printPage = new GeoExt.data.PrintPage({
+            var printPage = Ext.create('GeoExt.data.PrintPage', {
                 printProvider: printProvider,
                 onLayoutChange: function() {log.layoutchange = true;}
             });
@@ -61,20 +61,20 @@
             var printProvider, printPage;
 
             // test #1
-            printProvider = new GeoExt.data.PrintProvider({
+            printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             });
-            printPage = new GeoExt.data.PrintPage({
+            printPage = Ext.create('GeoExt.data.PrintPage', {
                 printProvider: printProvider
             });
             t.eq(printPage.scale.get("name"), "1:4,000,000", "first scale set in page");
             printPage.destroy();
 
             // test #2
-            printProvider = new GeoExt.data.PrintProvider({
+            printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 url: "foo", autoLoad: false
             });
-            printPage = new GeoExt.data.PrintPage({
+            printPage = Ext.create('GeoExt.data.PrintPage', {
                 printProvider: printProvider
             });
             t.eq(printPage.scale, null,
@@ -88,8 +88,8 @@
         function test_setCenter(t) {
             t.plan(1);
             
-            var printPage = new GeoExt.data.PrintPage({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printPage = Ext.create('GeoExt.data.PrintPage', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -104,10 +104,11 @@
         function test_setScale(t) {
             t.plan(1);
             
-            var printProvider = new GeoExt.data.PrintProvider({
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
                 capabilities: printCapabilities
             });
-            var printPage = new GeoExt.data.PrintPage({
+
+            var printPage = Ext.create('GeoExt.data.PrintPage', {
                 printProvider: printProvider
             });
             
@@ -121,8 +122,8 @@
         function test_setRotation(t) {
             t.plan(1);
 
-            var printPage = new GeoExt.data.PrintPage({
-                printProvider: new GeoExt.data.PrintProvider({
+            var printPage = Ext.create('GeoExt.data.PrintPage', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
@@ -135,9 +136,9 @@
         
         function test_fit(t) {
             t.plan(4);
-            
+
             var center = new OpenLayers.LonLat(146.56, -41.56);
-            var mapPanel = new GeoExt.MapPanel({
+            var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "map",
                 width: 272,
                 height: 272,
@@ -147,14 +148,20 @@
             });
 
             var printPage = Ext.create('GeoExt.data.PrintPage', {
-                printProvider: Ext.create('GeoExt.data.PrintProvider', {
+                printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
                     capabilities: printCapabilities
                 })
             });
             
             printPage.fit(mapPanel, {mode: "printer"});
-        
-            t.eq(printPage.center.toString(), center.toString(), "Print page centered correctly.");
+
+            // helper function for lonlat comparisons
+            var toRoundedShortString = function(lonlat, precision){
+                var prec = precision || 3;
+                return (lonlat.lon.toFixed(prec) + ", " + lonlat.lat.toFixed(prec));
+            };
+
+            t.eq(toRoundedShortString(printPage.center), toRoundedShortString(center), "Print page centered correctly.");
             t.eq(printPage.scale.get("value"), 4000000, "Print scale set correctly.");
 
             printPage.fit(mapPanel, {mode: "closest"});

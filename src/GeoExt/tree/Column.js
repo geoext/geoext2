@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
 /**
- * Provides indentation and folder structure markup for a Tree taking into account
- * depth and position within the tree hierarchy.
- * 
- * @private
+ * @class
+ * A subclass of {@link Ext.tree.Column}, which provides indentation and 
+ * folder structure markup for a Tree, taking into account depth and 
+ * position within the tree hierarchy.
  */
 Ext.define('GeoExt.tree.Column', {
     extend: 'Ext.tree.Column',
@@ -17,7 +25,7 @@ Ext.define('GeoExt.tree.Column', {
 
         this.renderer = function(value, metaData, record, rowIdx, colIdx, store, view) {
 
-            var buf   = [parentRenderer(value, metaData, record, rowIdx, colIdx, store, view)];
+            var buf   = [parentRenderer.call(this, value, metaData, record, rowIdx, colIdx, store, view)];
 
             // Replace all base layers from checkbox to radio
             if(record.get('checkedGroup')) {

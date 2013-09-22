@@ -1,16 +1,24 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Geometry/Polygon.js
+ * @include OpenLayers/Geometry/LinearRing.js
+ * @include OpenLayers/Geometry/Point.js
+ * @include OpenLayers/Feature/Vector.js
+ * @include GeoExt/panel/Map.js
  */
 
 /**
  * @class GeoExt.data.PrintPage
  *
  * Provides a representation of a print page for
- *  {@link GeoExt.data.PrintProvider}. The extent of the page is stored as
+ *  {@link GeoExt.data.MapfishPrintProvider}. The extent of the page is stored as
  *  `OpenLayers.Feature.Vector`. Widgets can use this to display the print
  *  extent on the map.
  */
@@ -21,13 +29,13 @@ Ext.define('GeoExt.data.PrintPage', {
     ],
 
     /**
-     * @cfg {GeoExt.data.PrintProvider} printProvider
+     * @cfg {GeoExt.data.MapfishPrintProvider} printProvider
      * The print provider to use with this page.
      */
 
     /**
      * @private
-     * @property {GeoExt.data.PrintProvider} printProvider
+     * @property {GeoExt.data.MapfishPrintProvider} printProvider
      */
     printProvider: null,
 

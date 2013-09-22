@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
 /**
  * This plugin provides basic tree - map synchronisation functionality for a TreeView.
  *
@@ -55,8 +63,8 @@ Ext.define('GeoExt.tree.View', {
     },
 
     createChild: function(el, node) {
-
-        var component = node.get('component');
+        var component = node.get('component'),
+            cmpObj;
 
         if(component) {
             cmpObj = Ext.ComponentManager.create(component);

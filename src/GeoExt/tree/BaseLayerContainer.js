@@ -1,9 +1,16 @@
-/**
- * @require GeoExt/tree/LayerContainer.js
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include GeoExt/tree/LayerContainer.js
  */
 
 /**
- * @class
  * A layer node plugin that will collect all base layers of an OpenLayers
  * map. Only layers that have displayInLayerSwitcher set to true will be
  * included. The childrens' iconCls defaults to
@@ -14,9 +21,7 @@
  * showing the user that only one base layer can be active at a time.
  * 
  * To use this node plugin in a tree node config, configure a node like this:
- *
- * @example
- * {plugins: "gx_baselayercontainer", text: "My base layers"} 
+ *     {plugins: "gx_baselayercontainer", text: "My base layers"} 
  */
 Ext.define('GeoExt.tree.BaseLayerContainer', {
     extend: 'GeoExt.tree.LayerContainer',

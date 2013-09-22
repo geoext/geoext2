@@ -1,9 +1,15 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
- * See http://svn.geoext.org/core/trunk/geoext/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Util.js
+ * @include GeoExt/data/ScaleModel.js
+ * @include GeoExt/panel/Map.js
  */
 
 /**
@@ -13,7 +19,10 @@
  * {GeoExt.panel.Map} object.
  */
 Ext.define('GeoExt.data.ScaleStore', {
-    requires: ['GeoExt.data.ScaleModel', 'GeoExt.panel.Map'],
+    requires: [
+        'GeoExt.data.ScaleModel',
+        'GeoExt.panel.Map'
+    ],
     extend: 'Ext.data.Store',
     model: 'GeoExt.data.ScaleModel',
 

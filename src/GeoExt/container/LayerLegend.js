@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2008-2012 The Open Source Geospatial Foundation
- * 
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
- * See https://github.com/geoext/geoext2/blob/master/license.txt for the full text
- * of the license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
  */
 
 /**
@@ -33,11 +33,11 @@ Ext.define('GeoExt.container.LayerLegend', {
         getTypes: function(layerRecord, preferredTypes) {
             var types = (preferredTypes || []).concat(),
                 scoredTypes = [], score, type;
-            for (type in GeoExt.LayerLegend.types) {
-                score = GeoExt.LayerLegend.types[type].supports(layerRecord);
+            for (type in this.types) {
+                score = this.types[type].supports(layerRecord);
                 if(score > 0) {
                     // add to scoredTypes if not preferred
-                    if (types.indexOf(type) == -1) {
+                    if (Ext.Array.indexOf(types, type) == -1) {
                         scoredTypes.push({
                             type: type,
                             score: score
@@ -68,7 +68,7 @@ Ext.define('GeoExt.container.LayerLegend', {
         supports: function(layerRecord) {
             // to be implemented by subclasses
         },
-        /** @cfg {Array}
+        /** @cfg {Object}
          * An object containing a name-class mapping of LayerLegend subclasses.
          * To register as LayerLegend, a subclass should add itself to this object:
          *  
@@ -78,7 +78,7 @@ Ext.define('GeoExt.container.LayerLegend', {
          * GeoExt.LayerLegend.types["getlegendgraphic"] =
          *     GeoExt.GetLegendGraphicLegend;
          */
-        types: []
+        types: {} 
     },
 
     /** @cfg {GeoExt.data.LayerRecord}

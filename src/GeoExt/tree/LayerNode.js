@@ -1,23 +1,31 @@
+/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/**
+ * The LayerNode plugin. This is used to create a node that is connected to
+ * a layer, so the checkbox and the layer's visibility are in sync. A basic
+ * layer node would be configured like this:
+ *     {plugins: ['gx_layernode'], layer: myLayer}
+ *
+ * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the
+ * node configuration.
+ */
 Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',
-    mixins: ['Ext.util.Observable'],
     alias: 'plugin.gx_layer',
 
     /**
-     * If provided, nodes will be rendered with a radio button instead of a
-     * checkbox. All layers represented by nodes with the same checkedGroup are
-     * considered mutually exclusive - only one can be visible at a time.
-     * @cfg {String} checkedGroup
-     */
-    
-    /**
-     * If the node was configured with a text, we consider the text fixed and
-     * won't update it when the layer's name changes.
-     * @cfg {Boolean} fixedText
-     */
-    
-    /** 
-     *  @private
+     * @private
+     * The init method is invoked after initComponent method has been run for
+     * the client Component.
+     *
+     * It perform plugin initialization.
+     * @param {Ext.Component} target The client Component which owns this plugin.
      */
     init: function(target) {
 
@@ -25,9 +33,9 @@ Ext.define('GeoExt.tree.LayerNode', {
         var layer = target.get('layer');
 
         target.set('checked', layer.getVisibility());
-        target.set('checkedGroup', this.checkedGroup === undefined ?
-            layer.isBaseLayer ? "gx_baselayer" : "" :
-            "");
+        if (!target.get('checkedGroup') && layer.isBaseLayer) {
+            target.set('checkedGroup', 'gx_baselayer');
+        }
         target.set('fixedText', !!target.text);
         
         target.set('leaf', true);
@@ -43,17 +51,24 @@ Ext.define('GeoExt.tree.LayerNode', {
         });
     },
 
-    onAfterEdit: function(modifiedFields) {
+    /**
+     * @private
+     * Handler for the node's afteredit event.
+     *
+     * @param {GeoExt.data.LayerTreeModel} node
+     * @param {String[]} modifiedFields
+     */
+    onAfterEdit: function(node, modifiedFields) {
         var me = this;
 
-        if(~modifiedFields.indexOf('checked')) {
-            this.onCheckChange();
+        if(~Ext.Array.indexOf(modifiedFields, 'checked')) {
+            me.onCheckChange();
         }
     },
     
-    /** private: method[onLayerVisiilityChanged
-     *  handler for visibilitychanged events on the layer
-     * @scope (Ext.data.NodeInterface) current node
+    /**
+     * @private
+     * Handler for visibilitychanged events on the layer
      */
     onLayerVisibilityChanged: function() {
         if(!this._visibilityChanging) {
@@ -61,11 +76,10 @@ Ext.define('GeoExt.tree.LayerNode', {
         }
     },
     
-    /** private: method[onCheckChange]
-     *  :param node: ``GeoExt.tree.LayerNode``
-     *  :param checked: ``Boolean``
-     *
-     *  handler for checkchange events 
+    /**
+     * @private
+     * Updates the visibility of the layer that is connected to the target
+     * node. 
      */
     onCheckChange: function() {
         var node = this.target,
@@ -84,24 +98,6 @@ Ext.define('GeoExt.tree.LayerNode', {
                 layer.setVisibility(checked);
             }
             delete node._visibilityChanging;
-        }
-    },
-    
-    /** private: method[onMapMoveend]
-     *  :param evt: ``OpenLayers.Event``
-     *
-     *  handler for map moveend events to determine if node should be
-     *  disabled or enabled 
-     */
-    onMapMoveend: function(evt){
-        /* scoped to node */
-        if (this.autoDisable) {
-            if (this.layer.inRange === false) {
-                this.disable();
-            }
-            else {
-                this.enable();
-            }
         }
     }
 
