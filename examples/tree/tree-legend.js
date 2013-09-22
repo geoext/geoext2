@@ -9,7 +9,10 @@ Ext.require([
     'GeoExt.data.LayerTreeModel',
     'GeoExt.tree.View',
     'GeoExt.container.WmsLegend',
-    'GeoExt.tree.Column'
+    'GeoExt.tree.Column',
+    // We need to require this class, even though it is used by Ext.EventObjectImpl
+    // see: http://www.sencha.com/forum/showthread.php?262124-Missed-(-)-dependency-reference-to-a-Ext.util.Point-in-Ext.EventObjectImpl
+    'Ext.util.Point'
 ]);
 
 Ext.application({
