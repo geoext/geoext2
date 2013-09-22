@@ -9,7 +9,7 @@ Ext.Loader.setConfig({
         // for dev use
         Ext: "http://cdn.sencha.com/ext/gpl/4.2.1/src"
         // for build purpose
-        //Ext: "extjs-4.1.0/src"
+//        Ext: "ext-4.2.1.883/src"
     }
 });
 

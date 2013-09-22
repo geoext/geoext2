@@ -10,8 +10,8 @@ On Linux:
 
 === Download ExtJs ===
 
-Download Ext JS 4.1 from http://www.sencha.com/products/extjs/download,
-and unzip it in the current dir (examples/app/simple/extjs-4.1.0).
+Download Ext JS 4.2.1 from http://www.sencha.com/products/extjs/download,
+and unzip it in the current dir (examples/app/simple/ext-4.2.1.883).
 
 === Build ===
 
@@ -19,11 +19,11 @@ To be able to build the simple-dev.html and app.js files need to point
 to the local Ext JS installation: 
 
  - edit simple-dev.html, comment out the script tag that points to
-   "http://cdn.sencha.io/ext-4.1.0-gpl/ext-debug.js", and uncomment
-   the one that points to "extjs-4.1.0/ext-debug.js".
+   "http://cdn.sencha.com/ext/gpl/4.2.1/ext-debug.js", and uncomment
+   the one that points to "ext-4.2.1.883/ext-debug.js".
 
  - edit app.js and in the Loader config replace
-   "http://cdn.sencha.io/ext-4.1.0-gpl/src" by "extjs-4.1.0/src".
+   "http://cdn.sencha.com/ext/gpl/4.2.1/src" by "ext-4.2.1.883/src".
 
 You can now update (or create) the build profile:
 
