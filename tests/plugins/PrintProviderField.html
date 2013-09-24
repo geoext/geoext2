@@ -102,7 +102,9 @@
                 plugins: plugin,
                 renderTo: document.body,
                 // add a fake ownerCt to the field
-                ownerCt: {printProvider: printProvider}
+                ownerCt: Ext.create('Ext.panel.Panel', {
+                    printProvider: printProvider
+                })
             });
 
             plugin.init(field);
