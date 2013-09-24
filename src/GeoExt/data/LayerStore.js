@@ -146,7 +146,7 @@ Ext.define('GeoExt.data.LayerStore', {
             "clear": me.onClear,
             "add": me.onAdd,
             "remove": me.onRemove,
-            "update": me.onUpdate,
+            "update": me.onStoreUpdate,
             scope: me
         });
         me.data.on({
@@ -173,6 +173,7 @@ Ext.define('GeoExt.data.LayerStore', {
             me.un("clear", me.onClear, me);
             me.un("add", me.onAdd, me);
             me.un("remove", me.onRemove, me);
+            me.un("update", me.onStoreUpdate, me);
 
             me.data.un("replace", me.onReplace, me);
 
@@ -345,7 +346,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * @param {Ext.data.Model} record
      * @param {Number} operation
      */
-    onUpdate: function(store, record, operation) {
+    onStoreUpdate: function(store, record, operation) {
         if(operation === Ext.data.Record.EDIT) {
             if (record.modified && record.modified.title) {
                 var layer = record.getLayer();
