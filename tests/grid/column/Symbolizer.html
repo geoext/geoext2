@@ -86,22 +86,29 @@
             el8.innerHTML = markup8;
 
             t.delay_call(1, function() {
-                t.ok(el1.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for Curve");
-                t.ok(el2.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for LinearRing");
-                t.ok(el3.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for LineString");
-                t.ok(el4.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for MultiLineString");
-                t.ok(el5.outerHTML.indexOf("OpenLayers.Geometry.Point") >= 0, "test for MultiPoint");
-                t.ok(el6.outerHTML.indexOf("OpenLayers.Geometry.Polygon") >= 0, "test for MultiPolygon");
-                t.ok(el7.outerHTML.indexOf("OpenLayers.Geometry.Point") >= 0, "test for Point");
-                t.ok(el8.outerHTML.indexOf("OpenLayers.Geometry.Polygon") >= 0, "test for Polygon");
+                t.ok(el1.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for Curve");
+                t.ok(el2.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for LinearRing");
+                t.ok(el3.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for LineString");
+                t.ok(el4.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for MultiLineString");
+                t.ok(el5.outerHTML.indexOf("OpenLayers_Geometry_Point") >= 0, "test for MultiPoint");
+                t.ok(el6.outerHTML.indexOf("OpenLayers_Geometry_Polygon") >= 0, "test for MultiPolygon");
+                t.ok(el7.outerHTML.indexOf("OpenLayers_Geometry_Point") >= 0, "test for Point");
+                t.ok(el8.outerHTML.indexOf("OpenLayers_Geometry_Polygon") >= 0, "test for Polygon");
 
+                // Teardown
                 Ext.each(Ext.ComponentQuery.query('gx_symbolizercolumn'),
                     function (renderer) {
                         renderer.destroy();
-                });
+                    }
+                );
                 document.body.removeChild(el1);
                 document.body.removeChild(el2);
                 document.body.removeChild(el3);
+                document.body.removeChild(el4);
+                document.body.removeChild(el5);
+                document.body.removeChild(el6);
+                document.body.removeChild(el7);
+                document.body.removeChild(el8);
             });
         }
     </script>
