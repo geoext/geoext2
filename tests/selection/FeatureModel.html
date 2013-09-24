@@ -467,25 +467,27 @@
             // features visible
             map.zoomTo(16);
 
-            // simulate another mousedown on the second row
-            // to get multiple selection
-            // test that the map is recentered so that all features are visible
-            e = {
-                button: 0,
-                shiftKey: false,
-                ctrlKey: true
-            };
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            t.delay_call(1, function(){
+                // simulate another mousedown on the second row
+                // to get multiple selection
+                // test that the map is recentered so that all features are visible
+                e = {
+                    button: 0,
+                    shiftKey: false,
+                    ctrlKey: true
+                };
+                sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
 
-            t.eq(map.getCenter().toString(), "lon=6,lat=6", "Map recentered to lon=6,lat=6 to make multiple selected features visible");
-            t.eq(map.getZoom(), 4, "Map' s zoom has changed in order to make multiple selected features visible");
+                t.eq(map.getCenter().toString(), "lon=6,lat=6", "Map recentered to lon=6,lat=6 to make multiple selected features visible");
+                t.eq(map.getZoom(), 4, "Map' s zoom has changed in order to make multiple selected features visible");
 
-            sm.clearSelections();
+                sm.clearSelections();
 
-            /*
-             * Tear down
-             */
-            grid.destroy();
+                /*
+                 * Tear down
+                 */
+                grid.destroy();
+            });
 
         }
     </script>
