@@ -172,7 +172,7 @@ Ext.define('GeoExt.data.FeatureStore', {
             'clear': this.onClear,
             'add': this.onAdd,
             'remove': this.onRemove,
-            'update': this.onUpdate,
+            'update': this.onStoreUpdate,
             scope: this
         });
 
@@ -195,7 +195,7 @@ Ext.define('GeoExt.data.FeatureStore', {
                 'clear': this.onClear,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'update': this.onUpdate,
+                'update': this.onStoreUpdate,
                 scope: this
             });
             this.layer = null;
@@ -384,7 +384,7 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Ext.data.Model} record
      * @param {Number} operation
      */
-    onUpdate: function(store, record, operation, modifiedFieldNames) {
+    onStoreUpdate: function(store, record, operation, modifiedFieldNames) {
         if (!this._updating) {
             var feature = record.raw;
             if (feature.state !== OpenLayers.State.INSERT) {
