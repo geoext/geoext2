@@ -17,7 +17,7 @@
         }
     });
 
-    Ext.require(['GeoExt.Form']);
+    Ext.Loader.syncRequire(['GeoExt.Form']);
 
     function test_toFilter(t) {
         t.plan(27);
@@ -219,7 +219,7 @@
         t.eq(filter.value, "bar", "Default behaviour is to not add any wildcards");
     }
 
-    Ext.require(['GeoExt.data.AttributeModel', 'GeoExt.data.reader.Attribute']);
+    Ext.Loader.syncRequire(['GeoExt.data.AttributeModel', 'GeoExt.data.reader.Attribute']);
 
     function test_recordToField(t) {
         t.plan(31);

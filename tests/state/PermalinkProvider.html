@@ -15,7 +15,7 @@
         }
     });
 
-    Ext.require(['GeoExt.panel.Map', 'GeoExt.state.PermalinkProvider']);
+    Ext.Loader.syncRequire(['GeoExt.panel.Map', 'GeoExt.state.PermalinkProvider']);
 
     function test_set(t) {
         t.plan(1);

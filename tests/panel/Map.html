@@ -15,7 +15,7 @@
             }
         });
 
-        Ext.require(['GeoExt.panel.Map', 'GeoExt.slider.Zoom']);
+        Ext.Loader.syncRequire(['GeoExt.panel.Map', 'GeoExt.slider.Zoom']);
  
         // the hidden span element that contains the test iframe
         var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
