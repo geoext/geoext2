@@ -14,8 +14,11 @@
                 "GeoExt": "../../src/GeoExt"
             }
         });
-        
-        Ext.require([
+
+        // loading happens with syncrequire, because in IE8, the registering of
+        // GeoExt.container.WmsLegend as available legend type would happen to
+        // late and the legend test would fail.
+        Ext.Loader.syncRequire([
             'GeoExt.data.PrintPage', 
             'GeoExt.data.MapfishPrintProvider',
             'GeoExt.panel.Legend',
@@ -23,7 +26,7 @@
             'GeoExt.container.UrlLegend',
             'GeoExt.container.VectorLegend'
         ]);
-        
+
     </script>
 
     <script type="text/javascript">
