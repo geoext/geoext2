@@ -5,6 +5,8 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
+    <script src="../test-utility.js"></script>
+
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -20,6 +22,7 @@
         ]);
        
         function test_zoomslider(t) {
+            showTestIframe();
             t.plan(7);
             
             var map = new OpenLayers.Map({
@@ -69,6 +72,7 @@
                     }
 
                     map.destroy();
+                    hideTestIframe();
                 });
             });
             
@@ -76,6 +80,7 @@
         }
         
         function test_zoomslider_aggressive(t) {
+            showTestIframe();
             t.plan(2);
             var slider1 = new GeoExt.ZoomSlider({
                 renderTo: document.body
@@ -100,6 +105,7 @@
             
             slider1.destroy();
             slider2.destroy();
+            hideTestIframe();
         }
 
     </script>
