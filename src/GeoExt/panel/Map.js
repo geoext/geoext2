@@ -356,8 +356,9 @@ Ext.define('GeoExt.panel.Map', {
      * * `visibility_<XXX>`
      * * `opacity_<XXX>`
      *
-     * The <XXX> suffix is either the title or id of the layer record, it can be
-     * influenced by setting #prettyStateKeys to `true` or `false`.
+     * The &lt;XXX&gt; suffix is either the title or id of the layer record, it
+     * can be influenced by setting #prettyStateKeys to `true` or `false`.
+     *
      * @private
      * @return {Object}
      */
