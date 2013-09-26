@@ -6,6 +6,8 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
+    <script src="../test-utility.js"></script>
+
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -395,6 +397,7 @@
         }
 
         function test_autopan_map_on_selection(t) {
+            showTestIframe();
             t.plan(4);
 
             /*
@@ -487,6 +490,7 @@
                  * Tear down
                  */
                 grid.destroy();
+                hideTestIframe();
             });
 
         }
