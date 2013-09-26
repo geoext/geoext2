@@ -70,7 +70,7 @@ Ext.define('GeoExt.data.LayerStore', {
      */
 
     /**
-     * @config {Object} Creation parameters
+     * @param {Object} config Creation parameters
      * @private
      */
     constructor: function(config) {
