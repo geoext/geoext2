@@ -6,6 +6,8 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
+    <script src="../test-utility.js"></script>
+
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -17,9 +19,6 @@
 
         Ext.Loader.syncRequire(['GeoExt.panel.Map', 'GeoExt.slider.Zoom']);
  
-        // the hidden span element that contains the test iframe
-        var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
-       
         function createMap() {
             var map = new OpenLayers.Map();
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -36,7 +35,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var moveToCnt;
 
@@ -69,7 +68,7 @@
             
             mapPanel.destroy();
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
         
         function test_allOverlays(t) {
@@ -78,7 +77,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map, panel;
             
@@ -104,7 +103,7 @@
             t.eq(panel.map.allOverlays, true, "allOverlays set to true if map config is provided to panel");
             panel.destroy();
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function test_zoom(t) {
@@ -113,7 +112,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var panel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
@@ -128,7 +127,7 @@
             
             panel.destroy();
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function test_extent(t) {
@@ -137,7 +136,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map, panel, log = {};
             
@@ -202,7 +201,7 @@
             t.ok(panel.map.getExtent(), "map has an extent after layer is added");
             panel.destroy();
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
         
         function test_center(t) {
@@ -211,7 +210,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map, panel, log = {};
             
@@ -266,7 +265,7 @@
             map.destroy();
             panel.destroy();
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
         
         function test_destroy(t) {
@@ -284,7 +283,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
             
             var panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
@@ -309,7 +308,7 @@
             }
             t.ok(!panel.map, "panel has no reference to a map");
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function test_applyState_called(t) {
@@ -320,7 +319,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var provider, applyState, mapPanel, log;
 
@@ -353,7 +352,7 @@
 
             GeoExt.panel.Map.prototype.applyState = applyState;
             mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function test_applyState(t) {
@@ -364,7 +363,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var state;
 
@@ -477,7 +476,7 @@
             // tear down
 
             mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function test_getState_called(t) {
@@ -488,7 +487,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var getState, mapPanel, log;
 
@@ -570,7 +569,7 @@
                 mapPanel.destroy();
             });
 
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function test_getState(t) {
@@ -581,7 +580,7 @@
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
             // (hidden again at the end of the test)
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var state;
 
@@ -660,7 +659,7 @@
                  "state.opacity_barid correctly set");
 
             mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
         
         function test_add(t) {

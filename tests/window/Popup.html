@@ -6,11 +6,9 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
+    <script src="../test-utility.js"></script>
+
     <script type="text/javascript">
-        // setSize does not work in iframes that are inside a hidden container
-        // in FF and IE.  So, we make the hidden span element visible when
-        // starting a test requiring it then hide it at the end.
-        var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
 
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -26,7 +24,7 @@
         ]);
 
         function setupContext(options) {        
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -62,7 +60,7 @@
         }
 
         function setupMultiFeatureContext() {
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -114,14 +112,14 @@
             });
             context.map.destroy();
             context.mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
         
         function tearDown(context) {
             context.feature.destroy();
             context.map.destroy();
             context.mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function popup(feature, map, options) {

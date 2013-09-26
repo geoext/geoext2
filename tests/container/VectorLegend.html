@@ -4,7 +4,10 @@
 
 <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
+<script src="../test-utility.js"></script>
+
 <script type="text/javascript">
+
     Ext.Loader.setConfig({
         disableCaching: false,
         enabled: true,
@@ -131,7 +134,7 @@
     }
     
     function test_saferemove(t) {
-
+        showTestIframe();
         t.plan(3);
 
         var map = new OpenLayers.Map();
