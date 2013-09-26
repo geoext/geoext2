@@ -161,7 +161,7 @@ Ext.define('GeoExt.slider.Zoom', {
     /**
      * Called by a MapPanel if this component is one of the items in the panel.
      * @private
-     * @param {GeoExt.panel.Map}
+     * @param {GeoExt.panel.Map} panel
      */
     removeFromMapPanel: function(panel) {
         var el = this.getEl();
@@ -172,7 +172,7 @@ Ext.define('GeoExt.slider.Zoom', {
 
     /**
      * @private
-     * @param {OpenLayers.Map}
+     * @param {OpenLayers.Map} map
      */
     bind: function(map) {
         this.map = map;
