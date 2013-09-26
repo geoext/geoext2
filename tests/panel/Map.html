@@ -663,6 +663,7 @@
         }
         
         function test_add(t) {
+            showTestIframe();
             t.plan(1);
             var layers = [
                 new OpenLayers.Layer("foo", {visibility: true}),
@@ -685,6 +686,7 @@
                     Ext.query(".olMapViewport", mapPanel.map.div)[0],
                  "Map Panel item has the map's viewport div as parent.");
             mapPanel.destroy();
+            hideTestIframe();
         }
     </script>
   </head>
