@@ -170,48 +170,55 @@
 
                 legend.destroy();
                 map.destroy();
+                hideTestIframe();
             });
         });
     }
 
     function test_createRuleRenderer(t) {
-        
         t.plan(2);
-
         var map = new OpenLayers.Map();
         var layer = new OpenLayers.Layer.Vector("old");
         map.addLayer(layer);
 
         var store = Ext.create("GeoExt.data.LayerStore", {map: map});
-        
-        var legend = Ext.create("GeoExt.container.VectorLegend", {
-            layerRecord: store.getAt(0),
-            renderTo: "legendpanel",
-            symbolType: "Point"
-        });
-        
-        var polyRule = new OpenLayers.Rule({
-            symbolizers: [
-                new OpenLayers.Symbolizer.Polygon({
-                    fillColor: "red"
-                })
-            ]
-        });
-        var pointRule = new OpenLayers.Rule({
-            symbolizers: [
-                new OpenLayers.Symbolizer.Point({
-                    fillColor: "red",
-                    pointRadius: 10
-                })
-            ]
-        });
-        
-        var polyRenderer = legend.createRuleRenderer(polyRule);
-        t.eq(polyRenderer.symbolType, "Polygon", "forced polygon renderer");
-        
-        var pointRenderer = legend.createRuleRenderer(pointRule);
-        t.eq(pointRenderer.symbolType, "Point", "got point renderer");
 
+        t.delay_call(1, function(){
+
+            var legend = Ext.create("GeoExt.container.VectorLegend", {
+                layerRecord: store.getAt(0),
+                renderTo: "legendpanel",
+                symbolType: "Point"
+            });
+
+            var polyRule = new OpenLayers.Rule({
+                symbolizers: [
+                    new OpenLayers.Symbolizer.Polygon({
+                        fillColor: "red"
+                    })
+                ]
+            });
+
+            var pointRule = new OpenLayers.Rule({
+                symbolizers: [
+                    new OpenLayers.Symbolizer.Point({
+                        fillColor: "red",
+                        pointRadius: 10
+                    })
+                ]
+            });
+
+            var polyRenderer = legend.createRuleRenderer(polyRule);
+            t.eq(polyRenderer.symbolType, "Polygon", "forced polygon renderer");
+
+            var pointRenderer = legend.createRuleRenderer(pointRule);
+            t.eq(pointRenderer.symbolType, "Point", "got point renderer");
+
+            // Teardown
+            legend.destroy();
+            store.destroy();
+            map.destroy();
+        });
     }
     
     function test_getRuleTitle(t) {
