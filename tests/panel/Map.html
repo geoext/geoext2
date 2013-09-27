@@ -682,9 +682,8 @@
                     ref: "zoomSlider"
                 }
             });
-            t.ok(mapPanel.items.get(0).getEl().dom.parentNode ===
-                    Ext.query(".olMapViewport", mapPanel.map.div)[0],
-                 "Map Panel item has the map's viewport div as parent.");
+            t.ok(mapPanel.items.get(0).getEl().dom.parentNode === mapPanel.body.dom,
+                 "Map Panel item has the panels's body div as parent.");
             mapPanel.destroy();
         }
     </script>
