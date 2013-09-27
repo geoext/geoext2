@@ -151,12 +151,6 @@ Ext.define('GeoExt.slider.Zoom', {
             },
             afterrender: function() {
                 this.bind(panel.map);
-                var el = this.getEl();
-                el.setStyle({
-                    position: "absolute",
-                    zIndex: 2000,
-                    height: "100px"
-                });
             },
             scope: this
         });
@@ -173,7 +167,7 @@ Ext.define('GeoExt.slider.Zoom', {
     /**
      * Called by a MapPanel if this component is one of the items in the panel.
      * @private
-     * @param {GeoExt.panel.Map}
+     * @param {GeoExt.panel.Map} panel
      */
     removeFromMapPanel: function(panel) {
         var el = this.getEl();
@@ -184,7 +178,7 @@ Ext.define('GeoExt.slider.Zoom', {
 
     /**
      * @private
-     * @param {OpenLayers.Map}
+     * @param {OpenLayers.Map} map
      */
     bind: function(map) {
         this.map = map;
