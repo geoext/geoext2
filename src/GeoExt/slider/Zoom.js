@@ -85,6 +85,12 @@ Ext.define('GeoExt.slider.Zoom', {
     updating: false,
 
     /**
+     * @property {Boolean} zooming
+     * The map is zoomed by the slider (based on map change/changecomplete).
+     */
+    zooming: false,
+
+    /**
      * Initialize the component.
      * @private
      */
@@ -145,6 +151,12 @@ Ext.define('GeoExt.slider.Zoom', {
             },
             afterrender: function() {
                 this.bind(panel.map);
+                var el = this.getEl();
+                el.setStyle({
+                    position: "absolute",
+                    zIndex: 2000,
+                    height: "100px"
+                });
             },
             scope: this
         });
@@ -161,7 +173,7 @@ Ext.define('GeoExt.slider.Zoom', {
     /**
      * Called by a MapPanel if this component is one of the items in the panel.
      * @private
-     * @param {GeoExt.panel.Map} panel
+     * @param {GeoExt.panel.Map}
      */
     removeFromMapPanel: function(panel) {
         var el = this.getEl();
@@ -172,7 +184,7 @@ Ext.define('GeoExt.slider.Zoom', {
 
     /**
      * @private
-     * @param {OpenLayers.Map} map
+     * @param {OpenLayers.Map}
      */
     bind: function(map) {
         this.map = map;
@@ -248,6 +260,7 @@ Ext.define('GeoExt.slider.Zoom', {
      */
     changeHandler: function() {
         if(this.map && !this.updating) {
+            this.zooming = true;
             this.map.zoomTo(this.getValue());
         }
     },
@@ -258,10 +271,11 @@ Ext.define('GeoExt.slider.Zoom', {
      * @private
      */
     update: function() {
-        if(this.rendered && this.map) {
+        if(this.rendered && this.map && !this.zooming) {
             this.updating = true;
             this.setValue(this.map.getZoom());
             this.updating = false;
         }
+        this.zooming = false;
     }
 });
