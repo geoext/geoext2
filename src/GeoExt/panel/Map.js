@@ -203,7 +203,7 @@ Ext.define('GeoExt.panel.Map', {
             if (typeof this.map.getViewport === "function") {
                 this.items.each(function(cmp) {
                     if (typeof cmp.addToMapPanel === "function") {
-                        cmp.getEl().appendTo(this.map.getViewport());
+                        cmp.getEl().appendTo(this.body);
                     }
                 }, this);
             }
