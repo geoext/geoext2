@@ -160,7 +160,7 @@ Ext.define('GeoExt.window.Popup', {
         }
         if (this.location instanceof OpenLayers.Geometry) {
             if (typeof this.location.getCentroid == "function") {
-                this.location = this.location.getCentroid();
+                this.location = this.location.getCentroid(true);
             }
             this.location = this.location.getBounds().getCenterLonLat();
         } else if (this.location instanceof OpenLayers.Pixel) {

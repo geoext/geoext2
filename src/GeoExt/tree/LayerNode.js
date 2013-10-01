@@ -31,24 +31,26 @@ Ext.define('GeoExt.tree.LayerNode', {
 
         this.target = target;
         var layer = target.get('layer');
+        if ( layer ) {
+            target.set('checked', layer.getVisibility());
+            if (!target.get('checkedGroup') && layer.isBaseLayer) {
+                target.set('checkedGroup', 'gx_baselayer');
+            }
+            target.set('fixedText', !!target.text);
+            
+            if ( !target.childNodes.length )
+                target.set('leaf', true);
+            
+            if(!target.get('iconCls')) {
+                target.set('iconCls', "gx-tree-layer-icon");
+            }
 
-        target.set('checked', layer.getVisibility());
-        if (!target.get('checkedGroup') && layer.isBaseLayer) {
-            target.set('checkedGroup', 'gx_baselayer');
+            target.on('afteredit', this.onAfterEdit, this);
+            layer.events.on({
+                "visibilitychanged": this.onLayerVisibilityChanged,
+                scope: this
+            });
         }
-        target.set('fixedText', !!target.text);
-        
-        target.set('leaf', true);
-        
-        if(!target.get('iconCls')) {
-            target.set('iconCls', "gx-tree-layer-icon");
-        }
-
-        target.on('afteredit', this.onAfterEdit, this);
-        layer.events.on({
-            "visibilitychanged": this.onLayerVisibilityChanged,
-            scope: this
-        });
     },
 
     /**
