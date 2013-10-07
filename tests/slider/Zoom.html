@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
 
-    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+
+    <script src="../test-utility.js"></script>
 
     <script type="text/javascript">
         Ext.Loader.setConfig({
@@ -14,12 +16,13 @@
             }
         });
 
-        Ext.require([
+        Ext.Loader.syncRequire([
             'GeoExt.panel.Map',
             'GeoExt.slider.Zoom'
         ]);
        
         function test_zoomslider(t) {
+            showTestIframe();
             t.plan(7);
             
             var map = new OpenLayers.Map({
@@ -43,33 +46,41 @@
             
             // zoom in and test that value is updated
             map.zoomIn();
-            t.eq(slider.getValue(), 3, "slider has correct value after zoomIn");
+            t.delay_call(1, function(){
+                t.eq(slider.getValue(), 3, "slider has correct value after zoomIn");
+
+                // test that zoomTo updates slider value
+                map.zoomTo(0);
+
+                t.delay_call(1, function(){
+                    t.eq(slider.getValue(), 0, "slider has correct value after zoomTo");
+
+                    // test that slider can be destroyed
+                    try {
+                        slider.destroy();
+                        t.ok(true, "slider.destroy does not cause problems");
+                    } catch(err) {
+                        t.fail("slider.destroy causes problems: " + err);
+                    }
+
+                    // test that map can be zoomed without trouble after slider destroy
+                    try {
+                        map.zoomIn();
+                        t.ok(true, "map.zoomIn does not cause problems after slider.destroy");
+                    } catch(err) {
+                        t.fail("map.zoomIn causes problems after slider.destroy: " + err);
+                    }
+
+                    map.destroy();
+                    hideTestIframe();
+                });
+            });
             
-            // test that zoomTo updates slider value
-            map.zoomTo(0);
-            t.eq(slider.getValue(), 0, "slider has correct value after zoomTo");
-            
-            // test that slider can be destroyed
-            try {
-                slider.destroy();
-                t.ok(true, "slider.destroy does not cause problems");
-            } catch(err) {
-                t.fail("slider.destroy causes problems: " + err);
-            }
-            
-            // test that map can be zoomed without trouble after slider destroy
-            try {
-                map.zoomIn();
-                t.ok(true, "map.zoomIn does not cause problems after slider.destroy");
-            } catch(err) {
-                t.fail("map.zoomIn causes problems after slider.destroy: " + err);
-            }
-            
-            map.destroy();
 
         }
         
         function test_zoomslider_aggressive(t) {
+            showTestIframe();
             t.plan(2);
             var slider1 = new GeoExt.ZoomSlider({
                 renderTo: document.body
@@ -94,6 +105,7 @@
             
             slider1.destroy();
             slider2.destroy();
+            hideTestIframe();
         }
 
     </script>

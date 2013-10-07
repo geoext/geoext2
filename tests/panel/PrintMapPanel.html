@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
 
-    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
         Ext.Loader.setConfig({
@@ -15,7 +15,7 @@
             }
         });
         
-        Ext.require([
+        Ext.Loader.syncRequire([
             'GeoExt.panel.Map', 
             'GeoExt.panel.PrintMap', 
             'GeoExt.data.MapfishPrintProvider'
@@ -24,7 +24,7 @@
         var printCapabilities = {"scales":[{"name":"1:25,000","value":"25000"},{"name":"1:50,000","value":"50000"},{"name":"1:100,000","value":"100000"},{"name":"1:200,000","value":"200000"},{"name":"1:500,000","value":"500000"},{"name":"1:1,000,000","value":"1000000"},{"name":"1:2,000,000","value":"2000000"},{"name":"1:4,000,000","value":"4000000"}],"dpis":[{"name":"75","value":"75"},{"name":"150","value":"150"},{"name":"300","value":"300"}],"layouts":[{"name":"A4 portrait","map":{"width":440,"height":483},"rotation":true},{"name":"Legal","map":{"width":440,"height":483},"rotation":false}],"printURL":"http://demo.opengeo.org/geoserver/pdf/print.pdf","createURL":"http://demo.opengeo.org/geoserver/pdf/create.json"};
        
         function test_initComponent(t) {
-            t.plan(8);
+            t.plan(9);
                                
             var mapPanel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
@@ -69,16 +69,25 @@
 
             var printExtent = printMapPanel.printPage.getPrintExtent(mapPanel.map);
             t.ok(printMapPanel.map.getExtent().containsBounds(printExtent), "Preview contains the extent of the source map.");
-            
+
             var page = printMapPanel.printPage;
             var scale = page.scale;
             var scales = printMapPanel.previewScales;
-            var scaleIdx = Ext.Array.indexOf(scales, scale);
+
+            t.ok(scales instanceof Ext.data.Store, "Property previewScales is a Ext.data.Store");
+            // since we have an Ext.data.Store,
+            // we can use that classes' indexOf method.
+            var scaleIdx = scales.indexOf(scale);
+
             page.setScale(scales.getAt(scaleIdx + 1));
-            t.ok(!printMapPanel.map.getExtent().containsBounds(printExtent), "After zooming in, preview does not contain the extent of the source map any more.");
+
+            t.ok(!printMapPanel.map.getExtent().containsBounds(printExtent),
+                    "After zooming in, preview does not contain the extent " +
+                    "of the source map any more.");
 
             printMapPanel.destroy();
             mapPanel.destroy();
+
         }
 
     </script>

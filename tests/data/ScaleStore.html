@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
-    <script type="text/javascript" src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
+    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
 
     <script type="text/javascript">
 
@@ -15,7 +15,7 @@
             }
         });
 
-        Ext.require([
+        Ext.Loader.syncRequire([
             'GeoExt.data.ScaleStore'
         ]);
        
@@ -48,6 +48,46 @@
             return mapPanel;
         }
 
+        /**
+         * Since we add listeners to the array of listeners of a particular
+         * type, we can use the current count of the different types of
+         * listeners as the next index. So if there is 4 listeners of a 'foo'
+         * event registered, the index of the registered foo-event handler will
+         * be 4.
+         */
+        function getNextListenersIdx(evtObj, evtName) {
+            var nextIdx = 0;
+            if (evtObj &&
+                evtObj.events &&
+                evtObj.events.listeners &&
+                evtObj.events.listeners[evtName] &&
+                Ext.isArray(evtObj.events.listeners[evtName])) {
+                nextIdx = evtObj.events.listeners[evtName].length;
+            }
+            return nextIdx;
+        }
+
+        /**
+         * A helper method to compare actual and expected listeners in the
+         * tests.
+         */
+        function listenerEq(evtObj, evtName, expectedIdx, expectedListener) {
+            // catch the case where expectedListener is undefined
+            if(expectedListener === undefined){
+                return evtObj.events.listeners[evtName][expectedIdx] === undefined;
+            } else {
+                return evtObj.events.listeners[evtName][expectedIdx].func === expectedListener;
+            }
+        }
+
+        /**
+         * A shortcut when testing of a particular listener isn't at the
+         * specified index.
+         */
+        function listenerUndefined(evtObj, evtName, expectedIdx) {
+            return listenerEq(evtObj, evtName, expectedIdx, undefined);
+        }
+
         function test_constructor(t) {
             t.plan(1);
 
@@ -71,16 +111,22 @@
             // map has no base layer
             // 4 tests
 
+            // first we need to determine the indices of the listeners, which
+            // should be added, so that we can afterwards compare them.
+            //
+            var idxChangeBaseLayer = getNextListenersIdx(map, "changebaselayer"),
+                idxAddLayer = getNextListenersIdx(map, "addlayer");
             store.bind(map);
-            t.ok(map.events.listeners["changebaselayer"][0]["func"] == store.populateFromMap,
+
+            t.ok(listenerEq(map, "changebaselayer", idxChangeBaseLayer, store.populateFromMap),
                  "bind registers a changebaselayer listener (map has no base layer)");
-            t.ok(map.events.listeners["addlayer"][0]["func"] == store.populateOnAdd,
+            t.ok(listenerEq(map, "addlayer", idxAddLayer, store.populateOnAdd),
                  "bind registers a addlayer listener (map has no base layer)");
 
             store.unbind();
-            t.eq(map.events.listeners["changebaselayer"][0], undefined,
+            t.ok(listenerUndefined(map, "changebaselayer", idxChangeBaseLayer),
                  "unbind unregisters changebaselayer listener (map has no base layer)");
-            t.eq(map.events.listeners["addlayer"][0], undefined,
+            t.ok(listenerUndefined(map, "addlayer", idxAddLayer),
                  "unbind unregisters addlayer listener (map has no base layer)");
 
             // map has a base layer
@@ -88,14 +134,19 @@
 
             map.addLayer(new OpenLayers.Layer("name", {isBaseLayer: true}));
 
+            // Again, determine the indices of the soon to be bound listners
+            // just like above
+            idxChangeBaseLayer = getNextListenersIdx(map, "changebaselayer"),
+            idxAddLayer = getNextListenersIdx(map, "addlayer")
+
             store.bind(map);
-            t.ok(map.events.listeners["changebaselayer"][0]["func"] == store.populateFromMap,
+            t.ok(listenerEq(map, "changebaselayer", idxChangeBaseLayer, store.populateFromMap),
                  "bind registers a changebaselayer listener (map has a base layer)");
-            t.eq(map.events.listeners["addlayer"][0], undefined,
+            t.ok(listenerUndefined(map, "addlayer", idxAddLayer),
                  "bind does not register a addlayer listener (map has a base layer)");
 
             store.unbind();
-            t.eq(map.events.listeners["changebaselayer"][0], undefined,
+            t.ok(listenerUndefined(map, "changebaselayer", idxChangeBaseLayer),
                  "unbind unregisters changebaselayer listener (map has a base layer)");
 
             store.destroy();
