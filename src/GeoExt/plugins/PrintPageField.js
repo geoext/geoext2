@@ -16,8 +16,7 @@
  * A form with a combo box for the scale and text fields for rotation and a
  *  page title. The page title is a custom parameter of the print module's
  *  page configuration:
- *      
- *      @example
+ *  
  *      var printPage = Ext.create('GeoExt.data.PrintPage'{
  *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
  *              capabilities: printCapabilities

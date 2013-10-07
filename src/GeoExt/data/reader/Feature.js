@@ -28,6 +28,9 @@ Ext.define('GeoExt.data.reader.Feature', {
 
     /**
      * Copy feature attribute to record.
+     * @param {Array} convertedValues
+     * @param {Object} feature
+     * @param {Object} record
      * @private
      */
     convertFeatureRecordData: function(convertedValues, feature, record) {

@@ -15,7 +15,7 @@
  * @class GeoExt.data.WmsDescribeLayerStore
  * Small helper class to make creating stores for remote WMS layer description
  * easier. The store is pre-configured with a built-in
- * {Ext.data.proxy.Ajax} and {GeoExt.data.reader.WmsDescribeLayer}.
+ * {Ext.data.proxy.Ajax} and GeoExt.data.reader.WmsDescribeLayer.
  * The proxy is configured to allow caching and issues requests via GET.
  * If you require some other proxy/reader combination then you'll have to
  * configure this with your own proxy.

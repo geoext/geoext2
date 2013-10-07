@@ -56,7 +56,8 @@ Ext.define('GeoExt.plugins.PrintExtent', {
     alternateClassName : 'GeoExt.PrintExtent',
     
     /** 
-     * @private {Object} initialConfig
+     * @private
+     * @property {Object}
      * Holds the initial config object passed to the
      *  constructor.
      */
@@ -96,7 +97,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
     
     /** 
      * @cfg {Object} transformFeatureOptions
-     * Optional options for the`OpenLayers.Control.TransformFeature` 
+     * Optional options for the `OpenLayers.Control.TransformFeature` 
      *  control.
      */
     transformFeatureOptions: null,
@@ -242,7 +243,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      * Selects the given page (i.e. calls the setFeature on the modify feature
      *  control)
      * 
-     * @param {GeoExt.data.PrintPage} page The page to select
+     * @param {GeoExt.data.PrintPage} page The page to select.
      */
     selectPage: function(page) {
         this.control.active && this.control.setFeature(page.feature);
@@ -270,7 +271,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
 
     /** 
      * 
-     *  Tear downs the plugin, removing the
+     *  Tears down the plugin, removing the
      *  `OpenLayers.Control.TransformFeature` control and
      *  the `OpenLayers.Layer.Vector` layer.
      */

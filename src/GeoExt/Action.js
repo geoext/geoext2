@@ -13,14 +13,13 @@
  * Sample code to create a toolbar with an OpenLayers control into it.
  *
  * Example:
-<pre><code>
-var action = Ext.create('GeoExt.Action', {
-    text: "max extent",
-    control: new OpenLayers.Control.ZoomToMaxExtent(),
-    map: map
-});
-var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
-</code></pre>
+ * 
+ *     var action = Ext.create('GeoExt.Action', {
+ *         text: "max extent",
+ *         control: new OpenLayers.Control.ZoomToMaxExtent(),
+ *         map: map
+ *     });
+ *     var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',

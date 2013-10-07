@@ -27,14 +27,16 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     alternateClassName : 'GeoExt.form.GeocoderComboBox',
 
     /** 
-     * @cfg {String} Text to display for an empty field (i18n).
+     * @cfg {String}
+     * Text to display for an empty field (i18n).
      */
     emptyText: "Search",
     
     /**
-     * @cfg {GeoExt.panel.Map/OpenLayers.Map} map The map that will be controlled by
+     * @cfg {GeoExt.panel.Map/OpenLayers.Map} map
+     * The map that will be controlled by
      * this GeoCoderComboBox. Only used if this component is not added as item
-     * or toolbar item to a {GeoExt.panel.Map}.
+     * or toolbar item to a GeoExt.panel.Map.
      */
     /**
      * @property {OpenLayers.Map} map
@@ -43,30 +45,26 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 
     /**
      * @cfg {String/OpenLayers.Projection}
-     * The srs used by the geocoder service. Default is "EPSG:4326".
+     * The srs used by the geocoder service.
      */
     srs: "EPSG:4326",
     
     /** 
      * @cfg {Integer}
      * The minimum zoom level to use when zooming to a location.
-     * Not used when zooming to a bounding box. Default is 10.
+     * Not used when zooming to a bounding box.
      */
     zoom: 10,
     
     /** 
-     * @cfg {OpenLayers.Layer.Vector} If provided, a marker will be drawn on this
-     * layer with the location returned by the geocoder. The location will be
-     * cleared when the map panned. 
-     */
-    
-    /** 
-     * @cfg {Number} Delay before the search occurs.  Default is 100ms.
+     * @cfg {Number} 
+     * Delay before the search occurs in ms.
      */
     queryDelay: 100,
     
     /**
-     * @cfg {String} Field from selected record to use when the combo's
+     * @cfg {String}
+     * Field from selected record to use when the combo's
      * getValue method is called.  Default is "bounds". This field is
      * supposed to contain an array of [left, bottom, right, top] coordinates
      * for a bounding box or [x, y] for a location. 
@@ -109,7 +107,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     queryParam: "q",
     
     /**
-     * {Number}
+     * @cfg {Number}
      * Minimum number of entered characters to trigger a search.
      * Default is 3.
      */
@@ -178,7 +176,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     },
     
     /** 
-     * Find the MapPanel somewhere up in the hierarchy and set the map
+     * Find the MapPanel somewhere up in the hierarchy and set the map.
      * @private
      */
     findMapPanel: function() {
@@ -227,8 +225,8 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     },
     
     /** 
-     * Remove the location marker from the :obj:`layer` and destroy the
-     * :obj:`locationFeature`.
+     * Remove the location marker from the `layer` and destroy the
+     * `#locationFeature`.
      * @private
      */
     removeLocationFeature: function() {
@@ -249,7 +247,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
     },
     
     /** 
-     * Set the :obj:`map` for this instance.
+     * Set the `#map` for this instance.
      * @param {GeoExt.panel.Map/OpenLayers.Map} map
      * @private
      */

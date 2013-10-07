@@ -34,43 +34,42 @@
  * * `<name>__ge: OpenLayers.Filter.Comparison.GREATER_THAN_OR_EQUAL_TO`
  * * `<name>__like: OpenLayers.Filter.Comparison.LIKE`
  *
- * In most cases your would not directly create `GeoExt.form.action.Search`
+ * In most cases you would not directly create `GeoExt.form.action.Search`
  * objects, but use `GeoExt.form.FormPanel` instead.
  *
  * Sample code showing how to use a GeoExt Search Action with an Ext
  * form panel:
  * 
-<pre><code>
-var formPanel = Ext.create('Ext.form.Panel', {
-    renderTo: "formpanel",
-    items: [{
-        xtype: "textfield",
-        name: "name__like",
-        value: "mont"
-    }, {
-        xtype: "textfield",
-        name: "elevation__ge",
-        value: "2000"
-    }]
-});
-
-var searchAction = Ext.create('GeoExt.form.action.Search', {
-    form: formPanel.getForm(),
-    protocol: new OpenLayers.Protocol.WFS({
-        url: "http://publicus.opengeo.org/geoserver/wfs",
-        featureType: "tasmania_roads",
-        featureNS: "http://www.openplans.org/topp"
-    }),
-    abortPrevious: true
-});
-
-formPanel.getForm().doAction(searchAction, {
-    callback: function(response) {
-        // response.features includes the features read
-        // from the server through the protocol
-    }
-});
-</code></pre>
+ *     var formPanel = Ext.create('Ext.form.Panel', {
+ *          renderTo: "formpanel",
+ *          items: [{
+ *              xtype: "textfield",
+ *              name: "name__like",
+ *              value: "mont"
+ *          }, {
+ *              xtype: "textfield",
+ *              name: "elevation__ge",
+ *              value: "2000"
+ *          }]
+ *      });
+ *      
+ *      var searchAction = Ext.create('GeoExt.form.action.Search', {
+ *          form: formPanel.getForm(),
+ *          protocol: new OpenLayers.Protocol.WFS({
+ *              url: "http://publicus.opengeo.org/geoserver/wfs",
+ *              featureType: "tasmania_roads",
+ *              featureNS: "http://www.openplans.org/topp"
+ *          }),
+ *          abortPrevious: true
+ *      });
+ *      
+ *     formPanel.getForm().doAction(searchAction, {
+ *          callback: function(response) {
+ *              // response.features includes the features read
+ *              // from the server through the protocol
+ *          }
+ *      });
+ * 
  */
 Ext.define('GeoExt.form.action.Search', {
     extend: 'Ext.form.Action',
@@ -87,8 +86,8 @@ Ext.define('GeoExt.form.action.Search', {
 
     /**
      * @property {OpenLayers.Protocol.Response} response
-     *  `OpenLayers.Protocol.Response` A reference to the response
-     *  resulting from the search request. Read-only.
+     *  A reference to the response resulting from the search request.
+     *  Read-only.
      */
 
     /**

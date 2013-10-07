@@ -51,19 +51,17 @@ Ext.define('GeoExt.container.UrlLegend', {
      * FORMAT parameter in baseParams.
      *
      * Example:
-<pre><code>
-var legendPanel = new GeoExt.LegendPanel({
-    map: map,
-    title: 'Legend Panel',
-    defaults: {
-        style: 'padding:5px',
-        baseParams: {
-            FORMAT: 'image/png',
-            LEGEND_OPTIONS: 'forceLabels:on'
-        }
-    }
-});
-</code></pre>
+     *
+     *     var legendPanel = new GeoExt.LegendPanel({
+     *         map: map,
+     *         title: 'Legend Panel',
+     *         defaults: {
+     *             style: 'padding:5px',
+     *             baseParams: {
+     *                 LEGEND_OPTIONS: 'forceLabels:on'
+     *             }
+     *         }
+     *     });
      */
     baseParams: null,
 

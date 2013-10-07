@@ -14,7 +14,7 @@
 /**
  * @class
  * A layer node plugin that will collect all layers of an OpenLayers map. Only
- * layers that have displayInLayerSwitcher set to true will be included.
+ * layers that have ``displayInLayerSwitcher`` set to ``true`` will be included.
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
  * text defaults to "Layers".
  *

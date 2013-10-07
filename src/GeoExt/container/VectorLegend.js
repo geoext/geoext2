@@ -25,6 +25,10 @@ Ext.define('GeoExt.container.VectorLegend', {
     alternateClassName: 'GeoExt.VectorLegend',
     
     statics: {
+        /**
+         * @param {GeoExt.data.LayerRecord} layerRecord Record containing a vector layer.
+         * @return {Boolean}
+         */
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.Vector ? 1 : 0;
         }
@@ -32,30 +36,30 @@ Ext.define('GeoExt.container.VectorLegend', {
 
     /** @cfg {GeoExt.data.LayerRecord}
      * The record containing a vector layer that this legend will be based on.  
-     * One of ``layerRecord``, ``layer``,  or ``rules`` must be specified in 
+     * One of ``#layerRecord``, ``#layer``,  or ``#rules`` must be specified in 
      * the config.
      */
     layerRecord: null,
 
     /** @cfg {OpenLayers.Layer.Vector}
-     * The layer that this legend will be based on.  One of ``layer``, 
-     * ``rules``, or ``layerRecord`` must be specified in the config.
+     * The layer that this legend will be based on.  One of ``#layer``, 
+     * ``#rules``, or ``#layerRecord`` must be specified in the config.
      */
     layer: null,
 
     /** @cfg {Array}
-     * List of rules.  One of ``rules``, ``layer``, or ``layerRecord`` must be 
-     * specified in the config.  The ``symbolType`` property must also be
-     * provided if only ``rules`` are given in the config.
+     * List of rules.  One of ``#rules``, ``#layer``, or ``#layerRecord`` must be 
+     * specified in the config.  The ``#symbolType`` property must also be
+     * provided if only ``#rules`` are given in the config.
      */
     rules: null,
 
     /** @cfg {String}
      * The symbol type for legend swatches.  Must be one of ``"Point"``, 
-     * ``"Line"``, or ``"Polygon"``.  If not provided, the ``layer`` or
-     * ``layerRecord`` config property must be specified, and the geometry type
+     * ``"Line"``, or ``"Polygon"``.  If not provided, the ``#layer`` or
+     * ``#layerRecord`` config property must be specified, and the geometry type
      * of the first feature found on the layer will be used. If a rule does
-     * not have a symbolizer for ``symbolType``, we look at the symbolizers
+     * not have a symbolizer for ``#symbolType``, we look at the symbolizers
      * for the rule, and see if it has a ``"Point"``, ``"Line"`` or
      * ``"Polygon"`` symbolizer, which we use for rendering a swatch of the
      * respective geometry type. 
@@ -71,7 +75,7 @@ Ext.define('GeoExt.container.VectorLegend', {
 
     /** @cfg {Boolean}
      * Set cursor style to "pointer" for symbolizers.  Register for
-     * the ``symbolclick`` event to handle clicks.  Note that click events
+     * the ``#symbolclick`` event to handle clicks.  Note that click events
      * are fired regardless of this value.  If ``false``, no cursor style will
      * be set.  Default is ``false``.
      */
@@ -79,7 +83,7 @@ Ext.define('GeoExt.container.VectorLegend', {
 
     /** @cfg {Boolean}
      * Set cursor style to "pointer" for rule titles.  Register for
-     * the ``titleclick`` event to handle clicks.  Note that click events
+     * the ``#titleclick`` event to handle clicks.  Note that click events
      * are fired regardless of this value.  If ``false``, no cursor style will
      * be set.  Default is ``false``.
      */
@@ -87,9 +91,9 @@ Ext.define('GeoExt.container.VectorLegend', {
 
     /** @cfg {Boolean}
      * Set to true if a rule should be selected by clicking on the
-     * symbol or title. Selection will trigger the ruleselected event, and
+     * symbol or title. Selection will trigger the ``#ruleselected`` event, and
      * a click on a selected rule will unselect it and trigger the
-     * ``ruleunselected`` event. Default is ``false``.
+     * ``#ruleunselected`` event. Default is ``false``.
      */
     selectOnClick: false,
 
@@ -118,8 +122,8 @@ Ext.define('GeoExt.container.VectorLegend', {
     /** @property {Number}
      * @private
      * The current scale denominator of any map associated with this
-     * legend.  Use :meth`setCurrentScaleDenominator` to change this.  If not
-     * set an entry for each rule will be rendered.  If set, only rules that
+     * legend.  Use ``#setCurrentScaleDenominator`` to change this.  If not
+     * set, an entry for each rule will be rendered.  If set, only rules that
      * apply for the given scale will be rendered.
      */
     currentScaleDenominator: null,
@@ -207,7 +211,7 @@ Ext.define('GeoExt.container.VectorLegend', {
             
             /** 
              * @event ruleunselected
-             * Fires when the selected rule is clicked and ``selectOnClick`` 
+             * Fires when the selected rule is clicked and ``#selectOnClick`` 
              * is set to ``true``, or when a rule is unselected by selecting a
              * different one.
              * @param {GeoExt.VectorLegend} comp This component.
@@ -269,7 +273,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     },
     
     /** 
-     * Sets the ``rules`` property for this.  This is called when the component
+     * Sets the ``#rules`` property for this.  This is called when the component
      * is constructed without rules.  Rules will be derived from the layer's 
      * style map if it has one.
      * @private
@@ -292,8 +296,8 @@ Ext.define('GeoExt.container.VectorLegend', {
     },
     
     /**
-     * Set the current scale denominator.  This will hide entries for any
-     * rules that don't apply at the current scale.
+     * Set the current scale denominator. This will hide entries for any
+     * rule that don't apply at the current scale.
      * @param {Number} scale The scale denominator.
      */
     setCurrentScaleDenominator: function(scale) {
@@ -370,7 +374,12 @@ Ext.define('GeoExt.container.VectorLegend', {
             }
         }, this);
     },
-
+    
+    /**
+     * @private
+     * @param {OpenLayers.Rule} rule
+     * @return {Ext.panel.Panel}
+     */
     createRuleEntry: function(rule) {
         var applies = true;
         if (this.currentScaleDenominator != null) {
@@ -593,7 +602,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     },
     
     /** 
-     * Get a rule title given a rule.
+     * Get a rule title by a rule-object.
      * @private
      * @return {String}
      */
@@ -627,7 +636,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     },
 
     /**
-     * Handler for remove event of the layerStore
+     * Handler for remove event of the layerStore.
      * @private
      * @param {Ext.data.Store} store The store from which the record was
      * removed.
@@ -647,7 +656,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     },
 
     /** 
-     * Handler for add event of the layerStore
+     * Handler for add event of the layerStore.
      * @private
      * @param {Ext.data.Store} store The store to which the record was
      * added.

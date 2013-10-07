@@ -14,44 +14,43 @@
 /**
  * @class GeoExt.slider.Zoom
  *
+ * Create a slider to control the zoom of a layer.
+ *  
  * Sample code to render a slider outside the map viewport:
  *
  * Example:
-<pre><code>
-var slider = Ext.create('GeoExt.slider.Zoom', {
-    renderTo: document.body,
-    width: 200,
-    map: map
-});
-</code></pre>
+ *     var slider = Ext.create('GeoExt.slider.Zoom', {
+ *         renderTo: document.body,
+ *         width: 200,
+ *         map: map
+ *     });
  *
  *  Sample code to add a slider to a map panel:
  *
  * Example:
-<pre><code>
-var panel = Ext.create('GeoExt.MapPanel', {
-    renderTo: document.body,
-    height: 300,
-    width: 400,
-    map: {
-        controls: [new OpenLayers.Control.Navigation()]
-    },
-    layers: [new OpenLayers.Layer.WMS(
-        "Global Imagery",
-        "http://maps.opengeo.org/geowebcache/service/wms",
-        {layers: "bluemarble"}
-    )],
-    extent: [-5, 35, 15, 55],
-    items: [{
-        xtype: "gx_zoomslider",
-        aggressive: true,
-        vertical: true,
-        height: 100,
-        x: 10,
-        y: 20
-    }]
-});
-</code></pre>
+ * 
+ *     var panel = Ext.create('GeoExt.MapPanel', {
+ *         renderTo: document.body,
+ *         height: 300,
+ *         width: 400,
+ *         map: {
+ *             controls: [new OpenLayers.Control.Navigation()]
+ *         },
+ *         layers: [new OpenLayers.Layer.WMS(
+ *             "Global Imagery",
+ *             "http://maps.opengeo.org/geowebcache/service/wms",
+ *             {layers: "bluemarble"}
+ *         )],
+ *         extent: [-5, 35, 15, 55],
+ *         items: [{
+ *             xtype: "gx_zoomslider",
+ *             aggressive: true,
+ *             vertical: true,
+ *             height: 100,
+ *             x: 10,
+ *             y: 20
+ *         }]
+ *     });
  */
 Ext.define('GeoExt.slider.Zoom', {
     extend : 'Ext.slider.Single',

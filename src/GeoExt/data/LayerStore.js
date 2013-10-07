@@ -214,7 +214,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a map's addlayer event
+     * Handler for a map's addlayer event.
      * @private
      * @param {Object} evt
      */
@@ -229,7 +229,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a map's removelayer event
+     * Handler for a map's removelayer event.
      * @private
      * @param {Object} evt
      */
@@ -250,7 +250,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's load event
+     * Handler for a store's load event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -283,7 +283,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's clear event
+     * Handler for a store's clear event.
      * @private
      * @param {Ext.data.Store} store
      */
@@ -296,7 +296,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's add event
+     * Handler for a store's add event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -318,7 +318,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's remove event
+     * Handler for a store's remove event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
@@ -336,7 +336,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's update event
+     * Handler for a store's update event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
@@ -364,7 +364,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's data collections' replace event
+     * Handler for a store's data collections' replace event.
      * @private
      * @param {String} key
      * @param {Ext.data.Model} oldRecord In this case, a record that has
@@ -377,7 +377,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Get the record for the specified layer
+     * Get the record for the specified layer.
      * @param {OpenLayers.Layer} layer
      * @returns {Ext.data.Model} or undefined if not found
      */

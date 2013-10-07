@@ -18,34 +18,33 @@
  *  Sample code displaying a new permalink each time the map is moved.
  *
  * Example:
-<pre><code>
-// create permalink provider
-var permalinkProvider = new GeoExt.state.PermalinkProvider();
-
-// set it in the state manager
-Ext.state.Manager.setProvider(permalinkProvider);
-
-// create a map panel, and make it stateful
-var mapPanel = new GeoExt.MapPanel({
-    renderTo: "map",
-    layers: [
-        new OpenLayers.Layer.WMS(
-            "Global Imagery",
-            "http://maps.opengeo.org/geowebcache/service/wms",
-            {layers: "bluemarble"}
-        )
-    ],
-    stateId: "map",
-    prettyStateKeys: true // for pretty permalinks
-});
-
-// display permalink each time state is changed
-permalinkProvider.on({
-    statechanged: function(provider, name, value) {
-        alert(provider.getLink());
-    }
-});
-</code></pre>
+ * 
+ *     // create permalink provider
+ *     var permalinkProvider = new GeoExt.state.PermalinkProvider();
+ *     
+ *     // set it in the state manager
+ *     Ext.state.Manager.setProvider(permalinkProvider);
+ *     
+ *     // create a map panel, and make it stateful
+ *     var mapPanel = new GeoExt.MapPanel({
+ *         renderTo: "map",
+ *         layers: [
+ *             new OpenLayers.Layer.WMS(
+ *                 "Global Imagery",
+ *                 "http://maps.opengeo.org/geowebcache/service/wms",
+ *                 {layers: "bluemarble"}
+ *             )
+ *         ],
+ *         stateId: "map",
+ *         prettyStateKeys: true // for pretty permalinks
+ *     });
+ *     
+ *     // display permalink each time state is changed
+ *     permalinkProvider.on({
+ *         statechanged: function(provider, name, value) {
+ *             alert(provider.getLink());
+ *         }
+ *     });
  */
 Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
@@ -54,6 +53,9 @@ Ext.define('GeoExt.state.PermalinkProvider', {
     ],
     alias : 'widget.gx_permalinkprovider',
     //    alternateClassName : 'GeoExt.MapPanel',
+    /**
+     * 
+     */
     constructor: function(config){
         this.callParent(arguments);
         config = config || {};
@@ -71,8 +73,8 @@ Ext.define('GeoExt.state.PermalinkProvider', {
      * @private
      * @property{Boolean}
      *  Specifies whether type of state values should be encoded
-     *  and decoded. Set it to false if you work with components that don't
-     *  require encoding types, and want pretty permalinks. Defaults to true.
+     *  and decoded. Set it to ``false`` if you work with components that don't
+     *  require encoding types, and want pretty permalinks.
      */
     encodeType: true,
 

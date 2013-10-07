@@ -167,7 +167,7 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
     },
     
     /** 
-     * Handler for the printProvider's dpichange and layoutchange event
+     * Handler for the printProvider's dpichange and layoutchange event.
      *
      * @private
      * @param {GeoExt.data.MapfishPrintProvider}  printProvider
