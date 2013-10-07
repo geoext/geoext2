@@ -189,30 +189,35 @@
                 scope : this
             });
 
+            var resetPop = function(){
+                moves = 0;
+                pop.show();
+            };
+
             t.ok(pop.anc, "Popup has anchor element");
 
             // move the map and confirm that popup moves
             context.map.setCenter(new OpenLayers.LonLat(6, 45));
-            t.eq(moves, 1, "anchored popup moves once on map.setCenter");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on map.setCenter");
+            resetPop();
 
             // anchored popup needs to reposition on collapse, resize and
             // expand to keep the anchor point on the feature
 
             // collapse popup and and confirm that it moves
             pop.collapse();
-            t.eq(moves, 1, "anchored popup moves once on collapse");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on collapse");
+            resetPop();
 
             // expand popup and confirm that it moves
             pop.expand();
-            t.eq(moves, 1, "anchored popup moves once on expand");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on expand");
+            resetPop();
             
             // resize popup and confirm that it moves
             pop.setSize(100, 100);
-            t.eq(moves, 1, "anchored popup moves once on resize");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on resize");
+            resetPop();
 
             t.delay_call(0.1, function() {
                 tearDown(context);
