@@ -20,7 +20,7 @@ Ext.define('GeoExt.LegendImage', {
 
     /**
      * @cfg {String} url
-     * The url of the image to load
+     * The url of the image to load.
      */
     url: null,
 
@@ -33,7 +33,7 @@ Ext.define('GeoExt.LegendImage', {
 
     /**
      * @cfg {String} imgCls
-     * Optional css class to apply to img tag
+     * Optional css class to apply to img tag.
      */
     imgCls: null,
 

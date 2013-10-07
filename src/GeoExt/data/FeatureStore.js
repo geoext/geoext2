@@ -125,7 +125,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Bind this store to a layer instance, once bound the store
+     * Bind this store to a layer instance. Once bound the store
      * is synchronized with the layer and vice-versa.
      *
      * @param {OpenLayers.Layer.Vector} layer The layer instance.
@@ -257,7 +257,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for layer featuresadded event
+     * Handler for layer featuresadded event.
      * @private
      * @param {Object} evt
      */
@@ -283,7 +283,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for layer featuresremoved event
+     * Handler for layer featuresremoved event.
      * @private
      * @param {Object} evt
      */
@@ -302,7 +302,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for layer featuremodified event
+     * Handler for layer featuremodified event.
      * @private
      * @param {Object} evt
      */
@@ -317,7 +317,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's load event
+     * Handler for a store's load event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -334,7 +334,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's clear event
+     * Handler for a store's clear event.
      * @private
      * @param {Ext.data.Store} store
      */
@@ -345,7 +345,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's add event
+     * Handler for a store's add event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -360,7 +360,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's remove event
+     * Handler for a store's remove event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
@@ -378,7 +378,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's update event
+     * Handler for a store's update event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record

@@ -14,7 +14,7 @@
 
 /**
  * @class GeoExt.data.reader.WmsCapabilities
- * Data reader class to create {GeoExt.data.WmsCapabilitiesLayerModel[]}
+ * Data reader class to create GeoExt.data.WmsCapabilitiesLayerModel[]
  * from a WMS GetCapabilities response.
  */
 Ext.define('GeoExt.data.reader.WmsCapabilities', {
@@ -183,7 +183,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
 
     /**
      * Generates attribution markup using the Attribution metadata
-     * from WMS Capabilities
+     * from WMS Capabilities.
      * @private
      * @param {Object} attribution The attribution property of the layer
      * object as parsed from a WMS Capabilities document

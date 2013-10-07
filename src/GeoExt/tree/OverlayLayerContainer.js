@@ -12,10 +12,11 @@
 
 /**
  * A layer node plugin that will collect all base layers of an OpenLayers
- * map. Only layers that have displayInLayerSwitcher set to true will be
- * included. The node's text defaults to 'Overlays'.
+ * map. Only layers that have ``displayInLayerSwitcher`` set to ``true``
+ * will be included. The node's text defaults to 'Overlays'.
  * 
  * To use this node plugin in a tree node config, configure a node like this:
+ * 
  *     {plugins: "gx_overlaylayercontainer", text: "My overlays"} 
  */
 Ext.define('GeoExt.tree.OverlayLayerContainer', {

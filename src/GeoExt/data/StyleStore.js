@@ -9,7 +9,7 @@
 /**
  *  A smart store that creates records for client-side rendered legends. If
  *  its store is configured with an {OpenLayers.Style2} instance as `data`,
- *  each record will represent a Rule of the Style, and the store will be
+ *  each record will represent a rule of the Style, and the store will be
  *  configured with `symbolizers` (Array of {OpenLayers.Symbolizer}),
  *  `filter` ({OpenLayers.Filter}), `label` (String, the rule's title),
  *  `name` (String), `description` (String), `elseFilter` (Boolean),
@@ -33,12 +33,9 @@
  *  Sample code to create a store that reads from an {OpenLayers.Style2}
  *  object:
  *  
- <pre><code>
- *
- *      var store = Ext.create('GeoExt.data.StyleStore',{
- *          data: myStyle // OpenLayers.Style2 or OpenLayers.Symbolizer.Raster
- *      });
- </code></pre>
+ *     var store = Ext.create('GeoExt.data.StyleStore',{
+ *         data: myStyle // OpenLayers.Style2 or OpenLayers.Symbolizer.Raster
+ *     });
  */
 Ext.define('GeoExt.data.StyleStore', {
     extend: 'Ext.data.Store',

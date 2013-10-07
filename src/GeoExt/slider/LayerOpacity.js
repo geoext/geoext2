@@ -14,46 +14,46 @@
 /**
  * @class GeoExt.slider.LayerOpacity
  *
+ *  Create a slider to control the opacity of a layer.
+ *  
  *  Sample code to render a slider outside the map viewport:
  *
  * Example:
-<pre><code>
-var slider = new GeoExt.LayerOpacitySlider({
-    renderTo: document.body,
-    width: 200,
-    layer: layer
-});
-</code></pre>$
+ * 
+ *     var slider = new GeoExt.LayerOpacitySlider({
+ *         renderTo: document.body,
+ *         width: 200,
+ *         layer: layer
+ *     });
  *
  *  Sample code to add a slider to a map panel:
  *
  * Example:
-<pre><code>
-var layer = new OpenLayers.Layer.WMS(
-    "Global Imagery",
-    "http://maps.opengeo.org/geowebcache/service/wms",
-    {layers: "bluemarble"}
-);
-var panel = new GeoExt.MapPanel({
-    renderTo: document.body,
-    height: 300,
-    width: 400,
-    map: {
-        controls: [new OpenLayers.Control.Navigation()]
-    },
-    layers: [layer],
-    extent: [-5, 35, 15, 55],
-    items: [{
-        xtype: "gx_opacityslider",
-        layer: layer,
-        aggressive: true,
-        vertical: true,
-        height: 100,
-        x: 10,
-        y: 20
-    }]
-});
-</code></pre>
+ * 
+ *     var layer = new OpenLayers.Layer.WMS(
+ *         "Global Imagery",
+ *         "http://maps.opengeo.org/geowebcache/service/wms",
+ *          {layers: "bluemarble"}
+ *     );
+ *     var panel = new GeoExt.MapPanel({
+ *         renderTo: document.body,
+ *         height: 300,
+ *         width: 400,
+ *         map: {
+ *             controls: [new OpenLayers.Control.Navigation()]
+ *         },
+ *         layers: [layer],
+ *         extent: [-5, 35, 15, 55],
+ *         items: [{
+ *             xtype: "gx_opacityslider",
+ *             layer: layer,
+ *             aggressive: true,
+ *             vertical: true,
+ *             height: 100,
+ *             x: 10,
+ *             y: 20
+ *         }]
+ *     });
  */
 Ext.define('GeoExt.slider.LayerOpacity', {
     alternateClassName: "GeoExt.LayerOpacitySlider",

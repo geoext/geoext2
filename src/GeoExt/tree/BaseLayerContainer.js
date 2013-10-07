@@ -12,10 +12,9 @@
 
 /**
  * A layer node plugin that will collect all base layers of an OpenLayers
- * map. Only layers that have displayInLayerSwitcher set to true will be
- * included. The childrens' iconCls defaults to
- * "gx-tree-baselayer-icon" and the node' text defaults to
- * "Base Layer".
+ * map. Only layers that have ``displayInLayerSwitcher`` set to ``true`` will
+ * be included. The childrens' iconCls defaults to "gx-tree-baselayer-icon"
+ * and the node' text defaults to "Base Layer".
  * 
  * Children will be rendered with a radio button instead of a checkbox,
  * showing the user that only one base layer can be active at a time.

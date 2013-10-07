@@ -15,17 +15,17 @@
  * Data reader class to create an array of records from a CSW
  * GetRecords response. The raw response from the OpenLayers parser
  * is available through the jsonData property.
+ * 
  * Example:
-<pre><code>
-var store = new Ext.data.Store({
-    proxy: new GeoExt.data.ProtocolProxy({
-        protocol: new OpenLayers.Protocol.CSW({
-            url: "http://demo.geonode.org/geonetwork/srv/en/csw"
-        })
-    }),
-    reader: new GeoExt.data.reader.CswRecords()
-});
-</code></pre>
+ * 
+ *     var store = new Ext.data.Store({
+ *         proxy: new GeoExt.data.ProtocolProxy({
+ *             protocol: new OpenLayers.Protocol.CSW({
+ *                 url: "http://demo.geonode.org/geonetwork/srv/en/csw"
+ *             })
+ *         }),
+ *         reader: new GeoExt.data.reader.CswRecords()
+ *     });
  */
 Ext.define('GeoExt.data.reader.CswRecords', {
     alternateClassName: ['GeoExt.data.CSWRecordsReader'],
@@ -46,7 +46,7 @@ Ext.define('GeoExt.data.reader.CswRecords', {
         }
     },
 
-    /*
+    /**
      * @private
      * @param {XMLHttpRequest/OpenLayers.Protocol.Response} data If a
      * ProtocolProxy is configured with OpenLayers.Protocol.CSW data will be

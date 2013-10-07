@@ -15,18 +15,17 @@
  * `OpenLayers.Format.WFSDescribeFeatureType` internally for the parsing.
  *
  * Example:
-<pre><code>
-Ext.define('My.model.Model', {
-    field: ['name', 'type'],
-    proxy: {
-        type: 'ajax',
-        url: 'http://wftgetfeaturetype',
-        reader: {
-            type: 'gx_attribute'
-        }
-    }
-});
-</code></pre> 
+ *
+ *     Ext.define('My.model.Model', {
+ *         field: ['name', 'type'],
+ *         proxy: {
+ *             type: 'ajax',
+ *             url: 'http://wftgetfeaturetype',
+ *             reader: {
+ *                 type: 'gx_attribute'
+ *             }
+ *         }
+ *     });
  * `gx_attribute` is the alias to the Attribute reader.
  *
  * 

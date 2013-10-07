@@ -17,7 +17,7 @@ Ext.define('GeoExt.Lang', {
 
     /** 
      * @cfg {String}
-     * The current language tag.  Use :meth:`set` to set the locale.  Defaults
+     * The current language tag.  Use `#set` to set the locale. Defaults
      * to the browser language where available.
      */
     locale: navigator.language || navigator.userLanguage,
@@ -35,7 +35,7 @@ Ext.define('GeoExt.Lang', {
      */
     constructor: function() {
         this.addEvents(
-            /** api: event[localize]
+            /** @event
              *  Fires when localized strings are set.  Listeners will receive a
              *  single ``locale`` event with the language tag.
              */
@@ -77,7 +77,7 @@ Ext.define('GeoExt.Lang', {
 
     /**
      * Set the language for all GeoExt components.  This will use any localized
-     * strings in the dictionary (set with the :meth:`add` method) that
+     * strings in the dictionary (set with the `#add` method) that
      * correspond to the complete matching language tag or any "higher order"
      * tag (e.g. setting "en-CA" will use strings from the "en" dictionary if
      * matching strings are not found in the "en-CA" dictionary).

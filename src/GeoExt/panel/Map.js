@@ -19,32 +19,30 @@
  * map's ``getExtent()`` method.
  *
  * Example:
-<pre><code>
-var mappanel = Ext.create('GeoExt.panel.Map', {
-    title: 'A sample Map',
-    map: {
-        // ...
-        // optional, can be either
-        //   - a valid OpenLayers.Map configuration or
-        //   - an instance of OpenLayers.Map
-    },
-    center: '12.31,51.48',
-    zoom: 6
-});
-</code></pre>
+ * 
+ *     var mappanel = Ext.create('GeoExt.panel.Map', {
+ *         title: 'A sample Map',
+ *         map: {
+ *             // ...
+ *             // optional, can be either
+ *             //   - a valid OpenLayers.Map configuration or
+ *             //   - an instance of OpenLayers.Map
+ *         },
+ *         center: '12.31,51.48',
+ *         zoom: 6
+ *     });
  *
  * A Map created with code like above is then ready to use as any other panel.
- * To have a fullscrteen map application, you could e.g. add it to a viewport:
+ * To have a fullscreen map application, you could e.g. add it to a viewport:
  *
  * Example:
-<pre><code>
-Ext.create('Ext.container.Viewport', {
-    layout: 'fit',
-    items: [
-        mappanel // our variable from above
-    ]
- });
-</code></pre>
+ * 
+ *     Ext.create('Ext.container.Viewport', {
+ *         layout: 'fit',
+ *         items: [
+ *             mappanel // our variable from above
+ *         ]
+ *     });
  */
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
@@ -148,7 +146,7 @@ Ext.define('GeoExt.panel.Map', {
     /**
      * @property {String[]} stateEvents
      * @private
-     * Array of state events
+     * Array of state events.
      */
     stateEvents: [
         "aftermapmove",
