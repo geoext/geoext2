@@ -43,7 +43,7 @@ Ext.define('GeoExt.FeatureRenderer', {
 
     /**
      * @cfg {String}
-     * One of ``"Point"``, ``"Line"``, or ``"Polygon"`` or ``"Text"``.  Only
+     * One of ``"Point"``, ``"Line"``, ``"Polygon"`` or ``"Text"``.  Only
      * pertinent if OpenLayers.Symbolizer objects are not used.  If ``feature``
      * is provided, it will be preferred.
      */

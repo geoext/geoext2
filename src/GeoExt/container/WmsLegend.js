@@ -28,6 +28,10 @@ Ext.define('GeoExt.container.WmsLegend', {
     alternateClassName: 'GeoExt.WMSLegend',
 
     statics: {
+        /**
+         * @param {GeoExt.data.LayerRecord} layerRecord Record containing a WMS layer.
+         * @return {Boolean}
+         */
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }
@@ -56,19 +60,18 @@ Ext.define('GeoExt.container.WmsLegend', {
      * FORMAT parameter in baseParams.
      *
      * Example:
-<pre><code>
-var legendPanel = new GeoExt.LegendPanel({
-    map: map,
-    title: 'Legend Panel',
-    defaults: {
-        style: 'padding:5px',
-        baseParams: {
-            FORMAT: 'image/png',
-            LEGEND_OPTIONS: 'forceLabels:on'
-        }
-    }
-});
-</code></pre>
+     *
+     *     var legendPanel = new GeoExt.LegendPanel({
+     *         map: map,
+     *         title: 'Legend Panel',
+     *         defaults: {
+     *             style: 'padding:5px',
+     *             baseParams: {
+     *                 FORMAT: 'image/png',
+     *                 LEGEND_OPTIONS: 'forceLabels:on'
+     *             }
+     *         }
+     *     });
      */
     baseParams: null,
 

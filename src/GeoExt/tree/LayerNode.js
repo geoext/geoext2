@@ -10,6 +10,7 @@
  * The LayerNode plugin. This is used to create a node that is connected to
  * a layer, so the checkbox and the layer's visibility are in sync. A basic
  * layer node would be configured like this:
+ * 
  *     {plugins: ['gx_layernode'], layer: myLayer}
  *
  * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the

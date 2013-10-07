@@ -16,7 +16,7 @@
  * @class GeoExt.data.ScaleStore
  * A store that contains a cache of available zoom levels.  The store can
  * optionally be kept synchronized with an {OpenLayers.Map} or
- * {GeoExt.panel.Map} object.
+ * GeoExt.panel.Map object.
  */
 Ext.define('GeoExt.data.ScaleStore', {
     requires: [
@@ -52,7 +52,7 @@ Ext.define('GeoExt.data.ScaleStore', {
      * the map's current configuration.  If the map does not currently have a
      * set scale list, then the store will remain empty until the map is
      * configured with one.
-     * @param {GeoExt.panel.Map/OpenLayers.Map} map to which we should bind.
+     * @param {GeoExt.panel.Map/OpenLayers.Map} map Map to which we should bind.
      */
     bind: function(map, options) {
         this.map = (map instanceof GeoExt.panel.Map ? map.map : map);
@@ -81,7 +81,7 @@ Ext.define('GeoExt.data.ScaleStore', {
 
     /**
      * @private
-     * This method handles the case where we have bind() called on a
+     * This method handles the case where we have ``#bind`` called on a
      * not-fully-configured map so that the zoom levels can be detected when a
      * baselayer is finally added.
      * @param {Object} evt

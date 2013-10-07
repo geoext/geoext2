@@ -51,21 +51,21 @@
 
         /**
          * @property {Number} ENDS_WITH
-         * Use `GeoExt.Form.ENDS_WITH` as the `wildcard` param to `toFilter`
+         * Use `GeoExt.Form.ENDS_WITH` as the `wildcard` param to `#toFilter`
          * if you want wildcards to be prepended to LIKE field values.
          */
         ENDS_WITH: 1,
 
         /**
          * @property {Number} STARTS_WITH
-         * Use `GeoExt.Form.STARTS_WITH` as the `wildcard` param to `toFilter`
+         * Use `GeoExt.Form.STARTS_WITH` as the `wildcard` param to `#toFilter`
          * if you want wildcards to be appended to LIKE field values.
          */
         STARTS_WITH: 2,
 
         /**
          * @property {Number} CONTAINS
-         * Use `GeoExt.Form.CONTAINS` as the `wildcard` param to `toFilter`
+         * Use `GeoExt.Form.CONTAINS` as the `wildcard` param to `#toFilter`
          * if you want a wildcards to be both prepended and appended to LIKE
          * field values.
          */
@@ -75,10 +75,10 @@
          * Create an `OpenLayers.Filter` object from a `Ext.form.Basic`
          * or a `Ext.form.Panel` instance.
          * @param {Ext.form.Form/Ext.form.Panel} form The form.
-         * @param {String} logicalOp  Either `OpenLayers.Filter.Logical.AND` or
+         * @param {String} logicalOp Either `OpenLayers.Filter.Logical.AND` or
          * `OpenLayers.Filter.Logical.OR`. Set to `OpenLayers.Filter.Logical.AND`
          * if null or undefined
-         * @param {Integer} Determines the wildcard behaviour of LIKE
+         * @param {Integer} wildcard Determines the wildcard behaviour of LIKE
          * queries. See {@link #ENDS_WITH}, {@link #STARTS_WITH} and
          * {@link #CONTAINS}.
          * @return `OpenLayers.Filter`

@@ -12,10 +12,11 @@
 
 /**
  * A loader that will load layers from a GeoExt.data.LayerStore.
- * By default, only layers that have displayInLayerSwitcher set to true will be
- * included. The childrens' iconCls defaults to "gx-tree-layer-icon".
+ * By default, only layers that have ``displayInLayerSwitcher`` set to ``true``
+ * will be included. The childrens' iconCls defaults to "gx-tree-layer-icon".
  *
  * Example:
+ * 
  *     var loader = Ext.create('GeoExt.tree.LayerLoader', {
  *         baseAttrs: {
  *             iconCls: 'baselayer-icon',
@@ -68,14 +69,16 @@ Ext.define('GeoExt.tree.LayerLoader', {
      store: null,
     
     /**
-     * @property {Function} filter
-     * A function, called in the scope of this loader, with a layer record
-     * as argument. Is expected to return true for layers to be loaded, false
-     * otherwise. By default, the filter checks for displayInLayerSwitcher:
+     * A function, called in the scope of this loader, with a
+     * GeoExt.data.LayerRecord as argument. Is expected to return ``true`` for
+     * layers to be loaded, ``false`` otherwise. By default, the filter checks
+     * for ``displayInLayerSwitcher``:
      *  
      *     filter: function(record) {
      *         return record.getLayer().displayInLayerSwitcher === true
      *     }
+     * @property {Function} filter
+     * @param {GeoExt.data.LayerRecord} record
      */
     filter: function(record) {
         return record.getLayer().displayInLayerSwitcher === true;

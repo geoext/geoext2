@@ -22,24 +22,23 @@
  * Sample code to create a feature grid with a feature selection model:
  *
  * Example:
-<pre><code>
-var gridPanel = new Ext.grid.GridPanel({
-    title: "Feature Grid",
-    region: "east",
-    store: store,
-    width: 320,
-    columns: [{
-        header: "Name",
-        width: 200,
-        dataIndex: "name"
-    }, {
-        header: "Elevation",
-        width: 100,
-        dataIndex: "elevation"
-    }],
-    selType: 'featuremodel'
+ * 
+ *     var gridPanel = new Ext.grid.GridPanel({
+ *         title: "Feature Grid",
+ *         region: "east",
+ *         store: store,
+ *         width: 320,
+ *         columns: [{
+ *             header: "Name",
+ *             width: 200,
+ *             dataIndex: "name"
+ *         }, {
+ *             header: "Elevation",
+ *             width: 100,
+ *             dataIndex: "elevation"
+ *         }],
+ *         selType: 'featuremodel'
  *     });
-</code></pre>
  */
 
 
@@ -83,13 +82,15 @@ Ext.define('GeoExt.selection.FeatureModel', {
      */
 
     /**
-     * @private {Boolean}
+     * @private
+     * @property {Boolean}
      * Flag indicating if the selection model is bound.
      */
     bound: false,
 
     /**
-     * @private {OpenLayers.Feature.Vector[]}
+     * @private
+     * @property {OpenLayers.Feature.Vector[]}
      * An array to store the selected features.
      */
     selectedFeatures: [],
@@ -127,7 +128,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
     /**
      * @private
      *
-     * Called after this.grid is defined
+     * Called after this.grid is defined.
      */
     bindComponent: function() {
         this.callParent(arguments);
@@ -322,7 +323,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
 
     /**
      * @private
-     * centers the map in order to display all selected features.
+     * Centers the map in order to display all selected features.
      */
     recenterToSelectionExtent: function() {
         var map = this.selectControl.map;

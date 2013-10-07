@@ -12,9 +12,9 @@
 
 /**
  * @class GeoExt.data.RasterStyleModel
- * <p>A specific model for Raster Symbolizer classifications<p>
+ * <p>A specific model for Raster Symbolizer classifications.<p>
  *
- * Preconfigured with an Ajax proxy and a JSON reader
+ * Preconfigured with an Ajax proxy and a JSON reader.
  * 
  */
 
