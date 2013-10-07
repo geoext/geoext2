@@ -172,7 +172,7 @@ Ext.define('GeoExt.data.FeatureStore', {
             'clear': this.onClear,
             'add': this.onAdd,
             'remove': this.onRemove,
-            'update': this.onUpdate,
+            'update': this.onStoreUpdate,
             scope: this
         });
 
@@ -195,7 +195,7 @@ Ext.define('GeoExt.data.FeatureStore', {
                 'clear': this.onClear,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'update': this.onUpdate,
+                'update': this.onStoreUpdate,
                 scope: this
             });
             this.layer = null;
@@ -384,7 +384,7 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Ext.data.Model} record
      * @param {Number} operation
      */
-    onUpdate: function(store, record, operation, modifiedFieldNames) {
+    onStoreUpdate: function(store, record, operation, modifiedFieldNames) {
         if (!this._updating) {
             var feature = record.raw;
             if (feature.state !== OpenLayers.State.INSERT) {
@@ -403,6 +403,59 @@ Ext.define('GeoExt.data.FeatureStore', {
                 });
                 delete this._updating;
             }
+        }
+    },
+
+    /**
+     * @inheritdoc
+     *
+     * The event firing behaviour of Ext.4.1 is reestablished here. See also:
+     * [This discussion on the Sencha forum](http://www.sencha.com/forum/
+     * showthread.php?253596-beforeload-is-not-fired-by-loadRawData)
+     *
+     * In version 4.2.1 this method reads
+     *
+     *     //...
+     *     loadRawData : function(data, append) {
+     *         var me      = this,
+     *             result  = me.proxy.reader.read(data),
+     *             records = result.records;
+     *
+     *         if (result.success) {
+     *             me.totalCount = result.total;
+     *             me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+     *         }
+     *     },
+     *     // ...
+     *
+     * While the previous version 4.1.3 has also
+     * the line `me.fireEvent('load', me, records, true);`:
+     *
+     *     // ...
+     *     if (result.success) {
+     *         me.totalCount = result.total;
+     *         me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+     *         me.fireEvent('load', me, records, true);
+     *     }
+     *     // ...
+     *
+     * Our overwritten method has the code from 4.1.3, so that the #load-event
+     * is being fired.
+     *
+     * See also the source code of [version 4.1.3](http://docs-origin.sencha.
+     * com/extjs/4.1.3/source/Store.html#Ext-data-Store-method-loadRawData) and
+     * of [version 4.2.1](http://docs-origin.sencha.com/extjs/4.2.1/source/
+     * Store.html#Ext-data-Store-method-loadRawData).
+     */
+    loadRawData : function(data, append) {
+        var me      = this,
+            result  = me.proxy.reader.read(data),
+            records = result.records;
+
+        if (result.success) {
+            me.totalCount = result.total;
+            me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+            me.fireEvent('load', me, records, true);
         }
     }
 });
