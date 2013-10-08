@@ -155,6 +155,9 @@ Ext.define('GeoExt.window.Popup', {
         if (this.location instanceof OpenLayers.Feature.Vector) {
             this.location = this.location.geometry;
         }
+        if (this.location instanceof OpenLayers.LonLat){
+            this.location = new OpenLayers.Geometry.Point(this.location.lon, this.location.lat);
+        }
         if (this.location instanceof OpenLayers.Geometry) {
             if (typeof this.location.getCentroid == "function") {
                 this.location = this.location.getCentroid();
