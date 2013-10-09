@@ -67,7 +67,22 @@ Ext.define('GeoExt.tree.View', {
             cmpObj;
 
         if(component) {
+
             cmpObj = Ext.ComponentManager.create(component);
+
+            if(cmpObj.xtype &&
+               node.gx_treecomponents &&
+               node.gx_treecomponents[cmpObj.xtype]) {
+
+                node.gx_treecomponents[cmpObj.xtype].destroy();
+                delete node.gx_treecomponents[cmpObj.xtype];
+
+            }
+
+            if(!node.gx_treecomponents) {
+                node.gx_treecomponents = {};
+            }
+            node.gx_treecomponents[cmpObj.xtype] = cmpObj;
 
             cmpObj.render(el);
 
