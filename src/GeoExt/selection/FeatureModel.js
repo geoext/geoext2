@@ -40,8 +40,6 @@
  *         selType: 'featuremodel'
  *     });
  */
-
-
 Ext.define('GeoExt.selection.FeatureModel', {
     extend: 'Ext.selection.RowModel',
     alias: 'selection.featuremodel',
@@ -231,9 +229,11 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
+     * Handler for when a feature is selected.
+     *
      * @private
-     * @param {Object} evt
-     * An object with a feature property referencing the selected feature.
+     * @param {Object} evt An object with a `feature` property referencing the
+     *     selected feature.
      */
     featureSelected: function(evt) {
         if (!this._selecting) {
@@ -252,9 +252,11 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
+     * Handler for when a feature is unselected.
+     *
      * @private
-     * @param {Object} evt
-     * An object with a feature property referencing the unselected feature.
+     * @param {Object} evt An object with a `feature` property referencing the
+     *     unselected feature.
      */
     featureUnselected: function(evt) {
         if (!this._selecting) {
@@ -272,6 +274,8 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
+     * Synchronizes selection on the layer with selection in the grid.
+     *
      * @private
      * @param {Ext.data.Record} record The record.
      * @param {Boolean} isSelected.
@@ -314,16 +318,19 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
-     * @private
+     * Gets the layers attached to the select feature control.
+     *
      * @return the layers attached to the select feature control.
+     * @private
      */
     getLayers: function() {
         return this.selectControl.layers || [this.selectControl.layer];
     },
 
     /**
-     * @private
      * Centers the map in order to display all selected features.
+     *
+     * @private
      */
     recenterToSelectionExtent: function() {
         var map = this.selectControl.map;
@@ -340,8 +347,8 @@ Ext.define('GeoExt.selection.FeatureModel', {
     /**
      * Calculates the max extent which includes all selected features.
      *
-     * @return {OpenLayers.Bounds}
-     * Return null if the layer has no features with geometries.
+     * @return {OpenLayers.Bounds} Returns null if the layer has no features
+     *     with geometries.
      */
     getSelectionExtent: function () {
         var maxExtent = null;

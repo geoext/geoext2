@@ -115,6 +115,10 @@ Ext.define('GeoExt.data.ScaleStore', {
         this.loadData(zooms);
     },
 
+    /**
+     * Unregisters listeners by calling #unbind prior to destroying.
+     * @private
+     */
     destroy: function() {
         this.unbind();
         this.callParent(arguments);

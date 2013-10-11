@@ -23,6 +23,12 @@ Ext.define('GeoExt.container.UrlLegend', {
     alternateClassName: 'GeoExt.UrlLegend',
 
     statics : {
+        /**
+         * Checks whether the given layer record supports an URL legend.
+         *
+         * @param {Geoext.data.LayerModel} layerRecord A layer record.
+         * @return {Number} Either `10` when URL legends are supported or `0`.
+         */
         supports: function(layerRecord) {
             return Ext.isEmpty(layerRecord.get("legendURL")) ? 0 : 10;
         }

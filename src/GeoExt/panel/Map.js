@@ -36,7 +36,7 @@
  * To have a fullscreen map application, you could e.g. add it to a viewport:
  *
  * Example:
- * 
+ *
  *     Ext.create('Ext.container.Viewport', {
  *         layout: 'fit',
  *         items: [
@@ -155,12 +155,14 @@ Ext.define('GeoExt.panel.Map', {
         "afterlayerorderchange",
         "afterlayernamechange",
         "afterlayeradd",
-        "afterlayerremove"],
+        "afterlayerremove"
+    ],
 
     /**
      * Initializes the map panel. Creates an OpenLayers map if
      * none was provided in the config options passed to the
      * constructor.
+     *
      * @private
      */
     initComponent: function(){

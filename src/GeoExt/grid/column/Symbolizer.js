@@ -22,6 +22,9 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
     alias: ['widget.gx_symbolizercolumn'],
     requires: ['GeoExt.FeatureRenderer'],
 
+    /**
+     * The default renderer Method for Features.
+     */
     defaultRenderer: function(value, meta, record) {
         if (value) {
             var id = Ext.id();

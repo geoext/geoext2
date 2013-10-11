@@ -242,6 +242,8 @@ Ext.define('GeoExt.panel.PrintMap', {
     },
 
     /**
+     * Register various event listeners.
+     *
      * @private
      */
     bind: function() {
@@ -366,6 +368,9 @@ Ext.define('GeoExt.panel.PrintMap', {
     },
 
     /**
+     * Recalculates all preview scales. This is e.g. needed when the size
+     * changes.
+     *
      * @private
      */
     calculatePreviewScales: function() {
@@ -435,6 +440,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     },
 
     /**
+     * Private method called during the destroy sequence.
      * @private
      */
     beforeDestroy: function() {

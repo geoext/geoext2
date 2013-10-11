@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -48,7 +48,6 @@
  *             }
  *         }
  *     });
- *       
  *     formPanel.addButton({
  *         text: "search",
  *         handler: function() {
@@ -56,8 +55,9 @@
  *         },
  *         scope: formPanel
  *     });
+ *
+ * @class GeoExt.form.Panel
  */
-
 Ext.define('GeoExt.form.Panel', {
     extend: 'Ext.form.Panel',
     requires: ['GeoExt.form.Basic'],

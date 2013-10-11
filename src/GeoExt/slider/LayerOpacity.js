@@ -14,22 +14,18 @@
 /**
  * @class GeoExt.slider.LayerOpacity
  *
- *  Create a slider to control the opacity of a layer.
- *  
- *  Sample code to render a slider outside the map viewport:
+ * Create a slider to control the opacity of a layer.
  *
- * Example:
- * 
+ * Sample code to render a slider outside the map viewport:
+ *
  *     var slider = new GeoExt.LayerOpacitySlider({
  *         renderTo: document.body,
  *         width: 200,
  *         layer: layer
  *     });
  *
- *  Sample code to add a slider to a map panel:
+ * Sample code to add a slider to a map panel:
  *
- * Example:
- * 
  *     var layer = new OpenLayers.Layer.WMS(
  *         "Global Imagery",
  *         "http://maps.opengeo.org/geowebcache/service/wms",
@@ -457,6 +453,11 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         this.unbind();
     },
 
+    /**
+     * Stops the event from propagating.
+     *
+     * @private
+     */
     stopMouseEvents: function(e) {
         e.stopEvent();
     }

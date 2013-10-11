@@ -13,7 +13,8 @@
 
 /**
  * @class GeoExt.data.FeatureStore
- * A store that synchronizes a features array of an ``OpenLayers.Layer.Vector``.
+ *
+ * A store that synchronizes a features array of an `OpenLayers.Layer.Vector`.
  */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
@@ -117,6 +118,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
+     * Unbinds own listeners by calling #unbind when being destroyed.
+     *
      * @private
      */
     destroy: function() {
@@ -180,7 +183,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Unbind this store to his layer instance.
+     * Unbind this store from his layer instance.
      */
     unbind: function() {
         if (this.isLayerBinded) {
@@ -203,10 +206,20 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
+    /**
+     * Convenience method to add features.
+     *
+     * @param {OpenLayers.Feature.Vector[]} features The features to add.
+     */
     addFeatures: function(features) {
         return this.loadRawData(features, true);
     },
 
+    /**
+     * Convenience method to remove features.
+     *
+     * @param {OpenLayers.Feature.Vector[]} features The features to remove.
+     */
     removeFeatures: function(features) {
         //accept both a single-argument array of records, or any number of record arguments
         if (!Ext.isArray(features)) {
@@ -243,6 +256,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
+     * Adds the given records to the associated layer.
+     *
      * @private
      * @param {Ext.data.Model[]} records
      */
@@ -258,6 +273,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for layer featuresadded event.
+     *
      * @private
      * @param {Object} evt
      */
@@ -283,6 +299,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for layer featuresremoved event.
+     *
      * @private
      * @param {Object} evt
      */
@@ -302,6 +319,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for layer featuremodified event.
+     *
      * @private
      * @param {Object} evt
      */
@@ -317,6 +335,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for a store's load event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -334,6 +353,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for a store's clear event.
+     *
      * @private
      * @param {Ext.data.Store} store
      */
@@ -345,6 +365,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for a store's add event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -360,6 +381,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for a store's remove event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
@@ -378,6 +400,7 @@ Ext.define('GeoExt.data.FeatureStore', {
 
     /**
      * Handler for a store's update event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record

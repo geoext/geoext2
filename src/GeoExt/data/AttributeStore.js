@@ -20,6 +20,8 @@
  *         ignore: {type: 'xsd:string'},
  *         url: 'http://host.wfsdescribefeaturetype'
  *     });
+ *
+ * @class GeoExt.data.AttributeStore
  */
 Ext.define('GeoExt.data.AttributeStore', {
     extend: 'GeoExt.data.OwsStore',

@@ -12,12 +12,11 @@
 
 /**
  * @class GeoExt.data.RasterStyleModel
- * <p>A specific model for Raster Symbolizer classifications.<p>
+ *
+ * A specific model for Raster Symbolizer classifications.
  *
  * Preconfigured with an Ajax proxy and a JSON reader.
- * 
  */
-
 Ext.define('GeoExt.data.RasterStyleModel',{
         extend: 'Ext.data.Model',
         requires : ['Ext.data.JsonReader'],

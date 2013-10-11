@@ -12,7 +12,8 @@
  */
 
 /**
- * @class
+ * @class GeoExt.tree.LayerContainer
+ *
  * A layer node plugin that will collect all layers of an OpenLayers map. Only
  * layers that have ``displayInLayerSwitcher`` set to ``true`` will be included.
  * The childrens' iconCls defaults to "gx-tree-layer-icon" and this node'
