@@ -17,6 +17,8 @@
  *     viewConfig: {
  *         plugins: { ptype: 'layertreeview' }
  *     }
+ *
+ * @class GeoExt.tree.View
  */
 Ext.define('GeoExt.tree.View', {
     extend: 'Ext.tree.View',
@@ -32,6 +34,14 @@ Ext.define('GeoExt.tree.View', {
         return me.callParent(arguments);
     },
 
+    /**
+     * Called when an item updates or is added.
+     *
+     * @param {Ext.data.Model} record The model instance
+     * @param {Number} index The index of the record/node
+     * @param {HTMLElement} node The node that has just been updated
+     * @param {Object} options Options.
+     */
     onItem: function(records, index, node, options) {
         var me = this;
 
@@ -44,6 +54,9 @@ Ext.define('GeoExt.tree.View', {
         }
     },
 
+    /**
+     * Called when a node is being rendered.
+     */
     onNodeRendered: function(node) {
         var me = this;
 

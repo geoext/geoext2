@@ -7,7 +7,7 @@
  */
 
 /**
- * Base class for components of GeoExt.LegendPanel.
+ * Base class for components of GeoExt.panel.Legend.
  *
  * @class GeoExt.container.LayerLegend
  */
@@ -220,6 +220,11 @@ Ext.define('GeoExt.container.LayerLegend', {
         return title;
     },
 
+    /**
+     * Unbinds event listeners prior to destroying.
+     *
+     * @private
+     */
     beforeDestroy: function() {
         if (this.layerStore) {
             this.layerStore.un("update", this.onStoreUpdate, this);
@@ -229,6 +234,12 @@ Ext.define('GeoExt.container.LayerLegend', {
         this.callParent();
     },
 
+    /**
+     * Nullifies members #layerRecord and #layerStore when the legend is being
+     * destroyed.
+     *
+     * @private
+     */
     onDestroy: function() {
         this.layerRecord = null;
         this.layerStore = null;

@@ -354,6 +354,8 @@ Ext.define('GeoExt.data.PrintPage', {
     },
 
     /**
+     * Unbinds layoutchange listener of the #printProvider.
+     *
      * @private
      */
     destroy: function() {

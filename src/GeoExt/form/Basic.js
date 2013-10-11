@@ -17,6 +17,8 @@
  *
  * In most cases one would not use this class directly, but
  * `GeoExt.form.Panel` instead.
+ *
+ * @class GeoExt.form.Basic
  */
 Ext.define('GeoExt.form.Basic', {
     extend: 'Ext.form.Basic',

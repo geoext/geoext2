@@ -7,7 +7,8 @@
  */
 
 /**
- * @class
+ * @class GeoExt.tree.Column
+ *
  * A subclass of {@link Ext.tree.Column}, which provides indentation and 
  * folder structure markup for a Tree, taking into account depth and 
  * position within the tree hierarchy.
@@ -45,6 +46,9 @@ Ext.define('GeoExt.tree.Column', {
 
     },
 
+    /**
+     * A basic default renderer return only it's passed value.
+     */
     defaultRenderer: function(value) {
         return value;
     }

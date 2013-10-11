@@ -12,13 +12,11 @@
 
 /**
  * @class GeoExt.data.AttributeModel
- * <p>A specific model for WFS DescribeFeatureType records.<p>
  *
- * Preconfigured with an Ajax proxy and a
- * {@link GeoExt.data.reader.Attribute}.
+ * A specific model for WFS DescribeFeatureType records.
+ *
+ * Preconfigured with an Ajax proxy and a GeoExt.data.reader.Attribute.
  */
-
-
 Ext.define('GeoExt.data.AttributeModel', {
     alternateClassName: 'GeoExt.data.AttributeRecord',
     extend: 'Ext.data.Model',

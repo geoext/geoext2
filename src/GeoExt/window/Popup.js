@@ -31,7 +31,7 @@
  *         collapsible: true
  *     });
  *
- * Or create it via ``xtype`` declaration:
+ * Or create it via `xtype` declaration:
  *
  * Example:
  * 
@@ -231,6 +231,7 @@ Ext.define('GeoExt.window.Popup', {
     /**
      * Override.
      *
+     * @inheritdoc
      * @private
      */
     show: function() {
@@ -246,6 +247,7 @@ Ext.define('GeoExt.window.Popup', {
     /**
      * Override.
      *
+     * @inheritdoc
      * @private
      */
     maximize: function() {
@@ -410,6 +412,7 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Called during map movements; does reposition the popup.
      * @private
      */
     onMapMove: function() {
@@ -421,6 +424,8 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Adds appropriate anchor events.
+     *
      * @private
      */
     addAnchorEvents: function() {
@@ -436,6 +441,8 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Removes previously bound anchor events.
+     *
      * @private
      */
     removeAnchorEvents: function() {

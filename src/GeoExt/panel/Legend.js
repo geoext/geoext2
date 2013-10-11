@@ -19,6 +19,7 @@
  *  ``displayInLayerSwitcher: false``, or a layer record has a
  *  ``hideInLegend`` field with a value of ``true``. Additional filtering can
  *  be done by configuring a ``filter`` on the LegendPanel.
+ *
  * @class GeoExt.panel.Legend
  */
 Ext.define('GeoExt.panel.Legend', {

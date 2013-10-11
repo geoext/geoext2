@@ -15,16 +15,14 @@
  *
  * The permalink provider.
  *
- *  Sample code displaying a new permalink each time the map is moved.
+ * Sample code displaying a new permalink each time the map is moved:
  *
- * Example:
- * 
  *     // create permalink provider
  *     var permalinkProvider = new GeoExt.state.PermalinkProvider();
- *     
+ *
  *     // set it in the state manager
  *     Ext.state.Manager.setProvider(permalinkProvider);
- *     
+ *
  *     // create a map panel, and make it stateful
  *     var mapPanel = new GeoExt.MapPanel({
  *         renderTo: "map",
@@ -38,7 +36,7 @@
  *         stateId: "map",
  *         prettyStateKeys: true // for pretty permalinks
  *     });
- *     
+ *
  *     // display permalink each time state is changed
  *     permalinkProvider.on({
  *         statechanged: function(provider, name, value) {
@@ -48,13 +46,11 @@
  */
 Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
-    requires : [
-    //    'GeoExt.data.LayerStore'
-    ],
+    requires : [],
     alias : 'widget.gx_permalinkprovider',
-    //    alternateClassName : 'GeoExt.MapPanel',
+
     /**
-     * 
+     *
      */
     constructor: function(config){
         this.callParent(arguments);
@@ -77,12 +73,6 @@ Ext.define('GeoExt.state.PermalinkProvider', {
      *  require encoding types, and want pretty permalinks.
      */
     encodeType: true,
-
-    initComponent: function(){
-        var me = this;
-
-        me.callParent(arguments);
-    },
 
     /**
      * Create a state object from a URL.
@@ -143,12 +133,4 @@ Ext.define('GeoExt.state.PermalinkProvider', {
 
         return Ext.urlAppend(base, paramsStr);
     }
-
-
 });
-
-
-
-
-
-

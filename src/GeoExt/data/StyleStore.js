@@ -36,6 +36,8 @@
  *     var store = Ext.create('GeoExt.data.StyleStore',{
  *         data: myStyle // OpenLayers.Style2 or OpenLayers.Symbolizer.Raster
  *     });
+ *
+ * @class GeoExt.data.StyleStore
  */
 Ext.define('GeoExt.data.StyleStore', {
     extend: 'Ext.data.Store',
