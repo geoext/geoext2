@@ -262,8 +262,9 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @param {Object} evt
      */
     onFeaturesAdded: function(evt) {
-         if (!this._adding) {
-            var features = evt.features, toAdd = features;
+        if (!this._adding) {
+            var features = evt.features,
+                toAdd = features;
             if (this.featureFilter) {
                 toAdd = [];
                 for (var i = 0, len = features.length; i < len; i++) {
@@ -273,11 +274,9 @@ Ext.define('GeoExt.data.FeatureStore', {
                     }
                 }
             }
+            toAdd = this.proxy.reader.read(toAdd).records;
             this._adding = true;
-            // add feature records to the store, when called with
-            // append true loadRawData triggers an "add" event and then a
-            // "load" event
-            this.loadRawData(toAdd, true);
+            this.add(toAdd);
             delete this._adding;
         }
     },

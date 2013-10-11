@@ -227,6 +227,97 @@
             t.eq(layer.features.length, 0, 'remove on store with "remove" removes the corresponding feature from layer');
         }
 
+        /**
+         * This test is modelled after the feature-grid example which
+         * could be turned out of sync when manually adding features or records.
+         */
+        function test_addFeaturesAddRecord(t) {
+            var map = new OpenLayers.Map(),
+                wmsLayer = new OpenLayers.Layer.WMS(
+                    "vmap0",
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'}
+                ),
+                vecLayer = new OpenLayers.Layer.Vector("vector", {
+                    protocol: new OpenLayers.Protocol.HTTP({
+                        url: "../../examples/data/summits.json",
+                        format: new OpenLayers.Format.GeoJSON()
+                    }),
+                    strategies: [new OpenLayers.Strategy.Fixed()]
+                }),
+                store;
+
+            map.addLayers([wmsLayer, vecLayer]);
+
+            // create feature store, binding it to the vector layer
+            store = Ext.create('GeoExt.data.FeatureStore', {
+                layer: vecLayer,
+                fields: [
+                    {name: 'name', type: 'string'},
+                    {name: 'elevation', type: 'float'}
+                ],
+                autoLoad: true
+            });
+
+            t.plan(9);
+
+            // tests
+            t.delay_call(1, function(){
+
+                var initialCntStore = store.getCount();
+                var initialCntLayer = vecLayer.features.length;
+
+                t.ok(initialCntStore !== 0,
+                    "We have " + initialCntStore + " records in store.");
+                t.ok(initialCntLayer !== 0,
+                    "We have " + initialCntStore + " features in layer.");
+
+                t.eq(initialCntStore, initialCntLayer,
+                    "Store and layer in sync.");
+
+                // Part one: Adding features to the layer
+                vecLayer.addFeatures([
+                    new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.Point(5,45)
+                    ),
+                    new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.Point(4,44)
+                    )
+                ]);
+
+                var afteraddOnLayerCntStore = store.getCount();
+                var afteraddOnLayerCntLayer = vecLayer.features.length;
+
+                t.eq(initialCntStore + 2, afteraddOnLayerCntStore,
+                    "Number of records (" + afteraddOnLayerCntStore + ") ok.");
+                t.eq(initialCntLayer + 2, afteraddOnLayerCntLayer,
+                    "Number of features (" + afteraddOnLayerCntLayer + ") ok.");
+                t.eq(afteraddOnLayerCntStore, afteraddOnLayerCntLayer,
+                    "Store and layer in sync (after adding features).");
+
+                // Part two: Adding features to the store
+                store.add(
+                    new OpenLayers.Feature.Vector(
+                        new OpenLayers.Geometry.Point(4,45)
+                    )
+                );
+
+                var afteraddOnStoreCntStore = store.getCount();
+                var afteraddOnStoreCntLayer = vecLayer.features.length;
+
+                t.eq(initialCntStore + 2 + 1, afteraddOnStoreCntStore,
+                    "Number of records (" + afteraddOnStoreCntStore + ") ok.");
+                t.eq(initialCntLayer + 2 + 1, afteraddOnStoreCntLayer,
+                    "Number of features (" + afteraddOnStoreCntLayer + ") ok.");
+                t.eq(afteraddOnStoreCntStore, afteraddOnStoreCntLayer,
+                    "Store and layer in sync (after adding records).");
+
+                // tear-down
+                store.destroy();
+                map.destroy();
+            });
+        }
+
         function test_getByFeature(t) {
             t.plan(2);
             var layer = new OpenLayers.Layer.Vector();
