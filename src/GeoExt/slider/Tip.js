@@ -9,7 +9,8 @@
 /**
  * @class GeoExt.slider.Tip
  *
- * Create a slider tip displaying ``Ext.slider.SingleSlider`` values over slider thumbs.
+ * Create a slider tip displaying ``Ext.slider.SingleSlider`` values over slider
+ * thumbs.
  *
  * Example:
  * 

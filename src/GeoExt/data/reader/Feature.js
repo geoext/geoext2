@@ -12,6 +12,7 @@
 
 /**
  * Used to read the attributes of a feature.
+ * @class GeoExt.data.reader.Feature
  */
 Ext.define('GeoExt.data.reader.Feature', {
     extend: 'Ext.data.reader.Json',

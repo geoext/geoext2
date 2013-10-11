@@ -10,11 +10,13 @@
  * The LayerNode plugin. This is used to create a node that is connected to
  * a layer, so the checkbox and the layer's visibility are in sync. A basic
  * layer node would be configured like this:
- * 
+ *
  *     {plugins: ['gx_layernode'], layer: myLayer}
  *
  * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the
  * node configuration.
+ *
+ * @class GeoExt.tree.LayerNode
  */
 Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',
@@ -38,9 +40,9 @@ Ext.define('GeoExt.tree.LayerNode', {
             target.set('checkedGroup', 'gx_baselayer');
         }
         target.set('fixedText', !!target.text);
-        
+
         target.set('leaf', true);
-        
+
         if(!target.get('iconCls')) {
             target.set('iconCls', "gx-tree-layer-icon");
         }
@@ -53,11 +55,11 @@ Ext.define('GeoExt.tree.LayerNode', {
     },
 
     /**
-     * @private
      * Handler for the node's afteredit event.
      *
      * @param {GeoExt.data.LayerTreeModel} node
      * @param {String[]} modifiedFields
+     * @private
      */
     onAfterEdit: function(node, modifiedFields) {
         var me = this;
@@ -66,21 +68,23 @@ Ext.define('GeoExt.tree.LayerNode', {
             me.onCheckChange();
         }
     },
-    
+
     /**
+     * Handler for visibilitychanged events on the layer.
+     *
      * @private
-     * Handler for visibilitychanged events on the layer
      */
     onLayerVisibilityChanged: function() {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
         }
     },
-    
+
     /**
-     * @private
      * Updates the visibility of the layer that is connected to the target
-     * node. 
+     * node.
+     *
+     * @private
      */
     onCheckChange: function() {
         var node = this.target,
@@ -91,7 +95,7 @@ Ext.define('GeoExt.tree.LayerNode', {
             var layer = node.get('layer');
             if(checked && layer.isBaseLayer && layer.map) {
                 layer.map.setBaseLayer(layer);
-            } else if(!checked && layer.isBaseLayer && layer.map && 
+            } else if(!checked && layer.isBaseLayer && layer.map &&
                       layer.map.baseLayer && layer.id == layer.map.baseLayer.id) {
                 // Must prevent the unchecking of radio buttons
                 node.set('checked', layer.getVisibility());

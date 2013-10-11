@@ -34,6 +34,8 @@
  * its nodes with the 'baselayer-icon' icon class and the 'baselayer' group.
  * This is basically the same loader that the GeoExt.tree.BaseLayerContainer
  * uses.
+ *
+ * @class GeoExt.tree.LayerLoader
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
@@ -279,8 +281,9 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
     
     /**
-     * @param {GeoExt.data.LayerTreeModel} node
+     * Adds appropriate listeners on the store.
      *
+     * @param {GeoExt.data.LayerTreeModel} node
      * @private
      */
     addStoreHandlers: function(node) {
@@ -300,6 +303,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
     
     /**
+     * Removes the bound listeners on the store.
+     *
      * @private
      */
     removeStoreHandlers: function() {
@@ -325,6 +330,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
 
     /**
+     * Unregisters bound listeners via #removeStoreHandlers
+     *
      * @private
      */
     destroy: function() {

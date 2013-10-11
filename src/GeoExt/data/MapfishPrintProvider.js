@@ -540,6 +540,8 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     },
 
     /**
+     * Actually triggers a 'download' of the passed URL.
+     *
      * @private
      * @param {String} url
      */
@@ -582,6 +584,7 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
    },
 
    /**
+    * Loads the internal stores and fires the #loadcapabilities event when done.
     * @private
     */
    loadStores: function() {
@@ -596,6 +599,8 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
    },
 
     /**
+     * Encodes a given layer according to the definitions in #encoders.
+     *
      * @private
      * @param {OpenLayers.Layer} layer
      * @return {Object}

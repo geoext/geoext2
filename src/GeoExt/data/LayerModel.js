@@ -8,6 +8,8 @@
 
 /**
  * The layer model class used by the stores.
+ * 
+ * @class GeoExt.data.LayerModel
  */
 Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',

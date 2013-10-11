@@ -262,6 +262,8 @@ Ext.define('GeoExt.slider.Zoom', {
     },
 
     /**
+     * Registers the relevant listeners on the #map to be in sync with it.
+     *
      * @private
      * @param {OpenLayers.Map} map
      */
@@ -279,6 +281,8 @@ Ext.define('GeoExt.slider.Zoom', {
     },
 
     /**
+     * unregisters the bound listeners on the #map, e.g. when being destroyed.
+     *
      * @private
      */
     unbind: function() {
