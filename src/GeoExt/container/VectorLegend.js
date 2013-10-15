@@ -615,7 +615,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     },
 
     /**
-     * Called owhile dragging/dropping. Moves the rule specified by sourcePos
+     * Called while dragging/dropping. Moves the rule specified by sourcePos
      * to targetPos and fires the rulemoved event.
      *
      * @private

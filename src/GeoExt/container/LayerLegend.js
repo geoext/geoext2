@@ -99,7 +99,7 @@ Ext.define('GeoExt.container.LayerLegend', {
     legendTitle: null,
 
     /** @cfg {String}
-     * Optional css class to use for the layer title labels.
+     * Optional CSS class to use for the layer title labels.
      */
     labelCls: null,
 
