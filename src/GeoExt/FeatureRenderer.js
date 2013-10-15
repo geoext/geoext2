@@ -200,7 +200,7 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     * Bound to the click event on the #el, this fires the clcik event.
+     * Bound to the click event on the #el, this fires the click event.
      * @private
      */
     onClick: function() {
@@ -247,7 +247,7 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     * When resizing has happened, we might need to re-set the rendere's
+     * When resizing has happened, we might need to re-set the renderer's
      * dimensions via #setRendererDimensions.
      *
      * @private

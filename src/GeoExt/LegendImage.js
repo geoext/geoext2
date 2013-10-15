@@ -34,7 +34,7 @@ Ext.define('GeoExt.LegendImage', {
 
     /**
      * @cfg {String} imgCls
-     * Optional css class to apply to img tag.
+     * Optional CSS class to apply to img tag.
      */
     imgCls: null,
 

@@ -344,7 +344,7 @@ Ext.define('GeoExt.panel.Map', {
 
     /**
      * Returns a state of the Map as keyed Object. Depending on the point in
-     * time this methoid is being called, the following keys will be available:
+     * time this method is being called, the following keys will be available:
      *
      * * `x`
      * * `y`
