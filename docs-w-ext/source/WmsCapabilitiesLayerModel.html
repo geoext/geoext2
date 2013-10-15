@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include GeoExt/data/reader/WmsCapabilities.js
+ */
+
+<span id='GeoExt-data-WmsCapabilitiesLayerModel'>/**
+</span> * @class GeoExt.data.WmsCapabilitiesLayerModel
+ * The model for WMS layers coming from a WMS GetCapabilities document.
+ */
+Ext.define('GeoExt.data.WmsCapabilitiesLayerModel',{
+    extend: 'GeoExt.data.LayerModel',
+    alternateClassName: [
+        'GeoExt.data.WMSCapabilitiesModel',
+        'GeoExt.data.WmsCapabilitiesModel'
+    ],
+    requires: ['GeoExt.data.reader.WmsCapabilities'],
+    alias: 'model.gx_wmscapabilities',
+<span id='GeoExt-data-WmsCapabilitiesLayerModel-property-fields'>    fields: [
+</span>        {name: &quot;name&quot;, type: &quot;string&quot;, mapping: &quot;metadata.name&quot;},
+        {name: &quot;abstract&quot;, type: &quot;string&quot;, mapping: &quot;metadata.abstract&quot;},
+        {name: &quot;queryable&quot;, type: &quot;boolean&quot;, mapping: &quot;metadata.queryable&quot;},
+        {name: &quot;opaque&quot;, type: &quot;boolean&quot;, mapping: &quot;metadata.opaque&quot;},
+        {name: &quot;noSubsets&quot;, type: &quot;boolean&quot;, mapping: &quot;metadata.noSubsets&quot;},
+        {name: &quot;cascaded&quot;, type: &quot;int&quot;, mapping: &quot;metadata.cascaded&quot;},
+        {name: &quot;fixedWidth&quot;, type: &quot;int&quot;, mapping: &quot;metadata.fixedWidth&quot;},
+        {name: &quot;fixedHeight&quot;, type: &quot;int&quot;, mapping: &quot;metadata.fixedHeight&quot;},
+        {name: &quot;minScale&quot;, type: &quot;float&quot;, mapping: &quot;metadata.minScale&quot;},
+        {name: &quot;maxScale&quot;, type: &quot;float&quot;, mapping: &quot;metadata.maxScale&quot;},
+        {name: &quot;prefix&quot;, type: &quot;string&quot;, mapping: &quot;metadata.prefix&quot;},
+        {name: &quot;attribution&quot;, type: &quot;string&quot;},
+        {name: &quot;formats&quot;, mapping: &quot;metadata.formats&quot;}, // array
+        {name: &quot;infoFormats&quot;, mapping: &quot;metadata.infoFormats&quot;}, //array
+        {name: &quot;styles&quot;, mapping: &quot;metadata.styles&quot;}, // array
+        {name: &quot;srs&quot;, mapping: &quot;metadata.srs&quot;}, // object
+        {name: &quot;dimensions&quot;, mapping: &quot;metadata.dimensions&quot;}, // object
+        {name: &quot;bbox&quot;, mapping: &quot;metadata.bbox&quot;}, // object
+        {name: &quot;llbbox&quot;, mapping: &quot;metadata.llbbox&quot;}, // array
+        {name: &quot;keywords&quot;, mapping: &quot;metadata.keywords&quot;}, // array
+        {name: &quot;identifiers&quot;, mapping: &quot;metadata.identifiers&quot;}, // object
+        {name: &quot;authorityURLs&quot;, mapping: &quot;metadata.authorityURLs&quot;}, // object
+        {name: &quot;metadataURLs&quot;, mapping: &quot;metadata.metadataURLs&quot;} // array
+    ],
+<span id='GeoExt-data-WmsCapabilitiesLayerModel-cfg-proxy'>    proxy: {
+</span>        type: 'ajax',
+        reader: {
+            type: 'gx_wmscapabilities'
+        }
+    }
+});
+</pre>
+</body>
+</html>

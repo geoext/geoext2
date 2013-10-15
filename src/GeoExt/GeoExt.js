@@ -7,10 +7,10 @@
  */
 
 /**
- * The GeoExt root object
+ * The GeoExt root object.
+ *
  * @class GeoExt
  * @singleton
  */
 var GeoExt = GeoExt || {};
-GeoExt.version = 'pre-2.0';
-
+GeoExt.version = '2.0.0-rc.1';

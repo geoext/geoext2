@@ -11,7 +11,7 @@
  */
 
 /**
- *  A panel showing legends of all layers in a layer store.
+ *  A panel showing legends of all layers in a GeoExt.data.LayerStore.
  *  Depending on the layer type, a legend renderer will be chosen.
  *
  *  The LegendPanel will include legends for all the layers in the
@@ -19,6 +19,7 @@
  *  ``displayInLayerSwitcher: false``, or a layer record has a
  *  ``hideInLegend`` field with a value of ``true``. Additional filtering can
  *  be done by configuring a ``filter`` on the LegendPanel.
+ *
  * @class GeoExt.panel.Legend
  */
 Ext.define('GeoExt.panel.Legend', {
@@ -28,7 +29,7 @@ Ext.define('GeoExt.panel.Legend', {
     alternateClassName : 'GeoExt.LegendPanel',
 
     /**
-     * @cfg {Boolean} dynamic
+     * @cfg {Boolean}
      * If false the LegendPanel will not listen to the add, remove and change 
      * events of the LayerStore. So it will load with the initial state of
      * the LayerStore and not change anymore. 
@@ -36,7 +37,7 @@ Ext.define('GeoExt.panel.Legend', {
     dynamic: true,
 
     /**
-     * @cfg {Ext.data.Store} layerStore
+     * @cfg {Ext.data.Store}
      * The layer store containing layers to be displayed in the legend 
      * container. If not provided it will be taken from the MapPanel.
      */
@@ -49,14 +50,16 @@ Ext.define('GeoExt.panel.Legend', {
     preferredTypes: null,
 
     /**
-     * @cfg {Function}
      * A function, called in the scope of the legend panel, with a layer record
-     * as argument. Is expected to return true for layers to be displayed, false
+     * as argument. It is expected to return true for layers to be displayed, false
      * otherwise. By default, all layers will be displayed.
+     * @cfg {Function}
+     * @param {Ext.data.Record} record
+     * @return {boolean}
      */
     filter: function(record) {
         return true;
-    },    
+    },
 
     /**
      * Private method called when the legend panel is being rendered.

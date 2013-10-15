@@ -99,7 +99,7 @@ Ext.define('GeoExt.data.PrintPage', {
          *
          * Listener arguments:
          *
-         *  * printPage - {@link GeoExt.data.PrintPage} this printPage
+         *  * printPage - {@link GeoExt.data.PrintPage} this printPage.
          *  * modifications - {Object} Object with one or more of
          *      `scale`, `center` and `rotation`, notifying
          *      listeners of the changed properties.
@@ -138,7 +138,7 @@ Ext.define('GeoExt.data.PrintPage', {
     /**
      * Gets this page's print extent for the provided map.
      *
-     * @param {OpenLayers.Map/GeoExt.MapPanel} map the map to get the print extent for.
+     * @param {OpenLayers.Map/GeoExt.MapPanel} map The map to get the print extent for.
      * @return {OpenLayers.Bounds}
      */
     getPrintExtent: function(map) {
@@ -204,7 +204,7 @@ Ext.define('GeoExt.data.PrintPage', {
      *
      *  Available options:
      *
-     *  * mode - `String` How to calculate the print extent? If `closest`,
+     *  * mode - `String` [closest/printer/screen] How to calculate the print extent? If `closest`,
      *    the closest matching print extent will be chosen. If `printer`, the
      *    chosen print extent will be the closest one that can show the entire
      *    `fitTo` extent on the printer. If `screen`, it will be the closest
@@ -354,6 +354,8 @@ Ext.define('GeoExt.data.PrintPage', {
     },
 
     /**
+     * Unbinds layoutchange listener of the #printProvider.
+     *
      * @private
      */
     destroy: function() {

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
+    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
 
     <script type="text/javascript">
 
@@ -15,7 +15,7 @@
             }
         });
 
-        Ext.require([
+        Ext.Loader.syncRequire([
             'GeoExt.grid.column.Symbolizer'
         ]);
 
@@ -86,22 +86,29 @@
             el8.innerHTML = markup8;
 
             t.delay_call(1, function() {
-                t.ok(el1.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for Curve");
-                t.ok(el2.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for LinearRing");
-                t.ok(el3.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for LineString");
-                t.ok(el4.outerHTML.indexOf("OpenLayers.Geometry.Line") >= 0, "test for MultiLineString");
-                t.ok(el5.outerHTML.indexOf("OpenLayers.Geometry.Point") >= 0, "test for MultiPoint");
-                t.ok(el6.outerHTML.indexOf("OpenLayers.Geometry.Polygon") >= 0, "test for MultiPolygon");
-                t.ok(el7.outerHTML.indexOf("OpenLayers.Geometry.Point") >= 0, "test for Point");
-                t.ok(el8.outerHTML.indexOf("OpenLayers.Geometry.Polygon") >= 0, "test for Polygon");
+                t.ok(el1.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for Curve");
+                t.ok(el2.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for LinearRing");
+                t.ok(el3.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for LineString");
+                t.ok(el4.outerHTML.indexOf("OpenLayers_Geometry_Line") >= 0, "test for MultiLineString");
+                t.ok(el5.outerHTML.indexOf("OpenLayers_Geometry_Point") >= 0, "test for MultiPoint");
+                t.ok(el6.outerHTML.indexOf("OpenLayers_Geometry_Polygon") >= 0, "test for MultiPolygon");
+                t.ok(el7.outerHTML.indexOf("OpenLayers_Geometry_Point") >= 0, "test for Point");
+                t.ok(el8.outerHTML.indexOf("OpenLayers_Geometry_Polygon") >= 0, "test for Polygon");
 
+                // Teardown
                 Ext.each(Ext.ComponentQuery.query('gx_symbolizercolumn'),
                     function (renderer) {
                         renderer.destroy();
-                });
+                    }
+                );
                 document.body.removeChild(el1);
                 document.body.removeChild(el2);
                 document.body.removeChild(el3);
+                document.body.removeChild(el4);
+                document.body.removeChild(el5);
+                document.body.removeChild(el6);
+                document.body.removeChild(el7);
+                document.body.removeChild(el8);
             });
         }
     </script>

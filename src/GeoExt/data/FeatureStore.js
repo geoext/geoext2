@@ -13,7 +13,8 @@
 
 /**
  * @class GeoExt.data.FeatureStore
- * A store that synchronizes a features array of an ``OpenLayers.Layer.Vector``.
+ *
+ * A store that synchronizes a features array of an `OpenLayers.Layer.Vector`.
  */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
@@ -117,6 +118,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
+     * Unbinds own listeners by calling #unbind when being destroyed.
+     *
      * @private
      */
     destroy: function() {
@@ -125,7 +128,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Bind this store to a layer instance, once bound the store
+     * Bind this store to a layer instance. Once bound the store
      * is synchronized with the layer and vice-versa.
      *
      * @param {OpenLayers.Layer.Vector} layer The layer instance.
@@ -172,7 +175,7 @@ Ext.define('GeoExt.data.FeatureStore', {
             'clear': this.onClear,
             'add': this.onAdd,
             'remove': this.onRemove,
-            'update': this.onUpdate,
+            'update': this.onStoreUpdate,
             scope: this
         });
 
@@ -180,7 +183,7 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Unbind this store to his layer instance.
+     * Unbind this store from his layer instance.
      */
     unbind: function() {
         if (this.isLayerBinded) {
@@ -195,7 +198,7 @@ Ext.define('GeoExt.data.FeatureStore', {
                 'clear': this.onClear,
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'update': this.onUpdate,
+                'update': this.onStoreUpdate,
                 scope: this
             });
             this.layer = null;
@@ -203,10 +206,20 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
     },
 
+    /**
+     * Convenience method to add features.
+     *
+     * @param {OpenLayers.Feature.Vector[]} features The features to add.
+     */
     addFeatures: function(features) {
         return this.loadRawData(features, true);
     },
 
+    /**
+     * Convenience method to remove features.
+     *
+     * @param {OpenLayers.Feature.Vector[]} features The features to remove.
+     */
     removeFeatures: function(features) {
         //accept both a single-argument array of records, or any number of record arguments
         if (!Ext.isArray(features)) {
@@ -243,6 +256,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
+     * Adds the given records to the associated layer.
+     *
      * @private
      * @param {Ext.data.Model[]} records
      */
@@ -257,13 +272,15 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for layer featuresadded event
+     * Handler for layer featuresadded event.
+     *
      * @private
      * @param {Object} evt
      */
     onFeaturesAdded: function(evt) {
-         if (!this._adding) {
-            var features = evt.features, toAdd = features;
+        if (!this._adding) {
+            var features = evt.features,
+                toAdd = features;
             if (this.featureFilter) {
                 toAdd = [];
                 for (var i = 0, len = features.length; i < len; i++) {
@@ -273,17 +290,16 @@ Ext.define('GeoExt.data.FeatureStore', {
                     }
                 }
             }
+            toAdd = this.proxy.reader.read(toAdd).records;
             this._adding = true;
-            // add feature records to the store, when called with
-            // append true loadRawData triggers an "add" event and then a
-            // "load" event
-            this.loadRawData(toAdd, true);
+            this.add(toAdd);
             delete this._adding;
         }
     },
 
     /**
-     * Handler for layer featuresremoved event
+     * Handler for layer featuresremoved event.
+     *
      * @private
      * @param {Object} evt
      */
@@ -302,7 +318,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for layer featuremodified event
+     * Handler for layer featuremodified event.
+     *
      * @private
      * @param {Object} evt
      */
@@ -317,7 +334,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's load event
+     * Handler for a store's load event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -334,7 +352,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's clear event
+     * Handler for a store's clear event.
+     *
      * @private
      * @param {Ext.data.Store} store
      */
@@ -345,7 +364,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's add event
+     * Handler for a store's add event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -360,7 +380,8 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's remove event
+     * Handler for a store's remove event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
@@ -378,13 +399,14 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's update event
+     * Handler for a store's update event.
+     *
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
      * @param {Number} operation
      */
-    onUpdate: function(store, record, operation, modifiedFieldNames) {
+    onStoreUpdate: function(store, record, operation, modifiedFieldNames) {
         if (!this._updating) {
             var feature = record.raw;
             if (feature.state !== OpenLayers.State.INSERT) {
@@ -403,6 +425,59 @@ Ext.define('GeoExt.data.FeatureStore', {
                 });
                 delete this._updating;
             }
+        }
+    },
+
+    /**
+     * @inheritdoc
+     *
+     * The event firing behaviour of Ext.4.1 is reestablished here. See also:
+     * [This discussion on the Sencha forum](http://www.sencha.com/forum/
+     * showthread.php?253596-beforeload-is-not-fired-by-loadRawData)
+     *
+     * In version 4.2.1 this method reads
+     *
+     *     //...
+     *     loadRawData : function(data, append) {
+     *         var me      = this,
+     *             result  = me.proxy.reader.read(data),
+     *             records = result.records;
+     *
+     *         if (result.success) {
+     *             me.totalCount = result.total;
+     *             me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+     *         }
+     *     },
+     *     // ...
+     *
+     * While the previous version 4.1.3 has also
+     * the line `me.fireEvent('load', me, records, true);`:
+     *
+     *     // ...
+     *     if (result.success) {
+     *         me.totalCount = result.total;
+     *         me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+     *         me.fireEvent('load', me, records, true);
+     *     }
+     *     // ...
+     *
+     * Our overwritten method has the code from 4.1.3, so that the #load-event
+     * is being fired.
+     *
+     * See also the source code of [version 4.1.3](http://docs-origin.sencha.
+     * com/extjs/4.1.3/source/Store.html#Ext-data-Store-method-loadRawData) and
+     * of [version 4.2.1](http://docs-origin.sencha.com/extjs/4.2.1/source/
+     * Store.html#Ext-data-Store-method-loadRawData).
+     */
+    loadRawData : function(data, append) {
+        var me      = this,
+            result  = me.proxy.reader.read(data),
+            records = result.records;
+
+        if (result.success) {
+            me.totalCount = result.total;
+            me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+            me.fireEvent('load', me, records, true);
         }
     }
 });

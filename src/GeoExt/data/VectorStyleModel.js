@@ -12,11 +12,11 @@
 
 /**
  * @class GeoExt.data.VectorStyleModel
- * <p>A specific model for CQL Style Rules<p>
  *
- * Preconfigured with an Ajax proxy and a JSON reader
+ * A specific model for CQL Style Rules.
+ *
+ * Preconfigured with an Ajax proxy and a JSON reader.
  */
-
 Ext.define('GeoExt.data.VectorStyleModel', {
     extend : 'Ext.data.Model',
     requires : ['Ext.data.JsonReader'],

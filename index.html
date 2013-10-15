@@ -1,62 +1,296 @@
-<html>
-<head>
-    <title>GeoExt 2</title>
-    <style type="text/css">
-        body {font-family: Verdana, Arial, Helvetica, sans-serif}
-        a:link {text-decoration:none;}
-        a:visited {text-decoration:none; color: #600;}
-        a:hover {text-decoration:underline;}
-        a:active {text-decoration:underline;}
-    </style>
-</head>
-<body>
-    <h1>GeoExt 2 - Status Page</h1>
-    <p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GeoExt 2 &mdash; JavaScript Toolkit for Rich Web Mapping Applications</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name="description" content="Main website for GeoExt 2, a JavaScript Toolkit for Rich Web Mapping Applications based on ExtJS 4. Includes links to examples, API-documentation and tests." />
+    <meta name="author" content="The GeoExt developers" />
+    <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="website-resources/css/index.css" /> -->
+    <link rel="stylesheet" href="website-resources/bootstrap/css/bootstrap.min.css" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="website-resources/bootstrap/js/html5shiv.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="website-resources/css/index.css" />
+  </head>
+  <body>
+
+
+
+    
+
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="brand" href="/">
+          <img src='website-resources/img/GeoExt-logo.png' style="height: 28px;">
+          GeoExt 2
+        </a>
+        <div class="nav-collapse collapse pull-right">
+          <ul class="nav">
+            <li><a href="./docs/"><i class="icon-list icon-big"></i> Documentation</a></li>
+            <li><a href="https://github.com/geoext/geoext2"><i class="icon-folder-open icon-big"></i> Code</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='container'>
+    <blockquote id='tagline' class='pull-right plain'>
+      <p>GeoExt 2 &mdash; JavaScript Toolkit for Rich Web Mapping Applications</p>
+    </blockquote>
+
+    <div class='well'>
+      <p>
         GeoExt enables building desktop-like GIS applications through the web.
         It is a JavaScript framework that combines the GIS functionality of
-        <a href="http://openlayers.org/">OpenLayers</a> with the user interface
-        of the ExtJS library provided by
+        <a href="http://openlayers.org/">OpenLayers</a> with the user 
+        interface of the ExtJS library provided by
         <a href="http://www.sencha.com/">Sencha</a>.
-    </p>
-    <p>
-        <a href="http://www.geoext.org/">GeoExt</a> currently works with
-        <a href="http://www.sencha.com/products/extjs3">ExtJS 3</a> but that
-        does not utilize the new features in
-        <a href="http://www.sencha.com/products/extjs/">ExtJS 4</a> (charting,
-        harmonized API with
-        <a href="http://www.sencha.com/products/touch/">Sencha Touch</a>
-        for mobile applications, and others).
-        The <a href="http://geoext.blogspot.de/2012/05/hello-geoext-2-geoext-meets-ext-js-4.html">code sprint</a>
-        in April 2012 in Bonn started developing GeoExt 2.0
-        to work with ExtJS 4 in order to leverage the newest features.
-    </p>
+      </p>
+    </div>
 
-    <p>This is a temporary web page for tracking the progress of GeoExt 2.0.</p>
+    <div class='row'>
+      <h1 class='topic'>About</h1>
+      <div class='span12'>
+        <p>
+          Since version 2, GeoExt is based upon the newest Ext JS 4.
+        </p>
+        <p>
+          This means
+          GeoExt can be used just like any other Ext 4 component, and applications
+          making use of GeoExt 2 also profit from Ext JS enhancements like
+          charting, a harmonized API with Sencha Touch and a sophisticated
+          single-file build tool.
+        </p>
+        <p>
+          GeoExt 2 has been in the making for a long time, though most of the
+          code has been written during
+          <a href="https://github.com/geoext/geoext2/wiki/GeoExt-2-Code-Sprint">
+          a code sprint back in May 2012</a>. We are
+          deeply grateful that
+          <a href="https://github.com/geoext/geoext2/wiki/GeoExt-2-Code-Sprint#sponsors">our sponsors</a> helped make GeoExt 2 happen.
+        </p>
+        <p>
+          Now, have a look at the examples below, read the
+          <a href="./docs/">API documentation</a>
+          or checkout the code. The current released version of
+          GeoExt is <a href="https://github.com/geoext/geoext2/releases/tag/2.0.0-rc.1">2.0.0-rc.1</a>.
+        </p>
+      </div>
+    </div>
 
-    <ul>
-        <li><a href="https://github.com/geoext/geoext2/wiki/GeoExt-2-Code-Sprint">GeoExt 2 Sprint WIKI page (sponsors etc)</a></li>
-        <li><a href="http://github.com/geoext/geoext2">git repository on GitHub</a>
-        <li><a href="docs/">API Documentation</a></li>
-        <li><b>Examples</b><ul>
-            <li><a href="examples/action/mappanel_with_actions.html">Action</a></li>
-            <li><a href="examples/app/simple/simple.html">A complete MVC Application</a></li>
-            <li><a href="examples/geocoder/geocoder.html">Geocoder</a></li>
-            <li><a href="examples/grid/feature-grid.html">FeatureGrid</a></li>
-            <li><a href="examples/layeropacityslider/layeropacityslider.html">LayerOpacitySlider</a></li>
-            <li><a href="examples/legendpanel/legendpanel.html">LegendPanel</a></li>
-            <li><a href="examples/mappanel/mappanel.html">MapPanel</a></li>
-            <li><a href="examples/permalink/permalink.html">Permalink</a></li>
-            <li><a href="examples/popup/popup.html">Popup</a></li>
-            <li><a href="examples/printextent/print-extent.html">PrintExtent</a></li>
-            <li><a href="examples/printpreview/print-preview.html">PrintPreview</a></li>
-            <li><a href="examples/renderer/renderer.html">Renderer</a></li>
-            <li><a href="examples/stylegrid/style-grid.html">StyleGrid</a></li>
-            <li><a href="examples/tree/tree.html">Tree</a></li>
-            <li><a href="examples/tree/tree-legend.html">LegendTree</a></li>
-            <li><a href="examples/wfscapabilities/wfscapabilities.html">WFS Capabilities</a></li>
-            <li><a href="examples/wmscapabilities/wmscapabilities.html">WMS Capabilities</a></li>
-            <li><a href="examples/zoomchooser/zoomchooser.html">ZoomChooser</a></li>
-            <li><a href="examples/zoomslider/zoomslider.html">ZoomSlider</a></li>
-        </ul></li>
-        <li><a href="tests/">Unit tests</a></li>        
+    <div class='row'>
+      <h1 class='topic'>Download</h1>
+      <div class='span12'>
+        <p>
+          Please download <a href="https://github.com/geoext/geoext2/releases/tag/2.0.0-rc.1">GeoExt 2.0.0-rc.1</a>,
+          test it, and give feedback. Thanks!
+        </p>
+      </div>
+    </div>
+
+    <div class='row'>
+      <h1 class='topic'>Examples</h1>
+    </div>
+    <div class='examples_container'>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/action/mappanel_with_actions.html' class='big-link'>
+            <h3>Action</h3>
+            <p>A GeoExt.Action is created to insert an OpenLayers control in a toolbar
+             as a button or in a menu as a menu item.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/app/simple/simple.html' class='big-link'>
+            <h3>MVC Application</h3>
+            <p>A simple complete MVC application example called CF (Cartography Framework).
+            </p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/geocoder/geocoder.html' class='big-link'>
+            <h3>Geocoder</h3>
+            <p>Creates a combo box that handles results from a geocoding service.
+             By default it uses OSM Nominatim.</p>
+          </a>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/grid/feature-grid.html' class='big-link'>
+            <h3>Feature Grid</h3>
+            <p>An Ext.grid.Panel loaded with features read from a GeoJSON document.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/layeropacityslider/layeropacityslider.html' class='big-link'>
+            <h3>Layer Opacity Slider</h3>
+            <p>The LayerOpacitySlider allows control of a layer opacity using an Ext.Slider.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/legendpanel/legendpanel.html' class='big-link'>
+            <h3>Legend Panel</h3>
+            <p>Create a LegendPanel that is autopopulated with legends from a map
+             that has already been created.</p>
+          </a>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/mappanel/mappanel.html' class='big-link'>
+            <h3>MapPanel</h3>
+            <p>Create a simple GeoExt.panel.Map container for a map.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/permalink/permalink.html' class='big-link'>
+            <h3>Permalink</h3>
+            <p>Generate permalinks with the current map position and visible layers.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/popup/popup.html' class='big-link'>
+            <h3>Popup</h3>
+            <p>A popup is a specialized window that supports anchoring to a particular
+             location in a MapPanel.</p>
+          </a>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/printextent/print-extent.html' class='big-link'>
+            <h3>Print Extent</h3>
+            <p>Set the bounds of a printable PDF interactively with a dynamic print extent rectangle.
+             It requires the MapFish or GeoServer print module.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/printpreview/print-preview.html' class='big-link'>
+            <h3>PrintPreview</h3>
+            <p>How to create a printable PDF with GeoExt.data.MapfishPrintProvider and GeoExt.PrintMapPanel.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/renderer/renderer.html' class='big-link'>
+            <h3>Renderer</h3>
+            <p>The FeatureRenderer renderers arbitrary OpenLayers.Feature.Vector objects given a list of symbolizers.</p>
+          </a>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/stylegrid/style-grid.html' class='big-link'>
+            <h3>Style Grid</h3>
+            <p>The StyleReader populates a store with records representing rules of a Style or the entries of a ColorMap,
+             so they can easily be shown in a grid.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/tree/tree.html' class='big-link'>
+            <h3>LayerTree</h3>
+            <p>This example shows how to work with a layer tree.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/tree/tree-legend.html' class='big-link'>
+            <h3>LegendTree</h3>
+            <p>This example shows how to add legends to the layer nodes in a tree.</p>
+          </a>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/wfscapabilities/wfscapabilities.html' class='big-link'>
+            <h3>WFS Capabilities</h3>
+            <p>Load a grid with data from a WFS capabilities document.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/wmscapabilities/wmscapabilities.html' class='big-link'>
+            <h3>WMS Capabilities</h3>
+            <p>Load a grid with data from a WMS capabilities document.</p>
+          </a>
+        </div>
+        <div class='span4'>
+          <a href='./examples/zoomchooser/zoomchooser.html' class='big-link'>
+            <h3>Zoom Chooser</h3>
+            <p>This example demonstrates the use of a GeoExt.data.ScaleStore
+             to list the available zoom levels for a map.</p>
+          </a>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='span4'>
+          <a href='./examples/zoomslider/zoomslider.html' class='big-link'>
+            <h3>Zoom Slider</h3>
+            <p>Allows control of the map scale using an Ext.slider.SingleSlider.</p>
+          </a>
+        </div>
+      </div>
+  </div>
+
+  <div class='row'>
+    <h1 class='topic'>What about GeoExt 1.x?</h1>
+    <div class='span12'>
+      <p>
+        Of course you can still use <a href="http://geoext.org">GeoExt 1.x</a>.
+      </p>
+      <p>
+        We will still be fixing bugs in the 1.x-series, but our development
+        will mainly focus on GeoExt 2 and above.</p>
+      </p>
+      <p>
+        Consider using the new and shiny GeoExt 2 when you decide to
+        refactor your code or start a new project. As we strived for a very
+        harmonized API between GeoExt 1 and 2, upgrading shouldn't be too
+        hard. 
+      </p>
+    </div>
+  </div>
+
+  <div class='row'>
+    <h1 class='topic'>Now: Get involved!</h1>
+  </div>
+
+  <div class='row'>
+    <div class='span4'>
+      <a href='https://github.com/geoext/geoext2' class='big-link'>
+        <h3>Fork the repo</h3>
+      </a>
+    </div>
+    <div class='span4'>
+      <a href='https://github.com/geoext/geoext2/issues' class='big-link'>
+        <h3>Open an issue</h3>
+      </a>
+    </div>
+    <div class='span4'>
+      <a href='http://www.geoext.org/cgi-bin/mailman/listinfo/' class='big-link'>
+        <h3>Join the discussion</h3>
+      </a>
+    </div>
+  </div>
+
+  </div>
+    <footer class="footer">
+      <p>
+        Code licensed under the <a href="./license.txt">BSD-license</a>. 
+        All documentation <a href='http://creativecommons.org/licenses/by/3.0/'>CC BY 3.0</a>.
+      </p>
+      <p>
+        The GeoExt library is for use with the ExtJS library. ExtJS is 
+        distributed under the terms of the GPL v3. 
+        See <a href="http://www.sencha.com/products/extjs/license/">the ExtJS license page</a>
+        for details on Ext JS licensing.
+      </p>
+    </footer>
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="./website-resources/bootstrap/js/bootstrap.min.js"></script>
+  </body>
 </html>

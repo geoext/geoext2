@@ -7,11 +7,17 @@ Ext.Loader.setConfig({
     paths: {
         GeoExt: "../../../src/GeoExt",
         // for dev use
-        Ext: "http://cdn.sencha.io/ext-4.1.0-gpl/src"
+        Ext: "http://cdn.sencha.com/ext/gpl/4.2.1/src"
         // for build purpose
-        //Ext: "extjs-4.1.0/src"
+//        Ext: "ext-4.2.1.883/src"
     }
 });
+
+Ext.require([
+    // We need to require this class, even though it is used by Ext.EventObjectImpl
+    // see: http://www.sencha.com/forum/showthread.php?262124-Missed-(-)-dependency-reference-to-a-Ext.util.Point-in-Ext.EventObjectImpl
+    'Ext.util.Point'
+]);
 
 /**
  * CF.app

@@ -70,7 +70,7 @@ Ext.define('GeoExt.data.LayerStore', {
      */
 
     /**
-     * @config {Object} Creation parameters
+     * @param {Object} config Creation parameters
      * @private
      */
     constructor: function(config) {
@@ -146,7 +146,7 @@ Ext.define('GeoExt.data.LayerStore', {
             "clear": me.onClear,
             "add": me.onAdd,
             "remove": me.onRemove,
-            "update": me.onUpdate,
+            "update": me.onStoreUpdate,
             scope: me
         });
         me.data.on({
@@ -173,6 +173,7 @@ Ext.define('GeoExt.data.LayerStore', {
             me.un("clear", me.onClear, me);
             me.un("add", me.onAdd, me);
             me.un("remove", me.onRemove, me);
+            me.un("update", me.onStoreUpdate, me);
 
             me.data.un("replace", me.onReplace, me);
 
@@ -214,7 +215,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a map's addlayer event
+     * Handler for a map's addlayer event.
      * @private
      * @param {Object} evt
      */
@@ -229,7 +230,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a map's removelayer event
+     * Handler for a map's removelayer event.
      * @private
      * @param {Object} evt
      */
@@ -239,10 +240,13 @@ Ext.define('GeoExt.data.LayerStore', {
         // as http://trac.openlayers.org/ticket/2136 is fixed.
         if(this.map.unloadDestroy) {
             if(!this._removing) {
-                var layer = evt.layer;
-                this._removing = true;
-                this.remove(this.getByLayer(layer));
-                delete this._removing;
+                var layer = evt.layer,
+                    rec = this.getByLayer(layer);
+                if (rec) {
+                    this._removing = true;
+                    this.remove(this.getByLayer(layer));
+                    delete this._removing;
+                }
             }
         } else {
             this.unbind();
@@ -250,7 +254,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's load event
+     * Handler for a store's load event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -283,7 +287,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's clear event
+     * Handler for a store's clear event.
      * @private
      * @param {Ext.data.Store} store
      */
@@ -296,7 +300,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's add event
+     * Handler for a store's add event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
@@ -318,7 +322,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's remove event
+     * Handler for a store's remove event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
@@ -336,13 +340,13 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's update event
+     * Handler for a store's update event.
      * @private
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
      * @param {Number} operation
      */
-    onUpdate: function(store, record, operation) {
+    onStoreUpdate: function(store, record, operation) {
         if(operation === Ext.data.Record.EDIT) {
             if (record.modified && record.modified.title) {
                 var layer = record.getLayer();
@@ -364,7 +368,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's data collections' replace event
+     * Handler for a store's data collections' replace event.
      * @private
      * @param {String} key
      * @param {Ext.data.Model} oldRecord In this case, a record that has
@@ -377,7 +381,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Get the record for the specified layer
+     * Get the record for the specified layer.
      * @param {OpenLayers.Layer} layer
      * @returns {Ext.data.Model} or undefined if not found
      */
@@ -391,12 +395,12 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
+     * Unbinds listeners by calling #unbind prior to being destroyed.
      * @private
      */
     destroy: function() {
-        var me = this;
-        me.unbind();
-        me.callParent();
+        this.unbind();
+        this.callParent();
     },
 
     /**
@@ -411,5 +415,58 @@ Ext.define('GeoExt.data.LayerStore', {
             this._addRecords = true;
         }
         this.callParent(arguments);
+    },
+
+    /**
+     * @inheritdoc
+     *
+     * The event firing behaviour of Ext.4.1 is reestablished here. See also:
+     * [This discussion on the Sencha forum](http://www.sencha.com/forum/
+     * showthread.php?253596-beforeload-is-not-fired-by-loadRawData)
+     *
+     * In version 4.2.1 this method reads
+     *
+     *     //...
+     *     loadRawData : function(data, append) {
+     *         var me      = this,
+     *             result  = me.proxy.reader.read(data),
+     *             records = result.records;
+     *
+     *         if (result.success) {
+     *             me.totalCount = result.total;
+     *             me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+     *         }
+     *     },
+     *     // ...
+     *
+     * While the previous version 4.1.3 has also
+     * the line `me.fireEvent('load', me, records, true);`:
+     *
+     *     // ...
+     *     if (result.success) {
+     *         me.totalCount = result.total;
+     *         me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+     *         me.fireEvent('load', me, records, true);
+     *     }
+     *     // ...
+     *
+     * Our overwritten method has the code from 4.1.3, so that the #load-event
+     * is being fired.
+     *
+     * See also the source code of [version 4.1.3](http://docs-origin.sencha.
+     * com/extjs/4.1.3/source/Store.html#Ext-data-Store-method-loadRawData) and
+     * of [version 4.2.1](http://docs-origin.sencha.com/extjs/4.2.1/source/
+     * Store.html#Ext-data-Store-method-loadRawData).
+     */
+    loadRawData : function(data, append) {
+        var me      = this,
+            result  = me.proxy.reader.read(data),
+            records = result.records;
+
+        if (result.success) {
+            me.totalCount = result.total;
+            me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+            me.fireEvent('load', me, records, true);
+        }
     }
 });

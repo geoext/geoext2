@@ -23,6 +23,12 @@ Ext.define('GeoExt.container.UrlLegend', {
     alternateClassName: 'GeoExt.UrlLegend',
 
     statics : {
+        /**
+         * Checks whether the given layer record supports an URL legend.
+         *
+         * @param {Geoext.data.LayerModel} layerRecord A layer record.
+         * @return {Number} Either `10` when URL legends are supported or `0`.
+         */
         supports: function(layerRecord) {
             return Ext.isEmpty(layerRecord.get("legendURL")) ? 0 : 10;
         }
@@ -51,19 +57,17 @@ Ext.define('GeoExt.container.UrlLegend', {
      * FORMAT parameter in baseParams.
      *
      * Example:
-<pre><code>
-var legendPanel = new GeoExt.LegendPanel({
-    map: map,
-    title: 'Legend Panel',
-    defaults: {
-        style: 'padding:5px',
-        baseParams: {
-            FORMAT: 'image/png',
-            LEGEND_OPTIONS: 'forceLabels:on'
-        }
-    }
-});
-</code></pre>
+     *
+     *     var legendPanel = new GeoExt.LegendPanel({
+     *         map: map,
+     *         title: 'Legend Panel',
+     *         defaults: {
+     *             style: 'padding:5px',
+     *             baseParams: {
+     *                 LEGEND_OPTIONS: 'forceLabels:on'
+     *             }
+     *         }
+     *     });
      */
     baseParams: null,
 

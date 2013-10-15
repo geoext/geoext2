@@ -16,10 +16,10 @@
 /**
  * @class GeoExt.panel.PrintMap
  *
- * A map panel that controls scale and center of a print page. Based on the
+ * A GeoExt.panel.Map that controls scale and center of a print page. Based on the
  *  current view (i.e. layers and extent) of a source map, this panel will be
  *  sized according to the aspect ratio of the print page. As the user zooms
- *  and pans in the :class:`GeoExt.PrintMapPanel`, the print page will update
+ *  and pans in the `GeoExt.PrintMapPanel`, the print page will update
  *  its scale and center accordingly. If the scale on the print page changes
  *  (e.g. by setting it using a combo box with a
  *  {@link GeoExt.plugins.PrintPageField}), the extent of the
@@ -33,38 +33,37 @@
  *  PrintMapPanel will open, with a "Create PDF" button.
  *
  * Example:
-<pre><code>
-var mapPanel = new GeoExt.MapPanel({
-    renderTo: "map",
-    layers: [new OpenLayers.Layer.WMS("Tasmania State Boundaries",
-        "http://demo.opengeo.org/geoserver/wms",
-        {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
-    center: [146.56, -41.56],
-    zoom: 6,
-    bbar: [{
-        text: "Print...",
-        handler: function() {
-            var printDialog = new Ext.Window({
-                autoHeight: true,
-                width: 350,
-                items: [new GeoExt.PrintMapPanel({
-                    sourceMap: mapPanel,
-                    printProvider: {
-                        capabilities: printCapabilities
-                    }
-                })],
-                bbar: [{
-                    text: "Create PDF",
-                    handler: function() {
-                        printDialog.items.get(0).print();
-                    }
-                }]
-            });
-            printDialog.show();
-        }
-    }]
-});
-</code></pre>
+ * 
+ *     var mapPanel = new GeoExt.MapPanel({
+ *         renderTo: "map",
+ *         layers: [new OpenLayers.Layer.WMS("Tasmania State Boundaries",
+ *             "http://demo.opengeo.org/geoserver/wms",
+ *             {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
+ *         center: [146.56, -41.56],
+ *         zoom: 6,
+ *         bbar: [{
+ *             text: "Print...",
+ *             handler: function() {
+ *                 var printDialog = new Ext.Window({
+ *                     autoHeight: true,
+ *                     width: 350,
+ *                     items: [new GeoExt.PrintMapPanel({
+ *                         sourceMap: mapPanel,
+ *                         printProvider: {
+ *                             capabilities: printCapabilities
+ *                         }
+ *                     })],
+ *                     bbar: [{
+ *                         text: "Create PDF",
+ *                         handler: function() {
+ *                             printDialog.items.get(0).print();
+ *                         }
+ *                     }]
+ *                 });
+ *                 printDialog.show();
+ *             }
+ *         }]
+ *     });
  */
 Ext.define('GeoExt.panel.PrintMap', {
     extend : 'GeoExt.panel.Map',
@@ -243,6 +242,8 @@ Ext.define('GeoExt.panel.PrintMap', {
     },
 
     /**
+     * Register various event listeners.
+     *
      * @private
      */
     bind: function() {
@@ -367,6 +368,9 @@ Ext.define('GeoExt.panel.PrintMap', {
     },
 
     /**
+     * Recalculates all preview scales. This is e.g. needed when the size
+     * changes.
+     *
      * @private
      */
     calculatePreviewScales: function() {
@@ -436,6 +440,7 @@ Ext.define('GeoExt.panel.PrintMap', {
     },
 
     /**
+     * Private method called during the destroy sequence.
      * @private
      */
     beforeDestroy: function() {

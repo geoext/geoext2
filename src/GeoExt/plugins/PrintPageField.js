@@ -8,16 +8,15 @@
 
 /**
  * @class GeoExt.plugins.PrintPageField
- * 
+ *
  * A plugin for `Ext.form.Field` components which provides synchronization
  *  with a {@link GeoExt.data.PrintPage}. The field name has to match the
  *  respective property of the printPage (e.g. `scale`, `rotation`).
- *      
+ *
  * A form with a combo box for the scale and text fields for rotation and a
  *  page title. The page title is a custom parameter of the print module's
  *  page configuration:
- *      
- *      @example
+ *
  *      var printPage = Ext.create('GeoExt.data.PrintPage'{
  *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
  *              capabilities: printCapabilities
@@ -57,7 +56,6 @@
  *              })
  *          }]
  *      });
- *      
  */
 Ext.define('GeoExt.plugins.PrintPageField', {
     mixins: {
@@ -66,57 +64,56 @@ Ext.define('GeoExt.plugins.PrintPageField', {
     requires: ['GeoExt.data.PrintPage', 'Ext.form.field.ComboBox', 'Ext.form.field.Checkbox'],
     alias : 'widget.gx_printpagefield',
     alternateClassName : 'GeoExt.PrintPageField',
-    
 
-    /** 
+
+    /**
      * @cfg {GeoExt.data.PrintPage} printPage
      * The print page to synchronize with.
      */
-
-    /** 
+    /**
      * @private
      * @property {GeoExt.data.PrintPage} printPage
      * The print page to synchronize with.
      *  Read-only.
      */
     printPage: null,
-    
-    /** 
+
+    /**
      * @private
      * @property {Ext.form.Field} target
      * This plugin's target field.
      */
     target: null,
-    
-    /** 
+
+    /**
      * @private
      */
     constructor: function(config) {
         this.initialConfig = config;
         Ext.apply(this, config);
-        
+
         this.callParent(arguments);
     },
-    
-    /** 
+
+    /**
      * @private
      * @param {Ext.form.Field} target The component that this plugin
      *  extends.
      */
     init: function(target) {
-        
+
         this.target = target;
         var onCfg = {
             "beforedestroy": this.onBeforeDestroy,
             scope: this
         };
-        
+
         // the old 'check' event of 3.x is gone, only 'change' is supported
         var eventName = "change";
         if (target instanceof Ext.form.ComboBox) {
             eventName = "select";
         }
-        
+
         onCfg[eventName] = this.onFieldChange;
         target.on(onCfg);
         this.printPage.on({
@@ -130,22 +127,22 @@ Ext.define('GeoExt.plugins.PrintPageField', {
         this.setValue(this.printPage);
     },
 
-    /** 
+    /**
      * Handler for the target field's "valid" or "select" event.
-     * 
+     *
      * @private
-     * @param {Ext.form.Field} field 
+     * @param {Ext.form.Field} field
      * @param {Ext.data.Record[]} records Optional.
      */
     onFieldChange: function(field, records) {
-        
+
         var record;
         if (Ext.isArray(records)) {
             record = records[0];
         } else {
             record = records;
         }
-        
+
         var printProvider = this.printPage.printProvider;
         var value = field.getValue();
         this._updating = true;
@@ -159,37 +156,37 @@ Ext.define('GeoExt.plugins.PrintPageField', {
         delete this._updating;
     },
 
-    /** 
+    /**
      * Handler for the "change" event for the page this plugin is configured
      *  with.
-     *  
+     *
      * @private
-     * @param {GeoExt.data.PrintPage} printPage 
+     * @param {GeoExt.data.PrintPage} printPage
      */
     onPageChange: function(printPage) {
         if(!this._updating) {
             this.setValue(printPage);
         }
     },
-    
-    /** 
+
+    /**
      * Handler for the "layoutchange" event of the printProvider.
-     * 
+     *
      * @private
      * @param {GeoExt.data.MapfishPrintProvider} printProvider
-     * @param {Ext.Record} layout 
-     *  
+     * @param {Ext.Record} layout
+     *
      */
     onLayoutChange: function(printProvider, layout) {
         var t = this.target;
         t.name == "rotation" && t.setDisabled(!layout.get("rotation"));
     },
 
-    /** 
+    /**
      * Sets the value in the target field.
-     * 
+     *
      * @private
-     * @param {GeoExt.data.PrintPage} printPage 
+     * @param {GeoExt.data.PrintPage} printPage
      */
     setValue: function(printPage) {
         var t = this.target;
@@ -204,7 +201,7 @@ Ext.define('GeoExt.plugins.PrintPageField', {
         t.resumeEvents();
     },
 
-    /** 
+    /**
      * @private
      */
     onBeforeDestroy: function() {

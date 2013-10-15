@@ -15,23 +15,21 @@
  * `OpenLayers.Format.WFSDescribeFeatureType` internally for the parsing.
  *
  * Example:
-<pre><code>
-Ext.define('My.model.Model', {
-    field: ['name', 'type'],
-    proxy: {
-        type: 'ajax',
-        url: 'http://wftgetfeaturetype',
-        reader: {
-            type: 'gx_attribute'
-        }
-    }
-});
-</code></pre> 
+ *
+ *     Ext.define('My.model.Model', {
+ *         field: ['name', 'type'],
+ *         proxy: {
+ *             type: 'ajax',
+ *             url: 'http://wftgetfeaturetype',
+ *             reader: {
+ *                 type: 'gx_attribute'
+ *             }
+ *         }
+ *     });
  * `gx_attribute` is the alias to the Attribute reader.
  *
- * 
+ * @class GeoExt.data.reader.Attribute
  */
-
 Ext.define('GeoExt.data.reader.Attribute', {
     extend: 'Ext.data.reader.Json',
     requires: ['Ext.data.Field'],
@@ -62,7 +60,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
          */
         feature: null
     },
-    
+
     /**
      * Create a new reader.
      * @param {Object} config (optional) Config object.
@@ -71,26 +69,29 @@ Ext.define('GeoExt.data.reader.Attribute', {
         if (!this.model) {
             this.model = 'GeoExt.data.AttributeModel';
         }
-        
+
         this.callParent([config]);
 
         if (this.feature) {
             this.setFeature(this.feature);
         }
     },
-    
+
+    /**
+     * Appends an Ext.data.Field to this the #model.
+     */
     applyFeature: function(feature) {
         var f = Ext.create('Ext.data.Field', {
             name: "value",
             defaultValue: undefined // defaultValue defaults to ""
-                                    // in Ext.data.Field, we may 
+                                    // in Ext.data.Field, we may
                                     // need to change that...
         });
         this.model.prototype.fields.add(f);
         return feature;
     },
 
-    /** 
+    /**
      * Function called by the parent to deserialize a DescribeFeatureType
      * response into Model objects.
      * @param {Object} request The XHR object that contains the
@@ -105,8 +106,8 @@ Ext.define('GeoExt.data.reader.Attribute', {
     },
 
     /**
-     * Function called by 
-     * {@link Ext.data.reader.Reader#read Ext.data.reader.Reader's read method} 
+     * Function called by
+     * {@link Ext.data.reader.Reader#read Ext.data.reader.Reader's read method}
      * to do the actual deserialization.
      *
      * @param {DOMElement/String/Array} data A document element or XHR
@@ -161,7 +162,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
         return this.callParent([records]);
     },
 
-    /** 
+    /**
      * Determine if the attribute should be ignored.
      * @param {String} name The field name.
      * @param {String} value The field value.

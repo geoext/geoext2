@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
 
-    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+
+    <script src="../test-utility.js"></script>
 
     <script type="text/javascript">
-        // setSize does not work in iframes that are inside a hidden container
-        // in FF and IE.  So, we make the hidden span element visible when
-        // starting a test requiring it then hide it at the end.
-        var hiddenSpan = window.parent.Test.AnotherWay._g_test_iframe.frameElement.parentNode;
 
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -20,13 +18,13 @@
             }
         });
 
-        Ext.require([
+        Ext.Loader.syncRequire([
             'GeoExt.panel.Map',
             'GeoExt.window.Popup'
         ]);
 
         function setupContext(options) {        
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -62,7 +60,7 @@
         }
 
         function setupMultiFeatureContext() {
-            hiddenSpan.style.display = "";
+            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -114,14 +112,14 @@
             });
             context.map.destroy();
             context.mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
         
         function tearDown(context) {
             context.feature.destroy();
             context.map.destroy();
             context.mapPanel.destroy();
-            hiddenSpan.style.display = "none";
+            hideTestIframe();
         }
 
         function popup(feature, map, options) {
@@ -191,30 +189,35 @@
                 scope : this
             });
 
+            var resetPop = function(){
+                moves = 0;
+                pop.show();
+            };
+
             t.ok(pop.anc, "Popup has anchor element");
 
             // move the map and confirm that popup moves
             context.map.setCenter(new OpenLayers.LonLat(6, 45));
-            t.eq(moves, 1, "anchored popup moves once on map.setCenter");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on map.setCenter");
+            resetPop();
 
             // anchored popup needs to reposition on collapse, resize and
             // expand to keep the anchor point on the feature
 
             // collapse popup and and confirm that it moves
             pop.collapse();
-            t.eq(moves, 1, "anchored popup moves once on collapse");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on collapse");
+            resetPop();
 
             // expand popup and confirm that it moves
             pop.expand();
-            t.eq(moves, 1, "anchored popup moves once on expand");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on expand");
+            resetPop();
             
             // resize popup and confirm that it moves
             pop.setSize(100, 100);
-            t.eq(moves, 1, "anchored popup moves once on resize");
-            moves = 0;
+            t.ok(moves > 0, "anchored popup moves on resize");
+            resetPop();
 
             t.delay_call(0.1, function() {
                 tearDown(context);

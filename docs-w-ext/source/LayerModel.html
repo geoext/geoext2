@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+<span id='GeoExt-data-LayerModel'>/**
+</span> * The layer model class used by the stores.
+ * 
+ * @class GeoExt.data.LayerModel
+ */
+Ext.define('GeoExt.data.LayerModel',{
+    alternateClassName: 'GeoExt.data.LayerRecord',
+    extend: 'Ext.data.Model',
+    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    alias: 'model.gx_layer',
+    statics: {
+<span id='GeoExt-data-LayerModel-static-method-createFromLayer'>        /**
+</span>         * Convenience function for creating new layer model instance object
+         * using a layer object.
+         * @param {OpenLayers.Layer} layer
+         * @return {GeoExt.data.LayerModel}
+         * @static
+         */
+        createFromLayer: function(layer) {
+            return this.proxy.reader.readRecords([layer]).records[0];
+        }
+    },
+<span id='GeoExt-data-LayerModel-property-fields'>    fields: [
+</span>        'id',
+        {name: 'title', type: 'string', mapping: 'name'},
+        {name: 'legendURL', type: 'string', mapping: 'metadata.legendURL'},
+        {name: 'hideTitle', type: 'bool', mapping: 'metadata.hideTitle'},
+        {name: 'hideInLegend', type: 'bool', mapping: 'metadata.hideInLegend'}
+    ],
+<span id='GeoExt-data-LayerModel-cfg-proxy'>    proxy: {
+</span>        type: 'memory',
+        reader: {
+            type: 'json'
+        }
+    },
+<span id='GeoExt-data-LayerModel-method-getLayer'>    /**
+</span>     * Returns the {OpenLayers.Layer} layer object used in this model instance.
+     * @return {OpenLayers.Layer}
+     */
+    getLayer: function() {
+        return this.raw;
+    }
+});
+</pre>
+</body>
+</html>

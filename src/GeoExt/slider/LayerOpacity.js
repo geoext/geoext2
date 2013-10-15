@@ -14,46 +14,42 @@
 /**
  * @class GeoExt.slider.LayerOpacity
  *
- *  Sample code to render a slider outside the map viewport:
+ * Create a slider to control the opacity of a layer.
  *
- * Example:
-<pre><code>
-var slider = new GeoExt.LayerOpacitySlider({
-    renderTo: document.body,
-    width: 200,
-    layer: layer
-});
-</code></pre>$
+ * Sample code to render a slider outside the map viewport:
  *
- *  Sample code to add a slider to a map panel:
+ *     var slider = new GeoExt.LayerOpacitySlider({
+ *         renderTo: document.body,
+ *         width: 200,
+ *         layer: layer
+ *     });
  *
- * Example:
-<pre><code>
-var layer = new OpenLayers.Layer.WMS(
-    "Global Imagery",
-    "http://maps.opengeo.org/geowebcache/service/wms",
-    {layers: "bluemarble"}
-);
-var panel = new GeoExt.MapPanel({
-    renderTo: document.body,
-    height: 300,
-    width: 400,
-    map: {
-        controls: [new OpenLayers.Control.Navigation()]
-    },
-    layers: [layer],
-    extent: [-5, 35, 15, 55],
-    items: [{
-        xtype: "gx_opacityslider",
-        layer: layer,
-        aggressive: true,
-        vertical: true,
-        height: 100,
-        x: 10,
-        y: 20
-    }]
-});
-</code></pre>
+ * Sample code to add a slider to a map panel:
+ *
+ *     var layer = new OpenLayers.Layer.WMS(
+ *         "Global Imagery",
+ *         "http://maps.opengeo.org/geowebcache/service/wms",
+ *          {layers: "bluemarble"}
+ *     );
+ *     var panel = new GeoExt.MapPanel({
+ *         renderTo: document.body,
+ *         height: 300,
+ *         width: 400,
+ *         map: {
+ *             controls: [new OpenLayers.Control.Navigation()]
+ *         },
+ *         layers: [layer],
+ *         extent: [-5, 35, 15, 55],
+ *         items: [{
+ *             xtype: "gx_opacityslider",
+ *             layer: layer,
+ *             aggressive: true,
+ *             vertical: true,
+ *             height: 100,
+ *             x: 10,
+ *             y: 20
+ *         }]
+ *     });
  */
 Ext.define('GeoExt.slider.LayerOpacity', {
     alternateClassName: "GeoExt.LayerOpacitySlider",
@@ -130,6 +126,44 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      * Defaults to false.
      */
     inverse: false,
+
+    /**
+     * The number of millisconds to wait (after rendering the slider) before
+     * resizing of the slider happens in case this slider is rendered ad child
+     * of a GeoExt.panel.Map.
+     *
+     * This defaults to 200 milliseconds, which is not really noticeable, and
+     * also rather conservative big.
+     *
+     * @private
+     */
+    resizingDelayMS: 200,
+
+    /**
+     * The height in pixels of the slider thumb. Will be used when we need to
+     * manually resize ourself in case we are added to a mappanel. This will
+     * be the height of the element containing the thumb when we are rendered
+     * horizontally (see #vertical).
+     *
+     * This value shouldn't usually be adjusted, when the default stylesheet of
+     * ExtJS is used.
+     *
+     * @cfg {Number}
+     */
+    thumbHeight: 14,
+
+    /**
+     * The width in pixels of the slider thumb. Will be used when we need to
+     * manually resize ourself in case we are added to a mappanel. This will
+     * be the width of the element containing the thumb when we are rendered
+     * vertically (see #vertical).
+     *
+     * This value shouldn't usually be adjusted, when the default stylesheet of
+     * ExtJS is used.
+     *
+     * @cfg {Number}
+     */
+    thumbWidth: 15,
 
     /**
      * Construct the component.
@@ -341,16 +375,64 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      */
     addToMapPanel: function(panel) {
         this.on({
-            render: function() {
-                var el = this.getEl();
-                el.setStyle({
-                    position: "absolute",
-                    zIndex: panel.map.Z_INDEX_BASE.Control
-                });
+            /**
+             * Once we are rendered and we know that we are a child of a
+             * mappanel, we need to make some adjustments to our DOMs
+             * box dimensions.
+             */
+            afterrender: function(){
+                var me = this,
+                    el = me.getEl(),
+                    dim = {
+                        // depending on our vertical setting, we need to find
+                        // sane values for both width and height.
+                        width: me.vertical ? me.thumbWidth : el.getWidth(),
+                        height: !me.vertical ? me.thumbHeight : el.getHeight(),
+                        top: me.y || 0,
+                        left: me.x || 0
+                    },
+                    resizeFunction,
+                    resizeTask;
+                // Bind handlers that stop the mouse from interacting with the
+                // map below the slider.
                 el.on({
-                    mousedown: this.stopMouseEvents,
-                    click: this.stopMouseEvents
+                    mousedown: me.stopMouseEvents,
+                    click: me.stopMouseEvents
                 });
+                /**
+                 * This method takes some of the gathered values from above and
+                 * ensures that we have an expected look.
+                 */
+                resizeFunction = function(){
+                    el.setStyle({
+                        top: dim.top,
+                        left: dim.left,
+                        width: dim.width,
+                        position: "absolute",
+                        height: dim.height,
+                        zIndex: panel.map.Z_INDEX_BASE.Control
+                    });
+                    // This is tricky...
+                    if (me.vertical) {
+                        // ...for vertical sliders the height of the surrounding
+                        // element is controlled by the height of the element
+                        // with the 'x-slider-inner'-class
+                        el.down('.x-slider-inner').el.setStyle({
+                            height: dim.height - me.thumbWidth
+                        });
+                    } else {
+                        // ...but for horizontal sliders, it's the form element
+                        // with class 'x-form-item-body' that controls the
+                        // height.
+                        el.down('.x-form-item-body').el.setStyle({
+                            height: me.thumbHeight
+                        });
+                    }
+                };
+                // We delay the execution for a small amount of milliseconds,
+                // so that our changes do take effect.
+                resizeTask = new Ext.util.DelayedTask(resizeFunction);
+                resizeTask.delay(me.resizingDelayMS);
             },
             scope: this
         });
@@ -371,6 +453,11 @@ Ext.define('GeoExt.slider.LayerOpacity', {
         this.unbind();
     },
 
+    /**
+     * Stops the event from propagating.
+     *
+     * @private
+     */
     stopMouseEvents: function(e) {
         e.stopEvent();
     }

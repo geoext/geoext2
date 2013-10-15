@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include GeoExt/data/reader/WmsDescribeLayer.js
+ * @requires GeoExt/data/OwsStore.js
+ */
+
+<span id='GeoExt-data-WmsDescribeLayerStore'>/**
+</span> * @class GeoExt.data.WmsDescribeLayerStore
+ * Small helper class to make creating stores for remote WMS layer description
+ * easier. The store is pre-configured with a built-in
+ * {Ext.data.proxy.Ajax} and GeoExt.data.reader.WmsDescribeLayer.
+ * The proxy is configured to allow caching and issues requests via GET.
+ * If you require some other proxy/reader combination then you'll have to
+ * configure this with your own proxy.
+ */
+Ext.define('GeoExt.data.WmsDescribeLayerStore',{
+    extend: 'GeoExt.data.OwsStore',
+    requires: ['GeoExt.data.reader.WmsDescribeLayer'],
+<span id='GeoExt-data-WmsDescribeLayerStore-cfg-model'>    model: 'GeoExt.data.WmsDescribeLayerModel',
+</span>    alternateClassName: ['GeoExt.data.WMSDescribeLayerStore']
+});
+</pre>
+</body>
+</html>

@@ -25,6 +25,8 @@
 
 <span id='GeoExt-data-LayerModel'>/**
 </span> * The layer model class used by the stores.
+ * 
+ * @class GeoExt.data.LayerModel
  */
 Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
@@ -57,7 +59,8 @@ Ext.define('GeoExt.data.LayerModel',{
         }
     },
 <span id='GeoExt-data-LayerModel-method-getLayer'>    /**
-</span>     * Returns the {OpenLayers.Layer} layer object used in this model instance
+</span>     * Returns the {OpenLayers.Layer} layer object used in this model instance.
+     * @return {OpenLayers.Layer}
      */
     getLayer: function() {
         return this.raw;

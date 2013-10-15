@@ -14,38 +14,35 @@
 
 /**
  * @class GeoExt.window.Popup
- * @include GeoExt/panel/Map.js
  *
- * Popups are a specialized Window that supports anchoring
+ * A popup is a specialized window that supports anchoring
  * to a particular location in a {@link GeoExt.panel.Map MapPanel}.
  * When a popup is anchored to a {@link #location}, that means that
  * the popup will visibly point to the location on the map,
  * and move accordingly when the map is panned or zoomed.
  *
  * Example:
-<pre><code>
-var popup = Ext.create('GeoExt.window.Popup', {
-    title: "My Popup",
-    location: feature,
-    width: 200,
-    html: "<div>Popup content</div>",
-    collapsible: true
-});
-</code></pre>
+ * 
+ *     var popup = Ext.create('GeoExt.window.Popup', {
+ *         title: "My Popup",
+ *         location: feature,
+ *         width: 200,
+ *         html: "<div>Popup content</div>",
+ *         collapsible: true
+ *     });
  *
- * Or create it via xtype declaration:
+ * Or create it via `xtype` declaration:
  *
  * Example:
-<pre><code>
-var popup = {
-    xtype: 'gx_popup',
-    title: "My Popup",
-    location: feature,
-    width: 200,
-    html: "<div>Popup content</div>",
-    collapsible: true
-}
-</code></pre>
+ * 
+ *     var popup = {
+ *         xtype: 'gx_popup',
+ *         title: "My Popup",
+ *         location: feature,
+ *         width: 200,
+ *         html: "<div>Popup content</div>",
+ *         collapsible: true
+ *    };
  */
 Ext.define('GeoExt.window.Popup', {
     extend: 'Ext.window.Window',
@@ -76,9 +73,8 @@ Ext.define('GeoExt.window.Popup', {
     /**
      * @property {Boolean} draggable
      * @private
-     * Enable dragging of this Panel.
-     * because the popup defaults to being anchored, and anchored popups
-     * should not be draggable.
+     * Enable dragging of this Panel. Because the popup defaults to being
+     * anchored, and anchored popups should not be draggable.
      */
     draggable: false,
 
@@ -101,7 +97,7 @@ Ext.define('GeoExt.window.Popup', {
     /**
      * @cfg {GeoExt.panel.Map/OpenLayers.Map} map
      * The map this popup will be anchored to (only required if `anchored`
-     * is set to true and the map cannot be derived from the `location`'s
+     * is set to ``true`` and the map cannot be derived from the `location`'s
      * layer).
      */
     map: null,
@@ -235,6 +231,7 @@ Ext.define('GeoExt.window.Popup', {
     /**
      * Override.
      *
+     * @inheritdoc
      * @private
      */
     show: function() {
@@ -250,6 +247,7 @@ Ext.define('GeoExt.window.Popup', {
     /**
      * Override.
      *
+     * @inheritdoc
      * @private
      */
     maximize: function() {
@@ -371,7 +369,7 @@ Ext.define('GeoExt.window.Popup', {
 
     /**
      * Pans the MapPanel's map so that an anchored popup can come entirely
-     * into view, with padding specified as per normal OpenLayers.Map popup
+     * into view, with padding specified as per normal OpenLayers. Map popup
      * padding.
      *
      * @private
@@ -414,6 +412,7 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Called during map movements; does reposition the popup.
      * @private
      */
     onMapMove: function() {
@@ -425,6 +424,8 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Adds appropriate anchor events.
+     *
      * @private
      */
     addAnchorEvents: function() {
@@ -440,6 +441,8 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
+     * Removes previously bound anchor events.
+     *
      * @private
      */
     removeAnchorEvents: function() {

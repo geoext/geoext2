@@ -23,7 +23,7 @@ Ext.define('GeoExt.data.OwsStore', {
     config: {
         /**
          * @cfg {String}
-         * The URL from which to retrieve the WMS DescribeLayer document
+         * The URL from which to retrieve the WMS DescribeLayer document.
          */
         url : null,
 

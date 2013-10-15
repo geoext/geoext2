@@ -174,29 +174,29 @@ Ext.application({
         for(var i=0; i<configs.length; ++i) {
             Ext.create("GeoExt.FeatureRenderer", configs[i]);
         }
-        $("render").onclick = render;
+        document.getElementById("render").onclick = render;
     }
 });
 
 var format = new OpenLayers.Format.WKT();
 var renderer, win;
 function render() {
-    var wkt = $("wkt").value;
+    var wkt = document.getElementById("wkt").value;
     var feature;
     try {
         feature = format.read(wkt);
     } catch(err) {
-        $("wkt").value = "Bad WKT: " + err;
+        document.getElementById("wkt").value = "Bad WKT: " + err;
     }
     var symbolizers;
     try {
-        var value = $("symbolizers").value;
+        var value = document.getElementById("symbolizers").value;
         symbolizers = eval("(" + value + ")");
         if (!symbolizers || symbolizers.constructor !== Array) {
             throw "Must be an array literal";
         }
     } catch(err) {
-        $("symbolizers").value = "Bad symbolizers: " + err + "\n\n" + value;
+        document.getElementById("symbolizers").value = "Bad symbolizers: " + err + "\n\n" + value;
         symbolizers = null;
     }
     if(feature && symbolizers) {

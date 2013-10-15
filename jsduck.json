@@ -1,5 +1,5 @@
 {
-    "--title": "GeoExt 2 Docs",
+    "--title": "GeoExt 2.0.0.rc.1 Documentation",
     "-o": "docs",
     // the "-extend,-link,-type_name" warning removals are used to prevent warnings
     // when the documentation is built without ExtJS
@@ -272,6 +272,6 @@
         "src"
         // Uncomment the following line and modify the path to match yours
         // if you wish to build with the ExtJS doc.
-        //,"../extjs-4.1.0/src/"
+        // ,"../../spielwiese/ext-4.2.1.883/src/"
     ]
 }

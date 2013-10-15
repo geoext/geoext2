@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+GNU General Public License Usage
+This file may be used under the terms of the GNU General Public License version 3.0 as
+published by the Free Software Foundation and appearing in the file LICENSE included in the
+packaging of this file.
+
+Please review the following information to ensure the GNU General Public License version 3.0
+requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
+<span id='Ext-grid-column-Boolean'>/**
+</span> * A Column definition class which renders boolean data fields.  See the {@link Ext.grid.column.Column#xtype xtype}
+ * config option of {@link Ext.grid.column.Column} for more details.
+ *
+ *     @example
+ *     Ext.create('Ext.data.Store', {
+ *        storeId:'sampleStore',
+ *        fields:[
+ *            {name: 'framework', type: 'string'},
+ *            {name: 'rocks', type: 'boolean'}
+ *        ],
+ *        data:{'items':[
+ *            { 'framework': &quot;Ext JS 4&quot;,     'rocks': true  },
+ *            { 'framework': &quot;Sencha Touch&quot;, 'rocks': true  },
+ *            { 'framework': &quot;Ext GWT&quot;,      'rocks': true  }, 
+ *            { 'framework': &quot;Other Guys&quot;,   'rocks': false } 
+ *        ]},
+ *        proxy: {
+ *            type: 'memory',
+ *            reader: {
+ *                type: 'json',
+ *                root: 'items'
+ *            }
+ *        }
+ *     });
+ *     
+ *     Ext.create('Ext.grid.Panel', {
+ *         title: 'Boolean Column Demo',
+ *         store: Ext.data.StoreManager.lookup('sampleStore'),
+ *         columns: [
+ *             { text: 'Framework',  dataIndex: 'framework', flex: 1 },
+ *             {
+ *                 xtype: 'booleancolumn', 
+ *                 text: 'Rocks',
+ *                 trueText: 'Yes',
+ *                 falseText: 'No', 
+ *                 dataIndex: 'rocks'
+ *             }
+ *         ],
+ *         height: 200,
+ *         width: 400,
+ *         renderTo: Ext.getBody()
+ *     });
+ */
+Ext.define('Ext.grid.column.Boolean', {
+    extend: 'Ext.grid.column.Column',
+    alias: ['widget.booleancolumn'],
+    alternateClassName: 'Ext.grid.BooleanColumn',
+
+    //&lt;locale&gt;
+<span id='Ext-grid-column-Boolean-cfg-trueText'>    /**
+</span>     * @cfg {String} trueText
+     * The string returned by the renderer when the column value is not falsey.
+     */
+    trueText: 'true',
+    //&lt;/locale&gt;
+
+    //&lt;locale&gt;
+<span id='Ext-grid-column-Boolean-cfg-falseText'>    /**
+</span>     * @cfg {String} falseText
+     * The string returned by the renderer when the column value is falsey (but not undefined).
+     */
+    falseText: 'false',
+    //&lt;/locale&gt;
+
+<span id='Ext-grid-column-Boolean-cfg-undefinedText'>    /**
+</span>     * @cfg {String} undefinedText
+     * The string returned by the renderer when the column value is undefined.
+     */
+    undefinedText: '&amp;#160;',
+
+<span id='Ext-grid-column-Boolean-cfg-renderer'>    /**
+</span>     * @cfg {Object} renderer
+     * @hide
+     */
+    
+<span id='Ext-grid-column-Boolean-cfg-scope'>    /**
+</span>     * @cfg {Object} scope
+     * @hide
+     */
+
+    defaultRenderer: function(value){
+        if (value === undefined) {
+            return this.undefinedText;
+        }
+        
+        if (!value || value === 'false') {
+            return this.falseText;
+        }
+        return this.trueText;
+    }
+});</pre>
+</body>
+</html>

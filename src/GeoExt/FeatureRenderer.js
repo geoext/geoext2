@@ -43,7 +43,7 @@ Ext.define('GeoExt.FeatureRenderer', {
 
     /**
      * @cfg {String}
-     * One of ``"Point"``, ``"Line"``, or ``"Polygon"`` or ``"Text"``.  Only
+     * One of ``"Point"``, ``"Line"``, ``"Polygon"`` or ``"Text"``.  Only
      * pertinent if OpenLayers.Symbolizer objects are not used.  If ``feature``
      * is provided, it will be preferred.
      */
@@ -178,6 +178,8 @@ Ext.define('GeoExt.FeatureRenderer', {
         );
     },
     /**
+     * (Re-)Initializes our custom event listeners, mainly #onClick.
+     *
      * @private
      */
     initCustomEvents: function() {
@@ -187,6 +189,8 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
+     * Unbinds previously bound listeners on #el.
+     *
      * @private
      */
     clearCustomEvents: function() {
@@ -196,6 +200,7 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
+     * Bound to the click event on the #el, this fires the clcik event.
      * @private
      */
     onClick: function() {
@@ -203,10 +208,12 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
+     * When we are rendered, we setup our own DOM structure and eventually
+     * call #drawFeature.
+     *
      * @private
      */
     onRender: function(ct, position) {
-
         if(!this.el) {
             this.el = document.createElement("div");
             this.el.id = this.getId();
@@ -230,15 +237,19 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
+     * After rendering we setup our own custom events using #initCustomEvents.
+     *
      * @private
      */
     afterRender: function() {
-
         this.callParent(arguments);
         this.initCustomEvents();
     },
 
     /**
+     * When resizing has happened, we might need to re-set the rendere's
+     * dimensions via #setRendererDimensions.
+     *
      * @private
      */
     onResize: function(w, h) {
@@ -247,6 +258,9 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
+     * Sets the dimensions of the renderer according to the #feature geometry
+     * and our own dimensions.
+     *
      * @private
      */
     setRendererDimensions: function() {
@@ -280,9 +294,10 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
+     * Iterate through the available renderer implementations and selects
+     * and assign the first one whose ``supported`` method returns ``true``.
+     *
      * @private
-     *  Iterate through the available renderer implementations and selects
-     *  and assign the first one whose ``supported`` method returns ``true``.
      */
     assignRenderer: function()  {
         for(var i=0, len=this.renderers.length; i<len; ++i) {
@@ -297,12 +312,12 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     *  Update the symbolizers used to render the feature.
+     * Update the symbolizers used to render the feature.
      *
-     *  @param symbolizers {Object[]} An array of symbolizers
-     *  @param options {Object}
-     *  @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
-     *
+     * @param symbolizers {Object[]} An array of symbolizers
+     * @param options {Object}
+     * @param options.draw {Boolean} Draw the feature after setting it.
+     *     Default is ``true``.
      */
     setSymbolizers: function(symbolizers, options) {
         this.symbolizers = symbolizers;
@@ -312,11 +327,12 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     *  Create a new feature based on the geometry type and render it.
+     * Create a new feature based on the geometry type and render it.
      *
      * @param type {String} One of the ``symbolType`` strings.
      * @param options {Object}
-     * @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
+     * @param options.draw {Boolean} Draw the feature after setting it.
+     *     Default is ``true``.
      *
      */
     setSymbolType: function(type, options) {
@@ -325,12 +341,13 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     *  Update the feature and redraw.
+     * Update the feature and redraw.
      *
      * @param feature {OpenLayers.Feature.Vector} The feature to be rendered.
      *      If none is provided, one will be created based on ``symbolType``.
      * @param options {Object}
-     * @param options.draw {Boolean} Draw the feature after setting it.  Default is ``true``.
+     * @param options.draw {Boolean} Draw the feature after setting it.
+     *     Default is ``true``.
      *
      */
     setFeature: function(feature, options) {
@@ -341,7 +358,8 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     *  Render the feature with the symbolizers.
+     * Render the feature with the symbolizers.
+     *
      * @private
      */
     drawFeature: function() {
@@ -375,16 +393,17 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     *  Update the ``symbolType`` or ``feature`` and ``symbolizer`` and redraw
-     *  the feature.
+     * Update the ``symbolType`` or ``feature`` and ``symbolizer`` and redraw
+     * the feature.
      *
-     *  Valid options:
+     * Valid options:
      *
-     *  @param options {Object} Object with properties to be updated.
-     *  @param options.feature {OpenLayers.Feature.Vector} The new or updated feature.
-     *      If provided, the feature gets precedence over ``symbolType``.
-     *  @param options.symbolType {String} One of the allowed ``symbolType`` values.
-     *  @param options.symbolizers {Object[]} An array of symbolizer objects.
+     * @param options {Object} Object with properties to be updated.
+     * @param options.feature {OpenLayers.Feature.Vector} The new or updated
+     *     feature. If provided, the feature gets precedence over `symbolType`.
+     * @param options.symbolType {String} One of the allowed `symbolType`
+     *     values.
+     * @param options.symbolizers {Object[]} An array of symbolizer objects.
      */
     update: function(options) {
         options = options || {};
@@ -406,7 +425,8 @@ Ext.define('GeoExt.FeatureRenderer', {
     },
 
     /**
-     *  Private method called during the destroy sequence.
+     * Private method called during the destroy sequence.
+     *
      * @private
      */
     beforeDestroy: function() {

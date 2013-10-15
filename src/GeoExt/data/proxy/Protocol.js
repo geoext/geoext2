@@ -42,9 +42,9 @@ Ext.define('GeoExt.data.proxy.Protocol', {
 
     /**
      * Send the request.
-     * @param {Ext.data.Operation} operation The Ext.data.Operation object
-     * @param {Function} callback The callback function to call when the Operation has completed
-     * @param {Object} scope The scope in which to execute the callback
+     * @param {Ext.data.Operation} operation The Ext.data.Operation object.
+     * @param {function} callback The callback function to call when the Operation has completed.
+     * @param {Object} scope The scope in which to execute the callback.
      * @private
      */
     doRequest: function(operation, callback, scope) {
@@ -94,7 +94,7 @@ Ext.define('GeoExt.data.proxy.Protocol', {
     },
 
     /**
-     * Handle response from the protocol
+     * Handle response from the protocol.
      * @private
      * @param {Object} o
      * @param {OpenLayers.Protocol.Response} response

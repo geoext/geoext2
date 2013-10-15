@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
+
+/*
+ * @include OpenLayers/Symbolizer/Raster.js
+ */
+
+<span id='GeoExt-data-RasterStyleModel'>/**
+</span> * @class GeoExt.data.RasterStyleModel
+ *
+ * A specific model for Raster Symbolizer classifications.
+ *
+ * Preconfigured with an Ajax proxy and a JSON reader.
+ */
+Ext.define('GeoExt.data.RasterStyleModel',{
+        extend: 'Ext.data.Model',
+        requires : ['Ext.data.JsonReader'],
+<span id='GeoExt-data-RasterStyleModel-cfg-idProperty'>        idProperty: &quot;filter&quot;,
+</span><span id='GeoExt-data-RasterStyleModel-property-fields'>        fields: [
+</span>            {name: &quot;symbolizers&quot;, mapping: function(v) {
+                return {
+                    fillColor: v.color,
+                    fillOpacity: v.opacity,
+                    stroke: false
+                };
+            }, defaultValue: null},
+            {name: &quot;filter&quot;, mapping: &quot;quantity&quot;, type: &quot;float&quot;, sortType: 'asFloat', sortDir: 'ASC'},
+            {name: &quot;label&quot;, mapping: function(v) {
+                // fill label with quantity if empty
+                return v.label || v.quantity;
+            }}
+        ],
+<span id='GeoExt-data-RasterStyleModel-cfg-proxy'>        proxy: {
+</span>            type: 'memory',
+            reader: {
+                type: 'json',
+                root: 'colorMap'
+            }
+        },
+<span id='GeoExt-data-RasterStyleModel-cfg-listeners'>        listeners:{
+</span>            idchanged:function(rec){
+                for(var i=0;i&lt;rec.stores.length;i++){
+                    var store = rec.stores[i];
+                    store.sort();
+                }
+            }
+        }
+});
+</pre>
+</body>
+</html>

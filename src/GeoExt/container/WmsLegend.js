@@ -28,6 +28,13 @@ Ext.define('GeoExt.container.WmsLegend', {
     alternateClassName: 'GeoExt.WMSLegend',
 
     statics: {
+        /**
+         * Checks whether the given layer record supports an URL legend.
+         *
+         * @param {GeoExt.data.LayerRecord} layerRecord Record containing a 
+         *     WMS layer.
+         * @return {Number} Either `1` when WMS legends are supported or `0`.
+         */
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         }
@@ -56,19 +63,18 @@ Ext.define('GeoExt.container.WmsLegend', {
      * FORMAT parameter in baseParams.
      *
      * Example:
-<pre><code>
-var legendPanel = new GeoExt.LegendPanel({
-    map: map,
-    title: 'Legend Panel',
-    defaults: {
-        style: 'padding:5px',
-        baseParams: {
-            FORMAT: 'image/png',
-            LEGEND_OPTIONS: 'forceLabels:on'
-        }
-    }
-});
-</code></pre>
+     *
+     *     var legendPanel = new GeoExt.LegendPanel({
+     *         map: map,
+     *         title: 'Legend Panel',
+     *         defaults: {
+     *             style: 'padding:5px',
+     *             baseParams: {
+     *                 FORMAT: 'image/png',
+     *                 LEGEND_OPTIONS: 'forceLabels:on'
+     *             }
+     *         }
+     *     });
      */
     baseParams: null,
 
@@ -82,6 +88,9 @@ var legendPanel = new GeoExt.LegendPanel({
     },
 
     /**
+     * Called when `moveend` fires on the associated layer. Might call #update
+     * to be in sync with layer style.
+     *
      * @private
      * @param {Object} e
      */
@@ -214,6 +223,9 @@ var legendPanel = new GeoExt.LegendPanel({
         this.doLayout();
     },
 
+    /**
+     * Unregisters the moveend-listener prior to destroying.
+     */
     beforeDestroy: function() {
         if (this.useScaleParameter === true) {
             var layer = this.layerRecord.getLayer();

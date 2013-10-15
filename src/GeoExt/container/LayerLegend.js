@@ -7,7 +7,7 @@
  */
 
 /**
- * Base class for components of GeoExt.LegendPanel.
+ * Base class for components of GeoExt.panel.Legend.
  *
  * @class GeoExt.container.LayerLegend
  */
@@ -88,13 +88,13 @@ Ext.define('GeoExt.container.LayerLegend', {
 
     /** @cfg {Boolean}
      * Whether or not to show the title of a layer. This can be overridden
-     * on the LayerStore record using the hideTitle property.
+     * on the #layerStore record using the hideTitle property.
      */
     showTitle: true,
 
     /** @cfg {String}
      * Optional title to be displayed instead of the layer title.  If this is
-     * set, the value of ``showTitle`` will be ignored (assumed to be true).
+     * set, the value of ``#showTitle`` will be ignored (assumed to be true).
      */
     legendTitle: null,
 
@@ -137,7 +137,7 @@ Ext.define('GeoExt.container.LayerLegend', {
     },
 
     /** 
-     * Handler for remove event of the layerStore
+     * Handler for remove event of the layerStore.
      * @private
      * @param {Ext.data.Store} store The store from which the record was
      * removed.
@@ -151,7 +151,7 @@ Ext.define('GeoExt.container.LayerLegend', {
     },
 
     /** 
-     * Handler for add event of the layerStore
+     * Handler for add event of the layerStore.
      * @private
      * @param {Ext.data.Store} store The store to which the record was
      * added.
@@ -163,9 +163,9 @@ Ext.define('GeoExt.container.LayerLegend', {
     onStoreAdd: function(store, record, index) {
         // to be implemented by subclasses if needed
     },
-    
+
     /**
-     * Update a the legend. Gets called when the store fires the update event.
+     * Updates the legend. Gets called when the store fires the update event.
      * This usually means the visibility of the layer, its style or title
      * has changed.
      * @private
@@ -200,12 +200,13 @@ Ext.define('GeoExt.container.LayerLegend', {
             item.setText(title, false);
         }
     },
-    
+
     /** 
-     * Get a title for the layer.  If the record doesn't have a title, use the 
-     * name.
+     * Get a title for the layer. If the record doesn't have a title, the 
+     * name will be returned.
      * @private
      * @param {GeoExt.data.LayerRecord} record
+     * @return {String} The title of the layer.
      */
     getLayerTitle: function(record) {
         var title = this.legendTitle || "";
@@ -218,7 +219,12 @@ Ext.define('GeoExt.container.LayerLegend', {
         }
         return title;
     },
-    
+
+    /**
+     * Unbinds event listeners prior to destroying.
+     *
+     * @private
+     */
     beforeDestroy: function() {
         if (this.layerStore) {
             this.layerStore.un("update", this.onStoreUpdate, this);
@@ -228,6 +234,12 @@ Ext.define('GeoExt.container.LayerLegend', {
         this.callParent();
     },
 
+    /**
+     * Nullifies members #layerRecord and #layerStore when the legend is being
+     * destroyed.
+     *
+     * @private
+     */
     onDestroy: function() {
         this.layerRecord = null;
         this.layerStore = null;

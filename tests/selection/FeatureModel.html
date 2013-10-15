@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all-debug.js" ></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
 
-    <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+
+    <script src="../test-utility.js"></script>
 
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
             enabled: true,
             paths: {
-                Ext: 'http://cdn.sencha.io/ext-4.1.0-gpl/src',
+                Ext: 'http://cdn.sencha.io/ext/gpl/4.2.1/src',
                 GeoExt: '../../src/GeoExt'
             }
         });
 
-        Ext.require([
+        Ext.Loader.syncRequire([
             'GeoExt.selection.FeatureModel',
             'GeoExt.data.FeatureStore'
         ]);
@@ -395,6 +397,7 @@
         }
 
         function test_autopan_map_on_selection(t) {
+            showTestIframe();
             t.plan(4);
 
             /*
@@ -467,25 +470,28 @@
             // features visible
             map.zoomTo(16);
 
-            // simulate another mousedown on the second row
-            // to get multiple selection
-            // test that the map is recentered so that all features are visible
-            e = {
-                button: 0,
-                shiftKey: false,
-                ctrlKey: true
-            };
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            t.delay_call(1, function(){
+                // simulate another mousedown on the second row
+                // to get multiple selection
+                // test that the map is recentered so that all features are visible
+                e = {
+                    button: 0,
+                    shiftKey: false,
+                    ctrlKey: true
+                };
+                sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
 
-            t.eq(map.getCenter().toString(), "lon=6,lat=6", "Map recentered to lon=6,lat=6 to make multiple selected features visible");
-            t.eq(map.getZoom(), 4, "Map' s zoom has changed in order to make multiple selected features visible");
+                t.eq(map.getCenter().toString(), "lon=6,lat=6", "Map recentered to lon=6,lat=6 to make multiple selected features visible");
+                t.eq(map.getZoom(), 4, "Map' s zoom has changed in order to make multiple selected features visible");
 
-            sm.clearSelections();
+                sm.clearSelections();
 
-            /*
-             * Tear down
-             */
-            grid.destroy();
+                /*
+                 * Tear down
+                 */
+                grid.destroy();
+                hideTestIframe();
+            });
 
         }
     </script>

@@ -12,6 +12,7 @@
 
 /**
  * @class GeoExt.data.CswRecordsModel
+ *
  * The model for the structure returned by CS-W GetRecords.
  */
 Ext.define('GeoExt.data.CswRecordsModel',{

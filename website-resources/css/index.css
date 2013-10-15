@@ -1,0 +1,48 @@
+body {
+   font-family: 'Quattrocento Sans', sans-serif;
+   font-size: 1.05em
+}
+
+#tagline {
+    margin-top: 60px;
+    padding-left: 25%;
+    margin-bottom: 10px;
+    border-right-width: 0;
+    padding: 20px 0;
+}
+
+#tagline p {
+    font-size: 170%;
+    font-style: italic;
+}
+
+.footer {
+    height: 50px
+}
+
+.well {
+    clear: both;
+}
+
+img.thumb {
+    float: right;
+    margin-left: 10px
+}
+
+img.thumb_left {
+    float: left;
+    margin-right: 10px;
+    max-height:25px;
+    max-width:25px;
+}
+a.big-link:hover {
+ text-decoration: none;
+}
+.footer {
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  padding: 20px;
+  font-size: smaller;
+  text-align: center; 
+}
+

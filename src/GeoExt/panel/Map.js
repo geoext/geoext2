@@ -19,32 +19,30 @@
  * map's ``getExtent()`` method.
  *
  * Example:
-<pre><code>
-var mappanel = Ext.create('GeoExt.panel.Map', {
-    title: 'A sample Map',
-    map: {
-        // ...
-        // optional, can be either
-        //   - a valid OpenLayers.Map configuration or
-        //   - an instance of OpenLayers.Map
-    },
-    center: '12.31,51.48',
-    zoom: 6
-});
-</code></pre>
+ * 
+ *     var mappanel = Ext.create('GeoExt.panel.Map', {
+ *         title: 'A sample Map',
+ *         map: {
+ *             // ...
+ *             // optional, can be either
+ *             //   - a valid OpenLayers.Map configuration or
+ *             //   - an instance of OpenLayers.Map
+ *         },
+ *         center: '12.31,51.48',
+ *         zoom: 6
+ *     });
  *
  * A Map created with code like above is then ready to use as any other panel.
- * To have a fullscrteen map application, you could e.g. add it to a viewport:
+ * To have a fullscreen map application, you could e.g. add it to a viewport:
  *
  * Example:
-<pre><code>
-Ext.create('Ext.container.Viewport', {
-    layout: 'fit',
-    items: [
-        mappanel // our variable from above
-    ]
- });
-</code></pre>
+ *
+ *     Ext.create('Ext.container.Viewport', {
+ *         layout: 'fit',
+ *         items: [
+ *             mappanel // our variable from above
+ *         ]
+ *     });
  */
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
@@ -148,7 +146,7 @@ Ext.define('GeoExt.panel.Map', {
     /**
      * @property {String[]} stateEvents
      * @private
-     * Array of state events
+     * Array of state events.
      */
     stateEvents: [
         "aftermapmove",
@@ -157,12 +155,14 @@ Ext.define('GeoExt.panel.Map', {
         "afterlayerorderchange",
         "afterlayernamechange",
         "afterlayeradd",
-        "afterlayerremove"],
+        "afterlayerremove"
+    ],
 
     /**
      * Initializes the map panel. Creates an OpenLayers map if
      * none was provided in the config options passed to the
      * constructor.
+     *
      * @private
      */
     initComponent: function(){
@@ -203,7 +203,7 @@ Ext.define('GeoExt.panel.Map', {
             if (typeof this.map.getViewport === "function") {
                 this.items.each(function(cmp) {
                     if (typeof cmp.addToMapPanel === "function") {
-                        cmp.getEl().appendTo(this.map.getViewport());
+                        cmp.getEl().appendTo(this.body);
                     }
                 }, this);
             }
@@ -356,8 +356,9 @@ Ext.define('GeoExt.panel.Map', {
      * * `visibility_<XXX>`
      * * `opacity_<XXX>`
      *
-     * The <XXX> suffix is either the title or id of the layer record, it can be
-     * influenced by setting #prettyStateKeys to `true` or `false`.
+     * The &lt;XXX&gt; suffix is either the title or id of the layer record, it
+     * can be influenced by setting #prettyStateKeys to `true` or `false`.
+     *
      * @private
      * @return {Object}
      */

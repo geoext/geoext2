@@ -11,12 +11,14 @@
  */
 
 /**
- * A specific `Ext.form.Basic` whose `doAction` method creates
- * a {@link GeoExt.form.action.Search} if it is passed the string
+ * A specific `Ext.form.Basic` whose `#doAction` method creates
+ * a GeoExt.form.action.Search if it is passed the string
  * "search" as its first argument.
  *
  * In most cases one would not use this class directly, but
  * `GeoExt.form.Panel` instead.
+ *
+ * @class GeoExt.form.Basic
  */
 Ext.define('GeoExt.form.Basic', {
     extend: 'Ext.form.Basic',

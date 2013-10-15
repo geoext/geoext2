@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+GNU General Public License Usage
+This file may be used under the terms of the GNU General Public License version 3.0 as
+published by the Free Software Foundation and appearing in the file LICENSE included in the
+packaging of this file.
+
+Please review the following information to ensure the GNU General Public License version 3.0
+requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
+*/
+<span id='Ext-data-BufferStore'>/**
+</span> * @private
+ */
+Ext.define('Ext.data.BufferStore', {
+    extend: 'Ext.data.Store',
+    alias: 'store.buffer',
+<span id='Ext-data-BufferStore-cfg-sortOnLoad'>    sortOnLoad: false,
+</span><span id='Ext-data-BufferStore-cfg-filterOnLoad'>    filterOnLoad: false,
+</span>    
+<span id='Ext-data-BufferStore-method-constructor'>    constructor: function() {
+</span>        Ext.Error.raise('The BufferStore class has been deprecated. Instead, specify the buffered config option on Ext.data.Store');
+    }
+});</pre>
+</body>
+</html>

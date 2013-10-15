@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -23,43 +23,41 @@
  *
  * Sample code showing how to use a GeoExt form panel.
  *
-<pre><code>
-var formPanel = new GeoExt.form.FormPanel({
-    renderTo: "formpanel",
-    protocol: new OpenLayers.Protocol.WFS({
-        url: "http://publicus.opengeo.org/geoserver/wfs",
-        featureType: "tasmania_roads",
-        featureNS: "http://www.openplans.org/topp"
-    }),
-    items: [{
-        xtype: "textfield",
-        name: "name__ilike",
-        value: "mont"
-    }, {
-        xtype: "textfield",
-        name: "elevation__ge",
-        value: "2000"
-    }],
-    listeners: {
-        actioncomplete: function(form, action) {
-            // this listener triggers when the search request
-            // is complete, the OpenLayers.Protocol.Response
-            // resulting from the request is available
-            // in "action.response"
-        }
-    }
-});
-
-formPanel.addButton({
-    text: "search",
-    handler: function() {
-        this.search();
-    },
-    scope: formPanel
-});
-</code></pre>
+ *     var formPanel = new GeoExt.form.FormPanel({
+ *         renderTo: "formpanel",
+ *         protocol: new OpenLayers.Protocol.WFS({
+ *             url: "http://publicus.opengeo.org/geoserver/wfs",
+ *             featureType: "tasmania_roads",
+ *             featureNS: "http://www.openplans.org/topp"
+ *         }),
+ *         items: [{
+ *             xtype: "textfield",
+ *             name: "name__ilike",
+ *             value: "mont"
+ *         }, {
+ *             xtype: "textfield",
+ *             name: "elevation__ge",
+ *             value: "2000"
+ *         }],
+ *         listeners: {
+ *             actioncomplete: function(form, action) {
+ *                 // this listener triggers when the search request
+ *                 // is complete, the OpenLayers.Protocol.Response
+ *                 // resulting from the request is available
+ *                 // in "action.response"
+ *             }
+ *         }
+ *     });
+ *     formPanel.addButton({
+ *         text: "search",
+ *         handler: function() {
+ *             this.search();
+ *         },
+ *         scope: formPanel
+ *     });
+ *
+ * @class GeoExt.form.Panel
  */
-
 Ext.define('GeoExt.form.Panel', {
     extend: 'Ext.form.Panel',
     requires: ['GeoExt.form.Basic'],
@@ -74,7 +72,7 @@ Ext.define('GeoExt.form.Panel', {
     protocol: null,
 
     /**
-     * Create the internal {GeoExt.form.Basic} instance.
+     * Create the internal {@link GeoExt.form.Basic} instance.
      * @return {GeoExt.form.Basic} The basic form.
      * @private
      */

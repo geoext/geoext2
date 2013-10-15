@@ -12,6 +12,7 @@
 
 /**
  * The legend image.
+ *
  * @class GeoExt.LegendImage
  */
 Ext.define('GeoExt.LegendImage', {
@@ -20,7 +21,7 @@ Ext.define('GeoExt.LegendImage', {
 
     /**
      * @cfg {String} url
-     * The url of the image to load
+     * The url of the image to load.
      */
     url: null,
 
@@ -33,7 +34,7 @@ Ext.define('GeoExt.LegendImage', {
 
     /**
      * @cfg {String} imgCls
-     * Optional css class to apply to img tag
+     * Optional css class to apply to img tag.
      */
     imgCls: null,
 
@@ -56,9 +57,10 @@ Ext.define('GeoExt.LegendImage', {
             src: this.defaultImgSrc
         };
     },
-    
+
     /**
      * Sets the url of the legend image.
+     *
      * @param {String} url The new URL.
      */
     setUrl: function(url) {
@@ -75,9 +77,10 @@ Ext.define('GeoExt.LegendImage', {
         }
     },
 
-    /** 
+    /**
      * Private method called when the legend image component is being
      * rendered.
+     *
      * @private
      */
     onRender: function(ct, position) {
@@ -87,8 +90,9 @@ Ext.define('GeoExt.LegendImage', {
         }
     },
 
-    /** 
+    /**
      * Private method called during the destroy sequence.
+     *
      * @private
      */
     onDestroy: function() {
@@ -99,9 +103,10 @@ Ext.define('GeoExt.LegendImage', {
         }
         this.callParent();
     },
-    
+
     /**
      * Private method called if the legend image fails loading.
+     *
      * @private
      */
     onImageLoadError: function() {
@@ -112,6 +117,7 @@ Ext.define('GeoExt.LegendImage', {
 
     /**
      * Private method called after the legend image finished loading.
+     *
      * @private
      */
     onImageLoad: function() {

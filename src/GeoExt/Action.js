@@ -13,14 +13,13 @@
  * Sample code to create a toolbar with an OpenLayers control into it.
  *
  * Example:
-<pre><code>
-var action = Ext.create('GeoExt.Action', {
-    text: "max extent",
-    control: new OpenLayers.Control.ZoomToMaxExtent(),
-    map: map
-});
-var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
-</code></pre>
+ * 
+ *     var action = Ext.create('GeoExt.Action', {
+ *         text: "max extent",
+ *         control: new OpenLayers.Control.ZoomToMaxExtent(),
+ *         map: map
+ *     });
+ *     var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
@@ -101,7 +100,6 @@ Ext.define('GeoExt.Action', {
      * look at the Ext.Action API doc for more detail.
      *
      * @param {Object} config (optional) Config object.
-     *
      */
     constructor: function(config){
         // store the user scope and handlers
@@ -155,8 +153,9 @@ Ext.define('GeoExt.Action', {
 
     /**
      * The private handler.
-     * @private
+     *
      * @param {Ext.Component} The component that triggers the handler.
+     * @private
      */
     pHandler: function(cmp){
         var ctrl = this.control;
@@ -171,9 +170,10 @@ Ext.define('GeoExt.Action', {
 
     /**
      * The private toggle handler.
-     * @private
+     *
      * @param {Ext.Component} cmp The component that triggers the toggle handler.
      * @param {Boolean} state The state of the toggle.
+     * @private
      */
     pToggleHandler: function(cmp, state){
         this.changeControlState(state);
@@ -184,9 +184,10 @@ Ext.define('GeoExt.Action', {
 
     /**
      * The private check handler.
-     * @private
+     *
      * @param {Ext.Component} cmp The component that triggers the check handler.
      * @param {Boolean} state The state of the toggle.
+     * @private
      */
     pCheckHandler: function(cmp, state){
         this.changeControlState(state);
@@ -197,8 +198,9 @@ Ext.define('GeoExt.Action', {
 
     /**
      * Change the control state depending on the state boolean.
-     * @private
+     *
      * @param {Boolean} state The state of the toggle.
+     * @private
      */
     changeControlState: function(state){
         if(state) {
@@ -224,6 +226,7 @@ Ext.define('GeoExt.Action', {
 
     /**
      * Called when this action's control is activated.
+     *
      * @private
      */
     onCtrlActivate: function(){
@@ -240,6 +243,7 @@ Ext.define('GeoExt.Action', {
 
     /**
      * Called when this action's control is deactivated.
+     *
      * @private
      */
     onCtrlDeactivate: function(){
@@ -255,10 +259,10 @@ Ext.define('GeoExt.Action', {
     },
 
    /**
-    * @private
-    *
     * Called when the control which should get toggled
     * is not of type OpenLayers.Control.TYPE_BUTTON
+    *
+    * @private
     */
    safeCallEach: function(fnName, args) {
        var cs = this.items;
@@ -275,10 +279,10 @@ Ext.define('GeoExt.Action', {
    },
 
    /**
-    * @private
-    * @param {Boolean} v Disable the action's components.
-    *
     * Override method on super to optionally deactivate controls on disable.
+    *
+    * @param {Boolean} v Disable the action's components.
+    * @private
     */
    setDisabled : function(v) {
        if (!v && this.activateOnEnable && this.control && !this.control.active) {

@@ -2,14 +2,17 @@
 <html>
     <head>
         <title>MVC simple application example called CF (Cartography Framework)</title>
-        <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
-        <link rel="stylesheet" type="text/css" href="http://openlayers.org/api/2.12-rc3/theme/default/style.css" />
+
+        <link rel="stylesheet" type="text/css" href="http://cdn.sencha.com/ext/gpl/4.2.1/resources/css/ext-all.css">
+        <link rel="stylesheet" type="text/css" href="http://openlayers.org/api/2.13/theme/default/style.css" />
         <link rel="stylesheet" type="text/css" href="resources/css/cf.css" />
 
         <!-- Include OpenLayers.  Isn't managed by Ext.Loader -->
-        <script src="http://openlayers.org/api/2.12-rc3/OpenLayers.js"></script>
+        <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
-        <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext-4.1.0-gpl/ext.js"></script>
+        <!-- Usually you'd load ext.js, not ext-dev.js, but there is an issue currently:
+        http://www.sencha.com/forum/showthread.php?264887-Ext-4.2.1-Commercial-Ext.cmd-missing-in-Ext.js-file -->
+        <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.com/ext/gpl/4.2.1/ext-dev.js"></script>
         <script type="text/javascript" charset="utf-8" src="app-all.js"></script>
     </head>
 

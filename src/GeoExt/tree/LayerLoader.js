@@ -12,10 +12,11 @@
 
 /**
  * A loader that will load layers from a GeoExt.data.LayerStore.
- * By default, only layers that have displayInLayerSwitcher set to true will be
- * included. The childrens' iconCls defaults to "gx-tree-layer-icon".
+ * By default, only layers that have ``displayInLayerSwitcher`` set to ``true``
+ * will be included. The childrens' iconCls defaults to "gx-tree-layer-icon".
  *
  * Example:
+ * 
  *     var loader = Ext.create('GeoExt.tree.LayerLoader', {
  *         baseAttrs: {
  *             iconCls: 'baselayer-icon',
@@ -33,6 +34,8 @@
  * its nodes with the 'baselayer-icon' icon class and the 'baselayer' group.
  * This is basically the same loader that the GeoExt.tree.BaseLayerContainer
  * uses.
+ *
+ * @class GeoExt.tree.LayerLoader
  */
 Ext.define('GeoExt.tree.LayerLoader', {
     extend: 'Ext.util.Observable',
@@ -68,14 +71,16 @@ Ext.define('GeoExt.tree.LayerLoader', {
      store: null,
     
     /**
-     * @property {Function} filter
-     * A function, called in the scope of this loader, with a layer record
-     * as argument. Is expected to return true for layers to be loaded, false
-     * otherwise. By default, the filter checks for displayInLayerSwitcher:
+     * A function, called in the scope of this loader, with a
+     * GeoExt.data.LayerRecord as argument. Is expected to return ``true`` for
+     * layers to be loaded, ``false`` otherwise. By default, the filter checks
+     * for ``displayInLayerSwitcher``:
      *  
      *     filter: function(record) {
      *         return record.getLayer().displayInLayerSwitcher === true
      *     }
+     * @property {Function} filter
+     * @param {GeoExt.data.LayerRecord} record
      */
     filter: function(record) {
         return record.getLayer().displayInLayerSwitcher === true;
@@ -276,8 +281,9 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
     
     /**
-     * @param {GeoExt.data.LayerTreeModel} node
+     * Adds appropriate listeners on the store.
      *
+     * @param {GeoExt.data.LayerTreeModel} node
      * @private
      */
     addStoreHandlers: function(node) {
@@ -297,6 +303,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
     
     /**
+     * Removes the bound listeners on the store.
+     *
      * @private
      */
     removeStoreHandlers: function() {
@@ -322,6 +330,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
 
     /**
+     * Unregisters bound listeners via #removeStoreHandlers
+     *
      * @private
      */
     destroy: function() {
