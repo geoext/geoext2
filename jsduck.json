@@ -1,6 +1,4 @@
 {
-    "--title": "GeoExt 2.0.0.rc.1 Documentation",
-    "-o": "docs",
     // the "-extend,-link,-type_name" warning removals are used to prevent warnings
     // when the documentation is built without ExtJS
     "--warnings": "-extend,-link,-type_name",
@@ -268,6 +266,10 @@
         "OpenLayers.Symbolizer.Raster",
         "OpenLayers.Spherical"
     ],
+    "--title": "GeoExt 2.0.0-rc.1 Documentation",
+    "-o": "docs",
+    // "--title": "GeoExt 2.0.0-rc.1 Documentation (incl. Ext classes)",
+    // "-o": "docs-w-ext",
     "--": [
         "src"
         // Uncomment the following line and modify the path to match yours
