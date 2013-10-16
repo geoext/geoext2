@@ -151,7 +151,7 @@ Ext.define('GeoExt.slider.Zoom', {
     },
 
     /**
-     * Override onRender to set base css class.
+     * Override onRender to set base CSS class.
      * @private
      */
     onRender: function() {

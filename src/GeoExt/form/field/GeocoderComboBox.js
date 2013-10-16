@@ -73,7 +73,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 
     /**
      * @cfg {String}
-     * The field to display in the combo boy. Default is
+     * The field to display in the combo box. Default is
      * "name" for instant use with the default store for this component.
      */
     displayField: "name",

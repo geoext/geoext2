@@ -141,7 +141,7 @@
          * `restriction` and `label` fields.
          *
          * @param {Ext.data.Model} record Typically from an Attribute Store.
-         * @param {Object} options Optional object litteral. Valid options:
+         * @param {Object} options Optional object literal. Valid options:
          *
          *  * `checkboxLabelProperty` - `String` The name of the property used to set
          *  the label in the checkbox. Only applies if the record is of the "boolean"
