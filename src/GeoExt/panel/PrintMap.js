@@ -17,42 +17,49 @@
  * @class GeoExt.panel.PrintMap
  *
  * A GeoExt.panel.Map that controls scale and center of a print page. Based on the
- *  current view (i.e. layers and extent) of a source map, this panel will be
- *  sized according to the aspect ratio of the print page. As the user zooms
- *  and pans in the `GeoExt.PrintMapPanel`, the print page will update
- *  its scale and center accordingly. If the scale on the print page changes
- *  (e.g. by setting it using a combo box with a
- *  {@link GeoExt.plugins.PrintPageField}), the extent of the
- *  {@link GeoExt.PrintMapPanel} will be updated to match the page bounds.
+ * current view (i.e. layers and extent) of a source map, this panel will be
+ * sized according to the aspect ratio of the print page. As the user zooms
+ * and pans in the `GeoExt.PrintMapPanel`, the print page will update
+ * its scale and center accordingly. If the scale on the print page changes
+ * (e.g. by setting it using a combo box with a
+ * {@link GeoExt.plugins.PrintPageField}), the extent of the
+ * {@link GeoExt.PrintMapPanel} will be updated to match the page bounds.
  *
- *      The #zoom, #center and #extent config options will have
- *      no affect, as they will be determined by the #sourceMap.
+ * The #zoom, #center and #extent config options will have no effect, as
+ * they will be determined by the #sourceMap.
  *
  *
- *  A map with a "Print..." button. If clicked, a dialog containing a
- *  PrintMapPanel will open, with a "Create PDF" button.
+ * A map with a "Print..." button. If clicked, a dialog containing a
+ * PrintMapPanel will open, with a "Create PDF" button.
  *
  * Example:
  * 
- *     var mapPanel = new GeoExt.MapPanel({
+ *     var mapPanel = Ext.create("GeoExt.panel.Map", {
  *         renderTo: "map",
- *         layers: [new OpenLayers.Layer.WMS("Tasmania State Boundaries",
- *             "http://demo.opengeo.org/geoserver/wms",
- *             {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
+ *         layers: [
+ *             new OpenLayers.Layer.WMS(
+ *                 "Tasmania State Boundaries",
+ *                 "http://demo.opengeo.org/geoserver/wms",
+ *                 { layers: "topp:tasmania_state_boundaries" },
+ *                 { singleTile: true }
+ *             )
+ *         ],
  *         center: [146.56, -41.56],
  *         zoom: 6,
  *         bbar: [{
  *             text: "Print...",
  *             handler: function() {
- *                 var printDialog = new Ext.Window({
+ *                 var printDialog = Ext.create("Ext.Window", {
  *                     autoHeight: true,
  *                     width: 350,
- *                     items: [new GeoExt.PrintMapPanel({
- *                         sourceMap: mapPanel,
- *                         printProvider: {
- *                             capabilities: printCapabilities
- *                         }
- *                     })],
+ *                     items: [
+ *                         Ext.create("GeoExt.panel.PrintMap", {
+ *                             sourceMap: mapPanel,
+ *                             printProvider: {
+ *                                 capabilities: printCapabilities
+ *                             }
+ *                         })
+ *                     ],
  *                     bbar: [{
  *                         text: "Create PDF",
  *                         handler: function() {
