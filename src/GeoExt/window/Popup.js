@@ -42,7 +42,7 @@
  *         width: 200,
  *         html: "<div>Popup content</div>",
  *         collapsible: true
- *    };
+ *     };
  */
 Ext.define('GeoExt.window.Popup', {
     extend: 'Ext.window.Window',
