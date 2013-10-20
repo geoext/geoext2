@@ -11,9 +11,10 @@
  */
 
 /**
- * @class GeoExt.data.LayerStore
  * A store that synchronizes a layers array of an OpenLayers.Map with a
  * layer store holding {@link GeoExt.data.LayerModel} instances.
+ *
+ * @class GeoExt.data.LayerStore
  */
 Ext.define('GeoExt.data.LayerStore', {
     requires: ['GeoExt.data.LayerModel'],
@@ -22,55 +23,61 @@ Ext.define('GeoExt.data.LayerStore', {
 
     statics: {
         /**
+         * Direction: Map to store
+         *
          * @static
          * @property {Number}
-         * Direction: Map to store
          */
         MAP_TO_STORE: 1,
         /**
+         * Direction: Store to map
+         *
          * @static
          * @property {Number}
-         * Direction: Store to map
          */
         STORE_TO_MAP: 2
     },
 
     /**
-     * @event bind
      * Fires when the store is bound to a map.
      *
+     * @event bind
      * @param {GeoExt.data.LayerStore} store
      * @param {OpenLayers.Map} map
      */
 
     /**
-     * @cfg {OpenLayers.Map/GeoExt.panel.Map/Object} map
      * Map that this store will be in sync with. If not provided, the
      * store will not be bound to a map.
+     *
+     * @cfg {OpenLayers.Map/GeoExt.panel.Map/Object} map
      */
 
     /**
-     * @property {OpenLayers.Map/Object} map
      * Map that the store is synchronized with, if any.
+     *
+     * @property {OpenLayers.Map/Object} map
      */
     map: null,
 
     /**
-     * @cfg {OpenLayers.Layer/Array} layers
      * Layers that will be added to the store (and the map, depending on the
-     * value of the ``initDir`` option.
+     * value of the `initDir` option.
+     *
+     * @cfg {OpenLayers.Layer/Array} layers
      */
 
     /**
-     * @cfg {Number} initDir
+     *
      * Bitfields specifying the direction to use for the initial sync between
      * the map and the store, if set to 0 then no initial sync is done.
-     * Defaults to {@link #MAP_TO_STORE} |
-     * {@link #STORE_TO_MAP}.
+     * Defaults to #MAP_TO_STORE | #STORE_TO_MAP.
+     *
+     * @cfg {Number} initDir
      */
 
     /**
-     * @param {Object} config Creation parameters
+     * @param {Object} config Creation parameters.
      * @private
      */
     constructor: function(config) {
@@ -184,8 +191,9 @@ Ext.define('GeoExt.data.LayerStore', {
     /**
      * Handler for layer changes.  When layer order changes, this moves the
      * appropriate record within the store.
-     * @private
+     *
      * @param {Object} evt
+     * @private
      */
     onChangeLayer: function(evt) {
         var layer = evt.layer;
@@ -216,8 +224,9 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a map's addlayer event.
-     * @private
+     *
      * @param {Object} evt
+     * @private
      */
     onAddLayer: function(evt) {
         var me = this;
@@ -231,8 +240,9 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a map's removelayer event.
-     * @private
+     *
      * @param {Object} evt
+     * @private
      */
     onRemoveLayer: function(evt){
         //TODO replace the check for undloadDestroy with a listener for the
@@ -255,10 +265,11 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a store's load event.
-     * @private
+     *
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
      * @param {Boolean} successful
+     * @private
      */
     onLoad: function(store, records, successful) {
         if (successful) {
@@ -288,8 +299,9 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a store's clear event.
-     * @private
+     *
      * @param {Ext.data.Store} store
+     * @private
      */
     onClear: function(store) {
         this._removing = true;
@@ -301,10 +313,11 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a store's add event.
-     * @private
+     *
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model[]} records
      * @param {Number} index
+     * @private
      */
     onAdd: function(store, records, index) {
         if(!this._adding) {
@@ -323,10 +336,11 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a store's remove event.
-     * @private
+     *
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
      * @param {Number} index
+     * @private
      */
     onRemove: function(store, record, index){
         if(!this._removing) {
@@ -341,7 +355,7 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a store's update event.
-     * @private
+     *
      * @param {Ext.data.Store} store
      * @param {Ext.data.Model} record
      * @param {Number} operation
@@ -360,8 +374,9 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Removes a record's layer from the bound map.
-     * @private
+     *
      * @param {Ext.data.Record} record
+     * @private
      */
     removeMapLayer: function(record){
         this.map.removeLayer(record.getLayer());
@@ -369,12 +384,13 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Handler for a store's data collections' replace event.
-     * @private
+     *
      * @param {String} key
      * @param {Ext.data.Model} oldRecord In this case, a record that has
      *     been replaced.
      * @param {Ext.data.Model} newRecord In this case, a record that is
      *     replacing oldRecord.
+     * @private
      */
     onReplace: function(key, oldRecord, newRecord){
         this.removeMapLayer(oldRecord);
@@ -382,6 +398,7 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Get the record for the specified layer.
+     *
      * @param {OpenLayers.Layer} layer
      * @returns {Ext.data.Model} or undefined if not found
      */
@@ -396,6 +413,7 @@ Ext.define('GeoExt.data.LayerStore', {
 
     /**
      * Unbinds listeners by calling #unbind prior to being destroyed.
+     *
      * @private
      */
     destroy: function() {
@@ -408,6 +426,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * in the load options. Ext JS does not pass the load options to
      * "load" callbacks, so this is how we provide that information
      * to `onLoad`.
+     *
      * @private
      */
     loadRecords: function(records, options) {

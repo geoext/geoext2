@@ -12,6 +12,7 @@
 
 /**
  * Used to read the attributes of a feature.
+ *
  * @class GeoExt.data.reader.Feature
  */
 Ext.define('GeoExt.data.reader.Feature', {
@@ -20,6 +21,7 @@ Ext.define('GeoExt.data.reader.Feature', {
 
     /**
      * Force to have our convertRecordData.
+     *
      * @private
      */
     buildExtractors: function() {
@@ -29,6 +31,7 @@ Ext.define('GeoExt.data.reader.Feature', {
 
     /**
      * Copy feature attribute to record.
+     *
      * @param {Array} convertedValues
      * @param {Object} feature
      * @param {Object} record

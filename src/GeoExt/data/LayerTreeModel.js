@@ -68,8 +68,9 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     },
 
     /**
-     * @event afteredit
      * Fires after the node's fields were modified.
+     *
+     * @event afteredit
      * @param {GeoExt.data.LayerTreeModel} this This model instance.
      * @param {String[]} modifiedFieldNames The names of the fields that were
      * edited.

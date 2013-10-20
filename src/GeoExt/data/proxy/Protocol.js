@@ -1,49 +1,56 @@
 /*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
  */
 
 /**
- * A data proxy for use with {OpenLayers.Protocol} objects.
+ * A data proxy for use with OpenLayers.Protocol objects.
+ *
  * @class GeoExt.data.proxy.Protocol
  */
 Ext.define('GeoExt.data.proxy.Protocol', {
     extend: 'Ext.data.proxy.Server',
     alias: 'proxy.gx_protocol',
 
-    /** 
-     * @cfg {OpenLayers.Protocol}
+    /**
      * The protocol used to fetch features.
+     *
+     * @cfg {OpenLayers.Protocol}
      */
     protocol: null,
 
-    /** 
+    /**
+     * Abort any previous request before issuing another.
+     *
      * @cfg {Boolean}
-     * Abort any previous request before issuing another. Default is ``true``.
      */
     abortPrevious: true,
 
-    /** 
-     * @cfg {Boolean}
+    /**
      * Should options.params be set directly on options before passing it into
-     * the protocol's read method? Default is ``false``.
+     * the protocol's read method?
+     *
+     * @cfg {Boolean}
      */
     setParamsAsOptions: false,
 
-    /** 
+    /**
+     * The response returned by the read call on the protocol.
+     *
      * @property {OpenLayers.Protocol.Response}
      * @private
-     * The response returned by the read call on the protocol.
      */
     response: null,
 
     /**
      * Send the request.
+     *
      * @param {Ext.data.Operation} operation The Ext.data.Operation object.
-     * @param {function} callback The callback function to call when the Operation has completed.
+     * @param {Function} callback The callback function to call when the
+     *     operation has completed.
      * @param {Object} scope The scope in which to execute the callback.
      * @private
      */
@@ -82,8 +89,9 @@ Ext.define('GeoExt.data.proxy.Protocol', {
         this.response = this.protocol.read(options);
     },
 
-    /** 
+    /**
      * Called to abort any ongoing request.
+     *
      * @private
      */
     abortRequest: function() {
@@ -95,9 +103,10 @@ Ext.define('GeoExt.data.proxy.Protocol', {
 
     /**
      * Handle response from the protocol.
-     * @private
+     *
      * @param {Object} o
      * @param {OpenLayers.Protocol.Response} response
+     * @private
      */
     loadResponse: function(o, response) {
         var me = this;

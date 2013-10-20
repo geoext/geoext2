@@ -26,6 +26,7 @@
  *             }
  *         }
  *     });
+ *
  * `gx_attribute` is the alias to the Attribute reader.
  *
  * @class GeoExt.data.reader.Attribute
@@ -38,32 +39,37 @@ Ext.define('GeoExt.data.reader.Attribute', {
 
     config: {
         /**
-         * @cfg {OpenLayers.Format} format
-         * A parser for transforming the XHR response
-         * into an array of objects representing attributes.  Defaults to
-         * `OpenLayers.Format.WFSDescribeFeatureType` parser.
+         * A parser for transforming the XHR response into an array of objects
+         * representing attributes.
+         *
+         * Defaults to `OpenLayers.Format.WFSDescribeFeatureType` parser.
+         *
+         * @cfg {OpenLayers.Format}
          */
         format: null,
 
         /**
-         * @cfg {Object} ignore
-         * Properties of the ignore object should be field names.
-         * Values are either arrays or regular expressions.
+         * Properties of the ignore object should be field names. Values are
+         * either arrays or regular expressions.
+         *
+         * @cfg {Object}
          */
         ignore: null,
 
         /**
-         * @cfg {OpenLayers.Feature.Vector} feature
          * A vector feature. If provided records created by the reader will
          * include a field named "value" referencing the attribute value as
          * set in the feature.
+         *
+         * @cfg {OpenLayers.Feature.Vector}
          */
         feature: null
     },
 
     /**
      * Create a new reader.
-     * @param {Object} config (optional) Config object.
+     *
+     * @param {Object} [config] Config object.
      */
     constructor: function(config) {
         if (!this.model) {
@@ -78,7 +84,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
     },
 
     /**
-     * Appends an Ext.data.Field to this the #model.
+     * Appends an Ext.data.Field to this #model.
      */
     applyFeature: function(feature) {
         var f = Ext.create('Ext.data.Field', {
@@ -94,8 +100,9 @@ Ext.define('GeoExt.data.reader.Attribute', {
     /**
      * Function called by the parent to deserialize a DescribeFeatureType
      * response into Model objects.
+     *
      * @param {Object} request The XHR object that contains the
-     * DescribeFeatureType response.
+     *     DescribeFeatureType response.
      */
     getResponseData: function(request) {
         var data = request.responseXML;
@@ -111,10 +118,10 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * to do the actual deserialization.
      *
      * @param {DOMElement/String/Array} data A document element or XHR
-     * response string.  As an alternative to fetching attributes data from
-     * a remote source, an array of attribute objects can be provided given
-     * that the properties of each attribute object map to a provided field
-     * name.
+     *     response string.  As an alternative to fetching attributes data from
+     *     a remote source, an array of attribute objects can be provided given
+     *     that the properties of each attribute object map to a provided field
+     *     name.
      */
     readRecords: function(data) {
         if (!this.getFormat()) {
@@ -164,6 +171,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
 
     /**
      * Determine if the attribute should be ignored.
+     *
      * @param {String} name The field name.
      * @param {String} value The field value.
      * @return {Boolean} True if the attribute should be ignored.

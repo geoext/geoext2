@@ -7,99 +7,108 @@
  */
 
 /**
- * @class GeoExt.Action
  * Action class to create GeoExt.Action
  *
  * Sample code to create a toolbar with an OpenLayers control into it.
  *
  * Example:
- * 
+ *
  *     var action = Ext.create('GeoExt.Action', {
  *         text: "max extent",
  *         control: new OpenLayers.Control.ZoomToMaxExtent(),
  *         map: map
  *     });
  *     var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
+ *
+ * @class GeoExt.Action
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
     alias : 'widget.gx_action',
 
     /**
-     * @cfg {OpenLayers.Control}
      * The OpenLayers control wrapped in this action.
+     *
+     * @cfg {OpenLayers.Control}
      */
     control: null,
 
     /**
-     * @property {Boolean} activateOnEnable
      * Activate the action's control when the action is enabled.
+     *
+     * @property {Boolean} activateOnEnable
      */
     /**
-     * @cfg {Boolean} activateOnEnable
      * Activate the action's control when the action is enabled.
+     *
+     * @cfg {Boolean} activateOnEnable
      */
     activateOnEnable: false,
 
     /**
-     * @property {Boolean} deactivateOnDisable
      * Deactivate the action's control when the action is disabled.
+     *
+     * @property {Boolean} deactivateOnDisable
      */
     /**
-     * @cfg {Boolean} deactivateOnDisable
      * Deactivate the action's control when the action is disabled.
+     *
+     * @cfg {Boolean} deactivateOnDisable
      */
     deactivateOnDisable: false,
 
     /**
+     * The OpenLayers map that the control should be added to. For controls that
+     * don't need to be added to a map or have already been added to one, this
+     * config property may be omitted.
+     *
      * @cfg {OpenLayers.Map}
-     * The OpenLayers map that the control should be added
-     * to.  For controls that don't need to be added to a map or have already
-     * been added to one, this config property may be omitted.
      */
     map: null,
 
     /**
+     * The user-provided scope, used when calling uHandler, uToggleHandler,
+     * and uCheckHandler.
+     *
+     * @property {Object}
      * @private
-     * @cfg {Object}
-     * The user-provided scope, used when calling uHandler,
-     * uToggleHandler, and uCheckHandler.
      */
     uScope: null,
 
     /**
+     * References the function the user passes through the "handler" property.
+     *
+     * @property {Function}
      * @private
-     * @cfg {Function}
-     *  References the function the user passes through
-     *  the "handler" property.
      */
     uHandler: null,
 
     /**
+     * References the function the user passes through the "toggleHandler"
+     * property.
+     *
+     * @property {Function}
      * @private
-     * @cfg {Function}
-     *  References the function the user passes through
-     *  the "toggleHandler" property.
      */
     uToggleHandler: null,
 
     /**
+     * References the function the user passes through the "checkHandler"
+     * property.
+     *
+     * @property {Function}
      * @private
-     * @cfg {Function}
-     *  References the function the user passes through
-     *  the "checkHandler" property.
      */
     uCheckHandler: null,
 
     /**
-     * @private
-     *
      * Create a GeoExt.Action instance. A GeoExt.Action is created to insert
      * an OpenLayers control in a toolbar as a button or in a menu as a menu
      * item. A GeoExt.Action instance can be used like a regular Ext.Action,
      * look at the Ext.Action API doc for more detail.
      *
      * @param {Object} config (optional) Config object.
+     * @private
      */
     constructor: function(config){
         // store the user scope and handlers
@@ -171,7 +180,8 @@ Ext.define('GeoExt.Action', {
     /**
      * The private toggle handler.
      *
-     * @param {Ext.Component} cmp The component that triggers the toggle handler.
+     * @param {Ext.Component} cmp The component that triggers the toggle 
+     *     handler.
      * @param {Boolean} state The state of the toggle.
      * @private
      */

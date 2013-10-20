@@ -7,13 +7,14 @@
  */
 
 /**
- * @class GeoExt.data.ScaleModel
  * The model for scale values.
+ *
+ * @class GeoExt.data.ScaleModel
  */
 Ext.define('GeoExt.data.ScaleModel', {
     extend: 'Ext.data.Model',
     requires: [
-        'Ext.data.proxy.Memory', 
+        'Ext.data.proxy.Memory',
         'Ext.data.reader.Json'
     ],
     alias: 'model.gx_scale',

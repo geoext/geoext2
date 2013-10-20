@@ -11,8 +11,9 @@
  */
 
 /**
- * @class GeoExt.data.WmcLayerModel
  * The model for WMS layers coming from a Web Map Context document.
+ *
+ * @class GeoExt.data.WmcLayerModel
  */
 Ext.define('GeoExt.data.WmcLayerModel',{
     extend: 'GeoExt.data.LayerModel',
