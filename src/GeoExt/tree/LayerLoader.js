@@ -12,11 +12,11 @@
 
 /**
  * A loader that will load layers from a GeoExt.data.LayerStore.
- * By default, only layers that have ``displayInLayerSwitcher`` set to ``true``
+ * By default, only layers that have `displayInLayerSwitcher` set to `true`
  * will be included. The childrens' iconCls defaults to "gx-tree-layer-icon".
  *
  * Example:
- * 
+ *
  *     var loader = Ext.create('GeoExt.tree.LayerLoader', {
  *         baseAttrs: {
  *             iconCls: 'baselayer-icon',
@@ -24,8 +24,7 @@
  *         },
  *         filter: function(record) {
  *             var layer = record.getLayer();
- *             return
- *                 layer.displayInLayerSwitcher === true &&
+ *             return layer.displayInLayerSwitcher === true &&
  *                 layer.isBaseLayer === true;
  *         }
  *     });
@@ -46,53 +45,59 @@ Ext.define('GeoExt.tree.LayerLoader', {
     /**
      * Triggered before loading children. Return false to avoid
      * loading children.
+     *
      * @event beforeload
      * @param {GeoExt.tree.LayerLoader} this This loader.
      * @param {Ext.data.NodeInterface} node The node that this loader is
-     * configured with.
+     *     configured with.
      */
 
     /**
      * Triggered after children were loaded.
+     *
      * @event load
      * @param {GeoExt.tree.LayerLoader} loader This loader.
      * @param {Ext.data.NodeInterface} node The node that this loader is
-     * configured with.
+     *     configured with.
      */
 
     /**
-     * @cfg {GeoExt.data.LayerStore} store
      * The layer store containing layers to be added by this loader.
+     *
+     * @cfg {GeoExt.data.LayerStore} store
      */
     /**
-     * @property {GeoExt.data.LayerStore} store
      * The layer store containing layers to be added by this loader.
+     *
+     * @property {GeoExt.data.LayerStore} store
      */
      store: null,
-    
+
     /**
      * A function, called in the scope of this loader, with a
-     * GeoExt.data.LayerRecord as argument. Is expected to return ``true`` for
-     * layers to be loaded, ``false`` otherwise. By default, the filter checks
-     * for ``displayInLayerSwitcher``:
-     *  
+     * GeoExt.data.LayerRecord as argument. Is expected to return `true` for
+     * layers to be loaded, `false` otherwise. By default, the filter checks
+     * for `displayInLayerSwitcher`:
+     *
      *     filter: function(record) {
      *         return record.getLayer().displayInLayerSwitcher === true
      *     }
+     *
      * @property {Function} filter
      * @param {GeoExt.data.LayerRecord} record
      */
     filter: function(record) {
         return record.getLayer().displayInLayerSwitcher === true;
     },
-    
+
     /**
-     * @cfg
      * An object containing attributes to be added to all nodes created by
      * this loader.
+     *
+     * @cfg
      */
     baseAttrs: null,
-    
+
     /**
      * @param {GeoExt.data.LayerTreeModel} node The node to add children to.
      * @private
@@ -103,7 +108,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             while (node.firstChild) {
                 node.removeChild(node.firstChild);
             }
-            
+
             if (!this.store) {
                 this.store = GeoExt.MapPanel.guess().layers;
             }
@@ -111,11 +116,11 @@ Ext.define('GeoExt.tree.LayerLoader', {
                 this.addLayerNode(node, record);
             }, this);
             this.addStoreHandlers(node);
-    
+
             this.fireEvent("load", this, node);
         }
     },
-    
+
     /**
      * Listener for the store's add event.
      *
@@ -123,7 +128,6 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * @param {Ext.data.Record[]} records
      * @param {Number} index
      * @param {GeoExt.data.LayerTreeModel} node
-     *  
      * @private
      */
     onStoreAdd: function(store, records, index, node) {
@@ -135,7 +139,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             }
         }
     },
-    
+
     /**
      * Listener for the store's remove event.
      *
@@ -143,7 +147,6 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * @param {Ext.data.Record} record
      * @param {Integer} index
      * @param {GeoExt.data.LayerTreeModel} node
-     *
      * @private
      */
     onStoreRemove: function(layerRecord, node) {
@@ -156,11 +159,10 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * Adds a child node representing a layer of the map
      *
      * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
-     * will be added to as child.
+     *     will be added to as child.
      * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
-     * the layer to be added.
+     *     the layer to be added.
      * @param {Integer} index Optional index for the new layer.  Default is 0.
-     *
      * @private
      */
     addLayerNode: function(node, layerRecord, index) {
@@ -189,11 +191,11 @@ Ext.define('GeoExt.tree.LayerLoader', {
 
     /**
      * Removes a child node representing a layer of the map
-     * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
-     * will be removed from as child.
-     * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
-     * the layer to be removed.
      *
+     * @param {GeoExt.data.LayerTreeModel} node The node that the layer node
+     *     will be removed from as child.
+     * @param {GeoExt.data.LayerModel} layerRecord The layer record containing
+     *     the layer to be removed.
      * @private
      */
     removeLayerNode: function(node, layerRecord) {
@@ -207,7 +209,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             }
         }
     },
-    
+
     /**
      * Listener for child node "move" events.  This updates the order of
      * records in the store based on new node order if the node has not
@@ -217,7 +219,6 @@ Ext.define('GeoExt.tree.LayerLoader', {
      * @param {GeoExt.data.LayerTreeModel} oldParent
      * @param {GeoExt.data.LayerTreeModel} newParent
      * @param {Integer} index
-     *
      * @private
      */
     onChildMove: function(node, oldParent, newParent, index) {
@@ -279,7 +280,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
         }
         delete me._reordering;
     },
-    
+
     /**
      * Adds appropriate listeners on the store.
      *
@@ -301,7 +302,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
             }
         }
     },
-    
+
     /**
      * Removes the bound listeners on the store.
      *
@@ -325,7 +326,7 @@ Ext.define('GeoExt.tree.LayerLoader', {
         if (this.baseAttrs){
             Ext.apply(attr, this.baseAttrs);
         }
-        
+
         return attr;
     },
 

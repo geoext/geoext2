@@ -11,13 +11,14 @@
  */
 
 /**
- * @class GeoExt.data.WmsDescribeLayerModel
  * The model for the structure returned by SLD WMS DescribeLayer.
+ *
+ * @class GeoExt.data.WmsDescribeLayerModel
  */
 Ext.define('GeoExt.data.WmsDescribeLayerModel',{
     extend: 'Ext.data.Model',
     requires: [
-        'Ext.data.proxy.Memory', 
+        'Ext.data.proxy.Memory',
         'GeoExt.data.reader.WmsDescribeLayer'
     ],
     alias: 'model.gx_wmsdescribelayer',

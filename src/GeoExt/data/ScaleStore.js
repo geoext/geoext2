@@ -13,10 +13,11 @@
  */
 
 /**
- * @class GeoExt.data.ScaleStore
  * A store that contains a cache of available zoom levels.  The store can
  * optionally be kept synchronized with an {OpenLayers.Map} or
  * GeoExt.panel.Map object.
+ *
+ * @class GeoExt.data.ScaleStore
  */
 Ext.define('GeoExt.data.ScaleStore', {
     requires: [
@@ -27,14 +28,16 @@ Ext.define('GeoExt.data.ScaleStore', {
     model: 'GeoExt.data.ScaleModel',
 
     /**
-     * @cfg {OpenLayers.Map/GeoExt.panel.Map}
      * Optional map or map panel from which to derive scale values.
+     *
+     * @cfg {OpenLayers.Map/GeoExt.panel.Map}
      */
     map: null,
 
     /**
      * Construct a ScaleStore from a configuration.  The ScaleStore accepts
      * some custom parameters addition to the fields accepted by Ext.Store.
+     *
      * @private
      */
     constructor: function(config) {
@@ -52,6 +55,7 @@ Ext.define('GeoExt.data.ScaleStore', {
      * the map's current configuration.  If the map does not currently have a
      * set scale list, then the store will remain empty until the map is
      * configured with one.
+     *
      * @param {GeoExt.panel.Map/OpenLayers.Map} map Map to which we should bind.
      */
     bind: function(map, options) {
@@ -80,11 +84,12 @@ Ext.define('GeoExt.data.ScaleStore', {
     },
 
     /**
-     * @private
-     * This method handles the case where we have ``#bind`` called on a
+     * This method handles the case where we have `#bind` called on a
      * not-fully-configured map so that the zoom levels can be detected when a
      * baselayer is finally added.
+     *
      * @param {Object} evt
+     * @private
      */
     populateOnAdd: function(evt) {
         if (evt.layer.isBaseLayer) {
@@ -94,9 +99,10 @@ Ext.define('GeoExt.data.ScaleStore', {
     },
 
     /**
-     * @private
      * This method actually loads the zoom level information from the
      * OpenLayers.Map and converts it to Ext Records.
+     *
+     * @private
      */
     populateFromMap: function() {
         var zooms = [];
@@ -117,6 +123,7 @@ Ext.define('GeoExt.data.ScaleStore', {
 
     /**
      * Unregisters listeners by calling #unbind prior to destroying.
+     *
      * @private
      */
     destroy: function() {

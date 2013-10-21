@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -11,14 +11,14 @@
  */
 
 /**
- *  A panel showing legends of all layers in a GeoExt.data.LayerStore.
- *  Depending on the layer type, a legend renderer will be chosen.
+ * A panel showing legends of all layers in a GeoExt.data.LayerStore.
+ * Depending on the layer type, a legend renderer will be chosen.
  *
- *  The LegendPanel will include legends for all the layers in the
- *  ``layerStore`` it is configured with, unless the layer is configured with
- *  ``displayInLayerSwitcher: false``, or a layer record has a
- *  ``hideInLegend`` field with a value of ``true``. Additional filtering can
- *  be done by configuring a ``filter`` on the LegendPanel.
+ * The LegendPanel will include legends for all the layers in the
+ * `layerStore` it is configured with, unless the layer is configured with
+ * `displayInLayerSwitcher: false`, or a layer record has a
+ * `hideInLegend` field with a value of `true`. Additional filtering can
+ * be done by configuring a `filter` on the LegendPanel.
  *
  * @class GeoExt.panel.Legend
  */
@@ -29,23 +29,26 @@ Ext.define('GeoExt.panel.Legend', {
     alternateClassName : 'GeoExt.LegendPanel',
 
     /**
-     * @cfg {Boolean}
-     * If false the LegendPanel will not listen to the add, remove and change 
+     * If false the LegendPanel will not listen to the add, remove and change
      * events of the LayerStore. So it will load with the initial state of
-     * the LayerStore and not change anymore. 
+     * the LayerStore and not change anymore.
+     *
+     * @cfg {Boolean}
      */
     dynamic: true,
 
     /**
-     * @cfg {Ext.data.Store}
-     * The layer store containing layers to be displayed in the legend 
+     * The layer store containing layers to be displayed in the legend
      * container. If not provided it will be taken from the MapPanel.
+     *
+     * @cfg {Ext.data.Store}
      */
     layerStore: null,
 
     /**
-     * @cfg {Array}
      * An array of preferred legend types.
+     *
+     * @cfg {Array}
      */
     preferredTypes: null,
 
@@ -53,6 +56,7 @@ Ext.define('GeoExt.panel.Legend', {
      * A function, called in the scope of the legend panel, with a layer record
      * as argument. It is expected to return true for layers to be displayed, false
      * otherwise. By default, all layers will be displayed.
+     *
      * @cfg {Function}
      * @param {Ext.data.Record} record
      * @return {boolean}
@@ -63,11 +67,12 @@ Ext.define('GeoExt.panel.Legend', {
 
     /**
      * Private method called when the legend panel is being rendered.
+     *
      * @private
-     */    
+     */
     onRender: function() {
         this.callParent(arguments);
-    
+
         if(!this.layerStore) {
             this.layerStore = GeoExt.panel.Map.guess().layers;
         }
@@ -84,12 +89,13 @@ Ext.define('GeoExt.panel.Legend', {
         }
     },
 
-    /** 
+    /**
      * Private method to get the panel index for a layer represented by a
      * record.
-     * @private
+     *
      * @param {Integer} index The index of the record in the store.
      * @return {Integer} The index of the sub panel in this panel.
+     * @private
      */
     recordIndexToPanelIndex: function(index) {
         var store = this.layerStore;
@@ -111,25 +117,26 @@ Ext.define('GeoExt.panel.Legend', {
         }
         return panelIndex;
     },
-    
+
     /**
      * Generate an element id that is unique to this panel/layer combo.
-     * @private
+     *
      * @param {OpenLayers.Layer} layer
      * @returns {String}
+     * @private
      */
     getIdForLayer: function(layer) {
         return this.id + "-" + layer.id;
     },
 
-    /** 
+    /**
      * Private method called when a layer is added to the store.
-     * @private
-     * @param {Ext.data.Store} store The store to which the record(s) was 
-     * added.
+     *
+     * @param {Ext.data.Store} store The store to which the record(s) was added.
      * @param {Ext.data.Record} record The record object(s) corresponding
-     * to the added layers.
+     *     to the added layers.
      * @param {Integer} index The index of the inserted record.
+     * @private
      */
     onStoreAdd: function(store, records, index) {
         var panelIndex = this.recordIndexToPanelIndex(index+records.length-1);
@@ -139,24 +146,26 @@ Ext.define('GeoExt.panel.Legend', {
         this.doLayout();
     },
 
-    /** 
+    /**
      * Private method called when a layer is removed from the store.
-     * @private
+     *
      * @param {Ext.data.Store} store The store from which the record(s) was
-     * removed.
+     *     removed.
      * @param {Ext.data.Record} record The record object(s) corresponding
-     * to the removed layers.
+     *     to the removed layers.
      * @param {Integer} index The index of the removed record.
+     * @private
      */
     onStoreRemove: function(store, record, index) {
-        this.removeLegend(record);            
+        this.removeLegend(record);
     },
 
-    /** 
+    /**
      * Remove the legend of a layer.
+     *
+     * @param {Ext.data.Record} record The record object from the layer
+     *     store to remove.
      * @private
-     * @param {Ext.data.Record} record The record object from the layer 
-     * store to remove.
      */
     removeLegend: function(record) {
         if (this.items) {
@@ -168,10 +177,11 @@ Ext.define('GeoExt.panel.Legend', {
         }
     },
 
-    /** 
+    /**
      * Private method called when a layer store is cleared.
-     * @private
+     *
      * @param {Ext.data.Store} store The store from which was cleared.
+     * @private
      */
     onStoreClear: function(store) {
         this.removeAllLegends();
@@ -179,6 +189,7 @@ Ext.define('GeoExt.panel.Legend', {
 
     /**
      * Remove all legends from this legend panel.
+     *
      * @private
      */
     removeAllLegends: function() {
@@ -188,9 +199,9 @@ Ext.define('GeoExt.panel.Legend', {
 
     /**
      * Add a legend for the layer.
-     * @private
-     * @param {Ext.data.Record} record The record object from the layer 
-     * store.
+     *
+     * @param {Ext.data.Record} record The record object from the layer
+     *     store.
      * @param {Integer} index The position at which to add the legend.
      */
     addLegend: function(record, index) {
@@ -213,6 +224,7 @@ Ext.define('GeoExt.panel.Legend', {
 
     /**
      * Private method called during the destroy sequence.
+     *
      * @private
      */
     onDestroy: function() {
@@ -223,5 +235,5 @@ Ext.define('GeoExt.panel.Legend', {
         }
         this.callParent(arguments);
     }
- 
+
 });

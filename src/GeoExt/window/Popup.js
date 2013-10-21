@@ -13,16 +13,15 @@
  */
 
 /**
- * @class GeoExt.window.Popup
+ * A popup is a specialized window that supports anchoring to a particular
+ * location in a {@link GeoExt.panel.Map MapPanel}.
  *
- * A popup is a specialized window that supports anchoring
- * to a particular location in a {@link GeoExt.panel.Map MapPanel}.
  * When a popup is anchored to a {@link #location}, that means that
  * the popup will visibly point to the location on the map,
  * and move accordingly when the map is panned or zoomed.
  *
  * Example:
- * 
+ *
  *     var popup = Ext.create('GeoExt.window.Popup', {
  *         title: "My Popup",
  *         location: feature,
@@ -34,7 +33,7 @@
  * Or create it via `xtype` declaration:
  *
  * Example:
- * 
+ *
  *     var popup = {
  *         xtype: 'gx_popup',
  *         title: "My Popup",
@@ -55,91 +54,101 @@ Ext.define('GeoExt.window.Popup', {
      */
 
     /**
+     * Whether the popup is currently inside the map viewport.
+     *
      * @property {Boolean} insideViewport
      * @private
-     * Whether the popup is currently inside the map viewport.
      */
     insideViewport: null,
 
     /**
+     * Animate the transition when the panel is collapsed. Collapsing animation
+     * is not supported yet for popups.
+     *
      * @property {Boolean} animCollapse
      * @private
-     * Animate the transition when the panel is collapsed.
-     * Collapsing animation is not supported yet for
-     * popups.
      */
     animCollapse: false,
 
     /**
-     * @property {Boolean} draggable
-     * @private
      * Enable dragging of this Panel. Because the popup defaults to being
      * anchored, and anchored popups should not be draggable.
+     *
+     * @property {Boolean} draggable
+     * @private
      */
     draggable: false,
 
     /**
+     * Give the popup window a shadow. Because shadows are not supported yet for
+     * popups (the shadow does not look good with the anchor).
+     *
      * @property {Boolean} shadow
      * @private
-     * Give the popup window a shadow.
-     * Because shadows are not supported yet for popups (the shadow does
-     * not look good with the anchor).
      */
     shadow: false,
 
     /**
-     * @cfg {Boolean} unpinnable
      * The popup should have a "unpin" tool that unanchors it from
      * its location.
+     *
+     * @cfg {Boolean} unpinnable
      */
     unpinnable: true,
 
     /**
-     * @cfg {GeoExt.panel.Map/OpenLayers.Map} map
      * The map this popup will be anchored to (only required if `anchored`
-     * is set to ``true`` and the map cannot be derived from the `location`'s
+     * is set to `true` and the map cannot be derived from the `location`'s
      * layer).
+     *
+     * @cfg {GeoExt.panel.Map/OpenLayers.Map} map
      */
     map: null,
 
     /**
-     * @cfg {Boolean} anchored
      * The popup begins anchored to its location.
+     *
+     * @cfg {Boolean} anchored
      */
     anchored: true,
 
     /**
+     * The popup should pan the map so that the popup is fully in view when it
+     * is rendered.
+     *
      * @cfg {Boolean} panIn
-     * The popup should pan the map so that the popup is
-     * fully in view when it is rendered.
      */
     panIn: true,
 
     /**
-     * @cfg {OpenLayers.Feature.Vector/OpenLayers.LonLat/OpenLayers.Pixel} location
      * A location for this popup's anchor.
+     *
+     * @cfg {OpenLayers.Feature.Vector/OpenLayers.LonLat/OpenLayers.Pixel} location
      */
     location: null,
 
     /**
+     * CSS class name for the popup DOM elements.
+     *
      * @property {String} popupCls
      * @private
-     * CSS class name for the popup DOM elements.
      */
     popupCls: "gx-popup",
 
     /**
-     * @cfg {String} ancCls
      * CSS class name for the popup's anchor.
+     *
+     * @cfg {String} ancCls
      */
     ancCls: null,
 
     /**
+     * Controls the anchor position for the popup. If set to `auto`, the anchor
+     * will be positioned on the top or the bottom of the window, minimizing map
+     * movement. Supported values are `bottom-left`, `bottom-right`, `top-left`,
+     * `top-right` or `auto`.
+     *
      * @cfg {String} anchorPosition
-     * Controls the anchor position for the popup. If set to
-     *  `auto`, the anchor will be positioned on the top or the bottom of
-     *  the window, minimizing map movement. Supported values are `bottom-left`,
-     *  `bottom-right`, `top-left`, `top-right` or `auto`.
      */
     anchorPosition: "auto",
 
@@ -184,9 +193,9 @@ Ext.define('GeoExt.window.Popup', {
      * The "onRender" listener of this component.
      * Executes when the popup is rendered and creates the anchor div
      *
-     * @private
      * @param {Object} ct
      * @param {Object} position
+     * @private
      */
     onRender: function(ct, position) {
         this.callParent(arguments);
@@ -210,8 +219,8 @@ Ext.define('GeoExt.window.Popup', {
     },
 
     /**
-     * Initializes the tools on the popup.  In particular
-     * it adds the 'unpin' tool if the popup is unpinnable.
+     * Initializes the tools on the popup.  In particular it adds the 'unpin'
+     * tool if the popup is unpinnable.
      *
      * @private
      */
@@ -413,6 +422,7 @@ Ext.define('GeoExt.window.Popup', {
 
     /**
      * Called during map movements; does reposition the popup.
+     *
      * @private
      */
     onMapMove: function() {

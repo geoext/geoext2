@@ -11,8 +11,9 @@
  */
 
 /**
- * @class GeoExt.data.WfsCapabilitiesLayerModel
  * The model for WFS layers coming from a WFS GetCapabilities document.
+ *
+ * @class GeoExt.data.WfsCapabilitiesLayerModel
  */
 Ext.define('GeoExt.data.WfsCapabilitiesLayerModel',{
     extend: 'GeoExt.data.LayerModel',

@@ -11,10 +11,10 @@
  */
 
 /**
+ * Data reader class to create an array of layer description objects from a WMS
+ * DescribeLayer response.
+ *
  * @class GeoExt.data.reader.WmsDescribeLayer
- * Data reader class to create an array of
- * layer description objects from a WMS DescribeLayer
- * response.
  */
 Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
     alternateClassName: ['GeoExt.data.reader.WMSDescribeLayer', 'GeoExt.data.WMSCapabilitiesReader'],
@@ -23,6 +23,7 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
 
     /**
      * Creates new Reader.
+     *
      * @param {Object} config (optional) Config object.
      */
     constructor: function(config) {
@@ -39,9 +40,9 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
      * Gets the records.
      *
      * @param {Object} request The XHR object which contains the parsed XML
-     * document.
-     * @return {Object} A data block which is used by an {Ext.data.Store}
-     * as a cache of {Ext.data.Model} objects.
+     *     document.
+     * @return {Object} A data block which is used by an Ext.data.Store
+     *     as a cache of Ext.data.Model objects.
      */
     getResponseData: function(request) {
         var data = request.responseXML;
@@ -53,14 +54,14 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
 
     /**
      * Create a data block containing Ext.data.Records from an XML document.
-     * @private
+     *
      * @param {DOMElement/String/Object} data A document element or XHR
-     * response string.  As an alternative to fetching capabilities data
-     * from a remote source, an object representing the capabilities can
-     * be provided given that the structure mirrors that returned from the
-     * capabilities parser.
-     * @return  {Object} A data block which is used by an {Ext.data.Store}
-     * as a cache of {Ext.data.Model} objects.
+     *     response string.  As an alternative to fetching capabilities data
+     *     from a remote source, an object representing the capabilities can
+     *     be provided given that the structure mirrors that returned from the
+     *     capabilities parser.
+     * @return {Object} A data block which is used by an Ext.data.Store
+     *     as a cache of Ext.data.Model objects.
      */
     readRecords: function(data) {
         if(typeof data === "string" || data.nodeType) {

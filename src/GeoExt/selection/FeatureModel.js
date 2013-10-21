@@ -14,16 +14,14 @@
  */
 
 /**
- * @class GeoExt.selection.FeatureModel
- *
  * A row selection model which enables automatic selection of features
  * in the map when rows are selected in the grid and vice-versa.
  *
  * Sample code to create a feature grid with a feature selection model:
  *
  * Example:
- * 
- *     var gridPanel = new Ext.grid.GridPanel({
+ *
+ *     var gridPanel = Ext.create('Ext.grid.GridPanel', {
  *         title: "Feature Grid",
  *         region: "east",
  *         store: store,
@@ -39,64 +37,72 @@
  *         }],
  *         selType: 'featuremodel'
  *     });
+ *
+ * @class GeoExt.selection.FeatureModel
  */
 Ext.define('GeoExt.selection.FeatureModel', {
     extend: 'Ext.selection.RowModel',
     alias: 'selection.featuremodel',
 
     /**
+     * If true the select feature control is activated and deactivated when
+     * binding and unbinding.
+     *
      * @cfg {Boolean}
-     * If true the select feature control is activated and
-     * deactivated when binding and unbinding.
      */
     autoActivateControl: true,
 
     /**
+     * If true, and if the constructor is passed neither a layer nor a select
+     * feature control, a select feature control is created using the layer
+     * found in the grid's store. Set it to false if you want to manually bind
+     * the selection model to a layer.
+     *
      * @cfg {Boolean}
-     * If true, and if the constructor is passed neither a
-     * layer nor a select feature control, a select feature control is
-     * created using the layer found in the grid's store. Set it to
-     * false if you want to manually bind the selection model to a
-     * layer.
      */
     layerFromStore: true,
 
     /**
+     * The select feature control instance. If not provided one will be created.
+     *
+     * If provided any "layer" config option will be ignored, and its "multiple"
+     * option will be used to configure the selectionModel.  If an `Object`
+     * is provided here, it will be passed as config to the SelectFeature
+     * constructor, and the "layer" config option will be used for the layer.
+     *
      * @cfg {OpenLayers.Control.SelectFeature}
-     * The select feature control instance. If not
-     * provided one will be created.  If provided any "layer" config option
-     * will be ignored, and its "multiple" option will be used to configure
-     * the selectionModel.  If an ``Object`` is provided here, it will be
-     * passed as config to the SelectFeature constructor, and the "layer"
-     * config option will be used for the layer.
      */
     selectControl: null,
 
     /**
+     * The vector layer used for the creation of the select feature control, it
+     * must already be added to the map. If not provided, the layer bound to the
+     * grid's store, if any, will be used.
+     *
      * @cfg {OpenLayers.Layer.Vector} layer
-     * The vector layer used for the creation of
-     * the select feature control, it must already be added to the map. If not
-     * provided, the layer bound to the grid's store, if any, will be used.
      */
 
     /**
-     * @private
-     * @property {Boolean}
      * Flag indicating if the selection model is bound.
+     *
+     * @property {Boolean}
+     * @private
      */
     bound: false,
 
     /**
-     * @private
-     * @property {OpenLayers.Feature.Vector[]}
      * An array to store the selected features.
+     *
+     * @property {OpenLayers.Feature.Vector[]}
+     * @private
      */
     selectedFeatures: [],
 
     /**
+     * If true the map will recenter on feature selection so that the selected
+     * features are visible.
+     * 
      * @cfg {Boolean}
-     * If true the map will recenter on feature selection
-     * so that the selected features are visible.
      */
     autoPanMapOnSelection: false,
 
@@ -124,9 +130,9 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
-     * @private
-     *
      * Called after this.grid is defined.
+     * 
+     * @private
      */
     bindComponent: function() {
         this.callParent(arguments);
@@ -144,11 +150,11 @@ Ext.define('GeoExt.selection.FeatureModel', {
     },
 
     /**
-     * @private
      * Create the select feature control.
      *
      * @param {OpenLayers.Layer.Vector} layer The vector layer.
      * @param {Object} config The select feature control config.
+     * @private
      */
     createSelectControl: function(layer, config) {
         config = config || {};
@@ -169,13 +175,13 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * Bind the selection model to a layer or a SelectFeature control.
      *
      * @param {OpenLayers.Layer.Vector/OpenLayers.Control.SelectFeature} obj
-     * The object this selection model should be bound to,
-     * either a vector layer or a select feature control.
-     * @param {Object} options An object with a "controlConfig"
-     * property referencing the configuration object to pass to the
-     * ``OpenLayers.Control.SelectFeature`` constructor.
-     * @return {OpenLayers.Control.SelectFeature}
-     * The select feature control this selection model uses.
+     *     The object this selection model should be bound to, either a vector
+     *     layer or a select feature control.
+     * @param {Object} options An object with a "controlConfig" property
+     *     referencing the configuration object to pass to the
+     *     `OpenLayers.Control.SelectFeature` constructor.
+     * @return {OpenLayers.Control.SelectFeature} The select feature control
+     *     this selection model uses.
      */
     bind: function(obj, options) {
         if (!this.bound) {
@@ -205,8 +211,8 @@ Ext.define('GeoExt.selection.FeatureModel', {
     /**
      * Unbind the selection model from the layer or SelectFeature control.
      *
-     * @return {OpenLayers.Control.SelectFeature}
-     * The select feature control this selection model used.
+     * @return {OpenLayers.Control.SelectFeature} The select feature control
+     *     this selection model used.
      */
     unbind: function() {
         var selectControl = this.selectControl;
@@ -231,9 +237,9 @@ Ext.define('GeoExt.selection.FeatureModel', {
     /**
      * Handler for when a feature is selected.
      *
-     * @private
      * @param {Object} evt An object with a `feature` property referencing the
      *     selected feature.
+     * @private
      */
     featureSelected: function(evt) {
         if (!this._selecting) {
@@ -254,9 +260,9 @@ Ext.define('GeoExt.selection.FeatureModel', {
     /**
      * Handler for when a feature is unselected.
      *
-     * @private
      * @param {Object} evt An object with a `feature` property referencing the
      *     unselected feature.
+     * @private
      */
     featureUnselected: function(evt) {
         if (!this._selecting) {
@@ -276,9 +282,9 @@ Ext.define('GeoExt.selection.FeatureModel', {
     /**
      * Synchronizes selection on the layer with selection in the grid.
      *
-     * @private
      * @param {Ext.data.Record} record The record.
      * @param {Boolean} isSelected.
+     * @private
      */
     onSelectChange: function(record, isSelected) {
         this.callParent(arguments);

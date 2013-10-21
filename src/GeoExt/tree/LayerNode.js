@@ -11,7 +11,10 @@
  * a layer, so the checkbox and the layer's visibility are in sync. A basic
  * layer node would be configured like this:
  *
- *     {plugins: ['gx_layernode'], layer: myLayer}
+ *     {
+ *         plugins: ['gx_layernode'],
+ *         layer: myLayer
+ *     }
  *
  * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the
  * node configuration.
@@ -23,12 +26,12 @@ Ext.define('GeoExt.tree.LayerNode', {
     alias: 'plugin.gx_layer',
 
     /**
-     * @private
      * The init method is invoked after initComponent method has been run for
-     * the client Component.
-     *
-     * It perform plugin initialization.
-     * @param {Ext.Component} target The client Component which owns this plugin.
+     * the client Component. It performs plugin initialization.
+     * 
+     * @param {Ext.Component} target The client Component which owns this
+     *     plugin.
+     * @private
      */
     init: function(target) {
 
