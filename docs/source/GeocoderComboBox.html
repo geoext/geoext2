@@ -24,36 +24,43 @@
  */
 
 <span id='GeoExt-form-field-GeocoderComboBox'>/**
-</span> *  Creates a combo box that handles results from a geocoding service. By
- *  default it uses OSM Nominatim, but it can be configured with a custom store
- *  to use other services. If the user enters a valid address in the search
- *  box, the combo's store will be populated with records that match the
- *  address.  By default, records have the following fields:
+</span> * Creates a combo box that handles results from a geocoding service. By
+ * default it uses OSM Nominatim, but it can be configured with a custom store
+ * to use other services. If the user enters a valid address in the search
+ * box, the combo's store will be populated with records that match the
+ * address.  By default, records have the following fields:
  *
- *  * name - ``String`` The formatted address.
- *  * lonlat - ``Array`` Location matching address, for use with
- *      OpenLayers.LonLat.fromArray.
- *  * bounds - ``Array`` Recommended viewing bounds, for use with
- *      OpenLayers.Bounds.fromArray.
+ * * name - `String` The formatted address.
+ * * lonlat - `Array` Location matching address, for use with
+ *     OpenLayers.LonLat.fromArray.
+ * * bounds - `Array` Recommended viewing bounds, for use with
+ *     OpenLayers.Bounds.fromArray.
+ *
  * @class GeoExt.form.field.GeocoderComboBox
  */
 Ext.define('GeoExt.form.field.GeocoderComboBox', {
     extend : 'Ext.form.field.ComboBox',
-    requires: [&quot;GeoExt.panel.Map&quot;, &quot;Ext.data.JsonStore&quot;, &quot;Ext.data.proxy.JsonP&quot;],
+    requires: [
+        &quot;GeoExt.panel.Map&quot;,
+        &quot;Ext.data.JsonStore&quot;,
+        &quot;Ext.data.proxy.JsonP&quot;
+    ],
     alias : 'widget.gx_geocodercombo',
     alternateClassName : 'GeoExt.form.GeocoderComboBox',
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-emptyText'>    /**
-</span>     * @cfg {String}
-     * Text to display for an empty field (i18n).
+</span>     * Text to display for an empty field (i18n).
+     *
+     * @cfg {String}
      */
     emptyText: &quot;Search&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-map'>    /**
-</span>     * @cfg {GeoExt.panel.Map/OpenLayers.Map} map
-     * The map that will be controlled by
+</span>     * The map that will be controlled by
      * this GeoCoderComboBox. Only used if this component is not added as item
      * or toolbar item to a GeoExt.panel.Map.
+     *
+     * @cfg {GeoExt.panel.Map/OpenLayers.Map} map
      */
 <span id='GeoExt-form-field-GeocoderComboBox-property-map'>    /**
 </span>     * @property {OpenLayers.Map} map
@@ -61,94 +68,106 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
      */
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-srs'>    /**
-</span>     * @cfg {String/OpenLayers.Projection}
-     * The srs used by the geocoder service.
+</span>     * The srs used by the geocoder service.
+     *
+     * @cfg {String/OpenLayers.Projection}
      */
     srs: &quot;EPSG:4326&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-zoom'>    /**
-</span>     * @cfg {Integer}
-     * The minimum zoom level to use when zooming to a location.
+</span>     * The minimum zoom level to use when zooming to a location.
      * Not used when zooming to a bounding box.
+     *
+     * @cfg {Integer}
      */
     zoom: 10,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-queryDelay'>    /**
-</span>     * @cfg {Number}
-     * Delay before the search occurs in ms.
+</span>     * Delay before the search occurs in ms.
+     *
+     * @cfg {Number}
      */
     queryDelay: 100,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-valueField'>    /**
-</span>     * @cfg {String}
-     * Field from selected record to use when the combo's
+</span>     * Field from selected record to use when the combo's
      * getValue method is called.  Default is &quot;bounds&quot;. This field is
      * supposed to contain an array of [left, bottom, right, top] coordinates
      * for a bounding box or [x, y] for a location.
+     *
+     * @cfg {String}
      */
     valueField: &quot;bounds&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-displayField'>    /**
-</span>     * @cfg {String}
-     * The field to display in the combo boy. Default is
+</span>     * The field to display in the combo box. Default is
      * &quot;name&quot; for instant use with the default store for this component.
+     *
+     * @cfg {String}
      */
     displayField: &quot;name&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-locationField'>    /**
-</span>     * @cfg {String}
-     * The field to get the location from. This field is supposed
+</span>     * The field to get the location from. This field is supposed
      * to contain an array of [x, y] for a location. Default is &quot;lonlat&quot; for
      * instant use with the default store for this component.
+     *
+     * @cfg {String}
      */
     locationField: &quot;lonlat&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-url'>    /**
-</span>     * @cfg {String}
-     * URL template for querying the geocoding service. If a
-     * store is configured, this will be ignored. Note that the
-     * queryParam will be used to append the user's combo box
-     * input to the url. Default is
-     * &quot;http://nominatim.openstreetmap.org/search?format=json&quot;, for instant
-     * use with the OSM Nominatim geolocator. However, if you intend to use
-     * that, note the
-     * `Nominatim Usage Policy &lt;http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy&gt;`_.
+</span>     * URL template for querying the geocoding service. If a store is
+     * configured, this will be ignored. Note that the queryParam will be used
+     * to append the user's combo box input to the url.
+     *
+     * Default is &quot;http://nominatim.openstreetmap.org/search?format=json&quot;, for
+     * instant use with the OSM Nominatim geolocator. However, if you intend to
+     * use that, note the [Nominatim Usage
+     * Policy](http://wiki.openstreetmap.org/wiki/Nominatim_usage_policy).
+     *
+     * @cfg {String}
      */
     url: &quot;http://nominatim.openstreetmap.org/search?format=json&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-queryParam'>    /**
-</span>     * @cfg {String}
-     * The query parameter for the user entered search text.
+</span>     * The query parameter for the user entered search text.
      * Default is &quot;q&quot; for instant use with OSM Nominatim.
+     *
+     * @cfg {String}
      */
     queryParam: &quot;q&quot;,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-minChars'>    /**
-</span>     * @cfg {Number}
-     * Minimum number of entered characters to trigger a search.
-     * Default is 3.
+</span>     * Minimum number of entered characters to trigger a search.
+     *
+     * @cfg {Number}
      */
     minChars: 3,
 
 <span id='GeoExt-form-field-GeocoderComboBox-cfg-store'>    /**
-</span>     * @cfg {Ext.data.Store}
-     * The store used for this combo box. Default is a
-     * store with a ScriptTagProxy and the url configured as :obj:`url` * property.
+</span>     * The store used for this combo box. Default is a
+     * store with a ScriptTagProxy and the url configured as :obj:`url`
+     * property.
+     *
+     * @cfg {Ext.data.Store}
      */
     store: null,
 
 <span id='GeoExt-form-field-GeocoderComboBox-property-center'>    /**
-</span>     * @property {OpenLayers.LonLat}
-     * Last center that was zoomed to after selecting
-     * a location in the combo box.
+</span>     * Last center that was zoomed to after selecting a location in the combo
+     * box.
+     *
+     * @property {OpenLayers.LonLat}
      * @private
      */
     center: null,
 
 <span id='GeoExt-form-field-GeocoderComboBox-property-locationFeature'>    /**
-</span>     * @property {OpenLayers.Feature.Vector}
-     * Last location provided by the geolocator.
+</span>     * Last location provided by the geolocator.
      * Only set if layer is configured.
+     *
+     * @property {OpenLayers.Feature.Vector}
      * @private
      */
     locationFeature: null,
@@ -194,6 +213,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 
 <span id='GeoExt-form-field-GeocoderComboBox-method-findMapPanel'>    /**
 </span>     * Find the MapPanel somewhere up in the hierarchy and set the map.
+     *
      * @private
      */
     findMapPanel: function() {
@@ -206,6 +226,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 <span id='GeoExt-form-field-GeocoderComboBox-method-handleSelect'>    /**
 </span>     * Zoom to the selected location, and also set a location marker if this
      * component was configured with a layer.
+     *
      * @private
      */
     handleSelect: function(combo, rec) {
@@ -244,6 +265,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 <span id='GeoExt-form-field-GeocoderComboBox-method-removeLocationFeature'>    /**
 </span>     * Remove the location marker from the `layer` and destroy the
      * `#locationFeature`.
+     *
      * @private
      */
     removeLocationFeature: function() {
@@ -255,6 +277,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 <span id='GeoExt-form-field-GeocoderComboBox-method-clearResult'>    /**
 </span>     * Handler for the map's moveend event. Clears the selected location
      * when the map center has changed.
+     *
      * @private
      */
     clearResult: function() {
@@ -265,6 +288,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 
 <span id='GeoExt-form-field-GeocoderComboBox-method-setMap'>    /**
 </span>     * Set the `#map` for this instance.
+     *
      * @param {GeoExt.panel.Map/OpenLayers.Map} map
      * @private
      */
@@ -283,6 +307,7 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
 <span id='GeoExt-form-field-GeocoderComboBox-method-addToMapPanel'>    /**
 </span>     * Called by a MapPanel if this component is one of the items in the panel.
      * @param {GeoExt.panel.Map} panel
+     *
      * @private
      */
     addToMapPanel: Ext.emptyFn,

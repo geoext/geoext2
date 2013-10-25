@@ -7,15 +7,13 @@
  */
 
 /**
- *  @class GeoExt.plugins.PrintProviderField
+ * A plugin for Ext.form.Field components which provides synchronization
+ * with a GeoExt.data.MapfishPrintProvider.
  *
- *  A plugin for Ext.form.Field components which provides synchronization
- *  with a GeoExt.data.MapfishPrintProvider.
- *
- *  A form with combo boxes for layout and resolution, and a text field for a
- *  map title. The latter is a custom parameter to the print module, which is
- *  a default for all print pages. For setting custom parameters on the page
- *  level, use GeoExt.plugins.PrintPageField.
+ * A form with combo boxes for layout and resolution, and a text field for a
+ * map title. The latter is a custom parameter to the print module, which is
+ * a default for all print pages. For setting custom parameters on the page
+ * level, use GeoExt.plugins.PrintPageField.
  *
  *     var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
  *         capabilities: printCapabilities
@@ -59,26 +57,32 @@
  *             })
  *         }]
  *     }):
+ *
+ * @class GeoExt.plugins.PrintProviderField
  */
 Ext.define('GeoExt.plugins.PrintProviderField', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    requires: ['GeoExt.data.MapfishPrintProvider', 'Ext.form.field.ComboBox'],
-    alias : 'widget.gx_printproviderfield',
-    alternateClassName : 'GeoExt.PrintProviderField',
+    requires: [
+        'GeoExt.data.MapfishPrintProvider',
+        'Ext.form.field.ComboBox'
+    ],
+    alias: 'widget.gx_printproviderfield',
+    alternateClassName: 'GeoExt.PrintProviderField',
 
     /**
+     * The print provider to use with this plugin's field. Not required if set
+     * on the owner container of the field.
+     *
      * @cfg {GeoExt.data.MapfishPrintProvider} printProvider
-     * The print provider to use with this
-     * plugin's field. Not required if set on the owner container of the
-     * field.
      */
 
     /**
+     * This plugin's target field.
+     *
      * @private
      * @property {Ext.form.Field} target
-     * This plugin's target field.
      */
     target: null,
 
@@ -110,8 +114,8 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
     /**
      * Handler for the target field's "render" event.
      *
-     * @private
      * @param {Ext.Form.Field} field
+     * @private
      */
     onRender: function(field) {
         var printProvider = this.printProvider || field.ownerCt.printProvider;
@@ -135,9 +139,9 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
     /**
      * Handler for the target field's "change" or "select" event.
      *
-     * @private
      * @param {Ext.form.Field} field
      * @param {Ext.data.Record} record Optional.
+     * @private
      */
     onFieldChange: function(field, records) {
         var record;
@@ -167,9 +171,9 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
     /**
      * Handler for the printProvider's dpichange and layoutchange event.
      *
-     * @private
      * @param {GeoExt.data.MapfishPrintProvider}  printProvider
      * @param {Ext.data.Record}  rec
+     * @private
      */
     onProviderChange: function(printProvider, rec) {
         if(!this._updating) {
@@ -179,6 +183,7 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
 
     /**
      * Private method called during the destroy sequence.
+     *
      * @private
      */
     onBeforeDestroy: function() {

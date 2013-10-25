@@ -29,7 +29,7 @@
 
 <span id='GeoExt-tree-BaseLayerContainer'>/**
 </span> * A layer node plugin that will collect all base layers of an OpenLayers
- * map. Only layers that have ``displayInLayerSwitcher`` set to ``true`` will
+ * map. Only layers that have `displayInLayerSwitcher` set to `true` will
  * be included. The childrens' iconCls defaults to &quot;gx-tree-baselayer-icon&quot;
  * and the node' text defaults to &quot;Base Layer&quot;.
  *
@@ -38,7 +38,10 @@
  *
  * To use this node plugin in a tree node config, configure a node like this:
  *
- *     {plugins: &quot;gx_baselayercontainer&quot;, text: &quot;My base layers&quot;}
+ *     {
+ *         plugins: &quot;gx_baselayercontainer&quot;,
+ *         text: &quot;My base layers&quot;
+ *     }
  *
  * @class GeoExt.tree.BaseLayerContainer
  */
@@ -47,8 +50,9 @@ Ext.define('GeoExt.tree.BaseLayerContainer', {
     alias: 'plugin.gx_baselayercontainer',
 
 <span id='GeoExt-tree-BaseLayerContainer-property-defaultText'>    /**
-</span>     * @private
-     * The default text for the target node.
+</span>     * The default text for the target node.
+     *
+     * @private
      */
     defaultText: 'Base Layers',
 
@@ -56,9 +60,8 @@ Ext.define('GeoExt.tree.BaseLayerContainer', {
 </span>     * @private
      */
     init: function(target) {
-        var me = this;
-
-        var loader = me.loader;
+        var me = this,
+            loader = me.loader;
 
         me.loader = Ext.applyIf(loader || {}, {
             baseAttrs: Ext.applyIf((loader &amp;&amp; loader.baseAttrs) || {}, {

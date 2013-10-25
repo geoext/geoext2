@@ -12,11 +12,10 @@
  */
 
 /**
+ * A set of useful static functions to work with forms.
+ * 
  * @class GeoExt.Form
  * @singleton
- * @markdown
- *
- * A set of useful static functions to work with forms.
  */
 
 (function() {
@@ -50,37 +49,40 @@
         singleton: true,
 
         /**
-         * @property {Number} ENDS_WITH
          * Use `GeoExt.Form.ENDS_WITH` as the `wildcard` param to `#toFilter`
          * if you want wildcards to be prepended to LIKE field values.
+         * 
+         * @property {Number} ENDS_WITH
          */
         ENDS_WITH: 1,
 
         /**
-         * @property {Number} STARTS_WITH
          * Use `GeoExt.Form.STARTS_WITH` as the `wildcard` param to `#toFilter`
          * if you want wildcards to be appended to LIKE field values.
+         * 
+         * @property {Number} STARTS_WITH
          */
         STARTS_WITH: 2,
 
         /**
-         * @property {Number} CONTAINS
          * Use `GeoExt.Form.CONTAINS` as the `wildcard` param to `#toFilter`
          * if you want a wildcards to be both prepended and appended to LIKE
          * field values.
+         * 
+         * @property {Number} CONTAINS
          */
         CONTAINS: 3,
 
         /**
-         * Create an `OpenLayers.Filter` object from a `Ext.form.Basic`
-         * or a `Ext.form.Panel` instance.
+         * Create an `OpenLayers.Filter` object from an `Ext.form.Basic`
+         * or an `Ext.form.Panel` instance.
+         * 
          * @param {Ext.form.Form/Ext.form.Panel} form The form.
          * @param {String} logicalOp Either `OpenLayers.Filter.Logical.AND` or
-         * `OpenLayers.Filter.Logical.OR`. Set to `OpenLayers.Filter.Logical.AND`
-         * if null or undefined
+         *     `OpenLayers.Filter.Logical.OR`. If null or undefined, we use 
+         *     `OpenLayers.Filter.Logical.AND`
          * @param {Integer} wildcard Determines the wildcard behaviour of LIKE
-         * queries. See {@link #ENDS_WITH}, {@link #STARTS_WITH} and
-         * {@link #CONTAINS}.
+         *     queries. See #ENDS_WITH, #STARTS_WITH and #CONTAINS.
          * @return `OpenLayers.Filter`
          */
         toFilter: function(form, logicalOp, wildcard) {
@@ -141,49 +143,48 @@
          * `restriction` and `label` fields.
          *
          * @param {Ext.data.Model} record Typically from an Attribute Store.
-         * @param {Object} options Optional object litteral. Valid options:
+         * @param {Object} options Optional object literal. Valid options:
          *
-         *  * `checkboxLabelProperty` - `String` The name of the property used to set
-         *  the label in the checkbox. Only applies if the record is of the "boolean"
-         *  type. Possible values are "boxLabel" and "fieldLabel". Default is "boxLabel".
-         *  * `mandatoryFieldLabelStyle` - `String` A CSS style specification string
-         *  to apply to the field label if the field is not nillable (that is,
-         *  the corresponding record has the "nillable" attribute set to `false`).
-         *  Default is `"font-weigth: bold;"`.
-         *  * `labelTpl` - `Ext.Template` or `String` or `Array` If set, 
-         *  the field label is obtained by applying the record's data hash to this 
-         *  template. This allows for very customizable field labels. 
-         *  See for instance :
+         * * `checkboxLabelProperty` - `String` The name of the property
+         *       used to set the label in the checkbox. Only applies if the
+         *       record is of the "boolean" type. Possible values are "boxLabel"
+         *       and "fieldLabel". Default is "boxLabel".
+         * * `mandatoryFieldLabelStyle` - `String` A CSS style specification
+         *       string to apply to the field label if the field is not nillable
+         *       (that is, the corresponding record has the "nillable" attribute
+         *       set to `false`). Default is `"font-weight: bold;"`.
+         * * `labelTpl` - `Ext.Template` or `String` or `Array` If set, the
+         *       field label is obtained by applying the record's data hash to
+         *       this  template. This allows for very customizable field labels. 
          *
-         *      var formPanel = Ext.create('Ext.form.Form', {
-         *          autoScroll: true,
-         *          plugins: [
-         *              new GeoExt.plugins.AttributeForm({
-         *                  attributeStore: store,
-         *                  recordToFieldOptions: {
-         *                      mandatoryFieldLabelStyle: 'font-style:italic;',
-         *                      labelTpl: new Ext.XTemplate(
-         *                          '<span ext:qtip="{[this.getTip(values)]}">{name}</span>', {
-         *                              compiled: true,
-         *                              disableFormats: true,
-         *                              getTip: function(v) {
-         *                                  if (!v.type) {
-         *                                      return '';
-         *                                  }
-         *                                  var type = v.type.split(":").pop();
-         *                                  return OpenLayers.i18n(type) + 
-         *                                      (v.nillable ? '' : ' (required)');
-         *                              }
-         *                          }
-         *                      )
-         *                  }
-         *              })
-         *          ]
-         *      });
+         * See for instance :
          *
-         *  @return `Object` An object literal with a xtype property, use
-         *  `Ext.ComponentMgr.create` (or `Ext.create` in Ext 3) to create
-         *  an `Ext.form.Field` from this object.
+         *     var formPanel = Ext.create('GeoExt.Form', {
+         *         autoScroll: true,
+         *         attributeStore: store,
+         *         recordToFieldOptions: {
+         *             mandatoryFieldLabelStyle: 'font-style:italic;',
+         *             labelTpl: new Ext.XTemplate(
+         *                 '<span ext:qtip="{[this.getTip(values)]}">{name}</span>',
+         *                 {
+         *                     compiled: true,
+         *                     disableFormats: true,
+         *                     getTip: function(v) {
+         *                         if (!v.type) {
+         *                             return '';
+         *                         }
+         *                         var type = v.type.split(":").pop();
+         *                         return OpenLayers.i18n(type) + 
+         *                             (v.nillable ? '' : ' (required)');
+         *                     }
+         *                 }
+         *             )
+         *         }
+         *     });
+         *
+         * @return `Object` An object literal with a xtype property, use
+         *     `Ext.ComponentMgr.create` to create an `Ext.form.Field` from this
+         *     object.
          */
         recordToField: function(record, options) {
 

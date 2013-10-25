@@ -29,14 +29,14 @@
  */
 
 <span id='GeoExt-data-WmsCapabilitiesLayerStore'>/**
-</span> * @class GeoExt.data.WmsCapabilitiesLayerStore
- *
- * Small helper class to make creating stores for remote WMS layer data
+</span> * Small helper class to make creating stores for remote WMS layer data
  * easier. The store is pre-configured with a built-in
  * {Ext.data.proxy.Ajax} and GeoExt.data.reader.WmsCapabilities.
  * The proxy is configured to allow caching and issues requests via GET.
  * If you require some other proxy/reader combination then you'll have to
  * configure this with your own proxy.
+ *
+ * @class GeoExt.data.WmsCapabilitiesLayerStore
  */
 Ext.define('GeoExt.data.WmsCapabilitiesLayerStore',{
     extend: 'GeoExt.data.OwsStore',

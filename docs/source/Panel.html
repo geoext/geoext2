@@ -29,13 +29,17 @@
  */
 
 <span id='GeoExt-tree-Panel'>/**
-</span> * @class GeoExt.tree.Panel
- * An Ext.tree.Panel pre-configured with a GeoExt.tree.Column.
+</span> * An Ext.tree.Panel pre-configured with a GeoExt.tree.Column.
+ * 
+ * @class GeoExt.tree.Panel
  */
 Ext.define('GeoExt.tree.Panel', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.gx_treepanel',
-    requires: ['GeoExt.tree.Column', 'GeoExt.tree.View'],
+    requires: [
+        'GeoExt.tree.Column',
+        'GeoExt.tree.View'
+    ],
 <span id='GeoExt-tree-Panel-property-viewType'>    viewType: 'gx_treeview',
 </span>    
 <span id='GeoExt-tree-Panel-method-initComponent'>    initComponent: function() {

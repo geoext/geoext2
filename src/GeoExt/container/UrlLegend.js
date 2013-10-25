@@ -14,6 +14,7 @@
 /**
  * Show a legend image in a BoxComponent and make sure load errors are
  * dealt with.
+ *
  * @class GeoExt.container.UrlLegend
  */
 Ext.define('GeoExt.container.UrlLegend', {
@@ -34,23 +35,27 @@ Ext.define('GeoExt.container.UrlLegend', {
         }
     },
 
-    /** @cfg {Boolean}
+    /**
      * The WMS spec does not say if the first style advertised for a layer in
      * a Capabilities document is the default style that the layer is
      * rendered with. We make this assumption by default. To be strictly WMS
      * compliant, set this to false, but make sure to configure a STYLES
      * param with your WMS layers, otherwise LegendURLs advertised in the
      * GetCapabilities document cannot be used.
+     *
+     * @cfg {Boolean}
      */
     defaultStyleIsFirst: true,
 
-    /** @cfg {Boolean}
-     * Should we use the optional SCALE parameter in the SLD WMS
-     * GetLegendGraphic request? Defaults to true.
+    /**
+     * Should we use the optional `SCALE` parameter in the SLD WMS
+     * GetLegendGraphic request?
+     *
+     * @cfg {Boolean}
      */
     useScaleParameter: true,
 
-    /** @cfg {Object}
+    /**
      * Optional parameters to add to the legend url, this can e.g. be used to
      * support vendor-specific parameters in a SLD WMS GetLegendGraphic
      * request. To override the default MIME type of image/gif use the
@@ -58,7 +63,7 @@ Ext.define('GeoExt.container.UrlLegend', {
      *
      * Example:
      *
-     *     var legendPanel = new GeoExt.LegendPanel({
+     *     var legendPanel = Ext.create('GeoExt.panel.Legend', {
      *         map: map,
      *         title: 'Legend Panel',
      *         defaults: {
@@ -68,9 +73,14 @@ Ext.define('GeoExt.container.UrlLegend', {
      *             }
      *         }
      *     });
+     *
+     * @cfg {Object}
      */
     baseParams: null,
 
+    /**
+     * Initializes this UrlLegend.
+     */
     initComponent: function(){
         var me = this;
         me.callParent(arguments);
@@ -82,6 +92,7 @@ Ext.define('GeoExt.container.UrlLegend', {
     /**
      * Update the legend, adding, removing or updating
      * the per-sublayer box component.
+     *
      * @private
      */
     update: function() {
@@ -89,5 +100,6 @@ Ext.define('GeoExt.container.UrlLegend', {
         this.items.get(1).setUrl(this.layerRecord.get("legendURL"));
     }
 }, function() {
-    GeoExt.container.LayerLegend.types["gx_urllegend"] = GeoExt.container.UrlLegend;
+    GeoExt.container.LayerLegend.types["gx_urllegend"] =
+        GeoExt.container.UrlLegend;
 });

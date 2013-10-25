@@ -24,99 +24,108 @@
  */
 
 <span id='GeoExt-Action'>/**
-</span> * @class GeoExt.Action
- * Action class to create GeoExt.Action
+</span> * Action class to create GeoExt.Action
  *
  * Sample code to create a toolbar with an OpenLayers control into it.
  *
  * Example:
- * 
+ *
  *     var action = Ext.create('GeoExt.Action', {
  *         text: &quot;max extent&quot;,
  *         control: new OpenLayers.Control.ZoomToMaxExtent(),
  *         map: map
  *     });
  *     var toolbar = Ext.create('Ext.toolbar.Toolbar', action);
+ *
+ * @class GeoExt.Action
  */
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
     alias : 'widget.gx_action',
 
 <span id='GeoExt-Action-cfg-control'>    /**
-</span>     * @cfg {OpenLayers.Control}
-     * The OpenLayers control wrapped in this action.
+</span>     * The OpenLayers control wrapped in this action.
+     *
+     * @cfg {OpenLayers.Control}
      */
     control: null,
 
 <span id='GeoExt-Action-property-activateOnEnable'>    /**
-</span>     * @property {Boolean} activateOnEnable
-     * Activate the action's control when the action is enabled.
+</span>     * Activate the action's control when the action is enabled.
+     *
+     * @property {Boolean} activateOnEnable
      */
 <span id='GeoExt-Action-cfg-activateOnEnable'>    /**
-</span>     * @cfg {Boolean} activateOnEnable
-     * Activate the action's control when the action is enabled.
+</span>     * Activate the action's control when the action is enabled.
+     *
+     * @cfg {Boolean} activateOnEnable
      */
     activateOnEnable: false,
 
 <span id='GeoExt-Action-property-deactivateOnDisable'>    /**
-</span>     * @property {Boolean} deactivateOnDisable
-     * Deactivate the action's control when the action is disabled.
+</span>     * Deactivate the action's control when the action is disabled.
+     *
+     * @property {Boolean} deactivateOnDisable
      */
 <span id='GeoExt-Action-cfg-deactivateOnDisable'>    /**
-</span>     * @cfg {Boolean} deactivateOnDisable
-     * Deactivate the action's control when the action is disabled.
+</span>     * Deactivate the action's control when the action is disabled.
+     *
+     * @cfg {Boolean} deactivateOnDisable
      */
     deactivateOnDisable: false,
 
 <span id='GeoExt-Action-cfg-map'>    /**
-</span>     * @cfg {OpenLayers.Map}
-     * The OpenLayers map that the control should be added
-     * to.  For controls that don't need to be added to a map or have already
-     * been added to one, this config property may be omitted.
+</span>     * The OpenLayers map that the control should be added to. For controls that
+     * don't need to be added to a map or have already been added to one, this
+     * config property may be omitted.
+     *
+     * @cfg {OpenLayers.Map}
      */
     map: null,
 
-<span id='GeoExt-Action-cfg-uScope'>    /**
-</span>     * @private
-     * @cfg {Object}
-     * The user-provided scope, used when calling uHandler,
-     * uToggleHandler, and uCheckHandler.
+<span id='GeoExt-Action-property-uScope'>    /**
+</span>     * The user-provided scope, used when calling uHandler, uToggleHandler,
+     * and uCheckHandler.
+     *
+     * @property {Object}
+     * @private
      */
     uScope: null,
 
-<span id='GeoExt-Action-cfg-uHandler'>    /**
-</span>     * @private
-     * @cfg {Function}
-     *  References the function the user passes through
-     *  the &quot;handler&quot; property.
+<span id='GeoExt-Action-property-uHandler'>    /**
+</span>     * References the function the user passes through the &quot;handler&quot; property.
+     *
+     * @property {Function}
+     * @private
      */
     uHandler: null,
 
-<span id='GeoExt-Action-cfg-uToggleHandler'>    /**
-</span>     * @private
-     * @cfg {Function}
-     *  References the function the user passes through
-     *  the &quot;toggleHandler&quot; property.
+<span id='GeoExt-Action-property-uToggleHandler'>    /**
+</span>     * References the function the user passes through the &quot;toggleHandler&quot;
+     * property.
+     *
+     * @property {Function}
+     * @private
      */
     uToggleHandler: null,
 
-<span id='GeoExt-Action-cfg-uCheckHandler'>    /**
-</span>     * @private
-     * @cfg {Function}
-     *  References the function the user passes through
-     *  the &quot;checkHandler&quot; property.
+<span id='GeoExt-Action-property-uCheckHandler'>    /**
+</span>     * References the function the user passes through the &quot;checkHandler&quot;
+     * property.
+     *
+     * @property {Function}
+     * @private
      */
     uCheckHandler: null,
 
 <span id='GeoExt-Action-method-constructor'>    /**
-</span>     * @private
-     *
-     * Create a GeoExt.Action instance. A GeoExt.Action is created to insert
+</span>     * Create a GeoExt.Action instance. A GeoExt.Action is created to insert
      * an OpenLayers control in a toolbar as a button or in a menu as a menu
      * item. A GeoExt.Action instance can be used like a regular Ext.Action,
      * look at the Ext.Action API doc for more detail.
      *
      * @param {Object} config (optional) Config object.
+     * @private
      */
     constructor: function(config){
         // store the user scope and handlers
@@ -188,7 +197,8 @@ Ext.define('GeoExt.Action', {
 <span id='GeoExt-Action-method-pToggleHandler'>    /**
 </span>     * The private toggle handler.
      *
-     * @param {Ext.Component} cmp The component that triggers the toggle handler.
+     * @param {Ext.Component} cmp The component that triggers the toggle 
+     *     handler.
      * @param {Boolean} state The state of the toggle.
      * @private
      */

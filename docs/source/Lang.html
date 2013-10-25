@@ -17,7 +17,7 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -26,35 +26,41 @@
 <span id='GeoExt-Lang'>/**
 </span> * The GeoExt.Lang singleton is created when the library is loaded.
  * Include all relevant language files after this file in your build.
+ *
  * @class GeoExt.Lang
  */
 Ext.define('GeoExt.Lang', {
     extend: 'Ext.util.Observable',
     singleton: true,
 
-<span id='GeoExt-Lang-cfg-locale'>    /** 
-</span>     * @cfg {String}
-     * The current language tag.  Use `#set` to set the locale. Defaults
+<span id='GeoExt-Lang-cfg-locale'>    /**
+</span>     * The current language tag.  Use `#set` to set the locale. Defaults
      * to the browser language where available.
+     *
+     * @cfg {String}
      */
     locale: navigator.language || navigator.userLanguage,
 
-<span id='GeoExt-Lang-property-dict'>    /** 
-</span>     * @property {Object}
+<span id='GeoExt-Lang-property-dict'>    /**
+</span>     * Dictionary of string lookups per language.
+     *
+     * @property {Object}
      * @private
-     * Dictionary of string lookups per language.
      */
     dict: null,
 
 <span id='GeoExt-Lang-method-constructor'>    /**
-</span>     * @private
-     * Construct the Lang singleton.
+</span>     * Construct the Lang singleton.
+     *
+     * @private
      */
     constructor: function() {
         this.addEvents(
-<span id='GeoExt-Lang-event-localize'>            /** @event
-</span>             *  Fires when localized strings are set.  Listeners will receive a
-             *  single ``locale`` event with the language tag.
+<span id='GeoExt-Lang-event-localize'>            /**
+</span>             * Fires when localized strings are set.  Listeners will receive a
+             * single `locale` event with the language tag.
+             *
+             * @event
              */
             &quot;localize&quot;
         );
@@ -62,17 +68,18 @@ Ext.define('GeoExt.Lang', {
         this.callParent();
     },
 
-<span id='GeoExt-Lang-method-add'>    /** 
+<span id='GeoExt-Lang-method-add'>    /**
 </span>     * Add translation strings to the dictionary.  This method can be called
      * multiple times with the same language tag (locale argument) to extend
      * a single dictionary.
+     *
      * @param {String} locale A language tag that follows the &quot;en-CA&quot;
-     * convention (http://www.ietf.org/rfc/rfc3066.txt).
+     *     convention (http://www.ietf.org/rfc/rfc3066.txt).
      * @param {Object} lookup An object with properties that are dot
-     * delimited names of objects with localizable strings (e.g.
-     * &quot;GeoExt.VectorLegend.prototype&quot;).  The values for these properties
-     * are objects that will be used to extend the target objects with
-     * localized strings (e.g. {untitledPrefix: &quot;Untitiled &quot;})
+     *     delimited names of objects with localizable strings (e.g.
+     *     &quot;GeoExt.VectorLegend.prototype&quot;).  The values for these properties
+     *     are objects that will be used to extend the target objects with
+     *     localized strings (e.g. {untitledPrefix: &quot;Untitiled &quot;})
      */
     add: function(locale, lookup) {
         var obj = this.dict[locale];
@@ -98,6 +105,7 @@ Ext.define('GeoExt.Lang', {
      * correspond to the complete matching language tag or any &quot;higher order&quot;
      * tag (e.g. setting &quot;en-CA&quot; will use strings from the &quot;en&quot; dictionary if
      * matching strings are not found in the &quot;en-CA&quot; dictionary).
+     *
      * @param {String} locale Language identifier tag following recommendations
      *     at http://www.ietf.org/rfc/rfc3066.txt.
      */

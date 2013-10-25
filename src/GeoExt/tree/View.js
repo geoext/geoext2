@@ -7,15 +7,19 @@
  */
 
 /**
- * This plugin provides basic tree - map synchronisation functionality for a TreeView.
+ * This plugin provides basic tree - map synchronisation functionality for a
+ * TreeView.
  *
  * It creates a specialized instance of modify the nodes on the fly and adds
  * event listeners to the tree and the maps to get both in sync.
  *
- * Note that the plugin must be added to the tree view, not to the tree panel. For example using viewConfig:
+ * Note that the plugin must be added to the tree view, not to the tree panel.
+ * For example using viewConfig:
  *
  *     viewConfig: {
- *         plugins: { ptype: 'layertreeview' }
+ *         plugins: {
+ *             ptype: 'layertreeview'
+ *         }
  *     }
  *
  * @class GeoExt.tree.View
@@ -56,6 +60,8 @@ Ext.define('GeoExt.tree.View', {
 
     /**
      * Called when a node is being rendered.
+     * 
+     * 
      */
     onNodeRendered: function(node) {
         var me = this;
@@ -75,6 +81,9 @@ Ext.define('GeoExt.tree.View', {
         }
     },
 
+    /**
+     * Called when an item was created.
+     */
     createChild: function(el, node) {
         var component = node.get('component'),
             cmpObj;

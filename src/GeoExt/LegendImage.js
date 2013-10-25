@@ -20,28 +20,32 @@ Ext.define('GeoExt.LegendImage', {
     alias : 'widget.gx_legendimage',
 
     /**
-     * @cfg {String} url
      * The url of the image to load.
+     *
+     * @cfg {String} url
      */
     url: null,
 
     /**
-     * @cfg {String} defaultImgSrc
      * Path to image that will be used if the legend image fails
      * to load.  Default is Ext.BLANK_IMAGE_URL.
+     *
+     * @cfg {String} defaultImgSrc
      */
     defaultImgSrc: null,
 
     /**
+     * Optional CSS class to apply to img tag.
+     *
      * @cfg {String} imgCls
-     * Optional css class to apply to img tag.
      */
     imgCls: null,
 
     /**
+     * CSS class applied to img tag when no image is available or the default
+     * image was loaded.
+     * 
      * @cfg {String}
-     * CSS class applied to img tag when no image is available or
-     * the default image was loaded.
      */
     noImgCls: "gx-legend-noimage",
 
@@ -78,8 +82,7 @@ Ext.define('GeoExt.LegendImage', {
     },
 
     /**
-     * Private method called when the legend image component is being
-     * rendered.
+     * Private method called when the legend image component is being rendered.
      *
      * @private
      */

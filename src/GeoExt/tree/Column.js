@@ -7,11 +7,11 @@
  */
 
 /**
- * @class GeoExt.tree.Column
- *
- * A subclass of {@link Ext.tree.Column}, which provides indentation and 
- * folder structure markup for a Tree, taking into account depth and 
+ * A subclass of {@link Ext.tree.Column}, which provides indentation and
+ * folder structure markup for a Tree, taking into account depth and
  * position within the tree hierarchy.
+ *
+ * @class GeoExt.tree.Column
  */
 Ext.define('GeoExt.tree.Column', {
     extend: 'Ext.tree.Column',
@@ -33,13 +33,8 @@ Ext.define('GeoExt.tree.Column', {
                 buf[0] = buf[0].replace(/class="([^-]+)-tree-checkbox([^"]+)?"/, 'class="$1-tree-checkbox$2 gx-tree-radio"'); //"
             }
 
-            // Addd a hook to add other components in the tree like legend icons
+            // Add a hook to add other components in the tree like legend icons
             buf.push('<div class="gx-tree-component gx-tree-component-off" id="tree-record-'+record.id+'"></div>');
-
-
-            if(record.uiProvider && record.uiProvider instanceof 'string') {
-                
-            }
 
             return buf.join('');
         };

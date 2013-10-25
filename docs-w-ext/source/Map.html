@@ -31,12 +31,12 @@
 <span id='GeoExt-panel-Map'>/**
 </span> * Create a panel container for a map. The map contained by this panel
  * will initially be zoomed to either the center and zoom level configured
- * by the ``center`` and ``zoom`` configuration options, or the configured
- * ``extent``, or - if neither are provided - the extent returned by the
- * map's ``getExtent()`` method.
+ * by the `center` and `zoom` configuration options, or the configured
+ * `extent`, or - if neither are provided - the extent returned by the
+ * map's `getExtent()` method.
  *
  * Example:
- * 
+ *
  *     var mappanel = Ext.create('GeoExt.panel.Map', {
  *         title: 'A sample Map',
  *         map: {
@@ -60,6 +60,8 @@
  *             mappanel // our variable from above
  *         ]
  *     });
+ *
+ * @class GeoExt.panel.Map
  */
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
@@ -87,83 +89,97 @@ Ext.define('GeoExt.panel.Map', {
         }
     },
 
-<span id='GeoExt-panel-Map-cfg-center'>    /** @cfg {OpenLayers.LonLat/Number[]/String} center
+<span id='GeoExt-panel-Map-cfg-center'>    /**
 </span>     * A location for the initial map center.  If an array is provided, the
      * first two items should represent x &amp; y coordinates. If a string is
      * provided, it should consist of a x &amp; y coordinate seperated by a
      * comma.
+     *
+     * @cfg {OpenLayers.LonLat/Number[]/String} center
      */
     center: null,
 
 <span id='GeoExt-panel-Map-cfg-zoom'>    /**
-</span>     * @cfg {Number} zoom
-     * An initial zoom level for the map.
+</span>     * An initial zoom level for the map.
+     *
+     * @cfg {Number} zoom
      */
     zoom: null,
 
 <span id='GeoExt-panel-Map-cfg-extent'>    /**
-</span>     * @cfg {OpenLayers.Bounds/Number[]} extent
-     * An initial extent for the map (used if center and zoom are not
+</span>     * An initial extent for the map (used if center and zoom are not
      * provided.  If an array, the first four items should be minx, miny,
      * maxx, maxy.
+     *
+     * @cfg {OpenLayers.Bounds/Number[]} extent
      */
     extent: null,
 
 <span id='GeoExt-panel-Map-cfg-prettyStateKeys'>    /**
-</span>     * @cfg {Boolean} prettyStateKeys
-     * Set this to true if you want pretty strings in the MapPanel's state
+</span>     * Set this to true if you want pretty strings in the MapPanel's state
      * keys. More specifically, layer.name instead of layer.id will be used
      * in the state keys if this option is set to true. But in that case
      * you have to make sure you don't have two layers with the same name.
      * Defaults to false.
+     *
+     * @cfg {Boolean} prettyStateKeys
      */
 <span id='GeoExt-panel-Map-property-prettyStateKeys'>    /**
-</span>     * @property {Boolean} prettyStateKeys
-     * Whether we want the state key to be pretty. See
+</span>     * Whether we want the state key to be pretty. See
      * {@link #cfg-prettyStateKeys the config option prettyStateKeys} for
      * details.
+     *
+     * @property {Boolean} prettyStateKeys
      */
     prettyStateKeys: false,
 
 <span id='GeoExt-panel-Map-cfg-map'>    /**
-</span>     * @cfg {OpenLayers.Map/Object} map
-     * A configured map or a configuration object for the map constructor.
+</span>     * A configured map or a configuration object for the map constructor.
      * A configured map will be available after construction through the
      * {@link GeoExt.panel.Map#property-map} property.
+     *
+     * @cfg {OpenLayers.Map/Object} map
      */
 <span id='GeoExt-panel-Map-property-map'>    /**
-</span>     * @property {OpenLayers.Map/Object} map
-     * A map or map configuration.
+</span>     * A map or map configuration.
+     *
+     * @property {OpenLayers.Map/Object} map
      */
     map: null,
 
 <span id='GeoExt-panel-Map-cfg-layout'>    /**
-</span>     * @cfg {OpenLayers.Map/Object} layout
-     * In order for child items to be correctly sized and positioned,
-     * typically a layout manager must be specified through the layout configuration option.
+</span>     * In order for child items to be correctly sized and positioned,
+     * typically a layout manager must be specified through the layout
+     * configuration option.
+     *
+     * @cfg {OpenLayers.Map/Object} layout
      */
 <span id='GeoExt-panel-Map-property-layout'>    /**
-</span>     * @property {OpenLayers.Map/Object} layout
-     * A layout or layout configuration.
+</span>     * A layout or layout configuration.
+     *
+     * @property {OpenLayers.Map/Object} layout
      */
     layout: 'fit',
 
 <span id='GeoExt-panel-Map-cfg-layers'>    /**
-</span>     * @cfg {GeoExt.data.LayerStore/OpenLayers.Layer[]} layers
-     * The layers provided here will be added to this Map's
+</span>     * The layers provided here will be added to this Map's
      * {@link #property-map}.
+     *
+     * @cfg {GeoExt.data.LayerStore/OpenLayers.Layer[]} layers
      */
 <span id='GeoExt-panel-Map-property-layers'>    /**
-</span>     * @property {GeoExt.data.LayerStore} layers
-     * A store containing {@link GeoExt.data.LayerModel gx_layer-model}
+</span>     * A store containing {@link GeoExt.data.LayerModel gx_layer-model}
      * instances.
+     *
+     * @property {GeoExt.data.LayerStore} layers
      */
     layers: null,
 
 <span id='GeoExt-panel-Map-property-stateEvents'>    /**
-</span>     * @property {String[]} stateEvents
+</span>     * Array of state events.
+     *
+     * @property {String[]} stateEvents
      * @private
-     * Array of state events.
      */
     stateEvents: [
         &quot;aftermapmove&quot;,
@@ -227,32 +243,39 @@ Ext.define('GeoExt.panel.Map', {
         }, this);
 
 <span id='GeoExt-panel-Map-event-aftermapmove'>        /**
-</span>         * @event aftermapmove
-         * Fires after the map is moved.
+</span>         * Fires after the map is moved.
+         *
+         * @event aftermapmove
          */
 <span id='GeoExt-panel-Map-event-afterlayervisibilitychange'>        /**
-</span>         * @event afterlayervisibilitychange
-         * Fires after a layer changed visibility.
+</span>         * Fires after a layer changed visibility.
+         *
+         * @event afterlayervisibilitychange
          */
 <span id='GeoExt-panel-Map-event-afterlayeropacitychange'>        /**
-</span>         * @event afterlayeropacitychange
-         * Fires after a layer changed opacity.
+</span>         * Fires after a layer changed opacity.
+         *
+         * @event afterlayeropacitychange
          */
 <span id='GeoExt-panel-Map-event-afterlayerorderchange'>        /**
-</span>         * @event afterlayerorderchange
-         * Fires after a layer order changed.
+</span>         * Fires after a layer order changed.
+         *
+         * @event afterlayerorderchange
          */
 <span id='GeoExt-panel-Map-event-afterlayernamechange'>        /**
-</span>         * @event afterlayernamechange
-         * Fires after a layer name changed.
+</span>         * Fires after a layer name changed.
+         *
+         * @event afterlayernamechange
          */
 <span id='GeoExt-panel-Map-event-afterlayeradd'>        /**
-</span>         * @event afterlayeradd
-         * Fires after a layer added to the map.
+</span>         * Fires after a layer added to the map.
+         *
+         * @event afterlayeradd
          */
 <span id='GeoExt-panel-Map-event-afterlayerremove'>        /**
-</span>         * @event afterlayerremove
-         * Fires after a layer removed from the map.
+</span>         * Fires after a layer removed from the map.
+         *
+         * @event afterlayerremove
          */
 
         // bind various listeners to the corresponding OpenLayers.Map-events
@@ -268,6 +291,7 @@ Ext.define('GeoExt.panel.Map', {
 <span id='GeoExt-panel-Map-method-onMoveend'>    /**
 </span>     * The &quot;moveend&quot; listener bound to the
      * {@link GeoExt.panel.Map#property-map}.
+     *
      * @param {Object} e
      * @private
      */
@@ -278,6 +302,7 @@ Ext.define('GeoExt.panel.Map', {
 <span id='GeoExt-panel-Map-method-onChangelayer'>    /**
 </span>     * The &quot;changelayer&quot; listener bound to the
      * {@link GeoExt.panel.Map#property-map}.
+     *
      * @param {Object} e
      * @private
      */
@@ -299,6 +324,7 @@ Ext.define('GeoExt.panel.Map', {
 <span id='GeoExt-panel-Map-method-onAddlayer'>    /**
 </span>     * The &quot;addlayer&quot; listener bound to the
      * {@link GeoExt.panel.Map#property-map}.
+     *
      * @param {Object} e
      * @private
      */
@@ -309,6 +335,7 @@ Ext.define('GeoExt.panel.Map', {
 <span id='GeoExt-panel-Map-method-onRemovelayer'>    /**
 </span>     * The &quot;removelayer&quot; listener bound to the
      * {@link GeoExt.panel.Map#property-map}.
+     *
      * @param {Object} e
      * @private
      */
@@ -319,6 +346,7 @@ Ext.define('GeoExt.panel.Map', {
 <span id='GeoExt-panel-Map-method-onResize'>    /**
 </span>     * Private method called after the panel has been rendered or after it
      * has been laid out by its parent's layout.
+     *
      * @private
      */
     onResize: function() {
@@ -342,6 +370,7 @@ Ext.define('GeoExt.panel.Map', {
 
 <span id='GeoExt-panel-Map-method-setInitialExtent'>    /**
 </span>     * Set the initial extent of this panel's map.
+     *
      * @private
      */
     setInitialExtent: function() {
@@ -361,7 +390,7 @@ Ext.define('GeoExt.panel.Map', {
 
 <span id='GeoExt-panel-Map-method-getState'>    /**
 </span>     * Returns a state of the Map as keyed Object. Depending on the point in
-     * time this methoid is being called, the following keys will be available:
+     * time this method is being called, the following keys will be available:
      *
      * * `x`
      * * `y`
@@ -376,8 +405,8 @@ Ext.define('GeoExt.panel.Map', {
      * The &amp;lt;XXX&amp;gt; suffix is either the title or id of the layer record, it
      * can be influenced by setting #prettyStateKeys to `true` or `false`.
      *
-     * @private
      * @return {Object}
+     * @private
      */
     getState: function() {
         var me = this,
@@ -419,8 +448,9 @@ Ext.define('GeoExt.panel.Map', {
 
 <span id='GeoExt-panel-Map-method-applyState'>    /**
 </span>     * Apply the state provided as an argument.
-     * @private
+     *
      * @param {Object} state The state to apply.
+     * @private
      */
     applyState: function(state) {
         var me = this;
@@ -461,6 +491,7 @@ Ext.define('GeoExt.panel.Map', {
 </span>     * Check if an added item has to take separate actions
      * to be added to the map.
      * See e.g. the GeoExt.slider.Zoom or GeoExt.slider.LayerOpacity
+     *
      * @private
      */
     onBeforeAdd: function(item) {
@@ -472,6 +503,7 @@ Ext.define('GeoExt.panel.Map', {
 
 <span id='GeoExt-panel-Map-method-beforeDestroy'>    /**
 </span>     * Private method called during the destroy sequence.
+     *
      * @private
      */
     beforeDestroy: function() {

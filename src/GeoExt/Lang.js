@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -9,35 +9,41 @@
 /**
  * The GeoExt.Lang singleton is created when the library is loaded.
  * Include all relevant language files after this file in your build.
+ *
  * @class GeoExt.Lang
  */
 Ext.define('GeoExt.Lang', {
     extend: 'Ext.util.Observable',
     singleton: true,
 
-    /** 
-     * @cfg {String}
+    /**
      * The current language tag.  Use `#set` to set the locale. Defaults
      * to the browser language where available.
+     *
+     * @cfg {String}
      */
     locale: navigator.language || navigator.userLanguage,
 
-    /** 
+    /**
+     * Dictionary of string lookups per language.
+     *
      * @property {Object}
      * @private
-     * Dictionary of string lookups per language.
      */
     dict: null,
 
     /**
-     * @private
      * Construct the Lang singleton.
+     *
+     * @private
      */
     constructor: function() {
         this.addEvents(
-            /** @event
-             *  Fires when localized strings are set.  Listeners will receive a
-             *  single ``locale`` event with the language tag.
+            /**
+             * Fires when localized strings are set.  Listeners will receive a
+             * single `locale` event with the language tag.
+             *
+             * @event
              */
             "localize"
         );
@@ -45,17 +51,18 @@ Ext.define('GeoExt.Lang', {
         this.callParent();
     },
 
-    /** 
+    /**
      * Add translation strings to the dictionary.  This method can be called
      * multiple times with the same language tag (locale argument) to extend
      * a single dictionary.
+     *
      * @param {String} locale A language tag that follows the "en-CA"
-     * convention (http://www.ietf.org/rfc/rfc3066.txt).
+     *     convention (http://www.ietf.org/rfc/rfc3066.txt).
      * @param {Object} lookup An object with properties that are dot
-     * delimited names of objects with localizable strings (e.g.
-     * "GeoExt.VectorLegend.prototype").  The values for these properties
-     * are objects that will be used to extend the target objects with
-     * localized strings (e.g. {untitledPrefix: "Untitiled "})
+     *     delimited names of objects with localizable strings (e.g.
+     *     "GeoExt.VectorLegend.prototype").  The values for these properties
+     *     are objects that will be used to extend the target objects with
+     *     localized strings (e.g. {untitledPrefix: "Untitiled "})
      */
     add: function(locale, lookup) {
         var obj = this.dict[locale];
@@ -81,6 +88,7 @@ Ext.define('GeoExt.Lang', {
      * correspond to the complete matching language tag or any "higher order"
      * tag (e.g. setting "en-CA" will use strings from the "en" dictionary if
      * matching strings are not found in the "en-CA" dictionary).
+     *
      * @param {String} locale Language identifier tag following recommendations
      *     at http://www.ietf.org/rfc/rfc3066.txt.
      */

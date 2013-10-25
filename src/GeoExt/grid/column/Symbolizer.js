@@ -11,10 +11,9 @@
  */
 
 /**
+ * An Ext.grid.column.Column pre-configured with a GeoExt.FeatureRenderer
+ * 
  * @class GeoExt.grid.column.Symbolizer
- *
- * An {@link Ext.grid.column.Column} pre-configured with a
- * {@link GeoExt.FeatureRenderer}
  */
 Ext.define('GeoExt.grid.column.Symbolizer', {
     extend: 'Ext.grid.column.Column',

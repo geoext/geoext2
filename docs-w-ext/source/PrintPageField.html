@@ -24,81 +24,87 @@
  */
 
 <span id='GeoExt-plugins-PrintPageField'>/**
-</span> * @class GeoExt.plugins.PrintPageField
- *
- * A plugin for `Ext.form.Field` components which provides synchronization
- *  with a {@link GeoExt.data.PrintPage}. The field name has to match the
- *  respective property of the printPage (e.g. `scale`, `rotation`).
+</span> * A plugin for `Ext.form.Field` components which provides synchronization
+ * with a {@link GeoExt.data.PrintPage}. The field name has to match the
+ * respective property of the printPage (e.g. `scale`, `rotation`).
  *
  * A form with a combo box for the scale and text fields for rotation and a
- *  page title. The page title is a custom parameter of the print module's
- *  page configuration:
+ * page title. The page title is a custom parameter of the print module's
+ * page configuration:
  *
- *      var printPage = Ext.create('GeoExt.data.PrintPage'{
- *          printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
- *              capabilities: printCapabilities
- *          })
- *      });
- *      Ext.create('Ext.form.FormPanel', {
- *          renderTo: &quot;form&quot;,
- *          width: 200,
- *          height: 300,
- *          items: [{
- *              xtype: &quot;combo&quot;,
- *              displayField: &quot;name&quot;,
- *              store: printPage.scales, // printPage.scale
- *              name: &quot;scale&quot;,
- *              fieldLabel: &quot;Scale&quot;,
- *              typeAhead: true,
- *              mode: &quot;local&quot;,
- *              forceSelection: true,
- *              triggerAction: &quot;all&quot;,
- *              selectOnFocus: true,
- *              plugins: new GeoExt.plugins.PrintPageField({
- *                  printPage: printPage
- *              })
- *          }, {
- *              xtype: &quot;textfield&quot;,
- *              name: &quot;rotation&quot;, // printPage.rotation
- *              fieldLabel: &quot;Rotation&quot;,
- *              plugins: new GeoExt.plugins.PrintPageField({
- *                  printPage: printPage
- *              })
- *          }, {
- *              xtype: &quot;textfield&quot;,
- *              name: &quot;mapTitle&quot;, // printPage.customParams[&quot;mapTitle&quot;]
- *              fieldLabel: &quot;Map Title&quot;,
- *              plugins: new GeoExt.plugins.PrintPageField({
- *                  printPage: printPage
- *              })
- *          }]
- *      });
+ *     var printPage = Ext.create('GeoExt.data.PrintPage'{
+ *         printProvider: Ext.create('GeoExt.data.MapfishPrintProvider', {
+ *             capabilities: printCapabilities
+ *         })
+ *     });
+ *     Ext.create('Ext.form.FormPanel', {
+ *         renderTo: &quot;form&quot;,
+ *         width: 200,
+ *         height: 300,
+ *         items: [{
+ *             xtype: &quot;combo&quot;,
+ *             displayField: &quot;name&quot;,
+ *             store: printPage.scales, // printPage.scale
+ *             name: &quot;scale&quot;,
+ *             fieldLabel: &quot;Scale&quot;,
+ *             typeAhead: true,
+ *             mode: &quot;local&quot;,
+ *             forceSelection: true,
+ *             triggerAction: &quot;all&quot;,
+ *             selectOnFocus: true,
+ *             plugins: Ext.create('GeoExt.plugins.PrintPageField',{
+ *                 printPage: printPage
+ *             })
+ *         }, {
+ *             xtype: &quot;textfield&quot;,
+ *             name: &quot;rotation&quot;, // printPage.rotation
+ *             fieldLabel: &quot;Rotation&quot;,
+ *             plugins: Ext.create('GeoExt.plugins.PrintPageField',{
+ *                 printPage: printPage
+ *             })
+ *         }, {
+ *             xtype: &quot;textfield&quot;,
+ *             name: &quot;mapTitle&quot;, // printPage.customParams[&quot;mapTitle&quot;]
+ *             fieldLabel: &quot;Map Title&quot;,
+ *             plugins: Ext.create('GeoExt.plugins.PrintPageField',{
+ *                 printPage: printPage
+ *             })
+ *         }]
+ *     });
+ *
+ * @class GeoExt.plugins.PrintPageField
  */
 Ext.define('GeoExt.plugins.PrintPageField', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    requires: ['GeoExt.data.PrintPage', 'Ext.form.field.ComboBox', 'Ext.form.field.Checkbox'],
+    requires: [
+        'GeoExt.data.PrintPage',
+        'Ext.form.field.ComboBox',
+        'Ext.form.field.Checkbox'
+    ],
     alias : 'widget.gx_printpagefield',
     alternateClassName : 'GeoExt.PrintPageField',
 
 
 <span id='GeoExt-plugins-PrintPageField-cfg-printPage'>    /**
-</span>     * @cfg {GeoExt.data.PrintPage} printPage
-     * The print page to synchronize with.
+</span>     * The print page to synchronize with.
+     *
+     * @cfg {GeoExt.data.PrintPage} printPage
      */
 <span id='GeoExt-plugins-PrintPageField-property-printPage'>    /**
-</span>     * @private
+</span>     * The print page to synchronize with. Read-only.
+     *
      * @property {GeoExt.data.PrintPage} printPage
-     * The print page to synchronize with.
-     *  Read-only.
+     * @private
      */
     printPage: null,
 
 <span id='GeoExt-plugins-PrintPageField-property-target'>    /**
-</span>     * @private
+</span>     * This plugin's target field.
+     *
      * @property {Ext.form.Field} target
-     * This plugin's target field.
+     * @private
      */
     target: null,
 
@@ -113,9 +119,8 @@ Ext.define('GeoExt.plugins.PrintPageField', {
     },
 
 <span id='GeoExt-plugins-PrintPageField-method-init'>    /**
-</span>     * @private
-     * @param {Ext.form.Field} target The component that this plugin
-     *  extends.
+</span>     * @param {Ext.form.Field} target The component that this plugin extends.
+     * @private
      */
     init: function(target) {
 
@@ -147,9 +152,9 @@ Ext.define('GeoExt.plugins.PrintPageField', {
 <span id='GeoExt-plugins-PrintPageField-method-onFieldChange'>    /**
 </span>     * Handler for the target field's &quot;valid&quot; or &quot;select&quot; event.
      *
-     * @private
      * @param {Ext.form.Field} field
      * @param {Ext.data.Record[]} records Optional.
+     * @private
      */
     onFieldChange: function(field, records) {
 
@@ -175,10 +180,10 @@ Ext.define('GeoExt.plugins.PrintPageField', {
 
 <span id='GeoExt-plugins-PrintPageField-method-onPageChange'>    /**
 </span>     * Handler for the &quot;change&quot; event for the page this plugin is configured
-     *  with.
+     * with.
      *
-     * @private
      * @param {GeoExt.data.PrintPage} printPage
+     * @private
      */
     onPageChange: function(printPage) {
         if(!this._updating) {
@@ -189,9 +194,9 @@ Ext.define('GeoExt.plugins.PrintPageField', {
 <span id='GeoExt-plugins-PrintPageField-method-onLayoutChange'>    /**
 </span>     * Handler for the &quot;layoutchange&quot; event of the printProvider.
      *
-     * @private
      * @param {GeoExt.data.MapfishPrintProvider} printProvider
      * @param {Ext.Record} layout
+     * @private
      *
      */
     onLayoutChange: function(printProvider, layout) {
@@ -202,8 +207,8 @@ Ext.define('GeoExt.plugins.PrintPageField', {
 <span id='GeoExt-plugins-PrintPageField-method-setValue'>    /**
 </span>     * Sets the value in the target field.
      *
-     * @private
      * @param {GeoExt.data.PrintPage} printPage
+     * @private
      */
     setValue: function(printPage) {
         var t = this.target;

@@ -23,7 +23,7 @@
  *
  * Sample code showing how to use a GeoExt form panel.
  *
- *     var formPanel = new GeoExt.form.FormPanel({
+ *     var formPanel = Ext.create('GeoExt.form.FormPanel', {
  *         renderTo: "formpanel",
  *         protocol: new OpenLayers.Protocol.WFS({
  *             url: "http://publicus.opengeo.org/geoserver/wfs",
@@ -48,12 +48,15 @@
  *             }
  *         }
  *     });
- *     formPanel.addButton({
- *         text: "search",
- *         handler: function() {
- *             this.search();
- *         },
- *         scope: formPanel
+ *     formPanel.add({
+ *         xtype: 'toolbar',
+ *         items: [{
+ *             text: "Search",
+ *             handler: function() {
+ *                 this.search();
+ *             },
+ *             scope: formPanel
+ *         }]
  *     });
  *
  * @class GeoExt.form.Panel
@@ -64,15 +67,17 @@ Ext.define('GeoExt.form.Panel', {
     alias: 'widget.gx_form',
 
     /**
-     * @cfg {OpenLayers.Protocol} protocol
      * The protocol instance this form panel
      * is configured with, actions resulting from this form
      * will be performed through the protocol.
+     *
+     * @cfg {OpenLayers.Protocol} protocol
      */
     protocol: null,
 
     /**
      * Create the internal {@link GeoExt.form.Basic} instance.
+     *
      * @return {GeoExt.form.Basic} The basic form.
      * @private
      */
@@ -83,6 +88,7 @@ Ext.define('GeoExt.form.Panel', {
 
     /**
      * Shortcut to the internal form's search method.
+     *
      * @param {Object} options The options passed to the
      * GeoExt.form.action.Search constructor.
      *

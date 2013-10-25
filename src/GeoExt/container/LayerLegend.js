@@ -16,19 +16,21 @@ Ext.define('GeoExt.container.LayerLegend', {
     requires: ['Ext.form.Label'],
     alias : 'widget.gx_layerlegend',
     alternateClassName : 'GeoExt.LayerLegend',
-    
+
     statics : {
         /**
-         * Gets an array of legend xtypes that support the provided layer record,
-         * with optionally provided preferred types listed first.
+         * Gets an array of legend xtypes that support the provided layer
+         * record, with optionally provided preferred types listed first.
+         *
          * @param {GeoExt.data.LayerRecord} layerRecord A layer record to get
-         * legend types for. If not provided, all registered types will be
-         * returned.
+         *     legend types for. If not provided, all registered types will be
+         *     returned.
          * @param {Array} preferredTypes Types that should be considered.
-         * first. If not provided, all registered legend types will be returned
-         * in the order of their score for support of the provided layerRecord.
+         *     first. If not provided, all registered legend types will be
+         *     returned in the order of their score for support of the provided
+         *     layerRecord.
          * @return {Array} xtypes of legend types that can be used with
-         * the provided layerRecord.
+         *     the provided layerRecord.
          */
         getTypes: function(layerRecord, preferredTypes) {
             var types = (preferredTypes || []).concat(),
@@ -55,59 +57,77 @@ Ext.define('GeoExt.container.LayerLegend', {
             for (var i=0; i<len; ++i) {
                 goodTypes[i] = scoredTypes[i].type;
             }
-            // take the remaining preferred types, and add other good types 
+            // take the remaining preferred types, and add other good types
             return types.concat(goodTypes);
         },
         /**
          * Checks whether this legend type supports the provided layerRecord.
+         *
          * @param {GeoExt.data.LayerRecord} layerRecord The layer record
-         * to check support for.
+         *     to check support for.
          * @return {Integer} score indicating how good the legend supports the
-         * provided record. 0 means not supported.
+         *     provided record. 0 means not supported.
          */
         supports: function(layerRecord) {
             // to be implemented by subclasses
         },
-        /** @cfg {Object}
+        /**
          * An object containing a name-class mapping of LayerLegend subclasses.
-         * To register as LayerLegend, a subclass should add itself to this object:
-         *  
-         * GeoExt.GetLegendGraphicLegend = Ext.extend(GeoExt.LayerLegend, {
-         * });
-         *      
-         * GeoExt.LayerLegend.types["getlegendgraphic"] =
-         *     GeoExt.GetLegendGraphicLegend;
+         * To register as LayerLegend, a subclass should add itself to this
+         * object:
+         *
+         *     Ext.define('GeoExt.container.WmsLegend', {
+         *         extend: 'GeoExt.container.LayerLegend'
+         *         // ...
+         *     }, function() {
+         *         GeoExt.container.LayerLegend.types["gx_wmslegend"] =
+         *             GeoExt.container.WmsLegend;
+         *     });
+         *
+         * @cfg {Object}
          */
-        types: {} 
+        types: {}
     },
 
-    /** @cfg {GeoExt.data.LayerRecord}
+    /**
      * The layer record for the legend
+     *
+     * @cfg {GeoExt.data.LayerRecord}
      */
     layerRecord: null,
 
-    /** @cfg {Boolean}
+    /**
      * Whether or not to show the title of a layer. This can be overridden
      * on the #layerStore record using the hideTitle property.
+     *
+     * @cfg {Boolean}
      */
     showTitle: true,
 
-    /** @cfg {String}
+    /**
      * Optional title to be displayed instead of the layer title.  If this is
-     * set, the value of ``#showTitle`` will be ignored (assumed to be true).
+     * set, the value of `#showTitle` will be ignored (assumed to be true).
+     *
+     * @cfg {String}
      */
     legendTitle: null,
 
-    /** @cfg {String}
-     * Optional css class to use for the layer title labels.
+    /**
+     * Optional CSS class to use for the layer title labels.
+     *
+     * @cfg {String}
      */
     labelCls: null,
 
-    /** @property layerStore {GeoExt.data.LayerStore}
+    /**
+     * @property layerStore {GeoExt.data.LayerStore}
      * @private
      */
     layerStore: null,
-    
+
+    /**
+     * Initializes the LayerLegend component.
+     */
     initComponent: function(){
         var me = this;
         me.callParent(arguments);
@@ -128,6 +148,7 @@ Ext.define('GeoExt.container.LayerLegend', {
 
     /**
      * Get the label text of the legend.
+     *
      * @private
      * @return {String}
      */
@@ -136,29 +157,31 @@ Ext.define('GeoExt.container.LayerLegend', {
         return label.rendered ? label.el.dom.innerHTML : label.html;
     },
 
-    /** 
+    /**
      * Handler for remove event of the layerStore.
-     * @private
+     *
      * @param {Ext.data.Store} store The store from which the record was
-     * removed.
+     *     removed.
      * @param {Ext.data.Record} record The record object corresponding
-     * to the removed layer.
+     *     to the removed layer.
      * @param {Integer} index The index in the store at which the record
-     * was remvoed.
+     *     was remvoed.
+     * @private
      */
     onStoreRemove: function(store, record, index) {
         // to be implemented by subclasses if needed
     },
 
-    /** 
+    /**
      * Handler for add event of the layerStore.
-     * @private
+     *
      * @param {Ext.data.Store} store The store to which the record was
-     * added.
+     *     added.
      * @param {Ext.data.Record} record The record object corresponding
-     * to the added layer.
+     *     to the added layer.
      * @param {Integer} index The index in the store at which the record
-     * was added.
+     *     was added.
+     * @private
      */
     onStoreAdd: function(store, record, index) {
         // to be implemented by subclasses if needed
@@ -168,12 +191,13 @@ Ext.define('GeoExt.container.LayerLegend', {
      * Updates the legend. Gets called when the store fires the update event.
      * This usually means the visibility of the layer, its style or title
      * has changed.
-     * @private
+     *
      * @param {Ext.data.Store} store The store in which the record was
-     * changed.
+     *     changed.
      * @param {Ext.data.Record} record The record object corresponding
-     * to the updated layer.
+     *     to the updated layer.
      * @param {String} operation The type of operation.
+     * @private
      */
     onStoreUpdate: function(store, record, operation) {
         // if we don't have items, we are already awaiting garbage
@@ -188,8 +212,9 @@ Ext.define('GeoExt.container.LayerLegend', {
         }
     },
 
-    /** 
+    /**
      * Updates the legend.
+     *
      * @private
      */
     update: function() {
@@ -201,19 +226,20 @@ Ext.define('GeoExt.container.LayerLegend', {
         }
     },
 
-    /** 
-     * Get a title for the layer. If the record doesn't have a title, the 
+    /**
+     * Get a title for the layer. If the record doesn't have a title, the
      * name will be returned.
-     * @private
+     *
      * @param {GeoExt.data.LayerRecord} record
      * @return {String} The title of the layer.
+     * @private
      */
     getLayerTitle: function(record) {
         var title = this.legendTitle || "";
         if (this.showTitle && !title) {
             if (record && !record.get("hideTitle")) {
-                title = record.get("title") || 
-                record.get("name") || 
+                title = record.get("title") ||
+                record.get("name") ||
                 record.getLayer().name || "";
             }
         }

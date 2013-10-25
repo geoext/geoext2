@@ -28,13 +28,16 @@
  */
 
 <span id='GeoExt-data-CswRecordsModel'>/**
-</span> * @class GeoExt.data.CswRecordsModel
+</span> * The model for the structure returned by CS-W GetRecords.
  *
- * The model for the structure returned by CS-W GetRecords.
+ * @class GeoExt.data.CswRecordsModel
  */
 Ext.define('GeoExt.data.CswRecordsModel',{
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'GeoExt.data.reader.CswRecords'],
+    requires: [
+        'Ext.data.proxy.Memory',
+        'GeoExt.data.reader.CswRecords'
+    ],
     alias: 'model.gx_cswrecords',
 <span id='GeoExt-data-CswRecordsModel-property-fields'>    fields: [
 </span>        {name: &quot;title&quot;},

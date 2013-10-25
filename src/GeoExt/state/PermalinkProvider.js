@@ -11,20 +11,16 @@
  */
 
 /**
- * @class GeoExt.state.PermalinkProvider
- *
  * The permalink provider.
  *
  * Sample code displaying a new permalink each time the map is moved:
  *
  *     // create permalink provider
- *     var permalinkProvider = new GeoExt.state.PermalinkProvider();
- *
+ *     var permalinkProvider = Ext.create('GeoExt.state.PermalinkProvider', {});
  *     // set it in the state manager
  *     Ext.state.Manager.setProvider(permalinkProvider);
- *
  *     // create a map panel, and make it stateful
- *     var mapPanel = new GeoExt.MapPanel({
+ *     var mapPanel = Ext.create('GeoExt.panel.Map', {
  *         renderTo: "map",
  *         layers: [
  *             new OpenLayers.Layer.WMS(
@@ -36,13 +32,14 @@
  *         stateId: "map",
  *         prettyStateKeys: true // for pretty permalinks
  *     });
- *
  *     // display permalink each time state is changed
  *     permalinkProvider.on({
  *         statechanged: function(provider, name, value) {
  *             alert(provider.getLink());
  *         }
  *     });
+ *
+ * @class GeoExt.state.PermalinkProvider
  */
 Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
@@ -66,20 +63,21 @@ Ext.define('GeoExt.state.PermalinkProvider', {
     },
 
     /**
-     * @private
+     * Specifies whether type of state values should be encoded and decoded.
+     * Set it to `false` if you work with components that don't require
+     * encoding types, and want pretty permalinks.
+     *  
      * @property{Boolean}
-     *  Specifies whether type of state values should be encoded
-     *  and decoded. Set it to ``false`` if you work with components that don't
-     *  require encoding types, and want pretty permalinks.
+     * @private
      */
     encodeType: true,
 
     /**
      * Create a state object from a URL.
      *
-     * @private
      * @param url {String} The URL to get the state from.
      * @return {Object} The state object.
+     * @private
      */
     readURL: function(url) {
         var state = {};

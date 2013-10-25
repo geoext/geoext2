@@ -17,50 +17,57 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
  */
 
 <span id='GeoExt-data-proxy-Protocol'>/**
-</span> * A data proxy for use with {OpenLayers.Protocol} objects.
+</span> * A data proxy for use with OpenLayers.Protocol objects.
+ *
  * @class GeoExt.data.proxy.Protocol
  */
 Ext.define('GeoExt.data.proxy.Protocol', {
     extend: 'Ext.data.proxy.Server',
     alias: 'proxy.gx_protocol',
 
-<span id='GeoExt-data-proxy-Protocol-cfg-protocol'>    /** 
-</span>     * @cfg {OpenLayers.Protocol}
-     * The protocol used to fetch features.
+<span id='GeoExt-data-proxy-Protocol-cfg-protocol'>    /**
+</span>     * The protocol used to fetch features.
+     *
+     * @cfg {OpenLayers.Protocol}
      */
     protocol: null,
 
-<span id='GeoExt-data-proxy-Protocol-cfg-abortPrevious'>    /** 
-</span>     * @cfg {Boolean}
-     * Abort any previous request before issuing another. Default is ``true``.
+<span id='GeoExt-data-proxy-Protocol-cfg-abortPrevious'>    /**
+</span>     * Abort any previous request before issuing another.
+     *
+     * @cfg {Boolean}
      */
     abortPrevious: true,
 
-<span id='GeoExt-data-proxy-Protocol-cfg-setParamsAsOptions'>    /** 
-</span>     * @cfg {Boolean}
-     * Should options.params be set directly on options before passing it into
-     * the protocol's read method? Default is ``false``.
+<span id='GeoExt-data-proxy-Protocol-cfg-setParamsAsOptions'>    /**
+</span>     * Should options.params be set directly on options before passing it into
+     * the protocol's read method?
+     *
+     * @cfg {Boolean}
      */
     setParamsAsOptions: false,
 
-<span id='GeoExt-data-proxy-Protocol-property-response'>    /** 
-</span>     * @property {OpenLayers.Protocol.Response}
+<span id='GeoExt-data-proxy-Protocol-property-response'>    /**
+</span>     * The response returned by the read call on the protocol.
+     *
+     * @property {OpenLayers.Protocol.Response}
      * @private
-     * The response returned by the read call on the protocol.
      */
     response: null,
 
 <span id='GeoExt-data-proxy-Protocol-method-doRequest'>    /**
 </span>     * Send the request.
+     *
      * @param {Ext.data.Operation} operation The Ext.data.Operation object.
-     * @param {function} callback The callback function to call when the Operation has completed.
+     * @param {Function} callback The callback function to call when the
+     *     operation has completed.
      * @param {Object} scope The scope in which to execute the callback.
      * @private
      */
@@ -99,8 +106,9 @@ Ext.define('GeoExt.data.proxy.Protocol', {
         this.response = this.protocol.read(options);
     },
 
-<span id='GeoExt-data-proxy-Protocol-method-abortRequest'>    /** 
+<span id='GeoExt-data-proxy-Protocol-method-abortRequest'>    /**
 </span>     * Called to abort any ongoing request.
+     *
      * @private
      */
     abortRequest: function() {
@@ -112,9 +120,10 @@ Ext.define('GeoExt.data.proxy.Protocol', {
 
 <span id='GeoExt-data-proxy-Protocol-method-loadResponse'>    /**
 </span>     * Handle response from the protocol.
-     * @private
+     *
      * @param {Object} o
      * @param {OpenLayers.Protocol.Response} response
+     * @private
      */
     loadResponse: function(o, response) {
         var me = this;

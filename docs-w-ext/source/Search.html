@@ -17,7 +17,7 @@
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
  * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -33,7 +33,7 @@
  *
  * When run this action builds an `OpenLayers.Filter` from the form
  * and passes this filter to its protocol's read method. The form fields
- * must be named after a specific convention, so that an appropriate 
+ * must be named after a specific convention, so that an appropriate
  * `OpenLayers.Filter.Comparison` filter is created for each
  * field.
  *
@@ -56,7 +56,7 @@
  *
  * Sample code showing how to use a GeoExt Search Action with an Ext
  * form panel:
- * 
+ *
  *     var formPanel = Ext.create('Ext.form.Panel', {
  *          renderTo: &quot;formpanel&quot;,
  *          items: [{
@@ -69,7 +69,7 @@
  *              value: &quot;2000&quot;
  *          }]
  *      });
- *      
+ *
  *      var searchAction = Ext.create('GeoExt.form.action.Search', {
  *          form: formPanel.getForm(),
  *          protocol: new OpenLayers.Protocol.WFS({
@@ -79,14 +79,15 @@
  *          }),
  *          abortPrevious: true
  *      });
- *      
+ *
  *     formPanel.getForm().doAction(searchAction, {
  *          callback: function(response) {
  *              // response.features includes the features read
  *              // from the server through the protocol
  *          }
  *      });
- * 
+ *
+ * @class GeoExt.form.action.Search
  */
 Ext.define('GeoExt.form.action.Search', {
     extend: 'Ext.form.Action',
@@ -95,51 +96,59 @@ Ext.define('GeoExt.form.action.Search', {
     requires: ['GeoExt.Form'],
 
 <span id='GeoExt-form-action-Search-property-type'>    /**
-</span>     * @property {String}
-     * The action type string.
+</span>     * The action type string.
+     *
+     * @property {String}
      * @private
      */
     type: &quot;search&quot;,
 
 <span id='GeoExt-form-action-Search-property-response'>    /**
-</span>     * @property {OpenLayers.Protocol.Response} response
-     *  A reference to the response resulting from the search request.
-     *  Read-only.
+</span>     * A reference to the response resulting from the search request. Read-only.
+     *
+     * @property {OpenLayers.Protocol.Response} response
      */
 
 <span id='GeoExt-form-action-Search-cfg-protocol'>    /**
-</span>     * @cfg {OpenLayers.Protocol} protocol
-     * The protocol to use for search requests.
+</span>     * The protocol to use for search requests.
+     *
+     * @cfg {OpenLayers.Protocol} protocol
      */
+
 <span id='GeoExt-form-action-Search-property-protocol'>    /**
-</span>     * @property {OpenLayers.Protocol} protocol
-     * The protocol.
+</span>     * The protocol.
+     *
+     * @property {OpenLayers.Protocol} protocol
      */
 
 <span id='GeoExt-form-action-Search-cfg-readOptions'>    /**
-</span>     * @cfg {Object} readOptions
-     * (optional) Extra options passed to the protocol's read method.
+</span>     * (optional) Extra options passed to the protocol's read method.
+     *
+     * @cfg {Object} readOptions
      */
 
 <span id='GeoExt-form-action-Search-cfg-callback'>    /**
-</span>     * @cfg {Function} callback
-     * (optional) Callback function called when the response is
-     * received.
+</span>     * (optional) Callback function called when the response is received.
+     *
+     * @cfg {Function} callback
      */
 
 <span id='GeoExt-form-action-Search-cfg-scope'>    /**
-</span>     * @cfg {Object} scope
-     * (optional) Scope {@link #callback}.
+</span>     * (optional) Scope {@link #callback}.
+     *
+     * @cfg {Object} scope
      */
 
 <span id='GeoExt-form-action-Search-cfg-abortPrevious'>    /**
-</span>     * @cfg {Boolean} abortPrevious
-     * If set to true, the abort method will be called on the protocol
+</span>     * If set to true, the abort method will be called on the protocol
      * if there's a pending request. Default is `false`.
+     *
+     * @cfg {Boolean} abortPrevious
      */
 
 <span id='GeoExt-form-action-Search-method-run'>    /**
 </span>     * Run the action.
+     *
      * @private
      */
     run: function() {
@@ -168,6 +177,7 @@ Ext.define('GeoExt.form.action.Search', {
 
 <span id='GeoExt-form-action-Search-method-handleResponse'>    /**
 </span>     * Handle the response to the search query.
+     *
      * @param {OpenLayers.Protocol.Response} response The response object.
      * @private
      */
