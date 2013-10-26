@@ -18,7 +18,9 @@
  */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
-    requires: ['GeoExt.data.reader.Feature'],
+    requires: [
+        'GeoExt.data.reader.Feature'
+    ],
 
     statics: {
         /**

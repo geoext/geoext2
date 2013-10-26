@@ -32,7 +32,9 @@ Ext.define('GeoExt.data.reader.CswRecords', {
     alternateClassName: ['GeoExt.data.CSWRecordsReader'],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_cswrecords',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * Creates new Reader.
      *

@@ -33,7 +33,10 @@
  */
 Ext.define('GeoExt.data.reader.Attribute', {
     extend: 'Ext.data.reader.Json',
-    requires: ['Ext.data.Field'],
+    requires: [
+        'GeoExt.Version',
+        'Ext.data.Field'
+    ],
     alternateClassName: 'GeoExt.data.AttributeReader',
     alias: 'reader.gx_attribute',
 

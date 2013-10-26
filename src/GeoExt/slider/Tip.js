@@ -32,7 +32,9 @@
 Ext.define('GeoExt.slider.Tip', {
     extend : 'Ext.slider.Tip',
     alternateClassName : 'GeoExt.SliderTip',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * Display the tip when hovering over the thumb.  If `false`, tip will
      * only be displayed while dragging.  Default is `true`.

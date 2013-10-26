@@ -13,6 +13,9 @@
  */
 Ext.define('GeoExt.data.proxy.Protocol', {
     extend: 'Ext.data.proxy.Server',
+    requires: [
+        'GeoExt.Version'
+    ],
     alias: 'proxy.gx_protocol',
 
     /**

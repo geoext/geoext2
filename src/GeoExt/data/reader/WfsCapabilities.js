@@ -26,7 +26,9 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
     ],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wfscapabilities',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * Creates new Reader.
      *

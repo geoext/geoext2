@@ -18,7 +18,9 @@
 Ext.define('GeoExt.data.reader.Feature', {
     extend: 'Ext.data.reader.Json',
     alias : 'reader.feature',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * Force to have our convertRecordData.
      *

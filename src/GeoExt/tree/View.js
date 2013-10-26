@@ -27,7 +27,9 @@
 Ext.define('GeoExt.tree.View', {
     extend: 'Ext.tree.View',
     alias: 'widget.gx_treeview',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     initComponent : function() {
         var me = this;
 

@@ -18,7 +18,9 @@
 Ext.define('GeoExt.LegendImage', {
     extend : 'Ext.Component',
     alias : 'widget.gx_legendimage',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * The url of the image to load.
      *

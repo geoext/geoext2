@@ -51,7 +51,10 @@
  */
 Ext.define('GeoExt.data.MapfishPrintProvider', {
     extend: 'Ext.util.Observable',
-    requires: ['Ext.data.JsonStore'],
+    requires: [
+        'Ext.data.JsonStore',
+        'GeoExt.Version'
+    ],
 
     /**
      * Base url of the print service. Will always have a trailing "/".

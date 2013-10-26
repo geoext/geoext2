@@ -19,6 +19,9 @@ Ext.define('GeoExt.data.reader.Wmc', {
     alternateClassName: ['GeoExt.data.WMCReader'],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wmc',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * Creates new Reader.

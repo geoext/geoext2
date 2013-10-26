@@ -43,6 +43,9 @@
 Ext.define('GeoExt.selection.FeatureModel', {
     extend: 'Ext.selection.RowModel',
     alias: 'selection.featuremodel',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * If true the select feature control is activated and deactivated when
