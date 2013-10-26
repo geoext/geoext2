@@ -23,6 +23,9 @@
 Ext.define('GeoExt.FeatureRenderer', {
     extend: 'Ext.Component',
     alias: 'widget.gx_renderer',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * Optional vector to be drawn.  If not provided, and if `symbolizers`

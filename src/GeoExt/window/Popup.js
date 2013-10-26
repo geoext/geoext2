@@ -47,6 +47,9 @@ Ext.define('GeoExt.window.Popup', {
     extend: 'Ext.window.Window',
     alias: 'widget.gx_popup',
     alternateClassName : 'GeoExt.Popup',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /*
      * Some Ext.Window defaults need to be overriden here

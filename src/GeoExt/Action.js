@@ -25,6 +25,9 @@
 Ext.define('GeoExt.Action', {
     extend: 'Ext.Action',
     alias : 'widget.gx_action',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * The OpenLayers control wrapped in this action.

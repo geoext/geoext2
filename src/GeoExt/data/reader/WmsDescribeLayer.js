@@ -20,7 +20,9 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
     alternateClassName: ['GeoExt.data.reader.WMSDescribeLayer', 'GeoExt.data.WMSCapabilitiesReader'],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wmsdescribelayer',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * Creates new Reader.
      *

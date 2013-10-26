@@ -43,7 +43,9 @@
  */
 Ext.define('GeoExt.state.PermalinkProvider', {
     extend : 'Ext.state.Provider',
-    requires : [],
+    requires : [
+        'GeoExt.Version'
+    ],
     alias : 'widget.gx_permalinkprovider',
 
     /**

@@ -19,7 +19,10 @@
  */
 Ext.define('GeoExt.data.VectorStyleModel', {
     extend : 'Ext.data.Model',
-    requires : ['Ext.data.JsonReader'],
+    requires : [
+        'Ext.data.JsonReader',
+        'GeoExt.Version'
+    ],
     fields : [{
         name : "elseFilter",
         defaultValue : null

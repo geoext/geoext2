@@ -19,7 +19,10 @@
  */
 Ext.define('GeoExt.data.RasterStyleModel',{
     extend: 'Ext.data.Model',
-    requires : ['Ext.data.JsonReader'],
+    requires : [
+         'Ext.data.JsonReader',
+         'GeoExt.Version'
+    ],
     idProperty: "filter",
     fields: [
         {name: "symbolizers", mapping: function(v) {

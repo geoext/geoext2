@@ -15,6 +15,9 @@
 Ext.define('GeoExt.Lang', {
     extend: 'Ext.util.Observable',
     singleton: true,
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * The current language tag.  Use `#set` to set the locale. Defaults

@@ -19,6 +19,9 @@
  */
 Ext.define('GeoExt.data.OwsStore', {
     extend: 'Ext.data.Store',
+    requires: [
+        'GeoExt.Version'
+    ],
     alternateClassName: ['GeoExt.data.OWSStore'],
 
     config: {

@@ -13,7 +13,10 @@
  */
 Ext.define('GeoExt.container.LayerLegend', {
     extend : 'Ext.container.Container',
-    requires: ['Ext.form.Label'],
+    requires: [
+        'GeoExt.Version',
+        'Ext.form.Label'
+    ],
     alias : 'widget.gx_layerlegend',
     alternateClassName : 'GeoExt.LayerLegend',
 

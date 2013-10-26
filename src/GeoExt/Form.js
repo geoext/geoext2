@@ -46,6 +46,10 @@
     };
 
     Ext.define('GeoExt.Form', {
+        requires: [
+            'GeoExt.Version'
+        ],
+
         singleton: true,
 
         /**

@@ -24,7 +24,9 @@
 Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',
     alias: 'plugin.gx_layer',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * The init method is invoked after initComponent method has been run for
      * the client Component. It performs plugin initialization.
