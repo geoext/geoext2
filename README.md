@@ -1,6 +1,6 @@
 # GeoExt 2
 
-## Information on the GeoExt 2 Sprint
+## More information on GeoExt 2:
 
 http://geoext.github.com/geoext2/
 
