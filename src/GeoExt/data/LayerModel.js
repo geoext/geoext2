@@ -20,7 +20,7 @@ Ext.define('GeoExt.data.LayerModel',{
         'GeoExt.Version'
     ],
     alias: 'model.gx_layer',
-    statics: {
+    inheritableStatics: {
         /**
          * Convenience function for creating new layer model instance object
          * using a layer object.
@@ -30,7 +30,7 @@ Ext.define('GeoExt.data.LayerModel',{
          * @static
          */
         createFromLayer: function(layer) {
-            return this.proxy.reader.readRecords([layer]).records[0];
+            return this.getProxy().reader.readRecords([layer]).records[0];
         }
     },
     fields: [
