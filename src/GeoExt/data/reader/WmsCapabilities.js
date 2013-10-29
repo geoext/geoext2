@@ -131,6 +131,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      * @private
      */
     readRecords: function(data) {
+        if (Ext.isArray(data)) {
+            return this.callParent(data);
+        }
         if(typeof data === "string" || data.nodeType) {
             data = this.format.read(data);
         }
