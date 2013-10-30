@@ -116,7 +116,7 @@ prior to submitting your changes. Thanks.
 
 ## To run the test suite
 
-*   Serve the contents of a Geoext2 clone on a webserver, e.g.:
+*   Serve the contents of a GeoExt 2 clone on a webserver, e.g.:
 
     `user@machine:/src/geoext2 $ python -m SimpleHTTPServer 2222`
 
