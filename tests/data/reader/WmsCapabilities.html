@@ -154,6 +154,19 @@
             t.eq(transparent, true,
                 "TRANSPARENT param is true if no opacity set");
         }
+
+        function test_createFromLayer(t) {
+            t.plan(1);
+            var layer = new OpenLayers.Layer.WMS('foo', 'http://demo.opengeo.org', {
+                LAYERS: 'states'
+            }, {
+                metadata: {
+                    keywords: ['a', 'b']
+                }
+            });
+            var record = GeoExt.data.WmsCapabilitiesLayerModel.createFromLayer(layer);
+            t.eq(record.get('keywords')[0], 'a', 'keywords read correctly');
+        }
     </script>
   <body>
     <div id="map"></div>
