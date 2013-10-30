@@ -2,7 +2,7 @@
 
 ## More information on GeoExt 2:
 
-http://geoext.github.com/geoext2/
+http://geoext.github.io/geoext2/
 
 ## To generate the jsduck documentation:
 
