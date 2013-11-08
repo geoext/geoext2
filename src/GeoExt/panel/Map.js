@@ -177,6 +177,15 @@ Ext.define('GeoExt.panel.Map', {
     ],
 
     /**
+     * Whether we already rendered an OpenLayers.Map in this panel. Will be
+     * updated in #onResize, after the first rendering happened.
+     *
+     * @property {Boolean} mapRendered
+     * @private
+     */
+    mapRendered: false,
+
+    /**
      * Initializes the map panel. Creates an OpenLayers map if
      * none was provided in the config options passed to the
      * constructor.
@@ -339,9 +348,10 @@ Ext.define('GeoExt.panel.Map', {
      */
     onResize: function() {
         var map = this.map;
-        if(this.body.dom !== map.div) {
+        if(!this.mapRendered && this.body.dom !== map.div) {
             // the map has not been rendered yet
             map.render(this.body.dom);
+            this.mapRendered = true;
 
             this.layers.bind(map);
 
