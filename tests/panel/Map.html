@@ -71,8 +71,8 @@
             hideTestIframe();
         }
         
-        function test_allOverlays(t) {
-            t.plan(3);
+        function test_allOverlaysAndFallThrough(t) {
+            t.plan(8);
 
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
@@ -81,26 +81,66 @@
 
             var map, panel;
             
+            // Test if map-instances are respected and left untouched:
+            // 2 tests
             map = new OpenLayers.Map();
             panel = Ext.create('GeoExt.panel.Map', {
                 map: map
             });
-            t.eq(panel.map.allOverlays, false, "allOverlays is not set if map is provided to panel");
+            t.eq(panel.map.allOverlays, OpenLayers.Map.prototype.allOverlays,
+                    "allOverlays has the OpenLayers.Map-default value if map-" +
+                    "instance is provided to panel");
+            t.eq(panel.map.fallThrough, OpenLayers.Map.prototype.fallThrough,
+                    "fallThrough has the OpenLayers.Map-default value if map-" +
+                    "instance is provided to panel");
             // since we created the map, we destroy it
             map.destroy();
             panel.destroy();
             
+            // Test if our defaults are applied if neither map-instance nor
+            // map-config are provided:
+            // 2 tests
             panel = Ext.create('GeoExt.panel.Map', {
             });
-            t.eq(panel.map.allOverlays, true, "allOverlays set to true if no map is provided to panel");
+            t.eq(panel.map.allOverlays, true,
+                    "allOverlays set to true if no map is provided to panel");
+            t.eq(panel.map.fallThrough, true,
+                    "fallThrough set to true if no map is provided to panel");
             panel.destroy();
             
+            // Test if our defaults are applied when a map-config is being
+            // used:
+            // 2 tests
             panel = Ext.create('GeoExt.panel.Map', {
                 map: {
                     units: "meters"
                 }
             });
-            t.eq(panel.map.allOverlays, true, "allOverlays set to true if map config is provided to panel");
+            t.eq(panel.map.allOverlays, true,
+                    "allOverlays set to true if map config provided to panel");
+            t.eq(panel.map.fallThrough, true,
+                    "fallThrough set to true if map config provided to panel");
+            panel.destroy();
+
+            // Test if explicitly setting the allOverlays & fallThrough otions
+            // takes precedence over our defaults
+            //
+            // we only test the config-variant, as the fact that the instace
+            // isn't being modified is tested in the very first test of this
+            // function
+            // 2 tests
+            panel = Ext.create('GeoExt.panel.Map', {
+                map: {
+                    allOverlays: false,
+                    fallThrough: false
+                }
+            });
+            t.eq(panel.map.allOverlays, false,
+                    "Setting for allOverlays respected if map config provided" +
+                    " to panel");
+            t.eq(panel.map.fallThrough, false,
+                    "Setting for fallThrough respected if map config provided" +
+                    " to panel");
             panel.destroy();
 
             hideTestIframe();
