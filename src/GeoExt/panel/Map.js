@@ -186,7 +186,10 @@ Ext.define('GeoExt.panel.Map', {
     initComponent: function(){
         if(!(this.map instanceof OpenLayers.Map)) {
             this.map = new OpenLayers.Map(
-                Ext.applyIf(this.map || {}, {allOverlays: true})
+                Ext.applyIf(this.map || {}, {
+                    allOverlays: true,
+                    fallThrough: true
+                })
             );
         }
 
