@@ -125,11 +125,11 @@
 
             mapPanel.destroy();
             
-            t.eq(printExtent.layer, undefined,
+            t.eq(printExtent.layer, null,
                  "layer destroyed");
-            t.eq(printExtent.control, undefined,
+            t.eq(printExtent.control, null,
                  "control destroyed.");
-            t.eq(printExtent.mapPanel, null,
+            t.eq(printExtent.mapPanel, undefined,
                  "mapPanel set to null");
         }
 
