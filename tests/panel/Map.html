@@ -46,6 +46,14 @@
             };
 
             moveToCnt = 0;
+
+            // destroy any leftover panels on the page, guess() might get
+            // confused otherwise
+            var leftoverMapPanels = Ext.ComponentQuery.query('gx_mappanel');
+            Ext.each(leftoverMapPanels, function(panel) {
+                panel.destroy();
+            });
+
             var mapPanel = Ext.create('GeoExt.panel.Map', {
                 // panel options
                 id: "map-panel",
