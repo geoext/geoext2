@@ -20,7 +20,7 @@
     if ( Ext.versions.extjs.version ) {
         environment.push('ExtJS: ' + Ext.versions.extjs.version);
     }
-    if ( OpenLayers ) {
+    if ( window.OpenLayers ) {
         environment.push('OpenLayers: ' + OpenLayers.VERSION_NUMBER);
     }
     environment.push('GeoExt: ' + v);
