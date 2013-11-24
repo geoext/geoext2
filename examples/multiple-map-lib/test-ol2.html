@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>Hello GeoExt2 - OpenLayers 2</title>
+
+    <!-- ExtJS -->
+    <script type="text/javascript" src="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/include-ext.js"></script>
+    <script type="text/javascript" src="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/options-toolbar.js"></script>
+    <!-- Shared -->
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/example.css" />
+    <!-- You should definitely consider using a custom single-file version of OpenLayers -->
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+    <script type="text/javascript" src="../loader.js"></script>
+
+    <style type="text/css">
+    
+    .olControlAttribution a,
+    .olControlAttribution a:link,
+    .olControlAttribution a:visited,
+    .olControlAttribution a:hover,
+    .olControlAttribution a:active {
+        color: #fff;
+    }
+    .olControlAttribution {
+        font-size: 13px !important;
+        color: #ffffff;
+        text-shadow: 0 0 0.3em #8877FF, 0 0 0.3em #8877FF, 0 0 0.3em #8877FF;
+        bottom: 2px !important;
+        right: 2px !important;
+    }
+    </style>
+    
+    <script>
+    
+    Ext.require([
+        'Ext.container.Viewport',
+        'GeoExt.panel.Map',
+        'GeoExt.adapter.MapLibOpenLayers2'
+    ]);
+    
+    Ext.onReady(function() {
+
+        var mappanel = Ext.create('GeoExt.panel.Map', {
+            region: 'center',
+            layout: 'fit',
+            center: new OpenLayers.LonLat(790633.87198469, 6698639.3963017),
+            zoom: 15,
+            buttons: [{
+                text: 'Hello Moto'
+            }]
+        });
+        Ext.create('Ext.container.Viewport', {
+             layout: 'border',
+             items: [
+                {
+                    region: 'north',
+                    html: '<div style="margin: 20px;"><h1>FOSSGIS Hacking Event 2013: Using GeoExt with OpenLayers2</h1></div>',
+                    split: true,
+                    height: 75
+                },
+                mappanel
+             ]
+        });
+
+        Ext.create('Ext.window.Window', {
+            width: 150, 
+            height: 80,
+            x: 10,
+            y: Ext.getBody().getBottom()- 100,
+            title:'Rock You Baby', 
+            html: 'GeoExt Version: ' + GeoExt.version,
+            bodyStyle: {
+                textAlign: 'center',
+                linHeight: '2em'
+            },
+            style: {
+                fontWeight: 'bold'
+            }
+        }).show();
+    });
+    
+    
+    </script>
+    
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<html>
+<head>
+    <title>Hello GeoExt2 - Leaflet</title>
+
+    <!-- ExtJS -->
+    <script type="text/javascript" src="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/include-ext.js"></script>
+    <script type="text/javascript" src="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/options-toolbar.js"></script>
+    <!-- Shared -->
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/example.css" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <!-- leaflet -->
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script type="text/javascript" src="../loader.js"></script>
+
+    <script>
+
+    Ext.require([
+        'Ext.container.Viewport',
+        'GeoExt.panel.Map',
+        'GeoExt.adapter.MapLibLeaflet'
+    ]);
+
+    Ext.onReady(function() {
+         
+        var mappanel = Ext.create('GeoExt.panel.Map', {
+            region: 'center',
+            layout: 'fit',
+            center: new L.latLng(7.01476, 51.458069),
+            zoom: 12,
+            buttons: [{
+                text: 'Hello Moto'
+            }]
+        });
+        Ext.create('Ext.container.Viewport', {
+             layout: 'border',
+             items: [
+                {
+                    region: 'north',
+                    html: '<div style="margin: 20px;"><h1>FOSSGIS Hacking Event 2013: Using GeoExt with Leaflet</h1></div>',
+                    split: true,
+                    height: 75
+                },
+                mappanel
+             ]
+        });
+
+        Ext.create('Ext.window.Window', {
+            width: 150, 
+            height: 80,
+            x: 10,
+            y: Ext.getBody().getBottom()- 100,
+            title:'Rock You Baby', 
+            html: 'GeoExt Version: ' + GeoExt.version,
+            bodyStyle: {
+                textAlign: 'center',
+                linHeight: '2em'
+            },
+            style: {
+                fontWeight: 'bold'
+            }
+        }).show();
+    });
+
+    </script>
+</head>
+<body>
+<div id="dummy-leaflet-div"></div>
+</body>
+</html>
