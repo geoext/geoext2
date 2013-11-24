@@ -49,7 +49,8 @@
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
     requires: [
-        'GeoExt.data.LayerStore'
+        'GeoExt.data.LayerStore',
+        'GeoExt.adapter.MapLibFactory'
     ],
     alias: 'widget.gx_mappanel',
     alternateClassName: 'GeoExt.MapPanel',
@@ -193,23 +194,33 @@ Ext.define('GeoExt.panel.Map', {
      * @private
      */
     initComponent: function(){
-        if(!(this.map instanceof OpenLayers.Map)) {
-            this.map = new OpenLayers.Map(
-                Ext.applyIf(this.map || {}, {
-                    allOverlays: true,
-                    fallThrough: true
-                })
-            );
-        }
+
+//        if(!(this.map instanceof OpenLayers.Map)) {
+//            this.map = new OpenLayers.Map(
+//                Ext.applyIf(this.map || {}, {
+//                    allOverlays: true,
+//                    fallThrough: true
+//                })
+//            );
+//        }
+
+        //TODO make a factory
+
+        this.mapLibAdapter = GeoExt.adapter.MapLibFactory.create();
 
         var layers  = this.layers;
-        if(!layers || layers instanceof Array) {
-            this.layers = Ext.create('GeoExt.data.LayerStore', {
-                layers: layers,
-                map: this.map.layers.length > 0 ? this.map : null
-            });
-        }
 
+        //TODO get layers in adapter
+
+//        if(!layers || layers instanceof Array) {
+//            this.layers = Ext.create('GeoExt.data.LayerStore', {
+//                layers: layers,
+////                map: this.map.layers.length > 0 ? this.map : null
+//                map: true ? this.map : null
+//            });
+//        }
+
+        //TODO move to adapter
         if (Ext.isString(this.center)) {
             this.center = OpenLayers.LonLat.fromString(this.center);
         } else if(Ext.isArray(this.center)) {
@@ -220,6 +231,12 @@ Ext.define('GeoExt.panel.Map', {
         } else if(Ext.isArray(this.extent)) {
             this.extent = OpenLayers.Bounds.fromArray(this.extent);
         }
+
+        // set center and zoom of our map object
+        this.mapLibAdapter.setCentreOfTheMap(this.center);
+        this.mapLibAdapter.setZoomOfTheMap(this.zoom);
+        // create map object instance
+        this.map = this.mapLibAdapter.createMap();
 
         this.callParent(arguments);
 
@@ -276,13 +293,16 @@ Ext.define('GeoExt.panel.Map', {
          */
 
         // bind various listeners to the corresponding OpenLayers.Map-events
-        this.map.events.on({
-            "moveend": this.onMoveend,
-            "changelayer": this.onChangelayer,
-            "addlayer": this.onAddlayer,
-            "removelayer": this.onRemovelayer,
-            scope: this
-        });
+
+        //TODO event in adapter
+
+//        this.map.events.on({
+//            "moveend": this.onMoveend,
+//            "changelayer": this.onChangelayer,
+//            "addlayer": this.onAddlayer,
+//            "removelayer": this.onRemovelayer,
+//            scope: this
+//        });
     },
 
     /**
@@ -350,17 +370,19 @@ Ext.define('GeoExt.panel.Map', {
         var map = this.map;
         if(!this.mapRendered && this.body.dom !== map.div) {
             // the map has not been rendered yet
-            map.render(this.body.dom);
+//            map.render(this.body.dom);
+            this.mapLibAdapter.renderMap(this.body.dom);
             this.mapRendered = true;
 
-            this.layers.bind(map);
+//            this.layers.bind(map);
 
-            if (map.layers.length > 0) {
-                this.setInitialExtent();
-            } else {
-                this.layers.on("add", this.setInitialExtent, this,
-                               {single: true});
-            }
+            //TODO this in adapter
+//          if (map.layers.length > 0) {
+//                this.setInitialExtent();
+//            } else {
+//                this.layers.on("add", this.setInitialExtent, this,
+//                               {single: true});
+//            }
         } else {
             map.updateSize();
         }
@@ -373,6 +395,9 @@ Ext.define('GeoExt.panel.Map', {
      */
     setInitialExtent: function() {
         var map = this.map;
+
+        //TODO call adapter functions
+
         if (!map.getCenter()) {
             if (this.center || this.zoom ) {
                 // center and/or zoom?
