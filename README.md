@@ -4,6 +4,7 @@
 
 JavaScript Toolkit for Rich Web Mapping Applications
 
+[![Build Status](https://travis-ci.org/geoext/geoext2.png)](https://travis-ci.org/geoext/geoext2)
 
 ## What is GeoExt?
 
