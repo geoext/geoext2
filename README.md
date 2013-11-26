@@ -1,8 +1,8 @@
-# GeoExt 2
+# [![GeoExt Logo](http://geoext.github.io/geoext2/website-resources/img/GeoExt-logo.png "GeoExt Logo")](http://geoext.github.io/geoext2/) [GeoExt 2](http://geoext.github.io/geoext2/)
 
-![GeoExt Logo](http://geoext.github.io/geoext2/website-resources/img/GeoExt-logo.png "GeoExt Logo")
 
-JavaScript Toolkit for Rich Web Mapping Applications
+
+JavaScript Toolkit for Rich Web Mapping Applications.
 
 [![Build Status](https://travis-ci.org/geoext/geoext2.png)](https://travis-ci.org/geoext/geoext2)
 
