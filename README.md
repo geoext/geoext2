@@ -15,7 +15,7 @@ the web. It is a JavaScript framework that combines the GIS functionality of
 
 Version 2 of GeoExt is the successor to the
 [GeoExt 1.x-series](http://geoext.org) and is built atop the newest official
-installments of its base libraries; OpenLayers 2.13 and ExtJS 4.2.1.
+installments of its base libraries; OpenLayers 2.13.1 and ExtJS 4.2.1.
 
 
 ## More information on GeoExt 2
