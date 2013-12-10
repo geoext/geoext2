@@ -72,6 +72,8 @@ Ext.define('GeoExt.tree.View', {
         if(!el) {
             return;
         }
+        
+        node.el = el;
 
         if(node.get('layer'))
             me.fireEvent('createchild', el, node);
@@ -108,7 +110,9 @@ Ext.define('GeoExt.tree.View', {
             }
             node.gx_treecomponents[cmpObj.xtype] = cmpObj;
 
-            cmpObj.render(el);
+            if (!component.deferRender) {
+                cmpObj.render(el);
+            }
 
             el.removeCls('gx-tree-component-off');
         }
