@@ -53,6 +53,7 @@ Ext.define('GeoExt.LegendImage', {
 
     initComponent: function(){
         var me = this;
+        me.addEvents('legendimageloaded');
         me.callParent(arguments);
         if(this.defaultImgSrc === null) {
             this.defaultImgSrc = Ext.BLANK_IMAGE_URL;
@@ -130,6 +131,7 @@ Ext.define('GeoExt.LegendImage', {
         if (!OpenLayers.Util.isEquivalentUrl(el.dom.src, this.defaultImgSrc)) {
             el.removeCls(this.noImgCls);
         }
+        this.fireEvent('legendimageloaded', this);
     }
 
 });

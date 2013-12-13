@@ -113,6 +113,10 @@ Ext.define('GeoExt.tree.View', {
             if (!component.deferRender) {
                 cmpObj.render(el);
             }
+            
+            cmpObj.on('legendimageloaded', function() {
+              this.updateLayout();
+            }, this);
 
             el.removeCls('gx-tree-component-off');
         }
