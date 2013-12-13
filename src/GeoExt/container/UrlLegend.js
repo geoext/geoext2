@@ -86,7 +86,7 @@ Ext.define('GeoExt.container.UrlLegend', {
         me.addEvents('legendimageloaded');
         me.callParent(arguments);
         this.add(Ext.create('GeoExt.LegendImage', {
-            url: this.layerRecord.get("legendURL"),,
+            url: this.layerRecord.get("legendURL"),
             listeners: {
                 'legendimageloaded': function() {
                     this.fireEvent('legendimageloaded', this);
