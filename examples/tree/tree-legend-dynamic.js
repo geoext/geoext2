@@ -18,7 +18,7 @@ Ext.require([
 Ext.application({
     name: 'Tree Legend',
     launch: function() {
-        var mapPanel = new GeoExt.MapPanel({
+        var mapPanel = Ext.create('GeoExt.MapPanel', {
             region: "center",
             center: [146.1569825, -41.6109735],
             zoom: 6,
@@ -85,7 +85,7 @@ Ext.application({
 
         
 
-        var tree = new GeoExt.tree.Panel({
+        var tree = Ext.create('GeoExt.tree.Panel', {
             title: "Layers",
             width: 250,
             autoScroll: true,
@@ -126,7 +126,7 @@ Ext.application({
             items: [tree, { title: "Other stuff", width: 250, html: "Test" }]
         });
 
-        new Ext.Viewport({
+        Ext.create('Ext.Viewport', {
             layout: "fit",
             hideBorders: true,
             items: {
