@@ -137,10 +137,10 @@ prior to submitting your changes. Thanks.
 You can also run the above tests headlessly through casperjs:
 
 ```bash
-# in the root of the repository...
-cd tests/headless/
-# ...run the suite
-./casperjs-1.1-beta.1/bin/casperjs test run-testsuite.js
+# Run the suite in the root of the repository
+./tests/headless/casperjs-1.1-beta.1/bin/casperjs \
+  test \
+  tests/headless/run-testsuite.js
 ```
 
 These tests are also run though [travis](https://travis-ci.org/geoext/geoext2).
