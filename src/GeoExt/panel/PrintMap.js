@@ -191,7 +191,6 @@ Ext.define('GeoExt.panel.PrintMap', {
         if (!this.map) {
             this.map = {};
         }
-
         Ext.applyIf(this.map, {
             projection: this.sourceMap.getProjection(),
             maxExtent: this.sourceMap.getMaxExtent(),
@@ -201,7 +200,6 @@ Ext.define('GeoExt.panel.PrintMap', {
             allOverlays: true,
             fallThrough: true
         });
-
         if(!(this.printProvider instanceof GeoExt.data.MapfishPrintProvider)) {
             this.printProvider = Ext.create('GeoExt.data.MapfishPrintProvider',
                 this.printProvider);
@@ -252,7 +250,6 @@ Ext.define('GeoExt.panel.PrintMap', {
      * @private
      */
     bind: function() {
-
         // we have to call syncSize here because of changed
         // rendering order in ExtJS4
         this.syncSize();
