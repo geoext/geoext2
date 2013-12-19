@@ -30,7 +30,38 @@ Ext.application({
 	            comment: "This demo shows how to use GeoExt.PrintMapPanel"
 	        }
 	    });
-	    
+
+    var style = {
+            strokeColor: '#000000',
+            strokeWidth: 2,
+            strokeOpacity: 1,
+            fillColor: '#ee0000',
+            fillOpacity: 1,
+            pointRadius: 6,
+            graphicName: 'circle',
+        },
+        vecLayer = new OpenLayers.Layer.Vector("A Vector Layer", {
+            styleMap: new OpenLayers.StyleMap({
+                "default": style
+            })
+        }),
+        // Both Burnie and Devonport (cities in Tasmania) are styled throgh the
+        // above stylemap
+        burnie = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(145.875278, -41.063611)
+        ),
+        devonport = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(146.333333, -41.166667)
+        ),
+        // Hobart (the capital) gets inline style, this will also be printable
+        hobart = new OpenLayers.Feature.Vector(
+            new OpenLayers.Geometry.Point(147.325, -42.880556),
+            null,
+            Ext.applyIf({graphicName: 'square'}, style)
+        );
+        // Add the cities to the layer
+        vecLayer.addFeatures([burnie, devonport, hobart]);
+
 	    // A MapPanel with a "Print..." button
 	    mapPanel = Ext.create('GeoExt.panel.Map', {
 	        renderTo: "content",
@@ -45,12 +76,14 @@ Ext.application({
 	            projection: "EPSG:4326",
 	            units: 'degrees'
 	        },
-	        layers: [new OpenLayers.Layer.WMS("Tasmania State Boundaries",
-	            "http://demo.opengeo.org/geoserver/wms",
-	            {layers: "topp:tasmania_state_boundaries"},
-	            {singleTile: true
-	             , numZoomLevels: 8
-	            	})],
+	        layers: [
+	            new OpenLayers.Layer.WMS(
+	                "Tasmania State Boundaries",
+	                "http://demo.opengeo.org/geoserver/wms",
+	                { layers: "topp:tasmania_state_boundaries" }
+	            ),
+	            vecLayer
+	        ],
 	        center: [146.56, -41.56],
 	        zoom: 0,
 	        bbar: [{
@@ -61,6 +94,7 @@ Ext.application({
 	                printDialog = Ext.create('Ext.Window', {
 	                    title: "Print Preview",
 	                    layout: "fit",
+	                    border: false,
 	                    width: 350,
 	                    autoHeight: true,
 	                    items: [{
