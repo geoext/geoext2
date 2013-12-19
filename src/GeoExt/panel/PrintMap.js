@@ -196,7 +196,10 @@ Ext.define('GeoExt.panel.PrintMap', {
             projection: this.sourceMap.getProjection(),
             maxExtent: this.sourceMap.getMaxExtent(),
             maxResolution: this.sourceMap.getMaxResolution(),
-            units: this.sourceMap.getUnits()
+            units: this.sourceMap.getUnits(),
+            tileManager: null,
+            allOverlays: true,
+            fallThrough: true
         });
 
         if(!(this.printProvider instanceof GeoExt.data.MapfishPrintProvider)) {
