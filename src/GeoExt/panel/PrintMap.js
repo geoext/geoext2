@@ -222,18 +222,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         var layer;
         Ext.each(this.sourceMap.layers, function(layer) {
             if (layer.getVisibility() === true) {
-                if (layer instanceof OpenLayers.Layer.Vector) {
-                    var features = layer.features,
-                        clonedFeatures = new Array(features.length),
-                        vector = new OpenLayers.Layer.Vector(layer.name);
-                    for (var i=0, ii=features.length; i<ii; ++i) {
-                        clonedFeatures[i] = features[i].clone();
-                    }
-                    vector.addFeatures(clonedFeatures, {silent: true});
-                    this.layers.push(vector);
-                } else {
-                    this.layers.push(layer.clone());
-                }
+                this.layers.push(layer.clone());
             }
         }, this);
 
