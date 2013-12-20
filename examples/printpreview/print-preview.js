@@ -45,7 +45,7 @@ Ext.application({
                 "default": style
             })
         }),
-        // Both Burnie and Devonport (cities in Tasmania) are styled throgh the
+        // Both Burnie and Devonport (cities in Tasmania) are styled through the
         // above stylemap
         burnie = new OpenLayers.Feature.Vector(
             new OpenLayers.Geometry.Point(145.875278, -41.063611)
