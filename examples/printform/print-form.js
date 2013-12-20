@@ -75,6 +75,7 @@ Ext.application({
                 name: "comment",
                 value: "",
                 fieldLabel: "Comment",
+                allowBlank: false,
                 plugins: Ext.create('GeoExt.plugins.PrintPageField', {
                     printPage: printPage
                 })
@@ -124,7 +125,15 @@ Ext.application({
             buttons: [{
                 text: "Create PDF",
                 handler: function() {
-                    printProvider.print(mapPanel, printPage);
+                    if (formPanel.getForm().isValid()) {
+                        printProvider.print(mapPanel, printPage);
+                    } else {
+                        Ext.Msg.show({
+                            title: "Invalid form",
+                            msg: "The values in the form are invalid.",
+                            icon: Ext.Msg.ERROR
+                        });
+                    }
                 }
             }]
         });
