@@ -13,6 +13,10 @@
 
 /**
  * Create a slider to control the zoom of a layer.
+ * Important: Due to changes in OpenLayers 2.13, you need to set 
+ * 'zoomMethod: null' on the map to avoid inconsistent zoom-Levels.
+ * This is only needed when using 'aggressive: true' on the slider.
+ * The issue has already been fixed in the current trunk of OpenLayers.
  *
  * Sample code to render a slider outside the map viewport:
  *
@@ -33,7 +37,9 @@
  *         height: 300,
  *         width: 400,
  *         map: {
- *             controls: [new OpenLayers.Control.Navigation()]
+ *             controls: [new OpenLayers.Control.Navigation()],
+ *             maxResolution: 0.703125,
+ *             zoomMethod: null
  *         },
  *         layers: [new OpenLayers.Layer.WMS(
  *             "Global Imagery",
