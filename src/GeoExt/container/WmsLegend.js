@@ -86,6 +86,7 @@ Ext.define('GeoExt.container.WmsLegend', {
 
     initComponent: function(){
         var me = this;
+        me.addEvents('legendimageloaded');
         me.callParent();
         var layer = me.layerRecord.getLayer();
         me._noMap = !layer.map;
@@ -224,7 +225,13 @@ Ext.define('GeoExt.container.WmsLegend', {
                 this.add({
                     xtype: "gx_legendimage",
                     url: this.getLegendUrl(layerName, layerNames),
-                    itemId: layerName
+                    itemId: layerName,
+                    listeners: {
+                        'legendimageloaded': function() {
+                            this.fireEvent('legendimageloaded', this);
+                        },
+                        scope: this
+                    }
                 });
             }
         }

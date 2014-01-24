@@ -102,9 +102,9 @@ Ext.define('GeoExt.slider.MapPanelItem', {
                     el.setStyle({
                         top: dim.top,
                         left: dim.left,
-                        width: dim.width,
+                        width: "" + dim.width + "px",
                         position: "absolute",
-                        height: dim.height,
+                        height: "" + dim.height + "px",
                         zIndex: panel.map.Z_INDEX_BASE.Control
                     });
                     // This is tricky...
@@ -113,14 +113,14 @@ Ext.define('GeoExt.slider.MapPanelItem', {
                         // element is controlled by the height of the element
                         // with the 'x-slider-inner'-class
                         el.down('.x-slider-inner').el.setStyle({
-                            height: dim.height - me.thumbWidth
+                            height: "" + (dim.height - me.thumbWidth) + "px"
                         });
                     } else {
                         // ...but for horizontal sliders, it's the form element
                         // with class 'x-form-item-body' that controls the
                         // height.
                         el.down('.x-form-item-body').el.setStyle({
-                            height: me.thumbHeight
+                            height: "" + me.thumbHeight + "px"
                         });
                     }
                 };

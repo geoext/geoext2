@@ -81,6 +81,22 @@
                 legend.destroy();
             });
         }
+        
+        function test_legendimageloaded(t) {
+            t.plan(1);
+
+            var legend = Ext.create("GeoExt.LegendImage", {
+                url: "bogus",
+                renderTo: "legend",
+                listeners: {
+                    "legendimageloaded": function() {
+                        t.ok(true, "legendimageloaded triggered after image loading (regardless valid image src)");
+                    }
+                }
+            });
+
+            t.wait_result( 1 );
+        }
 
 
     </script>
