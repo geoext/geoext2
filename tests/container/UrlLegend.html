@@ -82,6 +82,25 @@
             t.ok(GeoExt.container.UrlLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
             t.eq(GeoExt.container.UrlLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
         }
+        
+        function test_legendurlimageloaded(t) {
+            t.plan(1);
+            var store = Ext.create('GeoExt.data.LayerStore', {
+                data : [
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
+                ]
+            });
+            var legend = Ext.create("GeoExt.UrlLegend", {
+                layerRecord: store.getAt(0),
+                renderTo: "legend",
+                listeners: {
+                    "legendimageloaded": function() {
+                        t.ok(true, "legendimageloaded triggered after image loading");
+                    }
+                }
+            });
+            t.wait_result( 1 );
+        }
 
     </script>
   </head>
