@@ -302,6 +302,28 @@
             l.destroy();
             mapPanel.destroy();
         }
+        
+        function test_legendwmsimageloaded(t) {
+            t.plan(1);
+            
+            var l, url, expectedUrl;
+            var mapPanel = loadMapPanel(false);
+
+            l = Ext.create("GeoExt.container.WmsLegend", {
+                renderTo: 'legendwms',
+                baseParams: {FORMAT: 'image/png', foo: 'bar bar'},
+                useScaleParameter: false,
+                layerRecord: mapPanel.layers.getAt(0),
+                listeners: {
+                    "legendimageloaded": function() {
+                        t.ok(true, "legendimageloaded triggered after image loading");
+                    }
+                }
+            });
+            mapPanel.render("mappanel");
+
+            t.wait_result( 1 );
+        }
 
 
     </script>
