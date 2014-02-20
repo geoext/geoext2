@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -35,14 +35,20 @@
  *         component: {
  *             xtype: "gx_wmslegend",
  *             layerRecord: myLayerRecord,
- *             showTitle: false
+ *             showTitle: false,
+ *             deferRender: false
  *         }
  *     }
  *
  * The above creates a node with a GeoExt.tree.LayerNode plugin, and connects
  * it to a layer record that was previously assigned to the myLayerRecord
  * variable. The node will be rendered with a GeoExt.container.WmsLegend,
- * configured with the same layer.
+ * configured with the same layer. The option deferRender is set to its default
+ * value false which means the component will be rendered as soon as the layer
+ * node is created. If deferRender is set to true the component will not be
+ * rendered automatically and must instead be rendered manually, preferably
+ * to the node element which is available on layer nodes as a property named
+ * el.
  *
  * @class GeoExt.data.LayerTreeModel
  */
