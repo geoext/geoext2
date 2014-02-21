@@ -88,6 +88,7 @@ Ext.define('GeoExt.tree.View', {
      */
     createChild: function(el, node) {
         var component = node.get('component'),
+            isChecked = node.get('checked'),
             cmpObj;
 
         if(component) {
@@ -108,7 +109,9 @@ Ext.define('GeoExt.tree.View', {
             }
             node.gx_treecomponents[cmpObj.xtype] = cmpObj;
 
-            cmpObj.render(el);
+            if (isChecked !== false) {
+                cmpObj.render(el);
+            }
 
             el.removeCls('gx-tree-component-off');
         }
