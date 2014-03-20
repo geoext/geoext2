@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -14,9 +14,13 @@
 Ext.define('GeoExt.data.LayerModel',{
     alternateClassName: 'GeoExt.data.LayerRecord',
     extend: 'Ext.data.Model',
-    requires: ['Ext.data.proxy.Memory', 'Ext.data.reader.Json'],
+    requires: [
+        'Ext.data.proxy.Memory',
+        'Ext.data.reader.Json',
+        'GeoExt.Version'
+    ],
     alias: 'model.gx_layer',
-    statics: {
+    inheritableStatics: {
         /**
          * Convenience function for creating new layer model instance object
          * using a layer object.
@@ -26,7 +30,7 @@ Ext.define('GeoExt.data.LayerModel',{
          * @static
          */
         createFromLayer: function(layer) {
-            return this.proxy.reader.readRecords([layer]).records[0];
+            return this.getProxy().reader.readRecords([layer]).records[0];
         }
     },
     fields: [

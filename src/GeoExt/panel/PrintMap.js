@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -191,14 +191,15 @@ Ext.define('GeoExt.panel.PrintMap', {
         if (!this.map) {
             this.map = {};
         }
-
         Ext.applyIf(this.map, {
             projection: this.sourceMap.getProjection(),
             maxExtent: this.sourceMap.getMaxExtent(),
             maxResolution: this.sourceMap.getMaxResolution(),
-            units: this.sourceMap.getUnits()
+            units: this.sourceMap.getUnits(),
+            tileManager: null,
+            allOverlays: true,
+            fallThrough: true
         });
-
         if(!(this.printProvider instanceof GeoExt.data.MapfishPrintProvider)) {
             this.printProvider = Ext.create('GeoExt.data.MapfishPrintProvider',
                 this.printProvider);
@@ -219,18 +220,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         var layer;
         Ext.each(this.sourceMap.layers, function(layer) {
             if (layer.getVisibility() === true) {
-                if (layer instanceof OpenLayers.Layer.Vector) {
-                    var features = layer.features,
-                        clonedFeatures = new Array(features.length),
-                        vector = new OpenLayers.Layer.Vector(layer.name);
-                    for (var i=0, ii=features.length; i<ii; ++i) {
-                        clonedFeatures[i] = features[i].clone();
-                    }
-                    vector.addFeatures(clonedFeatures, {silent: true});
-                    this.layers.push(vector);
-                } else {
-                    this.layers.push(layer.clone());
-                }
+                this.layers.push(layer.clone());
             }
         }, this);
 
@@ -260,7 +250,6 @@ Ext.define('GeoExt.panel.PrintMap', {
      * @private
      */
     bind: function() {
-
         // we have to call syncSize here because of changed
         // rendering order in ExtJS4
         this.syncSize();

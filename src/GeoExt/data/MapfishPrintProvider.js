@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -51,7 +51,10 @@
  */
 Ext.define('GeoExt.data.MapfishPrintProvider', {
     extend: 'Ext.util.Observable',
-    requires: ['Ext.data.JsonStore'],
+    requires: [
+        'Ext.data.JsonStore',
+        'GeoExt.Version'
+    ],
 
     /**
      * Base url of the print service. Will always have a trailing "/".

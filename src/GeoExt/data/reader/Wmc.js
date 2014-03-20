@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -19,6 +19,9 @@ Ext.define('GeoExt.data.reader.Wmc', {
     alternateClassName: ['GeoExt.data.WMCReader'],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wmc',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * Creates new Reader.

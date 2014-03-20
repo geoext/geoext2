@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -27,7 +27,9 @@
 Ext.define('GeoExt.tree.View', {
     extend: 'Ext.tree.View',
     alias: 'widget.gx_treeview',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     initComponent : function() {
         var me = this;
 
@@ -86,6 +88,7 @@ Ext.define('GeoExt.tree.View', {
      */
     createChild: function(el, node) {
         var component = node.get('component'),
+            isChecked = node.get('checked'),
             cmpObj;
 
         if(component) {
@@ -106,7 +109,9 @@ Ext.define('GeoExt.tree.View', {
             }
             node.gx_treecomponents[cmpObj.xtype] = cmpObj;
 
-            cmpObj.render(el);
+            if (isChecked !== false) {
+                cmpObj.render(el);
+            }
 
             el.removeCls('gx-tree-component-off');
         }

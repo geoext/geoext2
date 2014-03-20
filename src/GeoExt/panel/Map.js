@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -48,7 +48,9 @@
  */
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
-    requires: ['GeoExt.data.LayerStore'],
+    requires: [
+        'GeoExt.data.LayerStore'
+    ],
     alias: 'widget.gx_mappanel',
     alternateClassName: 'GeoExt.MapPanel',
 
@@ -175,6 +177,15 @@ Ext.define('GeoExt.panel.Map', {
     ],
 
     /**
+     * Whether we already rendered an OpenLayers.Map in this panel. Will be
+     * updated in #onResize, after the first rendering happened.
+     *
+     * @property {Boolean} mapRendered
+     * @private
+     */
+    mapRendered: false,
+
+    /**
      * Initializes the map panel. Creates an OpenLayers map if
      * none was provided in the config options passed to the
      * constructor.
@@ -184,7 +195,10 @@ Ext.define('GeoExt.panel.Map', {
     initComponent: function(){
         if(!(this.map instanceof OpenLayers.Map)) {
             this.map = new OpenLayers.Map(
-                Ext.applyIf(this.map || {}, {allOverlays: true})
+                Ext.applyIf(this.map || {}, {
+                    allOverlays: true,
+                    fallThrough: true
+                })
             );
         }
 
@@ -334,9 +348,10 @@ Ext.define('GeoExt.panel.Map', {
      */
     onResize: function() {
         var map = this.map;
-        if(this.body.dom !== map.div) {
+        if(!this.mapRendered && this.body.dom !== map.div) {
             // the map has not been rendered yet
             map.render(this.body.dom);
+            this.mapRendered = true;
 
             this.layers.bind(map);
 

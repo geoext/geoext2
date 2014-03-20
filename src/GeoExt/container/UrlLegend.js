@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -83,9 +83,16 @@ Ext.define('GeoExt.container.UrlLegend', {
      */
     initComponent: function(){
         var me = this;
+        me.addEvents('legendimageloaded');
         me.callParent(arguments);
         this.add(Ext.create('GeoExt.LegendImage', {
-            url: this.layerRecord.get("legendURL")
+            url: this.layerRecord.get("legendURL"),
+            listeners: {
+                'legendimageloaded': function() {
+                    this.fireEvent('legendimageloaded', this);
+                },
+                scope: this
+            }
         }));
     },
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -25,7 +25,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     ],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wmscapabilities',
-
+    requires: [
+        'GeoExt.Version'
+    ],
     /**
      * Creates new Reader.
      *
@@ -129,6 +131,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      * @private
      */
     readRecords: function(data) {
+        if (Ext.isArray(data)) {
+            return this.callParent(data);
+        }
         if(typeof data === "string" || data.nodeType) {
             data = this.format.read(data);
         }

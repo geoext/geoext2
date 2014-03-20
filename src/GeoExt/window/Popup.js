@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -47,6 +47,9 @@ Ext.define('GeoExt.window.Popup', {
     extend: 'Ext.window.Window',
     alias: 'widget.gx_popup',
     alternateClassName : 'GeoExt.Popup',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /*
      * Some Ext.Window defaults need to be overriden here

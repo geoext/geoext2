@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -23,6 +23,9 @@
 Ext.define('GeoExt.FeatureRenderer', {
     extend: 'Ext.Component',
     alias: 'widget.gx_renderer',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * Optional vector to be drawn.  If not provided, and if `symbolizers`
