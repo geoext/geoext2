@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -30,6 +30,10 @@
 
 <span id='GeoExt-slider-Zoom'>/**
 </span> * Create a slider to control the zoom of a layer.
+ * Important: Due to changes in OpenLayers 2.13, you need to set 
+ * 'zoomMethod: null' on the map to avoid inconsistent zoom-Levels.
+ * This is only needed when using 'aggressive: true' on the slider.
+ * The issue has already been fixed in the current trunk of OpenLayers.
  *
  * Sample code to render a slider outside the map viewport:
  *
@@ -50,7 +54,9 @@
  *         height: 300,
  *         width: 400,
  *         map: {
- *             controls: [new OpenLayers.Control.Navigation()]
+ *             controls: [new OpenLayers.Control.Navigation()],
+ *             maxResolution: 0.703125,
+ *             zoomMethod: null
  *         },
  *         layers: [new OpenLayers.Layer.WMS(
  *             &quot;Global Imagery&quot;,
@@ -71,8 +77,10 @@
  * @class GeoExt.slider.Zoom
  */
 Ext.define('GeoExt.slider.Zoom', {
-    extend : 'Ext.slider.Single',
-    requires : ['GeoExt.panel.Map'],
+    extend : 'GeoExt.slider.MapPanelItem',
+    requires : [
+        'GeoExt.panel.Map'
+    ],
     alias : 'widget.gx_zoomslider',
     alternateClassName : 'GeoExt.ZoomSlider',
 
@@ -111,44 +119,6 @@ Ext.define('GeoExt.slider.Zoom', {
      * @property {Boolean} zooming
      */
     zooming: false,
-
-<span id='GeoExt-slider-Zoom-property-resizingDelayMS'>    /**
-</span>     * The number of millisconds to wait (after rendering the slider) before
-     * resizing of the slider happens in case this slider is rendered ad child
-     * of a GeoExt.panel.Map.
-     *
-     * This defaults to 200 milliseconds, which is not really noticeable, and
-     * also rather conservative big.
-     *
-     * @private
-     */
-    resizingDelayMS: 200,
-
-<span id='GeoExt-slider-Zoom-cfg-thumbHeight'>    /**
-</span>     * The height in pixels of the slider thumb. Will be used when we need to
-     * manually resize ourself in case we are added to a mappanel. This will
-     * be the height of the element containing the thumb when we are rendered
-     * horizontally (see #vertical).
-     *
-     * This value shouldn't usually be adjusted, when the default stylesheet of
-     * ExtJS is used.
-     *
-     * @cfg {Number}
-     */
-    thumbHeight: 14,
-
-<span id='GeoExt-slider-Zoom-cfg-thumbWidth'>    /**
-</span>     * The width in pixels of the slider thumb. Will be used when we need to
-     * manually resize ourself in case we are added to a mappanel. This will
-     * be the width of the element containing the thumb when we are rendered
-     * vertically (see #vertical).
-     *
-     * This value shouldn't usually be adjusted, when the default stylesheet of
-     * ExtJS is used.
-     *
-     * @cfg {Number}
-     */
-    thumbWidth: 15,
 
 <span id='GeoExt-slider-Zoom-method-initComponent'>    /**
 </span>     * Initialize the component.
@@ -195,97 +165,24 @@ Ext.define('GeoExt.slider.Zoom', {
     },
 
 <span id='GeoExt-slider-Zoom-method-addToMapPanel'>    /**
-</span>     * Called by a MapPanel if this component is one of the items in the panel.
+</span>     * The base class takes care of the rendered dimensions of the slider, and
+     * we only additionally call #bind in the afterrender-event.
      *
-     * @param {GeoExt.panel.Map} panel
-     * @private
+     * @inheritdoc
      */
     addToMapPanel: function(panel) {
-        this.on({
+        var me = this;
+        me.callParent(arguments);
+        me.on({
 <span id='GeoExt-slider-Zoom-method-afterrender'>            /**
 </span>             * Once we are rendered and we know that we are a child of a
-             * mappanel, we need to make some adjustments to our DOMs
-             * box dimensions.
+             * mappanel, we bind our event handlers to the map.
              */
             afterrender: function(){
-                var me = this,
-                    el = me.getEl(),
-                    dim = {
-                        // depending on our vertical setting, we need to find
-                        // sane values for both width and height.
-                        width: me.vertical ? me.thumbWidth : el.getWidth(),
-                        height: !me.vertical ? me.thumbHeight : el.getHeight(),
-                        top: me.y || 0,
-                        left: me.x || 0
-                    },
-                    resizeFunction,
-                    resizeTask;
-                // Bind handlers that stop the mouse from interacting with the
-                // map below the slider.
-                el.on({
-                    mousedown: me.stopMouseEvents,
-                    click: me.stopMouseEvents
-                });
-<span id='GeoExt-slider-Zoom-method-resizeFunction'>                /**
-</span>                 * This method takes some of the gathered values from above and
-                 * ensures that we have an expected look.
-                 */
-                resizeFunction = function(){
-                    el.setStyle({
-                        top: dim.top,
-                        left: dim.left,
-                        width: dim.width,
-                        position: &quot;absolute&quot;,
-                        height: dim.height,
-                        zIndex: panel.map.Z_INDEX_BASE.Control
-                    });
-                    // This is tricky...
-                    if (me.vertical) {
-                        // ...for vertical sliders the height of the surrounding
-                        // element is controlled by the height of the element
-                        // with the 'x-slider-inner'-class
-                        el.down('.x-slider-inner').el.setStyle({
-                            height: dim.height - me.thumbWidth
-                        });
-                    } else {
-                        // ...but for horizontal sliders, it's the form element
-                        // with class 'x-form-item-body' that controls the
-                        // height.
-                        el.down('.x-form-item-body').el.setStyle({
-                            height: me.thumbHeight
-                        });
-                    }
-                };
-                // We delay the execution for a small amount of milliseconds,
-                // so that our changes do take effect.
-                resizeTask = new Ext.util.DelayedTask(resizeFunction);
-                resizeTask.delay(me.resizingDelayMS);
                 // bind the map to the slider
                 me.bind(panel.map);
-            },
-            scope: this
+            }
         });
-    },
-
-<span id='GeoExt-slider-Zoom-method-stopMouseEvents'>    /**
-</span>     * @param {Object} e
-     * @private
-     */
-    stopMouseEvents: function(e) {
-        e.stopEvent();
-    },
-
-<span id='GeoExt-slider-Zoom-method-removeFromMapPanel'>    /**
-</span>     * Called by a MapPanel if this component is one of the items in the panel.
-     *
-     * @param {GeoExt.panel.Map} panel
-     * @private
-     */
-    removeFromMapPanel: function(panel) {
-        var el = this.getEl();
-        el.un(&quot;mousedown&quot;, this.stopMouseEvents, this);
-        el.un(&quot;click&quot;, this.stopMouseEvents, this);
-        this.unbind();
     },
 
 <span id='GeoExt-slider-Zoom-method-bind'>    /**
@@ -309,6 +206,9 @@ Ext.define('GeoExt.slider.Zoom', {
 
 <span id='GeoExt-slider-Zoom-method-unbind'>    /**
 </span>     * Unregisters the bound listeners on the #map, e.g. when being destroyed.
+     *
+     * Will automatically be called from the inherited #removeFromMapPanel
+     * method.
      *
      * @private
      */

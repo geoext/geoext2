@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2013 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -35,7 +35,9 @@
  */
 Ext.define('GeoExt.data.FeatureStore', {
     extend: 'Ext.data.Store',
-    requires: ['GeoExt.data.reader.Feature'],
+    requires: [
+        'GeoExt.data.reader.Feature'
+    ],
 
     statics: {
 <span id='GeoExt-data-FeatureStore-static-property-LAYER_TO_STORE'>        /**

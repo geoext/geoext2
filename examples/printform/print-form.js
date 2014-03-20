@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2011 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -75,6 +75,7 @@ Ext.application({
                 name: "comment",
                 value: "",
                 fieldLabel: "Comment",
+                allowBlank: false,
                 plugins: Ext.create('GeoExt.plugins.PrintPageField', {
                     printPage: printPage
                 })
@@ -124,7 +125,15 @@ Ext.application({
             buttons: [{
                 text: "Create PDF",
                 handler: function() {
-                    printProvider.print(mapPanel, printPage);
+                    if (formPanel.getForm().isValid()) {
+                        printProvider.print(mapPanel, printPage);
+                    } else {
+                        Ext.Msg.show({
+                            title: "Invalid form",
+                            msg: "The values in the form are invalid.",
+                            icon: Ext.Msg.ERROR
+                        });
+                    }
                 }
             }]
         });
