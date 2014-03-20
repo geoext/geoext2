@@ -9,7 +9,7 @@
     var major = 2,
         minor = 0,
         patch = 1,
-        label = 'dev',
+        label = '',
         environment = [],
         v = '';
 
