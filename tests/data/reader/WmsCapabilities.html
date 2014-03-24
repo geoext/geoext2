@@ -40,10 +40,11 @@
         }
 
         function test_read(t) {
-            t.plan(39);
+            t.plan(41);
 
-            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities");
+            var reader = Ext.create("GeoExt.data.reader.WmsCapabilities", {keepRaw: true});
             var records = reader.read({responseXML: doc, responseText: true});
+            t.ok(reader.raw, "raw property set when keepRaw is true");
             var record = records.records[2];
             t.eq(record.get("name"), "tiger:tiger_roads", "correct layer name");
             reader.destroy();
@@ -58,6 +59,7 @@
                 }
             });
             records = reader.read({responseXML: doc, responseText: true});
+            t.ok(!reader.raw, "raw property not populated by default");
             t.eq(records.totalRecords, 22, 'readRecords returns correct number of records');
 
             var layer;

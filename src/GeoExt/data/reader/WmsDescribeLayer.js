@@ -24,6 +24,11 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
         'GeoExt.Version'
     ],
     /**
+     * Should we keep the raw parsed result? Default is false.
+     * @cfg {Boolean}
+     */
+    keepRaw: false,
+    /**
      * Creates new Reader.
      *
      * @param {Object} config (optional) Config object.
@@ -72,6 +77,19 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
         if (!!data.error) {
             Ext.Error.raise({msg: "Error parsing WMS DescribeLayer", arg: data.error});
         }
+        if (this.keepRaw) {
+            this.raw = data;
+        }
         return this.callParent([data]);
+    },
+
+    /**
+     * @private
+     */
+    destroyReader: function() {
+        var me = this;
+        delete me.raw;
+        this.callParent();
     }
+
 });
