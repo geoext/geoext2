@@ -8,3 +8,7 @@
 .gx-tree-component-off {
     display: none;
 }
+
+.gx-tree-baselayer-icon {
+    background-image: url('../../resources/images/default/map.png');
+}
