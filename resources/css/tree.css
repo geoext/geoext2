@@ -10,6 +10,9 @@
 .x-theme-gray .gx-tree-radio {
     background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-gray/images/form/radio.gif');
 }
+.gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-classic/images/form/radio.gif');
+}
 .gx-tree-component {
 }
 .gx-tree-component-off {
