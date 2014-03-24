@@ -1,14 +1,23 @@
-.gx-tree-radio {
-    background-image: url('../../resources/images/default/radio.gif');
+.x-theme-neptune .gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-neptune/images/form/radio.png');
 }
-
+.x-theme-classic .gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-classic/images/form/radio.gif');
+}
+.x-theme-access .gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-access/images/form/radio.gif');
+}
+.x-theme-gray .gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-gray/images/form/radio.gif');
+}
+.gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-classic/images/form/radio.gif');
+}
 .gx-tree-component {
 }
-
 .gx-tree-component-off {
     display: none;
 }
-
 .gx-tree-baselayer-icon {
     background-image: url('../../resources/images/default/map.png');
 }
