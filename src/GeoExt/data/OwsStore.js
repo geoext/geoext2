@@ -26,7 +26,7 @@ Ext.define('GeoExt.data.OwsStore', {
 
     config: {
         /**
-         * The URL from which to retrieve the WMS DescribeLayer document.
+         * The URL from which to retrieve the OWS document.
          *
          * @cfg {String}
          */
@@ -34,12 +34,18 @@ Ext.define('GeoExt.data.OwsStore', {
 
         /**
          * A parser for transforming the XHR response into an array of objects
-         * representing attributes. Defaults to an {OpenLayers.Format.WMSDescribeLayer}
-         * parser.
+         * representing attributes.
          *
          * @cfg {OpenLayers.Format}
          */
-        format : null
+        format : null,
+
+        /**
+         * Any baseParams to use on this store.
+         *
+         * @cfg {Object}
+         */
+        baseParams: null
     },
 
     /**
@@ -61,6 +67,27 @@ Ext.define('GeoExt.data.OwsStore', {
         }
         if(this.format) {
             this.setFormat(this.format);
+        }
+        var proxy = this.getProxy();
+        if (proxy) {
+            proxy.startParam = false;
+            proxy.limitParam = false;
+            proxy.pageParam = false;
+        }
+        if (config.baseParams) {
+            this.setBaseParams(config.baseParams);
+        }
+    },
+
+    /**
+     * @private
+     */
+    applyBaseParams: function(newParams) {
+        if (newParams && Ext.isObject(newParams)) {
+            var proxy = this.getProxy();
+            if(proxy) {
+                proxy.extraParams = newParams;
+            }
         }
     },
 
