@@ -28,7 +28,7 @@
         }
 
         function test_read(t) {
-            t.plan(5);
+            t.plan(6);
 
             var reader = Ext.create("GeoExt.data.reader.WmsDescribeLayer", {keepRaw: true});
 
@@ -40,10 +40,11 @@
             
             var record = records.records[0];
 
-            //3 tests -- testing the fields of a record
+            //4 tests -- testing the fields of a record
             t.eq(record.get("owsType"), "WFS", "[0] correct owsType");
             t.eq(record.get("owsURL"), "http://demo.opengeo.org/geoserver/wfs/WfsDispatcher?", "[0] correct owsURL");
-            t.eq(record.get("typeName"),"topp:states", "[0] correct typeName");
+            t.eq(record.get("typeName"), "topp:states", "[0] correct typeName");
+            t.eq(record.get("layerName"), "topp:states", "[0] correct layerName");
             reader.destroy();
         }
 
