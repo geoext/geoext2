@@ -39,7 +39,11 @@ Ext.define('GeoExt.data.reader.Attribute', {
     ],
     alternateClassName: 'GeoExt.data.AttributeReader',
     alias: 'reader.gx_attribute',
-
+    /**
+     * Should we keep the raw parsed result? Default is false.
+     * @cfg {Boolean}
+     */
+    keepRaw: false,
     config: {
         /**
          * A parser for transforming the XHR response into an array of objects
@@ -84,6 +88,15 @@ Ext.define('GeoExt.data.reader.Attribute', {
         if (this.feature) {
             this.setFeature(this.feature);
         }
+    },
+
+    /**
+     * @private
+     */
+    destroyReader: function() {
+        var me = this;
+        delete me.raw;
+        this.callParent();
     },
 
     /**
@@ -135,7 +148,11 @@ Ext.define('GeoExt.data.reader.Attribute', {
             attributes = data;
         } else {
             // only works with one featureType in the doc
-            attributes = this.getFormat().read(data).featureTypes[0].properties;
+            var result = this.getFormat().read(data);
+            if (this.keepRaw) {
+                this.raw = result;
+            }
+            attributes = result.featureTypes[0].properties;
         }
         var feature = this.feature;
         var fields = this.model.prototype.fields;
