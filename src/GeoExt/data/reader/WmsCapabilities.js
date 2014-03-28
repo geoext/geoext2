@@ -44,10 +44,17 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     },
 
     /**
-     * Should we keep the raw parsed result? Default is false.
+     * Should we keep the raw parsed result? If true, the result will be stored
+     * under the #raw property. Default is false.
      * @cfg {Boolean}
      */
     keepRaw: false,
+
+    /**
+     * The raw parsed result, only set if #keepRaw is true.
+     * @cfg {Object}
+     */
+    raw: null,
 
     /**
      * CSS class name for the attribution DOM elements.
