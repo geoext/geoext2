@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Symbolizer/Raster.js
+ * @include GeoExt/Version.js
  */
 
 /**

@@ -11,6 +11,7 @@
  * @include OpenLayers/Layer/Vector.js
  * @include OpenLayers/Util.js
  * @include OpenLayers/BaseTypes/Class.js
+ * @include GeoExt/Version.js
  */
 
 /**

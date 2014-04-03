@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Format/WMSDescribeLayer.js
+ * @include GeoExt/Version.js
  */
 
 /**

@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @include GeoExt/Version.js
+ */
+
 /**
  * Small Base class to make creating stores for remote OWS information sources
  * easier.

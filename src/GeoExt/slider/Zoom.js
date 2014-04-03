@@ -7,6 +7,7 @@
  */
 
 /*
+ * @requires GeoExt/slider/MapPanelItem.js
  * @include OpenLayers/Util.js
  * @include GeoExt/panel/Map.js
  */

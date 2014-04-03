@@ -7,6 +7,10 @@
  */
 
 /**
+ * @include GeoExt/Version.js
+ */
+
+/**
  * Create a slider tip displaying `Ext.slider.SingleSlider` values over slider
  * thumbs.
  *

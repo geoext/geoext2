@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Format/WMC.js
+ * @include GeoExt/Version.js
  */
 
 /**

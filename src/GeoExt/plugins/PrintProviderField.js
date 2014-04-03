@@ -7,6 +7,10 @@
  */
 
 /**
+ * @include GeoExt/data/MapfishPrintProvider.js
+ */
+
+/**
  * A plugin for Ext.form.Field components which provides synchronization
  * with a GeoExt.data.MapfishPrintProvider.
  *

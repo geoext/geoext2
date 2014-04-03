@@ -7,6 +7,10 @@
  */
 
 /**
+ * @include GeoExt/data/PrintPage.js
+ */
+
+/**
  * A plugin for `Ext.form.Field` components which provides synchronization
  * with a {@link GeoExt.data.PrintPage}. The field name has to match the
  * respective property of the printPage (e.g. `scale`, `rotation`).
