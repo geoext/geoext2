@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @include GeoExt/Version.js
+ */
+
 /**
  * Base class for components of GeoExt.panel.Legend.
  *

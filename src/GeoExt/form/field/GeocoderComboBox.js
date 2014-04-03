@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @include GeoExt/panel/Map.js
+ */
+
 /**
  * Creates a combo box that handles results from a geocoding service. By
  * default it uses OSM Nominatim, but it can be configured with a custom store

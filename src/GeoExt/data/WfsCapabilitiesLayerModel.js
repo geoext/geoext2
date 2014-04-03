@@ -7,6 +7,7 @@
  */
 
 /*
+ * @requires GeoExt/data/LayerModel.js
  * @include GeoExt/data/reader/WfsCapabilities.js
  */
 

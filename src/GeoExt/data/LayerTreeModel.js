@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @include GeoExt/Version.js
+ */
+
 /**
  * Model for trees that use GeoExt tree components. It can also hold plain
  * Ext JS layer nodes.

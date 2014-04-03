@@ -6,6 +6,11 @@
  * text of the license.
  */
 
+/*
+ * @include GeoExt/data/VectorStyleModel.js
+ * @include GeoExt/data/RasterStyleModel.js
+ */
+
 /**
  * A smart store that creates records for client-side rendered legends. If
  * its store is configured with an {OpenLayers.Style2} instance as `data`,

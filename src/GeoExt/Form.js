@@ -9,6 +9,7 @@
 /*
  * @requires OpenLayers/Filter/Comparison.js
  * @requires OpenLayers/Filter/Logical.js
+ * @include GeoExt/Version.js
  */
 
 /**
