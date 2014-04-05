@@ -3,7 +3,7 @@
 }
 
 .gx-popup-anc {
-    background: transparent url(../images/default/anchor-neptune.png) no-repeat 0 0;
+    background: transparent url(../images/default/anchor.png) no-repeat 0 0;
     position: absolute;
     left: 5px;
     z-index: 2;
@@ -14,7 +14,7 @@
 }
 
 .gx-popup-anc.top {
-    background: transparent url(../images/default/anchor-top-neptune.png) no-repeat 0 0;
+    background: transparent url(../images/default/anchor-top.png) no-repeat 0 0;
     top: -16px; /* height(gx-popup-anc) */
 }
 
