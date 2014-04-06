@@ -1,0 +1,147 @@
+[
+        {
+            "title": "Ungrouped Examples",
+            "items": [
+                {
+                    "name": "mappanel-with-actions",
+                    "title": "Action",
+                    "description": "A GeoExt.Action is created to insert an OpenLayers control in a toolbar as a button or in a menu as a menu item.",
+                    "url": "../../../examples/action/mappanel_with_actions.html",
+                    "icon": "../../../examples/action/thumb.png"
+                },
+                {
+                    "name": "simple-app",
+                    "title": "MVC Application",
+                    "description": "A simple complete MVC application example called CF (Cartography Framework).",
+                    "url": "../../../examples/app/simple/simple.html",
+                    "icon": "../../../examples/app/simple/thumb.png"
+                },
+                {
+                    "name": "geocoder",
+                    "title": "Geocoder",
+                    "description": "Creates a combo box that handles results from a geocoding service. By default it uses OSM Nominatim.",
+                    "url": "../../../examples/geocoder/geocoder.html",
+                    "icon": "../../../examples/geocoder/thumb.png"
+                },
+                {
+                    "name": "feature-grid",
+                    "title": "Freature Grid",
+                    "description": "An Ext.grid.Panel loaded with features read from a GeoJSON document.",
+                    "url": "../../../examples/grid/feature-grid.html",
+                    "icon": "../../../examples/grid/thumb.png"
+                },
+                {
+                    "name": "layer-opacity-slider",
+                    "title": "Layer Opacity Slider",
+                    "description": "The LayerOpacitySlider allows control of a layer opacity using an Ext.Slider.",
+                    "url": "../../../examples/layeropacityslider/layeropacityslider.html",
+                    "icon": "../../../examples/layeropacityslider/thumb.png"
+                },
+                {
+                    "name": "legend-panel",
+                    "title": "Legend Panel",
+                    "description": "Create a LegendPanel that is autopopulated with legends from a map that has already been created.",
+                    "url": "../../../examples/legendpanel/legendpanel.html",
+                    "icon": "../../../examples/legendpanel/thumb.png"
+                },
+                {
+                    "name": "map-panel",
+                    "title": "MapPanel",
+                    "description": "Create a simple GeoExt.panel.Map container for a map.",
+                    "url": "../../../examples/mappanel/mappanel.html",
+                    "icon": "../../../examples/mappanel/thumb.png"
+                },
+                {
+                    "name": "permalink",
+                    "title": "Permalink",
+                    "description": "Generate permalinks with the current map position and visible layers.",
+                    "url": "../../../examples/permalink/permalink.html",
+                    "icon": "../../../examples/permalink/thumb.png"
+                },
+                {
+                    "name": "popup",
+                    "title": "Popup",
+                    "description": "A popup is a specialized window that supports anchoring to a particular location in a MapPanel.",
+                    "url": "../../../examples/popup/popup.html",
+                    "icon": "../../../examples/popup/thumb.png"
+                },
+                {
+                    "name": "print-extent",
+                    "title": "Print Extent",
+                    "description": "Set the bounds of a printable PDF interactively with a dynamic print extent rectangle. It requires the MapFish or GeoServer print module.",
+                    "url": "../../../examples/printextent/print-extent.html",
+                    "icon": "../../../examples/printextent/thumb.png"
+                },
+                {
+                    "name": "print-form",
+                    "title": "Print Form",
+                    "description": "Set the bounds of a printable PDF interactively with a dynamic print extent rectangle. It requires the MapFish or GeoServer print module.",
+                    "url": "../../../examples/printform/print-form.html",
+                    "icon": "../../../examples/printform/thumb.png"
+                },
+                {
+                    "name": "print-page",
+                    "title": "Print Page",
+                    "description": "Create a printable PDF, using the MapFish or GeoServer print module.",
+                    "url": "../../../examples/printpage/print-page.html",
+                    "icon": "../../../examples/printpage/thumb.png"
+                },
+                {
+                    "name": "print-preview",
+                    "title": "Print Preview",
+                    "description": "How to create a printable PDF with GeoExt.data.MapfishPrintProvider and GeoExt.PrintMapPanel.",
+                    "url": "../../../examples/printpreview/print-preview.html",
+                    "icon": "../../../examples/printpreview/thumb.png"
+                },
+                {
+                    "name": "renderer",
+                    "title": "Renderer",
+                    "description": "The FeatureRenderer renderers arbitrary OpenLayers.Feature.Vector objects given a list of symbolizers.",
+                    "url": "../../../examples/renderer/renderer.html",
+                    "icon": "../../../examples/renderer/thumb.png"
+                },
+                {
+                    "name": "style-grid",
+                    "title": "Style Grid",
+                    "description": "The StyleReader populates a store with records representing rules of a Style or the entries of a ColorMap, so they can easily be shown in a grid.",
+                    "url": "../../../examples/stylegrid/style-grid.html",
+                    "icon": "../../../examples/stylegrid/thumb.png"
+                },
+                {
+                    "name": "layer-tree",
+                    "title": "Layer Tree",
+                    "description": "This example shows how to work with a layer tree.",
+                    "url": "../../../examples/tree/tree-legend.html",
+                    "icon": "../../../examples/tree/thumb.png"
+                },
+                {
+                    "name": "wfs-capabilities",
+                    "title": "WFS Capabilities",
+                    "description": "Load a grid with data from a WFS capabilities document.",
+                    "url": "../../../examples/wfscapabilities/wfscapabilities.html",
+                    "icon": "../../../examples/wfscapabilities/thumb.png"
+                },
+                {
+                    "name": "wms-capabilities",
+                    "title": "WMS Capabilities",
+                    "description": "Load a grid with data from a WMS capabilities document.",
+                    "url": "../../../examples/wmscapabilities/wmscapabilities.html",
+                    "icon": "../../../examples/wmscapabilities/thumb.png"
+                },
+                {
+                    "name": "zoom-chooser",
+                    "title": "Zoom Chooser",
+                    "description": "This example demonstrates the use of a GeoExt.data.ScaleStore to list the available zoom levels for a map.",
+                    "url": "../../../examples/zoomchooser/zoomchooser.html",
+                    "icon": "../../../examples/zoomchooser/thumb.png"
+                },
+                {
+                    "name": "zoom-slider",
+                    "title": "Zoom Slider",
+                    "description": "Allows control of the map scale using an Ext.slider.SingleSlider.",
+                    "url": "../../../examples/zoomslider/zoomslider.html",
+                    "icon": "../../../examples/zoomslider/thumb.png"
+                }
+            ]
+        }
+    ]
