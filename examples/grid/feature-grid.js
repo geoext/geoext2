@@ -29,9 +29,15 @@ Ext.application({
         // create map instance
         var map = new OpenLayers.Map();
         var wmsLayer = new OpenLayers.Layer.WMS(
-            "vmap0",
-            "http://vmap0.tiles.osgeo.org/wms/vmap0",
-            {layers: 'basic'}
+            "OpenStreetMap WMS",
+            "http://ows.terrestris.de/osm/service?",
+            {layers: 'OSM-WMS'},
+            {
+                attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                    'Data &copy; OpenStreetMap ' +
+                    '<a href="http://www.openstreetmap.org/copyright/en"' +
+                    'target="_blank">contributors<a>'
+            }
         );
 
         // create vector layer

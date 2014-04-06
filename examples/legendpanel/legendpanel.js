@@ -32,26 +32,24 @@ Ext.application({
         });
         map.addLayers([
             new OpenLayers.Layer.WMS(
-                "Tasmania",
-                "http://demo.opengeo.org/geoserver/wms?",
+                "OpenStreetMap WMS",
+                "http://ows.terrestris.de/osm/service?",
+                {layers: 'OSM-WMS'},
                 {
-                    layers: 'topp:tasmania_state_boundaries', 
-                    format: 'image/png', 
-                    transparent: true
-                },
-
-                {
-                    singleTile: true
-                }),            
+                    attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                        'Data &copy; OpenStreetMap ' +
+                        '<a href="http://www.openstreetmap.org/copyright/en"' +
+                        'target="_blank">contributors<a>'
+                }
+            ),            
             new OpenLayers.Layer.WMS(
-                "Cities and Roads",
-                "http://demo.opengeo.org/geoserver/wms?",
+                "Subway Stops",
+                "http://ows.terrestris.de/osm-haltestellen?",
                 {
-                    layers: 'topp:tasmania_cities,topp:tasmania_roads', 
+                    layers: 'OSM-Strassenbahnhaltestellen', 
                     format: 'image/png', 
                     transparent: true
                 },
-
                 {
                     singleTile: true
                 }),
@@ -69,7 +67,7 @@ Ext.application({
         map.layers[2].addFeatures([
             new OpenLayers.Feature.Vector(
                 OpenLayers.Geometry.fromWKT(
-                    "POLYGON(146.1 -41, 146.2 -41, 146.2 -41.1, 146.1 -41.1)"
+                    "POLYGON(6.8467 50.938, 6.8531 50.9433, 6.858 50.9395, 6.8467 50.938)"
                 )
             )
         ]);
@@ -79,14 +77,14 @@ Ext.application({
             height: 400,
             width: 600,
             map: map,
-            center: new OpenLayers.LonLat(146.4, -41.6),
-            zoom: 7
+            center: new OpenLayers.LonLat(6.85260, 50.9396),
+            zoom: 15
         });
 
         // give the record of the 1st layer a legendURL, which will cause
         // UrlLegend instead of WMSLegend to be used
         var layerRec0 = mapPanel.layers.getAt(0);
-        layerRec0.set("legendURL", "http://demo.opengeo.org/geoserver/wms?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_state_boundaries");
+        layerRec0.set("legendURL", "http://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
         
         legendPanel = Ext.create('GeoExt.panel.Legend', {
             defaults: {
@@ -102,10 +100,10 @@ Ext.application({
         // functions for interacting with the map's layers to show how the
         // legend instantly reflects changes
         function addRemoveLayer() {
-            if(Ext.Array.indexOf(map.layers, water) == -1) {
-                map.addLayer(water);
+            if(Ext.Array.indexOf(map.layers, busstops) == -1) {
+                map.addLayer(busstops);
             } else {
-                map.removeLayer(water);
+                map.removeLayer(busstops);
             }
         }        
         function moveLayer() {
@@ -131,9 +129,9 @@ Ext.application({
         // stores another legendURL for the legendurl button action
         var otherUrl = "http://www.geoext.org/trac/geoext/chrome/site/img/GeoExt.png";
         // create another layer for the add/remove button action
-        var water = new OpenLayers.Layer.WMS("Bodies of Water",
-            "http://demo.opengeo.org/geoserver/wms?",
-            {layers: 'topp:tasmania_water_bodies', format: 'image/png', transparent: true},
+        var busstops = new OpenLayers.Layer.WMS("Bus Stops",
+            "http://ows.terrestris.de/osm-haltestellen?",
+            {layers: 'OSM-Bushaltestellen', format: 'image/png', transparent: true},
             {singleTile: true});
 
         Ext.create('Ext.panel.Panel', {

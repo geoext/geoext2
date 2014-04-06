@@ -92,9 +92,16 @@ Ext.onReady(function() {
             region: "center",
             layers: [
                 new OpenLayers.Layer.WMS( 
-                    "OpenLayers WMS",
-                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
-                    {layers: 'basic'} ),
+                    "OpenStreetMap WMS",
+                    "http://ows.terrestris.de/osm/service?",
+                    {layers: 'OSM-WMS'},
+                    {
+                        attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                            'Data &copy; OpenStreetMap ' +
+                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'target="_blank">contributors<a>'
+                    }
+                ),
                 new OpenLayers.Layer.Vector('vector',{
                     isBaseLayer: true
                 }),

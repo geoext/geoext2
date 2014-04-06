@@ -39,15 +39,16 @@ Ext.application({
 
         var map = new OpenLayers.Map({});
         var ol_wms = new OpenLayers.Layer.WMS(
-            "OpenLayers WMS", 
-            "http://vmap0.tiles.osgeo.org/wms/vmap0", 
+            "OpenStreetMap WMS",
+            "http://ows.terrestris.de/osm/service?",
+            {layers: 'OSM-WMS'},
             {
-                layers: "basic"
-            },
-            {
-                attribution: 'Metacarta WMS hosted on <a href="http://www.osgeo.org/" target="_blank">osgeo.org<a>'
+                attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                    'Data &copy; OpenStreetMap ' +
+                    '<a href="http://www.openstreetmap.org/copyright/en"' +
+                    'target="_blank">contributors<a>'
             }
-            );
+        );
         
         map.addLayers([ol_wms]);
         
@@ -56,16 +57,11 @@ Ext.application({
             width: 400,
             height: 400,
             title: 'The GeoExt.panel.Map-class',
-            map: map
-            ,
-            stateful: true
-            ,
-            stateId: 'mappanel'
-            //,mapCenter: '2.648274,39.567489'
-            //,mapZoom: 7
-            ,
-            mapExtent: '7,51,8,52'
-            ,
+            map: map,
+            stateful: true,
+            stateId: 'mappanel',
+            center: '12.3,38.9',
+            zoom: 5,
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
