@@ -605,6 +605,11 @@
                     "path": "ext-4.2.1.883/src/"
                 },
                 {
+                    "clsName": "GeoExt.Version",
+                    "name": "Version.js",
+                    "path": "../../../src/GeoExt/"
+                },
+                {
                     "clsName": "Ext.util.Bindable",
                     "name": "Bindable.js",
                     "path": "ext-4.2.1.883/src/util/"

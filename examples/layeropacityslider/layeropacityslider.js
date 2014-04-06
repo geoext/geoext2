@@ -74,9 +74,15 @@ Ext.application({
         
         var clone = wms.clone();
         var wms2 = new OpenLayers.Layer.WMS(
-            "OpenLayers WMS",
-            "http://vmap0.tiles.osgeo.org/wms/vmap0",
-            {layers: 'basic'}
+            "OpenStreetMap WMS",
+            "http://ows.terrestris.de/osm/service?",
+            {layers: 'OSM-WMS'},
+            {
+                attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                    'Data &copy; OpenStreetMap ' +
+                    '<a href="http://www.openstreetmap.org/copyright/en"' +
+                    'target="_blank">contributors<a>'
+            }
         );
         panel2 = Ext.create('GeoExt.panel.Map', {
             title: "Map 2",

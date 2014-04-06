@@ -20,41 +20,44 @@ Ext.application({
     launch: function() {
         var mapPanel = Ext.create('GeoExt.MapPanel', {
             region: "center",
-            center: [146.1569825, -41.6109735],
-            zoom: 6,
+            center: [6.859, 50.937],
+            zoom: 15,
             layers: [
-                new OpenLayers.Layer.WMS("Tasmania State Boundaries",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_state_boundaries"
-                    }, {
+                new OpenLayers.Layer.WMS("OpenStreetMap WMS",
+                    "http://ows.terrestris.de/osm/service?",
+                    {layers: 'OSM-WMS'},
+                    {
+                        attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                            'Data &copy; OpenStreetMap ' +
+                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'target="_blank">contributors<a>',
                         buffer: 0,
                         // exclude this layer from layer container nodes
                         displayInLayerSwitcher: false
-                   }),
-                new OpenLayers.Layer.WMS("Water",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_water_bodies",
-                        transparent: true,
-                        format: "image/gif"
-                    }, {
-                        buffer: 0
-                    }),
-                new OpenLayers.Layer.WMS("Cities",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_cities",
-                        transparent: true,
-                        format: "image/gif"
-                    }, {
-                        buffer: 0
-                    }),
-                new OpenLayers.Layer.WMS("Tasmania Roads",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_roads",
-                        transparent: true,
-                        format: "image/gif"
-                    }, {
-                        buffer: 0
-                    })
+                    }
+                ),
+                new OpenLayers.Layer.WMS("Subway Stops",
+                    "http://ows.terrestris.de/osm-haltestellen?",
+                    {
+                        layers: 'OSM-Strassenbahnhaltestellen', 
+                        format: 'image/png', 
+                        transparent: true
+                    },
+                    {
+                        singleTile: true
+                    }
+                ),
+                new OpenLayers.Layer.WMS("Bus Stops",
+                    "http://ows.terrestris.de/osm-haltestellen?",
+                    {
+                        layers: 'OSM-Bushaltestellen', 
+                        format: 'image/png', 
+                        transparent: true
+                    },
+                    {
+                        singleTile: true
+                    }
+                )
             ]
         });
 

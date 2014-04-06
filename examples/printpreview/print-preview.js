@@ -78,9 +78,15 @@ Ext.application({
             },
             layers: [
                 new OpenLayers.Layer.WMS(
-                    "Tasmania State Boundaries",
-                    "http://demo.opengeo.org/geoserver/wms",
-                    { layers: "topp:tasmania_state_boundaries" }
+                    "OpenStreetMap WMS",
+                    "http://ows.terrestris.de/osm/service?",
+                    {layers: 'OSM-WMS'},
+                    {
+                        attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                            'Data &copy; OpenStreetMap ' +
+                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'target="_blank">contributors<a>'
+                    }
                 ),
                 vecLayer
             ],

@@ -20,9 +20,15 @@ Ext.application({
         var map = new OpenLayers.Map({});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         var wms = new OpenLayers.Layer.WMS(
-            "OpenLayers WMS",
-            "http://vmap0.tiles.osgeo.org/wms/vmap0?",
-            {layers: 'basic'}
+            "OpenStreetMap WMS",
+            "http://ows.terrestris.de/osm/service?",
+            {layers: 'OSM-WMS'},
+            {
+                attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                    'Data &copy; OpenStreetMap ' +
+                    '<a href="http://www.openstreetmap.org/copyright/en"' +
+                    'target="_blank">contributors<a>'
+            }
         );
 
         var vector = new OpenLayers.Layer.Vector("vector");
@@ -153,7 +159,7 @@ Ext.application({
         var mappanel = Ext.create('GeoExt.panel.Map', {
             title: 'Using GeoExt.Action instances in various places',
             map: map,
-            extent: '5.19,46.85,15.47,55.63',
+            extent: '-22,34,42,64',
             dockedItems: [{
                 xtype: 'toolbar',
                 dock: 'top',
