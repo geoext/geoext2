@@ -13,6 +13,7 @@
  * @include OpenLayers/Geometry/Point.js
  * @include OpenLayers/Feature/Vector.js
  * @include OpenLayers/Layer/Vector.js
+ * @requires GeoExt/Version.js
  */
 
 /**

@@ -8,6 +8,7 @@
 
 /*
  * @requires GeoExt/data/AttributeModel.js
+ * @requires GeoExt/data/OwsStore.js
  */
 
 /**

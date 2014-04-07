@@ -7,6 +7,10 @@
  */
 
 /**
+ * @requires GeoExt/Version.js
+ */
+
+/**
  * This plugin provides basic tree - map synchronisation functionality for a
  * TreeView.
  *

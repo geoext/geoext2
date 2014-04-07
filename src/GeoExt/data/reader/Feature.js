@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Feature/Vector.js
+ * @requires GeoExt/Version.js
  */
 
 /**

@@ -10,6 +10,7 @@
  * @include OpenLayers/Feature/Vector.js
  * @include OpenLayers/Geometry.js
  * @include GeoExt/panel/Map.js
+ * @requires GeoExt/Version.js
  */
 
 /**

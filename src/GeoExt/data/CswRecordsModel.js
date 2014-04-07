@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/data/reader/CswRecords.js
+ * @requires GeoExt/data/reader/CswRecords.js
  */
 
 /**
