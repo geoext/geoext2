@@ -1,0 +1,22 @@
+div.olControlAttribution {
+  background-color: rgb(220,220,220);
+  background-color: rgba(55,55,55,0.2); 
+  border-top-left-radius: 5px;
+  bottom: 0;
+  color: #333;
+  max-width: 50%;
+  max-height: 50%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 3px 3px 3px 5px;
+  right: 0;
+  text-align: right;
+  text-shadow: 0 0 2px #fff;
+}
+div.olControlAttribution a,
+div.olControlAttribution a:link,
+div.olControlAttribution a:visited,
+div.olControlAttribution a:hover,
+div.olControlAttribution a:active {
+  color: darkblue;
+}
