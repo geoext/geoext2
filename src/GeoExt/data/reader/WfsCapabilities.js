@@ -11,6 +11,7 @@
  * @include OpenLayers/Protocol/WFS.js
  * @include OpenLayers/Strategy/Fixed.js
  * @include OpenLayers/Layer/Vector.js
+ * @requires GeoExt/Version.js
  */
 
 /**

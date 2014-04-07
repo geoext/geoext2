@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Format/CSWGetRecords.js
+ * @requires GeoExt/Version.js
  */
 
 /**

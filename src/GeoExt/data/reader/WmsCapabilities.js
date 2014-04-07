@@ -10,6 +10,7 @@
  * @include OpenLayers/Format/WMSCapabilities.js
  * @include OpenLayers/Layer/WMS.js
  * @include OpenLayers/Util.js
+ * @requires GeoExt/Version.js
  */
 
 /**

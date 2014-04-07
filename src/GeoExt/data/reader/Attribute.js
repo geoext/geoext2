@@ -7,6 +7,7 @@
  */
 
 /*
+ * @requires GeoExt/Version.js
  * @include OpenLayers/Format/WFSDescribeFeatureType.js
  */
 

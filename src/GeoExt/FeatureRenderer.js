@@ -13,6 +13,7 @@
  * @include OpenLayers/Geometry/Polygon.js
  * @include OpenLayers/Geometry/LineString.js
  * @include OpenLayers/Renderer/SVG.js
+ * @requires GeoExt/Version.js
  */
 
 /**

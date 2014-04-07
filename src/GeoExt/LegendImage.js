@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Util.js
+ * @requires GeoExt/Version.js
  */
 
 /**
