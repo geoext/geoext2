@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/data/reader/WmsCapabilities.js
+ * @requires GeoExt/data/reader/WmsCapabilities.js
  */
 
 /**

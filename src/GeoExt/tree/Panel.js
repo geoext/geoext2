@@ -7,8 +7,8 @@
  */
 
 /*
- * @include GeoExt/tree/Column.js
- * @include GeoExt/tree/View.js
+ * @requires GeoExt/tree/Column.js
+ * @requires GeoExt/tree/View.js
  */
 
 /**

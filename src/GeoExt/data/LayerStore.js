@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/data/LayerModel.js
+ * @requires GeoExt/data/LayerModel.js
  */
 
 /**
