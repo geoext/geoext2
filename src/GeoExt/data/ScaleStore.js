@@ -8,7 +8,7 @@
 
 /*
  * @include OpenLayers/Util.js
- * @include GeoExt/data/ScaleModel.js
+ * @requires GeoExt/data/ScaleModel.js
  * @include GeoExt/panel/Map.js
  */
 
