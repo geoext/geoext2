@@ -1,0 +1,10 @@
+@import "popup.css";
+
+
+.gx-popup-anc {
+    background: transparent url(../images/default/anchor-neptune.png) no-repeat 0 0;
+}
+
+.gx-popup-anc.top {
+    background: transparent url(../images/default/anchor-top-neptune.png) no-repeat 0 0;
+}

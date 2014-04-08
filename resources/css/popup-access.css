@@ -1,0 +1,10 @@
+@import "popup.css";
+
+
+.gx-popup-anc {
+    background: transparent url(../images/default/anchor-access.png) no-repeat 0 0;
+}
+
+.gx-popup-anc.top {
+    background: transparent url(../images/default/anchor-top-access.png) no-repeat 0 0;
+}
