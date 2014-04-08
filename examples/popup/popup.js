@@ -18,6 +18,32 @@ Ext.require([
     'GeoExt.window.Popup'
 ]);
 
+// This code is only needed for loading the correct popup css-file
+// depending on the value chosen with the theme-switcher,
+// so it is only important for this example showcase.
+// The "real" popup-example code could be found in the next
+// 'Ext.onReady'-block.
+Ext.onReady(function() {
+    var defaultTheme = 'neptune';
+    function getQueryParam(name, queryString) {
+        var match = RegExp(name + '=([^&]*)').exec(queryString || location.search);
+        return match && decodeURIComponent(match[1]);
+    }
+
+    function addPopupCss(filename) {
+        var fileref = document.createElement("link")
+            fileref.setAttribute("rel", "stylesheet")
+            fileref.setAttribute("type", "text/css")
+            fileref.setAttribute("href", filename);
+        if (typeof fileref != "undefined") {
+            document.getElementsByTagName("head")[0].appendChild(fileref);
+        }
+    }
+
+    var theme = getQueryParam('theme') || defaultTheme;
+    addPopupCss('../../resources/css/popup-' + theme + '.css')
+});
+
 var mapPanel, popup;
 
 Ext.onReady(function() {
