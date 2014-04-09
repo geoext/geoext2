@@ -31,8 +31,8 @@ Ext.application({
             region: "center",
             // we do not want all overlays, to try the OverlayLayerContainer
             map: {allOverlays: false},
-            center: [146.1569825, -41.6109735],
-            zoom: 6,
+            center: [14, 37.5],
+            zoom: 7,
             layers: [
                 new OpenLayers.Layer.WMS("Global Imagery",
                     "http://maps.opengeo.org/geowebcache/service/wms", {
@@ -43,42 +43,46 @@ Ext.application({
                         visibility: false
                     }
                 ),
-                new OpenLayers.Layer.WMS("Tasmania State Boundaries",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_state_boundaries"
-                    }, {
-                        buffer: 0
+                new OpenLayers.Layer.WMS("OpenStreetMap WMS",
+                    "http://ows.terrestris.de/osm/service?",
+                    {layers: 'OSM-WMS'},
+                    {
+                        attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                            'Data &copy; OpenStreetMap ' +
+                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'target="_blank">contributors<a>'
                     }
                 ),
-                new OpenLayers.Layer.WMS("Water",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_water_bodies",
+                new OpenLayers.Layer.WMS("Country Borders",
+                    "http://ows.terrestris.de/geoserver/osm/wms", {
+                        layers: "osm:osm-country-borders",
                         transparent: true,
-                        format: "image/gif"
+                        format: "image/png"
                     }, {
                         isBaseLayer: false,
                         buffer: 0
                     }
                 ),
-                new OpenLayers.Layer.WMS("Cities",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_cities",
+                new OpenLayers.Layer.WMS("Gas Stations",
+                    "http://ows.terrestris.de/geoserver/osm/wms", {
+                        layers: "osm:osm-fuel",
                         transparent: true,
-                        format: "image/gif"
+                        format: "image/png"
                     }, {
                         isBaseLayer: false,
                         buffer: 0
                     }
                 ),
-                new OpenLayers.Layer.WMS("Tasmania Roads",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: "topp:tasmania_roads",
-                        transparent: true,
-                        format: "image/gif"
-                    }, {
-                        isBaseLayer: false,
-                        buffer: 0,
-                        maxResolution: 0.010986328125
+                new OpenLayers.Layer.WMS("Bus Stops",
+                    "http://ows.terrestris.de/osm-haltestellen?",
+                    {
+                        layers: 'OSM-Bushaltestellen',
+                        format: 'image/png',
+                        transparent: true
+                    },
+                    {
+                        singleTile: true,
+                        visibility: false
                     }
                 ),
                 // create a group layer (with several layers in the "layers" param)
@@ -164,7 +168,7 @@ Ext.application({
             border: true,
             region: "west",
             title: "Layers",
-            width: 200,
+            width: 250,
             split: true,
             collapsible: true,
             collapseMode: "mini",

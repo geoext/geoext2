@@ -38,8 +38,17 @@ Ext.application({
             renderTo: "content",
             width: 450,
             height: 320,
-            layers: [new OpenLayers.Layer.WMS("Tasmania", "http://demo.opengeo.org/geoserver/wms",
-                {layers: "topp:tasmania_state_boundaries"}, {singleTile: true})],
+            layers: [new OpenLayers.Layer.WMS(
+                "OpenStreetMap WMS",
+                "http://ows.terrestris.de/osm/service?",
+                {layers: 'OSM-WMS'},
+                {
+                    attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                        'Data &copy; OpenStreetMap ' +
+                        '<a href="http://www.openstreetmap.org/copyright/en"' +
+                        'target="_blank">contributors<a>'
+                }
+            )],
             center: [146.56, -41.56],
             zoom: 6,
             plugins: [printExtent],

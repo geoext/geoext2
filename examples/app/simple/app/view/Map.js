@@ -17,7 +17,7 @@ Ext.define('CF.view.Map', {
     region: 'west',
     width: 600,
     // GeoExt.panel.Map-specific options :
-    center: '12.3046875,51.48193359375',
+    center: '10.7,50.5',
     zoom: 6,
 
     initComponent: function() {

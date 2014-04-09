@@ -49,10 +49,15 @@ Ext.application({
         region: "center",
         layers: [
             new OpenLayers.Layer.WMS(
-                "Tasmania",
-                "http://demo.opengeo.org/geoserver/wms",
-                { layers: "topp:tasmania_state_boundaries" },
-                { singleTile: true }
+                "OpenStreetMap WMS",
+                "http://ows.terrestris.de/osm/service?",
+                {layers: 'OSM-WMS'},
+                {
+                    attribution: '&copy; terrestris GmbH & Co. KG <br>' +
+                        'Data &copy; OpenStreetMap ' +
+                        '<a href="http://www.openstreetmap.org/copyright/en"' +
+                        'target="_blank">contributors<a>'
+                }
             )
         ],
         center: [146.56, -41.56],
@@ -61,7 +66,7 @@ Ext.application({
     // The legend to optionally include on the printout
     var legendPanel = Ext.create('GeoExt.panel.Legend',{
         region: "west",
-        width: 150,
+        width: 160,
         bodyStyle: "padding:5px",
         layerStore: mapPanel.layers
     });
