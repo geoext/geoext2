@@ -1,0 +1,9 @@
+.gx-tree-radio {
+    background-image: url('http://cdn.sencha.com/ext/gpl/4.2.1/resources/ext-theme-neptune/images/form/radio.png');
+}
+.gx-tree-component-off {
+    display: none;
+}
+.gx-tree-baselayer-icon {
+    background-image: url('../../resources/images/default/map.png');
+}

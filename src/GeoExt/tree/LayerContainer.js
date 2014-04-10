@@ -21,6 +21,10 @@
  * configured with the gx_layercontainer plugin that this class provides - like
  * the root node in the example below:
  *
+ * When you use the tree in an application, make sure to include the proper
+ * stylesheet depending on the Ext theme that you use: `tree-classic.css`,
+ * `tree-access.css`, 'tree-gray.css` or `tree-neptune.css`.
+ *
  *     var mapPanel = Ext.create('GeoExt.panel.Map', {
  *         layers: [new OpenLayers.Layer('foo')]
  *     });

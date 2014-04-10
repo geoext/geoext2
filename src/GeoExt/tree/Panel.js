@@ -13,6 +13,10 @@
 
 /**
  * An Ext.tree.Panel pre-configured with a GeoExt.tree.Column.
+ *
+ * When you use the tree in an application, make sure to include the proper
+ * stylesheet depending on the Ext theme that you use: `tree-classic.css`,
+ * `tree-access.css`, 'tree-gray.css` or `tree-neptune.css`.
  * 
  * @class GeoExt.tree.Panel
  */
