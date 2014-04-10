@@ -21,6 +21,10 @@
  * the popup will visibly point to the location on the map,
  * and move accordingly when the map is panned or zoomed.
  *
+ * When you use the popup in an application, make sure to include the proper
+ * stylesheet depending on the Ext theme that you use: `popup-classic.css`,
+ * `popup-access.css`, 'popup-gray.css` or `popup-neptune.css`.
+ *
  * Example:
  *
  *     var popup = Ext.create('GeoExt.window.Popup', {

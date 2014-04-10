@@ -19,6 +19,10 @@
  * Children will be rendered with a radio button instead of a checkbox,
  * showing the user that only one base layer can be active at a time.
  *
+ * When you use the tree in an application, make sure to include the proper
+ * stylesheet depending on the Ext theme that you use: `tree-classic.css`,
+ * `tree-access.css`, 'tree-gray.css` or `tree-neptune.css`.
+ *
  * To use this node plugin in a tree node config, configure a node like this:
  *
  *     {

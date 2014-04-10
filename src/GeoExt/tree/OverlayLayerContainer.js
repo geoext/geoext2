@@ -15,6 +15,10 @@
  * map. Only layers that have `displayInLayerSwitcher` set to `true`
  * will be included. The node's text defaults to 'Overlays'.
  *
+ * When you use the tree in an application, make sure to include the proper
+ * stylesheet depending on the Ext theme that you use: `tree-classic.css`,
+ * `tree-access.css`, 'tree-gray.css` or `tree-neptune.css`.
+ *
  * To use this node plugin in a tree node config, configure a node like this:
  *
  *     {
