@@ -267,6 +267,8 @@
         "OpenLayers.Spherical"
     ],
     "--title": "GeoExt 2.0.0-rc.1 Documentation",
+    // Include the examples tab
+    "--examples": "examples.json",
     "-o": "docs",
     // "--title": "GeoExt 2.0.0-rc.1 Documentation (incl. Ext classes)",
     // "-o": "docs-w-ext",
