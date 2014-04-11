@@ -424,7 +424,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     unselect: function() {
         this.rulesContainer.items.each(function(item, i) {
             if (this.rules[i] == this.selectedRule) {
-                item.body.removeClass("x-grid3-row-selected");
+                item.body.removeCls("x-grid3-row-selected");
                 this.selectedRule = null;
                 this.fireEvent("ruleunselected", this, this.rules[i]);
             }
@@ -577,8 +577,8 @@ Ext.define('GeoExt.container.VectorLegend', {
             ddGroup: ct.id,
             onDragOut: function(e, targetId) {
                 var target = Ext.getCmp(targetId);
-                target.removeClass("gx-ruledrag-insert-above");
-                target.removeClass("gx-ruledrag-insert-below");
+                target.removeCls("gx-ruledrag-insert-above");
+                target.removeCls("gx-ruledrag-insert-below");
                 return Ext.dd.DragZone.prototype.onDragOut.apply(this, arguments);
             },
             onDragEnter: function(e, targetId) {
