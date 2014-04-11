@@ -408,7 +408,7 @@ Ext.define('GeoExt.container.VectorLegend', {
         }
         if (newSelection) {
             var ruleEntry = this.getRuleEntry(rule);
-            ruleEntry.body.addClass("x-grid3-row-selected");
+            ruleEntry.body.addCls("x-grid3-row-selected");
             this.selectedRule = rule;
             this.fireEvent("ruleselected", this, rule);
         }
@@ -591,7 +591,7 @@ Ext.define('GeoExt.container.VectorLegend', {
                 } else if (sourcePos < targetPos) {
                     cls = "gx-ruledrag-insert-below";
                 }
-                cls && target.addClass(cls);
+                cls && target.addCls(cls);
                 return Ext.dd.DragZone.prototype.onDragEnter.apply(this, arguments);
             },
             onDragDrop: function(e, targetId) {
@@ -635,7 +635,7 @@ Ext.define('GeoExt.container.VectorLegend', {
             this.doLayout();
             // make sure that the selected rule is still selected after update
             if (this.selectedRule) {
-                this.getRuleEntry(this.selectedRule).body.addClass("x-grid3-row-selected");
+                this.getRuleEntry(this.selectedRule).body.addCls("x-grid3-row-selected");
             }
         }
     },
