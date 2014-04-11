@@ -8,7 +8,7 @@
 
 /*
  * @requires GeoExt/container/LayerLegend.js
- * @include GeoExt/FeatureRenderer.js
+ * @requires GeoExt/FeatureRenderer.js
  */
 
 /**
