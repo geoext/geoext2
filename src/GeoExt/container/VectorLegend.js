@@ -408,7 +408,7 @@ Ext.define('GeoExt.container.VectorLegend', {
         }
         if (newSelection) {
             var ruleEntry = this.getRuleEntry(rule);
-            ruleEntry.body.addCls("x-grid3-row-selected");
+            ruleEntry.body.addCls("x-boundlist-selected");
             this.selectedRule = rule;
             this.fireEvent("ruleselected", this, rule);
         }
@@ -424,7 +424,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     unselect: function() {
         this.rulesContainer.items.each(function(item, i) {
             if (this.rules[i] == this.selectedRule) {
-                item.body.removeCls("x-grid3-row-selected");
+                item.body.removeCls("x-boundlist-selected");
                 this.selectedRule = null;
                 this.fireEvent("ruleunselected", this, this.rules[i]);
             }
@@ -635,7 +635,7 @@ Ext.define('GeoExt.container.VectorLegend', {
             this.doLayout();
             // make sure that the selected rule is still selected after update
             if (this.selectedRule) {
-                this.getRuleEntry(this.selectedRule).body.addCls("x-grid3-row-selected");
+                this.getRuleEntry(this.selectedRule).body.addCls("x-boundlist-selected");
             }
         }
     },
