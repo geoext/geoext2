@@ -266,16 +266,18 @@
         "OpenLayers.Symbolizer.Raster",
         "OpenLayers.Spherical"
     ],
-    "--title": "GeoExt 2.0.0-rc.1 Documentation",
     // Include the examples tab
     "--examples": "examples.json",
+
+    "--title": "GeoExt 2.0.1 Documentation",
     "-o": "docs",
-    // "--title": "GeoExt 2.0.0-rc.1 Documentation (incl. Ext classes)",
+    // "--title": "GeoExt 2.0.1 Documentation (incl. ExtJS classes)",
     // "-o": "docs-w-ext",
     "--": [
         "src"
         // Uncomment the following line and modify the path to match yours
         // if you wish to build with the ExtJS doc.
-        // ,"../../spielwiese/ext-4.2.1.883/src/"
+        // ,"path/to/ext-4.2.1.883/src/"
     ]
 }
+
