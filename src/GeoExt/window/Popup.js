@@ -207,7 +207,7 @@ Ext.define('GeoExt.window.Popup', {
      */
     onRender: function(ct, position) {
         this.callParent(arguments);
-        this.addClass(this.popupCls);
+        this.addCls(this.popupCls);
         this.ancCls = this.popupCls + "-anc";
 
         //create anchor dom element.
