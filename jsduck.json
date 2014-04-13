@@ -4,6 +4,7 @@
     // the "-extend,-link,-type_name" warning removals are used to prevent warnings
     // when the documentation is built without ExtJS
     "--warnings": "-extend,-link,-type_name",
+    "--examples": "examples.json",
     "--external": [
         "Integer", "Float",
         "OpenLayers.BaseTypes.Class",
