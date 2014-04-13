@@ -2,6 +2,8 @@ var
 	system = require('system'),
 	webpage = require('webpage'),
 	baseUrl = encodeURI(system.args[1]),
+	
+	// provide a string or a config object
 	examples = [
 	    "action/mappanel_with_actions.html",
 	    "app/simple/simple.html",
@@ -10,7 +12,7 @@ var
 	     	fn: function(){ 
 	     		Ext.ComponentQuery.query("gx_geocodercombo")[0].doQuery('Bonn'); 
 	     	},
-	    	clipRect: { top: 0, left:0, width: 400, height: 400 }
+	    	clipRect: { top: 184, left:28, width: 490, height: 390 }
 	    },
 	    "grid/feature-grid.html",
 	    "layeropacityslider/layeropacityslider.html",
@@ -51,24 +53,37 @@ var waitForExtReady = function(p, fun) {
         }
     }, 2000);
 };
-var capture = function(example, ii){
-	
-	var exampleUrl = (exampleUrl instanceof Object) ? example.url : example;
+
+var capture = function(exampleUrl, ii, cfg){
 	
 	var page = webpage.create(),
 		pageUrl = baseUrl + exampleUrl,
-		image = 'thumb_test_'+ ii +'.png';
+		thumbUrl = exampleUrl.split("/").slice(0, exampleUrl.split("/").length - 1).join("/") + "/",
+		image = 'thumb'+ii+'.png',
+		f = 4; // factor for viewport size
 	
-	page.viewportSize = { width: 118*4, height : 90*4 };
+	console.log("thumbUrl:",thumbUrl);
+	
+	page.viewportSize = { width: 118 * f, height : 90 * f };
 	
 	page.open(pageUrl, function(){
 		
 		waitForExtReady(page, function() {
 			window.setTimeout(function(){
+				
+				// hide theme switcher
 				page.evaluate( function(){ Ext.get("options-toolbar").hide(); });
-				if (example.fn) page.evaluate( fn );
-				if (example.clipRect) page.clipRect = example.clipRect;
-				page.render( image ); 
+				
+				// call optional function
+				if (cfg && cfg.fn) page.evaluate( cfg.fn );
+				
+				// clip optionally
+				if (cfg && cfg.clipRect) page.clipRect = cfg.clipRect;
+				
+				// the actual snapshot 
+				page.render( thumbUrl + image );
+				
+				// maybe end phantomjs
 				if ( ii == examples.length - 1 ) 
 	              window.setTimeout(phantom.exit, 2000); 
 			}, 5000);
@@ -79,7 +94,20 @@ var capture = function(example, ii){
 }
 
 for (var i = 0; i < examples.length; i++) {
+	
 	var url = examples[i];
-	console.log("capturing page " + i + ": ", url);
-	capture(url,i);
+		
+	
+	if (url instanceof Object)
+	{
+		capture(url.url,i,{
+			fn: url.fn || null,
+			clipRect: url.clipRect || null
+		});
+	} 
+	else 
+	{ 
+		capture(url,i);
+	};
+	
 }
