@@ -10,27 +10,94 @@ var
 	    {
 	     	url: "geocoder/geocoder.html",
 	     	fn: function(){ 
-	     		Ext.ComponentQuery.query("gx_geocodercombo")[0].doQuery('Bonn'); 
+	     		var cb = Ext.ComponentQuery.query("gx_geocodercombo")[0];
+	     		cb.doQuery('Bonn', true, true); 
+	     		cb.expand();
+	     		cb.onExpand();
+	     		cb.select(cb.getStore().getAt(1));
 	     	},
-	    	clipRect: { top: 184, left:28, width: 490, height: 390 }
+	    	clipRect: { top: 184, left:28, width: 490, height: 390 },
+	    	wait: 2000
 	    },
-	    "grid/feature-grid.html",
-	    "layeropacityslider/layeropacityslider.html",
-	    "legendpanel/legendpanel.html",
+	    { 
+	    	url: "grid/feature-grid.html",
+	    	clipRect: { top: 220, left:20, width: 900, height: 400 }
+	    },
+	    {
+	    	url: "layeropacityslider/layeropacityslider.html",
+	    	clipRect: { top: 246, left:20, width: 400, height: 322 }
+	    },
+	    {
+	    	url:"legendpanel/legendpanel.html",
+	    	clipRect: { top: 136, left:20, width: 800, height: 400 }
+	    },
 	    "mappanel/mappanel.html",
-	    "permalink/permalink.html",
-	    "popup/popup.html",
-	    "printextent/print-extent.html",
-	    "printform/print-form.html",
-	    "printpage/print-page.html",
-	    "printpreview/print-preview.html",
-	    "renderer/renderer.html",
-	    "stylegrid/style-grid.html",
+	    { 
+	    	url:"permalink/permalink.html",
+	    	clipRect: { top: 550, left: 20, width: 118, height: 90}
+	    },
+	    {
+	    	url: "popup/popup.html",
+	    	fn: function(){
+	    		var map = window.mapPanel.map;
+	    		var feature = map.layers[2].features[0];
+	    		map.zoomIn();
+	    		map.controls[4].clickFeature(feature);
+	    	},
+	    	clipRect: { top: 286, left: 25, width: 590, height: 359},
+	    	wait: 4000
+	    },
+	    {
+	    	url: "printextent/print-extent.html",
+	    	clipRect: { top: 179, left: 20, width: 450, height: 284 }
+	    },
+	    {
+	    	url:"printform/print-form.html",
+	    	clipRect: { top: 148, left: 20, width: 700, height: 420 }
+	    },
+	    {
+	    	url: "printpage/print-page.html",
+	    	clipRect: { top: 148, left: 20, width: 700, height: 410 }
+	    },
+	    {
+	    	url: "printpreview/print-preview.html",
+	    	fn: function(){
+	    		var button = Ext.ComponentQuery.query('button[text="Print..."]')[0];
+	    		button && button.fireHandler();
+	    	},
+	    	clipRect: {top: 148, left: 20, width: 795, height: 532 },
+	    	wait: 10000
+	    },
+	    {
+	    	url: "renderer/renderer.html",
+	    	clipRect: {top: 208, left: 20, width: 274, height: 204 }
+	    },
+	    {
+	    	url: "stylegrid/style-grid.html",
+	    	clipRect: {top: 179, left: 20, width: 220, height: 200 }
+	    },
 	    "tree/tree-legend.html",
-	    "wfscapabilities/wfscapabilities.html",
-	    "wmscapabilities/wmscapabilities.html",
-	    "zoomchooser/zoomchooser.html",
-	    "zoomslider/zoomslider.html"
+	    {
+	    	url: "wfscapabilities/wfscapabilities.html",
+	    	clipRect: {top: 148, left: 20, width: 650, height: 300 }
+	    },
+	    {
+	    	url: "wmscapabilities/wmscapabilities.html",
+	    	clipRect: {top: 148, left: 20, width: 650, height: 300 }
+	    },
+	    {
+	    	url: "zoomchooser/zoomchooser.html",
+	    	clipRect: {top: 148, left: 20, width: 600, height: 400 },
+	    	fn: function(){
+	    		var cb = Ext.ComponentQuery.query('combobox[emptyText="Zoom Level"]')[0];
+	     		cb.expand();
+	    	},
+	    	wait: 8000
+	    },
+	    {
+	    	url: "zoomslider/zoomslider.html",
+	    	clipRect: {top: 164, left: 20, width: 400, height: 300 },
+	    }
     ];
 /**
  * Waits for ExtJS to be ready, then executes provided function
@@ -59,8 +126,11 @@ var capture = function(exampleUrl, ii, cfg){
 	var page = webpage.create(),
 		pageUrl = baseUrl + exampleUrl,
 		thumbUrl = exampleUrl.split("/").slice(0, exampleUrl.split("/").length - 1).join("/") + "/",
-		image = 'thumb'+ii+'.png',
-		f = 4; // factor for viewport size
+		image = 'thumb.png',
+		timeForTiles = 16000,
+		timeForFunction = cfg && cfg.wait || 1000,
+		timeForExit = 2000,
+		f = 8; // factor for viewport size
 	
 	console.log("thumbUrl:",thumbUrl);
 	
@@ -75,18 +145,20 @@ var capture = function(exampleUrl, ii, cfg){
 				page.evaluate( function(){ Ext.get("options-toolbar").hide(); });
 				
 				// call optional function
+				
 				if (cfg && cfg.fn) page.evaluate( cfg.fn );
 				
 				// clip optionally
 				if (cfg && cfg.clipRect) page.clipRect = cfg.clipRect;
 				
 				// the actual snapshot 
-				page.render( thumbUrl + image );
+				window.setTimeout(function(){ page.render( thumbUrl + image ); }, timeForFunction + 1000); 
 				
 				// maybe end phantomjs
 				if ( ii == examples.length - 1 ) 
-	              window.setTimeout(phantom.exit, 2000); 
-			}, 5000);
+	              window.setTimeout(phantom.exit, timeForFunction + timeForExit); 
+				
+			}, timeForTiles);
         });
 		
 	});
