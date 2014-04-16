@@ -172,6 +172,6 @@ Ext.application({
             layout: 'fit',
             items: [mappanel]
         });
-        
+        this.fireEvent
     }
 });
