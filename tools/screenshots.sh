@@ -13,8 +13,11 @@ chkcmd "convert"
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 exampleUrl=$1
 
+echo $SCRIPTDIR
+echo $exampleUrl
+
 # take screenshots - requires phantomjs
-phantomjs "$SCRIPTDIR/screenshots.js" exampleUrl
+phantomjs "$SCRIPTDIR/screenshots.js" $exampleUrl $SCRIPTDIR
 
 # resize screenshots - requires imagemagick
 for THUMB in $(find "$SCRIPTDIR/examples" | grep thumb.png) 
