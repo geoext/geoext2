@@ -1,10 +1,7 @@
 {
-    "--title": "GeoExt 2 Docs",
-    "-o": "docs",
     // the "-extend,-link,-type_name" warning removals are used to prevent warnings
     // when the documentation is built without ExtJS
     "--warnings": "-extend,-link,-type_name",
-    "--examples": "examples.json",
     "--external": [
         "Integer", "Float",
         "OpenLayers.BaseTypes.Class",
@@ -269,10 +266,17 @@
         "OpenLayers.Symbolizer.Raster",
         "OpenLayers.Spherical"
     ],
+    // Include the examples tab
+    "--examples": "examples.json",
+
+    "--title": "GeoExt 2.0.1 Documentation",
+    "-o": "docs",
+    // "--title": "GeoExt 2.0.1 Documentation (incl. ExtJS classes)",
+    // "-o": "docs-w-ext",
     "--": [
         "src"
         // Uncomment the following line and modify the path to match yours
         // if you wish to build with the ExtJS doc.
-        //,"../extjs-4.1.0/src/"
+        // ,"path/to/ext-4.2.1.883/src/"
     ]
 }
