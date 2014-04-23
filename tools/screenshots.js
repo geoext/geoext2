@@ -112,9 +112,6 @@ var examples = [
  */
 var waitForExtReady = function(p, fun) {
     var me = this;
-
-    console.log('Waiting for ExtJS to be ready...');
-
     var readyChecker = window.setInterval(function() {
 
         var isReady = p.evaluate(function() {
@@ -122,7 +119,10 @@ var waitForExtReady = function(p, fun) {
         });
 
         if (isReady) {
-            console.log('ExtJS is ready.');
+            var url = p.evaluate(function(){
+                return window.location.href;
+            });
+            console.log('ExtJS is ready (' + url + ').');
             window.clearInterval(readyChecker);
             // call the function that waited to be executed
             fun.call(me);
@@ -165,6 +165,8 @@ var capture = function(exampleUrl, ii, cfg){
     page.viewportSize = { width: 118 * f, height : 90 * f };
 
     page.open(pageUrl, function(){
+
+        console.log("Opening " + pageUrl);
 
         waitForExtReady(page, function() {
 
