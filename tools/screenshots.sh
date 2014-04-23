@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 
+function die () {
+    echo >&2 "$@"
+    exit 1
+}
+
 function chkcmd {
     which $1 >/dev/null
     if [ $? -ne 0 ];then
-        echo "Program '$1' not found."
-        exit 1
+        die "Program '$1' not found."
     fi
 }
 chkcmd "phantomjs"
 chkcmd "convert"
 
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-exampleUrl=$1
+# check that we have exactly one argument
+[ "$#" -eq 1 ] || die "1 argument required, $# provided"
 
 echo $SCRIPTDIR
 echo $exampleUrl
