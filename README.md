@@ -115,6 +115,8 @@ prior to submitting your changes. Thanks.
 *   Run `jsduck --config jsduck.json` in the root of the repository
 *   Optional: If you want the documentation for ExtJS to be linked, edit
     `jsduck.json` to point to the proper source location (URLs will not work)
+*   Optional: To refresh screenshots in the example page run
+	`~$ . tools/screenshots.sh http://geoext.github.io/geoext2/examples/`
 *   Open the generated file `/path/to/your/geoext/docs/index.html` in your
     favorite browser
 *   Enjoy!
