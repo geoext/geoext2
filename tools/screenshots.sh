@@ -11,20 +11,22 @@ function chkcmd {
         die "Program '$1' not found."
     fi
 }
+
 chkcmd "phantomjs"
 chkcmd "convert"
 
 # check that we have exactly one argument
 [ "$#" -eq 1 ] || die "1 argument required, $# provided"
 
-echo $SCRIPTDIR
-echo $exampleUrl
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+EXAMPLEURL=$1
 
 # take screenshots - requires phantomjs
-phantomjs "$SCRIPTDIR/screenshots.js" $exampleUrl $SCRIPTDIR
+phantomjs "$SCRIPTDIR/screenshots.js" $EXAMPLEURL $SCRIPTDIR
 
 # resize screenshots - requires imagemagick
-for THUMB in $(find "$SCRIPTDIR/examples" | grep thumb.png) 
-do 
-  convert -resize 118X90 $THUMB $THUMB
+for THUMB in $(find "$SCRIPTDIR/../examples" | grep thumb.png)
+do
+    echo "Resizing $THUMB"
+    convert -resize 118X90 $THUMB $THUMB
 done
