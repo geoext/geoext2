@@ -1,7 +1,7 @@
-var 
+var
     system = require('system'),
     webpage = require('webpage'),
-    baseUrl = encodeURI(system.args[1]);
+    baseUrl = encodeURI(system.args[1]),
     toolsFolder = encodeURI(system.args[2]);
 
 // provide a string or a config object
@@ -13,7 +13,7 @@ var examples = [
         fn: function(){
             // open the combobox
             var cb = Ext.ComponentQuery.query("gx_geocodercombo")[0];
-            cb.doQuery('Bonn', true, true); 
+            cb.doQuery('Bonn', true, true);
             cb.expand();
             cb.onExpand();
             cb.select(cb.getStore().getAt(1));
@@ -21,7 +21,7 @@ var examples = [
         clipRect: { top: 184, left:28, width: 490, height: 390 },
         wait: 2000
     },
-    { 
+    {
         url: "grid/feature-grid.html",
         clipRect: { top: 220, left:20, width: 900, height: 400 }
     },
@@ -34,7 +34,7 @@ var examples = [
         clipRect: { top: 136, left:20, width: 800, height: 400 }
     },
     "mappanel/mappanel.html",
-    { 
+    {
         url:"permalink/permalink.html",
         clipRect: { top: 550, left: 20, width: 118, height: 90}
     },
@@ -111,11 +111,7 @@ var examples = [
  * @param fun function to execute
  */
 var waitForExtReady = function(p, fun) {
-
     var me = this;
-
-    console.log('Waiting for ExtJS to be ready...');
-
     var readyChecker = window.setInterval(function() {
 
         var isReady = p.evaluate(function() {
@@ -123,7 +119,10 @@ var waitForExtReady = function(p, fun) {
         });
 
         if (isReady) {
-            console.log('ExtJS is ready.');
+            var url = p.evaluate(function(){
+                return window.location.href;
+            });
+            console.log('ExtJS is ready (' + url + ').');
             window.clearInterval(readyChecker);
             // call the function that waited to be executed
             fun.call(me);
@@ -136,7 +135,7 @@ var waitForExtReady = function(p, fun) {
 /**
  * captures a screenshot for a given url
  * @param {string} exampleUrl
- * @param {int} count 
+ * @param {int} count
  * @param {object} cfg optional config object with the possible parameters:
  *  - `url` {string} the url to the html file to open in phantomjs
  *  - `clipRect` {object} an object specifying the position and bounds
@@ -161,16 +160,18 @@ var capture = function(exampleUrl, ii, cfg){
     // time before closing phantomjs
     timeForExit = 2000,
     // factor for viewport size
-    f = 8; 
+    f = 8;
 
     page.viewportSize = { width: 118 * f, height : 90 * f };
 
     page.open(pageUrl, function(){
 
+        console.log("Opening " + pageUrl);
+
         waitForExtReady(page, function() {
-            
+
             window.setTimeout(function(){
-                
+
                 // hide theme switcher
                 page.evaluate( function(){ Ext.get("options-toolbar").hide(); });
 
@@ -180,16 +181,16 @@ var capture = function(exampleUrl, ii, cfg){
                 // clip optionally
                 if (cfg && cfg.clipRect) page.clipRect = cfg.clipRect;
 
-                // the actual snapshot 
-                window.setTimeout(function(){ 
-                    page.render( thumbUrl + image ); 
+                // the actual snapshot
+                window.setTimeout(function(){
+                    page.render( thumbUrl + image );
                     console.log( "captured: " + thumbUrl + image );
-                }, timeForFunction + 1000); 
+                }, timeForFunction + 1000);
 
                 // maybe end phantomjs
                 if ( ii == examples.length - 1 ) {
                     window.setTimeout(phantom.exit, timeForFunction + timeForExit);
-                } 
+                }
 
             }, timeForTiles);
 
@@ -198,21 +199,18 @@ var capture = function(exampleUrl, ii, cfg){
     });
 
 }
+
 //loop through all examples and capture screenshots
 for (var i = 0; i < examples.length; i++) {
-
     var url = examples[i];
 
     // treat object and string configurations separately
-    if (url instanceof Object)
-    {
+    if (url instanceof Object) {
         capture(url.url,i,{
             fn: url.fn || null,
             clipRect: url.clipRect || null
         });
-    } 
-    else 
-    { 
+    } else {
         capture(url,i);
     };
 

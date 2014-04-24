@@ -1,26 +1,32 @@
 #!/usr/bin/env bash
 
+function die () {
+    echo >&2 "$@"
+    exit 1
+}
+
 function chkcmd {
     which $1 >/dev/null
     if [ $? -ne 0 ];then
-        echo "Program '$1' not found."
-        exit 1
+        die "Program '$1' not found."
     fi
 }
+
 chkcmd "phantomjs"
 chkcmd "convert"
 
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-exampleUrl=$1
+# check that we have exactly one argument
+[ "$#" -eq 1 ] || die "1 argument required, $# provided"
 
-echo $SCRIPTDIR
-echo $exampleUrl
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+EXAMPLEURL=$1
 
 # take screenshots - requires phantomjs
-phantomjs "$SCRIPTDIR/screenshots.js" $exampleUrl $SCRIPTDIR
+phantomjs "$SCRIPTDIR/screenshots.js" $EXAMPLEURL $SCRIPTDIR
 
 # resize screenshots - requires imagemagick
-for THUMB in $(find "$SCRIPTDIR/examples" | grep thumb.png) 
-do 
-  convert -resize 118X90 $THUMB $THUMB
+for THUMB in $(find "$SCRIPTDIR/../examples" | grep thumb.png)
+do
+    echo "Resizing $THUMB"
+    convert -resize 118X90 $THUMB $THUMB
 done
