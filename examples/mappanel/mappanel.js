@@ -8,6 +8,7 @@
 
 Ext.require([
     'Ext.container.Viewport',
+    'Ext.layout.container.Fit',
     'Ext.state.Manager',
     'Ext.state.CookieProvider',
     'Ext.window.MessageBox',
