@@ -11,14 +11,20 @@
         patch = 3,
         label = 'dev',
         environment = [],
+        extVersions = Ext.versions.extjs,
+        isExt5 = false,
+        isExt4 = false,
         v = '';
+
 
     // Concatenate GeoExt version.
     v = 'v' + major + '.' + minor + '.' + patch + (label ? '.' + label : '');
 
     // Grab versions of libraries in the environment
-    if ( Ext.versions.extjs.version ) {
-        environment.push('ExtJS: ' + Ext.versions.extjs.version);
+    if ( extVersions ) {
+        environment.push('ExtJS: ' + extVersions.version);
+        isExt4 = extVersions.major === 4;
+        isExt5 = extVersions.major === 5;
     }
     if ( window.OpenLayers ) {
         environment.push('OpenLayers: ' + OpenLayers.VERSION_NUMBER);
@@ -46,7 +52,24 @@
          *
          * @property {String} environment
          */
-        environment: (environment.join(', '))
+        environment: (environment.join(', ')),
+
+        /**
+         * Whether we are running in an ExtJS 4 environment or not.
+         *
+         * @property {Boolean} Whether we are running in an ExtJS 4 environment
+         *     or not.
+         */
+        isExt4: isExt4,
+
+        /**
+         * Whether we are running in an ExtJS 5 environment or not.
+         *
+         * @property {Boolean} Whether we are running in an ExtJS 5 environment
+         *     or not.
+         */
+        isExt5: isExt5
+
     }, function() {
         /**
          * The GeoExt root object.
@@ -60,5 +83,19 @@
          * @property version
          */
         GeoExt.version = GeoExt.Version.version;
+
+        /**
+         * @inheritdoc GeoExt.Version#isExt4
+         * @member GeoExt
+         * @property isExt4
+         */
+        GeoExt.isExt4 = GeoExt.Version.isExt4;
+
+        /**
+         * @inheritdoc GeoExt.Version#isExt5
+         * @member GeoExt
+         * @property isExt5
+         */
+        GeoExt.isExt5 = GeoExt.Version.isExt5;
     });
 })();
