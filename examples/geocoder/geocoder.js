@@ -15,9 +15,15 @@
 var mapPanel;
 
 Ext.require([
+    'Ext.layout.container.Fit',
     'GeoExt.panel.Map',
     'GeoExt.form.field.GeocoderComboBox'
 ]);
+
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
 
 Ext.application({
     name: 'GeocoderComboBox GeoExt2',
@@ -48,3 +54,6 @@ Ext.application({
         });
     }
 });
+
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)
