@@ -8,6 +8,7 @@
 
 Ext.require([
     'Ext.container.Viewport',
+    'Ext.layout.container.Fit',
     'Ext.window.MessageBox',
     'GeoExt.panel.Map',
     'GeoExt.Action'
