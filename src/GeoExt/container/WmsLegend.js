@@ -86,7 +86,6 @@ Ext.define('GeoExt.container.WmsLegend', {
 
     initComponent: function(){
         var me = this;
-        me.addEvents('legendimageloaded');
         me.callParent();
         var layer = me.layerRecord.getLayer();
         me._noMap = !layer.map;
