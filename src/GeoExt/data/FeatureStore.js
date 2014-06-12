@@ -484,16 +484,40 @@ Ext.define('GeoExt.data.FeatureStore', {
      * com/extjs/4.1.3/source/Store.html#Ext-data-Store-method-loadRawData) and
      * of [version 4.2.1](http://docs-origin.sencha.com/extjs/4.2.1/source/
      * Store.html#Ext-data-Store-method-loadRawData).
+     *
+     * Since version 5.0.0 the method has changed at even more places so that
+     * we check GeoExt.isExt4 to decide which method we should patch. TODO: We
+     * should remove the dependency on the load event as this patching really
+     * gets nasty.
      */
     loadRawData : function(data, append) {
-        var me      = this,
-            result  = me.proxy.reader.read(data),
-            records = result.records;
+        // The contents of the respective branches match their base library
+        // counterpart. The only difference is `me.fireEvent` in case of success
+        if (GeoExt.isExt4) {
+            var me      = this,
+                result  = me.proxy.reader.read(data),
+                records = result.records;
 
-        if (result.success) {
-            me.totalCount = result.total;
-            me.loadRecords(records, append ? me.addRecordsOptions : undefined);
-            me.fireEvent('load', me, records, true);
+            if (result.success) {
+                me.totalCount = result.total;
+                me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+                me.fireEvent('load', me, records, true);
+            }
+        } else {
+            var me      = this,
+                session = me.getSession(),
+                result  = me.getProxy().getReader().read(data, session ? {
+                    recordCreator: session.recordCreator
+                } : undefined),
+                records = result.getRecords(),
+                success = result.getSuccess();
+
+            if (success) {
+                me.totalCount = result.getTotal();
+                me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+                me.fireEvent('load', me, records, true);
+            }
+            return success;
         }
     }
 });
