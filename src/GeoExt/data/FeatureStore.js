@@ -156,10 +156,11 @@ Ext.define('GeoExt.data.FeatureStore', {
         }
 
         var features = layer.features.slice(0);
+        var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
 
         if (initDir & GeoExt.data.FeatureStore.STORE_TO_LAYER) {
             this.each(function(record) {
-                layer.addFeatures([record.raw]);
+                layer.addFeatures([record[featureKey]]);
             }, this);
         }
 
@@ -245,8 +246,9 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @return {String} The model instance corresponding to a feature.
      */
     getByFeature: function(feature) {
+        var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
         return this.getAt(this.findBy(function(record, id) {
-            return record.raw == feature;
+            return record[featureKey] == feature;
         }));
     },
 
@@ -257,8 +259,9 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @return {String} The model instance corresponding to the given id.
      */
     getById: function(id) {
+        var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
         return (this.snapshot || this.data).findBy(function(record) {
-            return record.raw.id === id;
+            return record[featureKey].id === id;
         });
     },
 
@@ -269,9 +272,10 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @private
      */
     addFeaturesToLayer: function(records) {
-        var features = [];
+        var features = [],
+            featureKey = GeoExt.isExt4 ? 'raw' : 'data';
         for (var i = 0, len = records.length; i < len; i++) {
-            features.push(records[i].raw);
+            features.push(records[i][featureKey]);
         }
         this._adding = true;
         this.layer.addFeatures(features);
@@ -395,8 +399,10 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @private
      */
     onRemove: function(store, record, index) {
+        featureKey
         if (!this._removing) {
-            var feature = record.raw;
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data',
+                feature = record[featureKey];
             if (this.layer.getFeatureById(feature.id) != null) {
                 this._removing = true;
                 this.layer.removeFeatures([feature]);
@@ -417,7 +423,8 @@ Ext.define('GeoExt.data.FeatureStore', {
      */
     onStoreUpdate: function(store, record, operation, modifiedFieldNames) {
         if (!this._updating) {
-            var feature = record.raw;
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data',
+                feature = record[featureKey];
             if (feature.state !== OpenLayers.State.INSERT) {
                 feature.state = OpenLayers.State.UPDATE;
             }
