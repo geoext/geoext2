@@ -211,8 +211,8 @@ Ext.define('GeoExt.FeatureRenderer', {
      * @private
      */
     clearCustomEvents: function() {
-        if (this.el && this.el.removeAllListeners) {
-            this.el.removeAllListeners();
+        if (this.el && this.el.clearListeners) {
+            this.el.clearListeners();
         }
     },
 
