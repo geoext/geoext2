@@ -49,6 +49,7 @@
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
     requires: [
+        'Ext.layout.container.Fit',
         'GeoExt.data.LayerStore'
     ],
     alias: 'widget.gx_mappanel',
