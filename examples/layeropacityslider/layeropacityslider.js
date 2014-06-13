@@ -23,8 +23,8 @@ Ext.require([
     'GeoExt.slider.Tip'
 ]);
 
-//Wrap the application initialization in Ext.onReady, this is needed because of
-//the way we include ExtJS dynamically in these examples.
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
 Ext.onReady(function(){
 
 
