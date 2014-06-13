@@ -706,20 +706,28 @@ Ext.define('GeoExt.container.VectorLegend', {
      *
      * @param {Ext.data.Store} store The store from which the record was
      *     removed.
-     * @param {Ext.data.Record} record The record object corresponding
-     *     to the removed layer.
-     * @param {Integer} index The index in the store.
+     * @param {Ext.data.Record/Ext.data.Record[]} records The record object
+     *     corresponding to the removed layer. When using ExtJS 5 this will be
+     *     an array of removed records.
+     * @param {Integer} index The index of the removed record(s).
      * @private
      */
-    onStoreRemove: function(store, record, index) {
-        if (record.getLayer() === this.layer) {
-            if (this.map && this.map.events) {
-                this.map.events.un({
-                    "zoomend": this.onMapZoom,
-                    scope: this
-                });
-            }
+    onStoreRemove: function(store, records, index) {
+        var me = this,
+            recArray = records;
+        if (!Ext.isArray(records)) {
+            recArray = [records];
         }
+        Ext.each(recArray, function(record) {
+            if (record.getLayer() === me.layer) {
+                if (me.map && me.map.events) {
+                    me.map.events.un({
+                        "zoomend": me.onMapZoom,
+                        scope: me
+                    });
+                }
+            }
+        });
     },
 
     /**
