@@ -26,12 +26,21 @@ Ext.define('GeoExt.data.reader.Feature', {
     createFieldAccessor: function(field){
         var accessor = this.callParent([field]);
         if(!Ext.isDefined(accessor)) {
-            // we weren'T configured with a field definition that resulted in a
-            // possible complex assessor, Let't define one where the field's
+            // We weren't configured with a field definition that resulted in a
+            // possible complex assessor, Let's define one where the field's
             // name is looked up inside of the attribute-object of the
-            // OpenLayers feature
-            // TODO is this enough?
-            // TODO we probably need sth. more elaborate :-/
+            // OpenLayers feature.
+            //
+            // An alternative would be to define a mapping prior and then call
+            // the parents `createFieldAccessor`-methoid again...
+            //
+            // var newMapping = 'attributes.' + field.name,
+            //     newFieldDef = Ext.apply(field, {mapping: newMapping});
+            // accessor = this.callParent([newFieldDef]);
+            //
+            // ...The above code actually works as well as the line below.
+            // Internally the lines above will eventually lead to the code
+            // below.
             accessor = this.createAccessor('attributes.' + field.name)
         }
         return accessor;
@@ -54,12 +63,13 @@ Ext.define('GeoExt.data.reader.Feature', {
         if (featureState === states.INSERT || featureState === states.UPDATE) {
             // setDirty is marked deprecated without replacement
             // record.setDirty();
-            // TODO below line untested
+            // TODO below line is currently untested
             record.dirty = true;
         }
         // original:
         // convertedValues['id'] = id;
-        // TODO below line only partly tested
+        // TODO below line only partly tested, it currently exposes the same
+        // behaviour we had with ExtJS 4
         record.setId(id);
 
         return record;
