@@ -29,6 +29,11 @@ Ext.require([
 
 var permalinkProvider;
 
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'HelloGeoExt2',
     launch: function() {
@@ -75,7 +80,7 @@ Ext.application({
             }]
         });
         
-        // update link when state chnages
+        // update link when state changes
         var onStatechange = function(provider) {
             var l = provider.getLink();
             Ext.get("permalink").update("<a href=" + l + ">" + l + "</a>");
@@ -86,3 +91,6 @@ Ext.application({
 
     }
 });
+
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)
