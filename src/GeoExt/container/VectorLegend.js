@@ -155,6 +155,58 @@ Ext.define('GeoExt.container.VectorLegend', {
     currentScaleDenominator: null,
 
     /**
+     * Fires when a rule title is clicked.
+     *
+     * @event titleclick
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule whose title was clicked.
+     */
+
+    /**
+     * Fires when a rule symbolizer is clicked.
+     *
+     * @event symbolclick
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule whose symbol was clicked.
+     */
+
+    /**
+     * Fires when a rule entry is clicked (fired with symbolizer or
+     * title click).
+     *
+     * @event ruleclick
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was clicked.
+     */
+
+    /**
+     * Fires when a rule is clicked and `selectOnClick` is set to
+     * `true`.
+     *
+     * @event ruleselected
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was selected.
+     */
+
+    /**
+     * Fires when the selected rule is clicked and `#selectOnClick`
+     * is set to `true`, or when a rule is unselected by selecting a
+     * different one.
+     *
+     * @event ruleunselected
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was unselected.
+     */
+
+    /**
+     * Fires when a rule is moved.
+     *
+     * @event rulemoved
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was moved.
+     */
+
+    /**
      * Initializes this VectorLegend.
      */
     initComponent: function(){
@@ -202,66 +254,6 @@ Ext.define('GeoExt.container.VectorLegend', {
         });
 
         this.add(this.rulesContainer);
-
-        this.addEvents(
-            /**
-             * Fires when a rule title is clicked.
-             *
-             * @event titleclick
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule whose title was clicked.
-             */
-            "titleclick",
-
-            /**
-             * Fires when a rule symbolizer is clicked.
-             *
-             * @event symbolclick
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule whose symbol was clicked.
-             */
-            "symbolclick",
-
-            /**
-             * Fires when a rule entry is clicked (fired with symbolizer or
-             * title click).
-             *
-             * @event ruleclick
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was clicked.
-             */
-            "ruleclick",
-
-            /**
-             * Fires when a rule is clicked and `selectOnClick` is set to
-             * `true`.
-             *
-             * @event ruleselected
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was selected.
-             */
-            "ruleselected",
-
-            /**
-             * Fires when the selected rule is clicked and `#selectOnClick`
-             * is set to `true`, or when a rule is unselected by selecting a
-             * different one.
-             *
-             * @event ruleunselected
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was unselected.
-             */
-            "ruleunselected",
-
-            /**
-             * Fires when a rule is moved.
-             *
-             * @event rulemoved
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was moved.
-             */
-            "rulemoved"
-        );
 
         this.update();
 
