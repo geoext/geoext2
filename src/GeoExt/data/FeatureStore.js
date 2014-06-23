@@ -344,9 +344,29 @@ Ext.define('GeoExt.data.FeatureStore', {
         var record_old = this.getByFeature(evt.feature);
         if (record_old) {
             var record_new = this.proxy.reader.read(evt.feature).records[0];
-            Ext.Object.each(record_new.getData(), function(key, value) {
-                record_old.set(key, value);
+            var keysAndValues = {};
+
+            if (GeoExt.isExt4) {
+                keysAndValues = record_new.getData();
+            } else {
+                var keys = Ext.Object.getKeys(record_new.getFieldsMap());
+                Ext.each(keys, function(key) {
+                    keysAndValues[key] = record_new.get(key);
+                });
+            }
+            Ext.Object.each(keysAndValues, function(key, value) {
+                record_old.set(key, value, {commit: true});
             }, this);
+            // Setting record dirty now:
+            //
+            // This was previously handled by set-call above, but since Ext5
+            // the model instance keeps a reference to the original feature
+            // inside of 'data' and the setter then thinks no changhes have
+            // occured, as the new value of the record is already the same as
+            // the one of the referenced feature.
+            //
+            // TODO check if the above assumption is always right
+            record_old.dirty = true;
         }
     },
 
