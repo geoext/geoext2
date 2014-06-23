@@ -305,6 +305,7 @@
         }
 
         function test_toggle_group(t) {
+            showTestIframe();
             t.plan(12);
 
             var menu, menuBtn, tb, ctrl1, ctrl2;
@@ -441,6 +442,7 @@
             t.eq(deactivateCtrl1Cnt, 1, "click on item2 deactivates ctrl1 once");
             t.eq(activateCtrl2Cnt, 1, "click on item2 activates ctrl2 once");
 
+            hideTestIframe();
         }
         function test_pressed(t) {
 
