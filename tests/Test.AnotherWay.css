@@ -241,3 +241,12 @@ body {
 #record_input {
     width: 53%;
 }
+
+#taw-test-iframe {
+	padding: 0;
+	width: 200px;
+	height: 200px;
+	position: absolute;
+	top: -1000px;
+	left: -1000px;
+}

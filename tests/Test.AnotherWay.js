@@ -37,6 +37,7 @@ Test.AnotherWay._g_pages_to_run = null; // list of pages to run automatically af
 Test.AnotherWay._g_run_on_main_load = false; // special handling for run_pages_to_run when it might be called before onload or before list of test pages is known.
 Test.AnotherWay._g_run_on_list_load = false;
 Test.AnotherWay._g_main_loaded = false;
+Test.AnotherWay._test_page_onload_delay_ms = 2000; // Number of milliseconds to wait after the iframe fired the onload event
 
 Test.AnotherWay._run_pages_to_run = function(called_from_outside){
     if (!Test.AnotherWay._g_main_loaded) {
@@ -960,7 +961,6 @@ Test.AnotherWay._test_page_onload = function(){
     }
     
     test_page.wait_msg = Test.AnotherWay._print_result(test_page.url, "running tests..<span class=\"counter\">" + test_page.test_objects.length + "</span>", "running", null);
-    
     test_page.test_object_i = 0;
     Test.AnotherWay._run_more_tests();
 };
@@ -2315,7 +2315,6 @@ onload = function(){
     var span = document.createElement("SPAN");
     span.innerHTML = "<!--[if IE]><br /><![endif]-" + "->";
     var is_ie = span.getElementsByTagName("BR").length > 0;
-    
     Test.AnotherWay._g_test_iframe = window.frames.test_iframe;
     
     var query_str = window.location.search;
@@ -2350,7 +2349,7 @@ onload = function(){
                     if (param[0] == "jsantestpage") {
                         Test.AnotherWay._add_test_page_url(decodeURIComponent(param[1]), "jsan");
                     }
-                    else 
+                    else
                         if (param[0] == "testlist") {
                             testlist_page = decodeURIComponent(param[1]);
                         }
