@@ -70,7 +70,13 @@ Ext.define('GeoExt.data.reader.Feature', {
         // convertedValues['id'] = id;
         // TODO below line only partly tested, it currently exposes the same
         // behaviour we had with ExtJS 4
+        //
+        // we have to store the state of 'dirty' so we can set it back after we
+        // have set the id (TODO we might need to change this to instead not use
+        // the setter at all)
+        var oldDirty = record.dirty
         record.setId(id);
+        record.dirty = oldDirty;
 
         return record;
     },
