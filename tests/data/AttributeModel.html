@@ -46,8 +46,22 @@
                 fields: [{name: 'foo', type: 'string'}]
             });
 
-            t.ok(Model.prototype.fields.get('foo') !== undefined,
-                 'fields are added when subclassing');
+            var fields = Model.prototype.fields;
+            if (Ext.isArray(fields)) {
+                var contained = false;
+                Ext.each(fields, function(field){
+                    if (field.name && field.name === 'foo') {
+                        contained = true;
+                        // break iteration
+                        return false;
+                    }
+                });
+                t.ok(contained,
+                        'fields are added when subclassing');
+            } else {
+	            t.ok(fields.get('foo') !== undefined,
+	                    'fields are added when subclassing');
+            }
         }
     </script>
   </head>
