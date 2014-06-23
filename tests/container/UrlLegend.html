@@ -41,12 +41,12 @@
             t.ok(legend instanceof GeoExt.LayerLegend, "Instance created correctly.");
             legend.destroy();
         }
-        
+
         function test_render(t) {
             t.plan(2);
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: LOGO_URL + "?foo"}})
                 ]
             });
             var legend = Ext.create("GeoExt.UrlLegend", {
@@ -54,7 +54,7 @@
                 renderTo: "legend"
             });
             t.ok(legend.items.get(1) instanceof GeoExt.LegendImage, "Legend has a LegendImage.");
-            t.eq(legend.items.get(1).url, Ext.BLANK_IMAGE_URL+"?foo", "Legend image rendered correctly.");
+            t.eq(legend.items.get(1).url, LOGO_URL + "?foo", "Legend image rendered correctly.");
             legend.destroy();
         }
 
@@ -62,7 +62,7 @@
             t.plan(1);
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer("foo", {metadata: {legendURL: "http://path/to/foo"}})
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: LOGO_URL + "?humpty=dumpty"}})
                 ]
             });
             var rec = store.getAt(0);
@@ -70,8 +70,8 @@
                 layerRecord: rec,
                 renderTo: "legend"
             });
-            rec.set("legendURL", Ext.BLANK_IMAGE_URL+"?foo");
-            t.eq(legend.items.get(1).url, Ext.BLANK_IMAGE_URL+"?foo", "Legend content updated correctly");
+            rec.set("legendURL", LOGO_URL + "?foo");
+            t.eq(legend.items.get(1).url, LOGO_URL + "?foo", "Legend content updated correctly");
             legend.destroy();
         }
 
@@ -88,12 +88,12 @@
             t.ok(GeoExt.container.UrlLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
             t.eq(GeoExt.container.UrlLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
         }
-        
+
         function test_legendurlimageloaded(t) {
             t.plan(1);
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: LOGO_URL + "?foo"}})
                 ]
             });
             var legend = Ext.create("GeoExt.UrlLegend", {
