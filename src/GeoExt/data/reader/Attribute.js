@@ -116,7 +116,19 @@ Ext.define('GeoExt.data.reader.Attribute', {
                                     // in Ext.data.Field, we may
                                     // need to change that...
         });
-        this.model.prototype.fields.add(f);
+        var model = this.model,
+            fields;
+        if (Ext.isString(model) && this.getModel) {
+            // ExtJS 5 needs the getter
+            model = this.getModel();
+        }
+        fields = model.prototype.fields;
+        if (Ext.isArray(fields)) {
+            // In ExtJS 5, fields isn't a collection anymore
+            model.addFields([f]);
+        } else {
+            model.prototype.fields.add(f);
+        }
         return feature;
     },
 
@@ -161,8 +173,13 @@ Ext.define('GeoExt.data.reader.Attribute', {
             }
             attributes = result.featureTypes[0].properties;
         }
-        var feature = this.feature;
-        var fields = this.model.prototype.fields;
+        var feature = this.feature || this.getFeature();
+        var model = this.model;
+        if (Ext.isString(model) && this.getModel) {
+            // ExtJS 5 needs the getter
+            model = this.getModel();
+        }
+        var fields = model.prototype.fields;
         var numFields = fields.length;
         var attr, values, name, record, ignore, value, field, records = [];
         for(var i=0, len=attributes.length; i<len; ++i) {
@@ -170,7 +187,12 @@ Ext.define('GeoExt.data.reader.Attribute', {
             attr = attributes[i];
             values = {};
             for(var j=0; j<numFields; ++j) {
-                field = fields.items[j];
+                if (Ext.isArray(fields)) {
+                    field = fields[j];
+                } else {
+                    field = fields.items[j];
+                }
+
                 name = field.name;
                 value = attr[name];
                 if(this.ignoreAttribute(name, value)) {
