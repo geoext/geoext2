@@ -23,9 +23,12 @@
             'GeoExt.container.UrlLegend'
         ]);
 
+        // Will be used in the tests, its value is being set at the bottom of
+        // the page
+        var LOGO_URL;
+
         function test_initialize(t) {
             t.plan(1);
-
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
                     new OpenLayers.Layer("foo")
@@ -109,5 +112,17 @@
   </head>
   <body>
     <div id="legend"></div>
+    <script>
+    LOGO_URL = (function(doc){
+        var img = doc.createElement('img'),
+            url;
+        img.src = '../GeoExt.png';
+        doc.body.appendChild(img);
+        url = img.src;
+        img.parentNode.removeChild(img);
+        img = null;
+        return url;
+    })(document);
+    </script>
   </body>
 </html>
