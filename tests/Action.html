@@ -19,7 +19,7 @@
                 GeoExt: '../src/GeoExt'
             }
         });
-    
+
         Ext.Loader.syncRequire([
             'GeoExt.data.LayerModel',
             'GeoExt.data.LayerStore',
@@ -57,7 +57,7 @@
             var ctrl, scope, handler, toggleHandler, checkHandler, cfg, action;
 
             ctrl = new OpenLayers.Control();
-            
+
             var map = new OpenLayers.Map();
 
             scope = {}, handler = function() {};
@@ -99,7 +99,7 @@
                  "constructor sets toggleHandler to this.ptoggleHandler in the initial config");
             t.ok(action.initialConfig.checkHandler == action.pCheckHandler,
                  "constructor sets checkHandler to this.pCheckHandler in the initial config");
-            
+
             map.destroy();
         }
 
@@ -145,12 +145,12 @@
                     handlerCnt++;
                 }
             });
-            
+
             // create button from action and it to toolbar
             btn = Ext.create('Ext.button.Button', action);
-            
+
             tb.add(btn);
-            
+
             // simulate click on button
             // 2 tests
             // test that the control's trigger is called exactly once
@@ -160,11 +160,10 @@
             btn.onClick(evt);
             t.eq(triggerCnt, 1, "click on button calls control trigger once");
             t.eq(handlerCnt, 1, "click on button calls action handler once");
-            
+
             // create menu item from action and it to menu
             item = Ext.create('Ext.menu.Item', action);
             menu.add(item);
-
             // simulate click on menu item
             // 2 tests
             // test that the control's trigger is called exactly once
@@ -182,10 +181,10 @@
             // test that button is disabled
             // test that menu item is disabled
             ctrl.deactivate();
-            
+
             t.eq(btn.disabled, true, "deactivating control disables button");
             t.eq(item.disabled, true, "deactivating control disables menu item");
-            
+
         }
 
         function test_toggle(t) {
@@ -206,7 +205,7 @@
                 // IE throws "object: Invalid argument" exceptions
                 shadow: false
             });
-            
+
             menuBtn = Ext.create('Ext.button.Button', {
                 menu: menu
             });
@@ -239,12 +238,12 @@
                     checkHandlerCnt++;
                 }
             });
-            
+
             // create button from action and it to toolbar
             btn = Ext.create('Ext.button.Button', action);
             tb.add(btn);
             t.eq(btn.pressed, true, "Button initially pressed for active control");
-            
+
             // simulate click on button
             // 2 tests
             // test that the control gets activated once
@@ -256,7 +255,7 @@
             t.eq(deactivateCnt, 1, "click on button deactivates control once");
             t.eq(activateCnt, 0, "click on button does not activate control");
             t.eq(toggleHandlerCnt, 1, "click on button calls toggle handler once");
-            
+
             // simulate click on button
             // 2 tests
             // test that the control gets deactivated once
@@ -272,7 +271,7 @@
             // create menu item from action and add it to menu
             item = Ext.create('Ext.menu.CheckItem', action);
             menu.add(item);
-            
+
             // simulate click on menu item
             // 2 tests
             // test that the control gets activated once
@@ -286,7 +285,7 @@
             t.eq(deactivateCnt, 1, "click on menu item deactivates control once");
             t.eq(activateCnt, 0, "click on menu item does not activate control");
             t.eq(checkHandlerCnt, 1, "click on menu item calls check handler once");
-            
+
             // simulate click on menu item
             // 2 tests
             // test that the control gets deactivated once
@@ -324,7 +323,7 @@
                 // IE throws "object: Invalid argument" exceptions
                 shadow: false
             });
-            
+
             menuBtn = Ext.create('Ext.button.Button', {
                 menu: menu
             });
@@ -371,20 +370,20 @@
                 group: "ctrl",
                 pressed: true
             });
-            
+
             // create buttons from actions and add them to toolbar
             btn1 = Ext.create('Ext.button.Button', action1);
             tb.add(btn1);
-            
+
             t.eq(btn1.pressed, true, "btn1 is pressed because ctrl1 is active");
-            
+
             btn2 = Ext.create('Ext.button.Button', action2);
             tb.add(btn2);
             tb.doLayout();
             // Ext.ButtonToggleMgr is registered too late, so we need to fire
             // the toggle event to enforce only one button active.
             btn2.fireEvent("toggle", btn2, btn2.pressed);
-            
+
             t.eq(btn2.pressed, true, "btn2 is pressed because ctrl2 is active");
             t.eq(btn1.pressed, false, "btn1 no longer pressed because only one cannot be active per group");
             t.eq(ctrl1.active, false, "ctrl1 no longer active because depressing btn1 deactivated it");
@@ -438,16 +437,16 @@
             menuBtn.hideMenu();
             t.eq(deactivateCtrl1Cnt, 1, "click on item2 deactivates ctrl1 once");
             t.eq(activateCtrl2Cnt, 1, "click on item2 activates ctrl2 once");
+
         }
-        
         function test_pressed(t) {
-            
+
             t.plan(2);
-            
+
             var map = new OpenLayers.Map();
             var ctrl1 = new OpenLayers.Control();
             var ctrl2 = new OpenLayers.Control();
-            
+
             // confirm that control is activated with pressed true
             var act1 = Ext.create('GeoExt.Action', {
                 control: ctrl1,
@@ -457,7 +456,7 @@
                 toggleGroup: "group"
             });
             t.eq(ctrl1.active, true, "ctrl1 activated with pressed true");
-            
+
             // confirm that a control is not activated with pressed false
             var act2 = Ext.create('GeoExt.Action', {
                 control: ctrl2,
@@ -467,19 +466,19 @@
                 toggleGroup: "group"
             });
             t.ok(!ctrl2.active, "ctrl2 not activated with pressed false");
-            
+
             map.destroy();
-            
+
         }
-        
+
         function test_checked(t) {
-            
+
             t.plan(2);
-            
+
             var map = new OpenLayers.Map();
             var ctrl1 = new OpenLayers.Control();
             var ctrl2 = new OpenLayers.Control();
-            
+
             // confirm that control is activated with checked true
             var act1 = Ext.create('GeoExt.Action', {
                 control: ctrl1,
@@ -489,7 +488,7 @@
                 toggleGroup: "group"
             });
             t.eq(ctrl1.active, true, "ctrl1 activated with checked true");
-            
+
             // confirm that a control is not activated with checked false
             var act2 = Ext.create('GeoExt.Action', {
                 control: ctrl2,
@@ -499,11 +498,11 @@
                 toggleGroup: "group"
             });
             t.ok(!ctrl2.active, "ctrl2 not activated with checked false");
-            
+
             map.destroy();
-            
+
         }
-        
+
         function test_deactivateOnDisable(t) {
             t.plan(7);
 
@@ -511,7 +510,7 @@
                 control: new OpenLayers.Control(),
                 map: new OpenLayers.Map()
             });
-            t.eq(act1.deactivateOnDisable, false, "false by default");            
+            t.eq(act1.deactivateOnDisable, false, "false by default");
 
             var act2 = Ext.create('GeoExt.Action', {
                 control: new OpenLayers.Control({active: true}),
@@ -521,14 +520,14 @@
             t.eq(act2.deactivateOnDisable, true, "set to true");
             t.eq(act2.control.active, true, "control active");
             t.ok(!act2.isDisabled(), "action not yet disabled");
-            
+
             act2.disable();
             t.ok(act2.isDisabled(), "action disabled");
             t.eq(act2.control.active, false, "control deactivated on disable");
             act2.enable();
             t.eq(act2.control.active, false, "enabling action does not activate control");
         }
-        
+
         function test_activateOnEnable(t) {
             t.plan(7);
 
@@ -536,7 +535,7 @@
                 control: new OpenLayers.Control(),
                 map: new OpenLayers.Map()
             });
-            t.eq(act1.activateOnEnable, false, "false by default");            
+            t.eq(act1.activateOnEnable, false, "false by default");
 
             var act2 = Ext.create('GeoExt.Action', {
                 control: new OpenLayers.Control({active: false}),
@@ -547,7 +546,7 @@
             t.eq(act2.activateOnEnable, true, "set to true");
             t.eq(act2.control.active, false, "control not active");
             t.ok(act2.isDisabled(), "action not yet enabled");
-            
+
             act2.enable();
             t.ok(!act2.isDisabled(), "action enabled");
             t.eq(act2.control.active, true, "control activated on enable");
