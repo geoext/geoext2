@@ -246,10 +246,13 @@ Ext.define('GeoExt.data.FeatureStore', {
      * @return {String} The model instance corresponding to a feature.
      */
     getByFeature: function(feature) {
-        var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
-        return this.getAt(this.findBy(function(record, id) {
-            return record[featureKey] == feature;
-        }));
+        var featureKey = GeoExt.isExt4 ? 'raw' : 'data',
+            comparisonFunc = function(record, id) {
+                return record[featureKey] == feature;
+            },
+            idx = this.findBy(comparisonFunc),
+            rec = this.getAt(idx);
+        return rec;
     },
 
     /**
@@ -394,19 +397,30 @@ Ext.define('GeoExt.data.FeatureStore', {
      * Handler for a store's remove event.
      *
      * @param {Ext.data.Store} store
-     * @param {Ext.data.Model} record
+     * @param {Ext.data.Model/Ext.data.Model[]} records
      * @param {Number} index
      * @private
      */
-    onRemove: function(store, record, index) {
-        featureKey
-        if (!this._removing) {
-            var featureKey = GeoExt.isExt4 ? 'raw' : 'data',
-                feature = record[featureKey];
-            if (this.layer.getFeatureById(feature.id) != null) {
-                this._removing = true;
-                this.layer.removeFeatures([feature]);
-                delete this._removing;
+    onRemove: function(store, records, index) {
+        var me = this,
+            featureKey = GeoExt.isExt4 ? 'raw' : 'data',
+            layer = me.layer,
+            removeFeatures = [];
+
+        if (!Ext.isArray(records)) {
+            records = [records];
+        }
+        if (!me._removing) {
+            Ext.each(records, function(record){
+                var feature = record[featureKey];
+                if (layer.getFeatureById(feature.id) != null) {
+                    removeFeatures.push(feature);
+                }
+            });
+            if (removeFeatures.length > 0) {
+                me._removing = true;
+                layer.removeFeatures(removeFeatures);
+                delete me._removing;
             }
         }
     },
