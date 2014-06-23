@@ -112,13 +112,15 @@
             var evt = {
                 preventDefault: function() {},
                 stopEvent: function() {},
-                button: 0
+                button: 0,
+                browserEvent: {}
             };
-   
+
             menu = Ext.create('Ext.menu.Menu', {
                 // with shadow set to its default value ("sides")
                 // IE throws "object: Invalid argument" exceptions
-                shadow: false
+                shadow: false,
+                enableKeyNav: false
             });
 
             menuBtn = Ext.create('Ext.button.Button', {
@@ -197,7 +199,8 @@
             var evt = {
                 preventDefault: function() {},
                 stopEvent: function() {},
-                button: 0
+                button: 0,
+                browserEvent: {}
             };
 
             menu = Ext.create('Ext.menu.Menu', {
@@ -299,9 +302,8 @@
             t.eq(deactivateCnt, 0, "click again on menu item does not deactivate control");
             t.eq(activateCnt, 1, "click again on menu item activates control once");
             t.eq(checkHandlerCnt, 1, "click again on menu item calls check handler once");
-            
         }
-        
+
         function test_toggle_group(t) {
             t.plan(12);
 
@@ -309,13 +311,14 @@
 
             var activateCtrl1Cnt, deactivateCtrl1Cnt;
             var activateCtrl2Cnt, deactivateCtrl2Cnt;
-            
+
             var action1, action2, btn1, btn2, item1, item2;
 
             var evt = {
                 preventDefault: function() {},
                 stopEvent: function() {},
-                button: 0
+                button: 0,
+                browserEvent: {}
             };
 
             menu = Ext.create('Ext.menu.Menu', {
