@@ -25,8 +25,32 @@
             'GeoExt.data.LayerStore',
             'GeoExt.panel.Map',
             'GeoExt.Action'
-        ]);
-        
+        ], function() {
+            // http://www.sencha.com/forum/showthread.php?286987-Instantiating-a-Menu-before-onReady-throws-an-error/page2
+            Ext.define('EXTJS-13849', {
+                override: 'Ext.menu.Manager',
+                register: function(menu) {
+                    var me = this;
+
+                    if (!me.active) {
+                        Ext.onReady(me.init, me);
+                    }
+
+                    if (menu.floating) {
+                        me.menus[menu.id] = menu;
+                        menu.on({
+                            beforehide: me.onBeforeHide,
+                            hide: me.onHide,
+                            beforeshow: me.onBeforeShow,
+                            show: me.onShow,
+                            scope: me
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
         function test_constructor(t) {
             t.plan(12);
 
