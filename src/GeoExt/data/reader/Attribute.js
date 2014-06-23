@@ -159,6 +159,12 @@ Ext.define('GeoExt.data.reader.Attribute', {
      *     name.
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
         if (!this.getFormat()) {
             this.setFormat(new OpenLayers.Format.WFSDescribeFeatureType());
         }
