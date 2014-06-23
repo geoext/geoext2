@@ -234,9 +234,12 @@ Ext.define('GeoExt.data.FeatureStore', {
             // Create an array copy
             features = features.slice(0);
         }
+        var recs = [];
         Ext.Array.each(features, function(feature) {
-            this.remove(this.getByFeature(feature));
+            var rec = this.getByFeature(feature);
+            recs.push(rec);
         }, this);
+        this.remove(recs);
     },
 
     /**
