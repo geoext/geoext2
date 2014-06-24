@@ -42,7 +42,7 @@ Ext.application({
         });
         Ext.state.Manager.setProvider(permalinkProvider);
 
-        var map = new OpenLayers.Map({});
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var ol_wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
             "http://ows.terrestris.de/osm/service?",

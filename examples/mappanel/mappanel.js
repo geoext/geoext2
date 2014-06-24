@@ -28,7 +28,7 @@ Ext.application({
             expires: new Date(new Date().getTime()+(1000*60*60*24*7)) //7 days from now
         }));
 
-        var map = new OpenLayers.Map({});
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         
         var wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",

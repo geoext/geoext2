@@ -30,7 +30,7 @@ Ext.onReady(function(){
 Ext.application({
     name: 'ScaleStore GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var layer = new OpenLayers.Layer.WMS(
             "Global Imagery",
             "http://maps.opengeo.org/geowebcache/service/wms",

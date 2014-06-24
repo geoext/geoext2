@@ -32,9 +32,7 @@ Ext.onReady(function(){
 Ext.application({
     name: 'LegendPanel GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map({
-            allOverlays: true
-        });
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         map.addLayers([
             new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",

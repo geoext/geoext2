@@ -23,7 +23,7 @@ Ext.application({
     name: 'ActionExample',
     launch: function(){
 
-        var map = new OpenLayers.Map({});
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         var wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
