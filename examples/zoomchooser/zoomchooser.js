@@ -56,7 +56,7 @@ Ext.application({
 
         map.events.register('zoomend', this, function() {
             var scale = scaleStore.queryBy(function(record){
-                return this.map.getZoom() == record.data.level;
+                return map.getZoom() == record.data.level;
             });
 
             if (scale.length > 0) {
