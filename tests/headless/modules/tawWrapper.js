@@ -12,10 +12,20 @@
  * @returns {String[]} The names of the referenced test files.
  */
 function getTestFiles() {
-    var links = document.querySelectorAll('li');
-    return Array.prototype.map.call(links, function(e) {
-        return e.innerHTML;
+    var testFileUrlVariants = [
+            '',
+            'extjs=5.0.0'
+        ],
+        listItems = document.querySelectorAll('li'),
+        files = [];
+    Array.prototype.forEach.call(listItems, function(listItem) {
+        var file = listItem.innerHTML;
+        testFileUrlVariants.forEach(function(variant) {
+            file += (variant ? "?" + variant : '');
+            files.push(file)
+        });
     });
+    return files;
 }
 
 /**
