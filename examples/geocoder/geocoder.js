@@ -15,7 +15,6 @@
 var mapPanel;
 
 Ext.require([
-    'Ext.layout.container.Fit',
     'GeoExt.panel.Map',
     'GeoExt.form.field.GeocoderComboBox'
 ]);

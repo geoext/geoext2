@@ -17,7 +17,6 @@ var panel1, panel2, wms, slider;
 Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
-    'Ext.layout.container.Fit',
     'GeoExt.panel.Map',
     'GeoExt.slider.LayerOpacity',
     'GeoExt.slider.Tip'
