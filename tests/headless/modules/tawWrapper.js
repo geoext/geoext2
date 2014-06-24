@@ -141,7 +141,6 @@ function runOneTestFunc(name, filename) {
                 }
             },
             eq: function(got, exp, msg) {
-                //if (got !== exp) {
                 if(!eqFunc(got, exp)) {
                     results.push({
                         pass: false,
