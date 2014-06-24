@@ -57,9 +57,10 @@
                  "ctor sets the passed map in the instance");
             store.destroy();
 
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
             var layer = new OpenLayers.Layer.Vector("Foo Layer", {isBaseLayer: true});
             store = Ext.create('GeoExt.data.LayerStore', {data: [layer]});
-            t.ok(store.getAt(0).raw == layer,
+            t.ok(store.getAt(0)[featureKey] == layer,
                  "ctor sets the passed layer in the instance");
 
             map.destroy();
@@ -380,7 +381,7 @@
         
         function test_events(t) {
             t.plan(21);
-            
+
             var map = new OpenLayers.Map({div: "mappanel", allOverlays: true});
             var a = new OpenLayers.Layer("a");
             var b = new OpenLayers.Layer("b");
@@ -422,7 +423,11 @@
             t.eq(events.length, 1, "[" + batch + "] one event");
             event = events[0];
             t.eq(event.type, "remove", "[" + batch + "] 'remove' event");
-            t.ok(event.args[1].getLayer() === d, "[" + batch + "] correct layer on record");
+
+            // depending on the Ext version the remove event will either contain
+            // an array or a single record
+            var rec = (Ext.isArray(event.args[1])) ? event.args[1][0] : event.args[1];
+            t.ok(rec.getLayer() === d, "[" + batch + "] correct layer on record");
 
             // confirm that we get an "add" and "remove" on map.setLayerIndex
             events = [];
