@@ -191,6 +191,7 @@
             store.bind(layer, {initDir: GeoExt.data.FeatureStore.LAYER_TO_STORE});
             t.eq(layer.features.length, 2, "initial records are not synchronized to layer");
             t.eq(store.getCount(), 4, "initial features are synchronized to store");
+
             store.removeFeatures(records[0]);
             t.eq(store.getCount(), 3, "removing record not present in layer has been well removed");
             t.eq(layer.features.length, 2, "nothing to remove in layer when removing record not present in layer");
@@ -413,7 +414,9 @@
                 model: 'My.FooBar.Model',
                 layer: layer
             });
+
             store.addFeatures([feature1, feature2, feature3]);
+
             var record1 = store.getByFeature(feature1);
             var record2 = store.getByFeature(feature2);
             var record3 = store.getByFeature(feature3);
@@ -434,8 +437,8 @@
             // featuremodified
             feature2.attributes.foo = "foo2";
             feature2.attributes.bar = "bar2";
-            layer.events.triggerEvent("featuremodified", {feature: feature2});
 
+            layer.events.triggerEvent("featuremodified", {feature: feature2});
             t.eq(record2.get("foo"), "foo2",
                  "featuremodified event causes update of record property \"foo\"");
             t.eq(record2.get("bar"), "bar2",
