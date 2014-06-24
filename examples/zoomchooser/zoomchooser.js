@@ -22,6 +22,11 @@ Ext.require([
     'GeoExt.data.ScaleStore'
 ]);
 
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'ScaleStore GeoExt2',
     launch: function() {
@@ -82,3 +87,5 @@ Ext.application({
     }
 });
 
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)
