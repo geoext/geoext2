@@ -425,7 +425,7 @@
                  "record gets correct initial value for property \"foo\"");
             t.eq(record1.get("bar"), "bar",
                  "record gets correct initial value for property \"bar\"");
-            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(record1.dirty, true, "record is dirty");
             t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
             t.eq(record2.dirty, false, "record is not dirty");
             t.eq(record3.dirty, false, "record is not dirty");
@@ -443,7 +443,7 @@
                  "featuremodified event causes update of record property \"foo\"");
             t.eq(record2.get("bar"), "bar2",
                  "featuremodified event causes update of record property \"bar\"");
-            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(record1.dirty, true, "record is dirty");
             t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
             t.eq(record2.dirty, true, "record is dirty");
             t.eq(feature2.state, OpenLayers.State.UPDATE, "feature is update");
