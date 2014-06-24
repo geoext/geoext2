@@ -124,7 +124,7 @@ function runOneTestFunc(name, filename) {
                 mockMethod + ", ",
                 testName + "(t), ",
                 filename,
-                (other ? other : ''),
+                (other ? (', ' + other) : ''),
                 "]"
             ].join("");
         },
