@@ -342,14 +342,20 @@ Ext.define('GeoExt.data.LayerStore', {
      * @param {Number} index
      * @private
      */
-    onRemove: function(store, record, index){
-        if(!this._removing) {
-            var layer = record.getLayer();
-            if (this.map.getLayer(layer.id) != null) {
-                this._removing = true;
-                this.removeMapLayer(record);
-                delete this._removing;
-            }
+    onRemove: function(store, records, index){
+        var me = this;
+        if (!Ext.isArray(records)) {
+            records = [records];
+        }
+        if(!me._removing) {
+            Ext.each(records, function(record){
+                var layer = record.getLayer();
+                if (me.map.getLayer(layer.id) != null) {
+                    me._removing = true;
+                    me.removeMapLayer(record);
+                    delete me._removing;
+                }
+            });
         }
     },
 
