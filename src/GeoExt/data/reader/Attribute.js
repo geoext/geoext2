@@ -47,7 +47,9 @@ Ext.define('GeoExt.data.reader.Attribute', {
      */
     keepRaw: false,
     /**
-     * The raw parsed result, only set if #keepRaw is true.
+     * The raw parsed result, only set if #keepRaw is true. When using ExtJS5 a
+     * reference to the raw data is always available via the property #data.
+     *
      * @cfg {Object}
      */
     raw: null,

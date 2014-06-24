@@ -26,7 +26,9 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
     ],
     /**
      * Should we keep the raw parsed result? If true, the result will be stored
-     * under the #raw property. Default is false.
+     * under the #raw property. Default is false. When using ExtJS5 a reference
+     * to the raw data is always available via the property #data.
+     *
      * @cfg {Boolean}
      */
     keepRaw: false,
