@@ -417,11 +417,13 @@ Ext.define('GeoExt.data.FeatureStore', {
     },
 
     /**
-     * Handler for a store's remove event.
+     * Handler for a store's remove event. Depending on the ExtJS version this
+     * method will either receive a single record or an array of records.
      *
-     * @param {Ext.data.Store} store
-     * @param {Ext.data.Model/Ext.data.Model[]} records
-     * @param {Number} index
+     * @param {Ext.data.Store} store The FeatureStore.
+     * @param {Ext.data.Model/Ext.data.Model[]} records A single record in
+     *     ExtJS 4 and an array of records in ExtJS 5.
+     * @param {Number} index The index at which the record(s) were removed.
      * @private
      */
     onRemove: function(store, records, index) {
