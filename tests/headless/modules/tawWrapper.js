@@ -13,8 +13,13 @@
  */
 function getTestFiles() {
     var testFileUrlVariants = [
-            '',
-            'extjs=5.0.0'
+            ''
+            // Once we know how we can reference an online version of ExtJS 5
+            // we can use the URL-parameter below. For now this will only work
+            // if a local copy of ExtJS is available and correctly referenced by
+            // include-base-libraries.js.
+            //
+            //  ,'extjs=5.0.0'
         ],
         listItems = document.querySelectorAll('li'),
         files = [];
