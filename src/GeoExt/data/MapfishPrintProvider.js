@@ -433,7 +433,7 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
      *         }
      *     }
      *
-     * This method is only used in the #constructor to set upo the stores for
+     * This method is only used in the #constructor to set up the stores for
      * the available scales, DPIs and layouts.
      *
      * @private
