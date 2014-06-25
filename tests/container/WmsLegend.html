@@ -118,7 +118,7 @@
             expectedUrl = LOGO_URL + "?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=a&FORMAT=image%2Fgif&SCALE="+mapPanel.map.getScale();
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy();
-            
+
             mapPanel.map.layers[0].params.STYLES = "bar";
 
             mapPanel.layers.getAt(0).set("styles", [{
@@ -158,7 +158,7 @@
             l.destroy();
 
             mapPanel.map.layers[0].params.STYLES = "";
-            
+
             l = Ext.create("GeoExt.WMSLegend", {
                 renderTo: 'legendwms',
                 layerRecord: mapPanel.layers.getAt(0),
@@ -338,10 +338,10 @@
             l.destroy();
             mapPanel.destroy();
         }
-        
+
         function test_legendwmsimageloaded(t) {
             t.plan(1);
-            
+
             var l, url, expectedUrl;
             var mapPanel = loadMapPanel(false);
 
@@ -361,6 +361,76 @@
             t.wait_result( 1 );
         }
 
+        /**
+         * "Valid identifiers start with a letter or underscore and are followed
+         * by (optional) additional letters, underscores, digits or hyphens."
+         */
+        function test_layernameToItemId(t) {
+            var layernames = [
+                    undefined,
+                    null,
+                    false,
+                    function(){},
+                    123,
+                    [],
+                    {},
+                    "",
+                    "   ",
+                    "abc",
+                    "   abc   ",
+                    "   \t   abc   \n   ",
+                    "a.b.c",
+                    "a:b:c",
+                    "a-b-c",
+                    "a_b_c",
+                    "123"
+                ],
+                namespace = GeoExt.container.WmsLegend,
+                validRe = namespace.validIdRe,
+                layernameToItemId = namespace.layernameToItemId;
+
+            t.plan(layernames.length * 3);
+
+            Ext.each(layernames, function (layername, idx) {
+                var itemId = layernameToItemId(layername),
+                    msgPrefix = (idx + 1) + ") ",
+                    cmp,
+                    msg;
+
+                // Test validity
+                // 1 test
+                msg  = msgPrefix + "Converted '" + layername + "' to valid "
+                msg += "itemId '" + itemId + "'";
+                t.ok(validRe.test(itemId), msg);
+
+                // Test actual creation of a component
+                // 2 tests
+                try {
+                    cmp = Ext.create('Ext.Component', {
+                        itemId: itemId,
+                        renderTo: Ext.getBody()
+                    });
+
+                    msg = msgPrefix + "Created component.";
+                    t.ok(cmp instanceof Ext.Component, msg);
+
+                    msg = msgPrefix + "itemId used."
+                    t.eq(cmp.getItemId(), itemId, msg);
+
+                } catch (e) {
+                    msg  = msgPrefix + "Couldn't create Ext.Component" + e;
+                    t.fail(msg);
+
+                    msg  = msgPrefix + "Since we couldn't create a component,";
+                    msg += " we cannot test if the correct itemId was used.";
+                    t.fail(msg);
+                } finally {
+                    if (cmp && cmp.destroy) {
+                        cmp.destroy();
+                    }
+                }
+            });
+        }
 
     </script>
   </head>
