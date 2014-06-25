@@ -426,8 +426,8 @@
 
             // depending on the Ext version the remove event will either contain
             // an array or a single record
-            var rec = (Ext.isArray(event.args[1])) ? event.args[1][0] : event.args[1];
-            t.ok(rec.getLayer() === d, "[" + batch + "] correct layer on record");
+            var removeRec1 = (Ext.isArray(event.args[1])) ? event.args[1][0] : event.args[1];
+            t.ok(removeRec1.getLayer() === d, "[" + batch + "] correct layer on record");
 
             // confirm that we get an "add" and "remove" on map.setLayerIndex
             events = [];
@@ -436,7 +436,11 @@
             t.eq(events.length, 2, "[" + batch + "] two events");
             event = events[0];
             t.eq(event.type, "remove", "[" + batch + "] 'remove' event first");
-            t.ok(event.args[1].getLayer() === b, "[" + batch + "] correct layer on record");
+
+            // depending on the Ext version the remove event will either contain
+            // an array or a single record
+            var removeRec2 = (Ext.isArray(event.args[1])) ? event.args[1][0] : event.args[1];
+            t.ok(removeRec2.getLayer() === b, "[" + batch + "] correct layer on record");
             event = events[1];
             t.eq(event.type, "add", "[" + batch + "] 'add' event second");
             t.eq(event.args[1].length, 1, "[" + batch + "] correct number of records");
@@ -452,7 +456,7 @@
             t.eq(event.type, "update", "[" + batch + "] 'update' event");
             t.ok(event.args[1].getLayer() === c, "[" + batch + "] correct layer on record");
             t.eq(event.args[2], Ext.data.Record.EDIT, "[" + batch + "] correct operation");
-            
+
             // confirm that we get an "update" on layer.setVisibility
             events = [];
             batch = "layer.setVisibility";
