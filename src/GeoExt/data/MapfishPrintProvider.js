@@ -356,23 +356,18 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
      * @private
      */
     constructor: function(config) {
-        this.initialConfig = config;
-        Ext.apply(this, config);
+        var me = this;
+        me.initialConfig = config;
+        Ext.apply(me, config);
 
-        if(!this.customParams) {
-            this.customParams = {};
+        if(!me.customParams) {
+            me.customParams = {};
         }
 
-        this.callParent(arguments);
+        me.callParent(arguments);
 
-        this.scales = Ext.create('Ext.data.JsonStore', {
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "json",
-                    root: "scales"
-                }
-            },
+        me.scales = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('scales'),
             fields: [
                 "name",
                 {name: "value", type: "float"}
@@ -382,28 +377,16 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
 
         });
 
-        this.dpis = Ext.create('Ext.data.JsonStore', {
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "json",
-                    root: "dpis"
-                }
-            },
+        me.dpis = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('dpis'),
             fields: [
-                 "name",
-                 {name: "value", type: "float"}
+                "name",
+                {name: "value", type: "float"}
             ]
         });
 
-        this.layouts = Ext.create('Ext.data.JsonStore', {
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "json",
-                    root: "layouts"
-                }
-            },
+        me.layouts = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('layouts'),
             fields: [
                 "name",
                 {name: "size", mapping: "map"},
@@ -412,15 +395,62 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
         });
 
         if(config.capabilities) {
-            this.loadStores();
+            me.loadStores();
         } else {
-            if(this.url.split("/").pop()) {
-                this.url += "/";
+            if(me.url.split("/").pop()) {
+                me.url += "/";
             }
-            if (this.initialConfig.autoLoad) {
-                this.loadCapabilities();
+            if (me.initialConfig.autoLoad) {
+                me.loadCapabilities();
             }
         }
+    },
+
+    /**
+     * An internal method that creates a valid proxy configuration object for
+     * the passed rootPropertyname. This method is mostly existing because the
+     * name of the rootProperty key we need in the JSON reader is different
+     * between ExtJS 4 and 5 (`root` and `rootProperty` respectively).
+     *
+     * Will always return a memory proxy configuration with a JSON reader where
+     * the correct value for the root of the data is set to the value given.
+     *
+     *     this.getProxyConfiguration('dpis');
+     *     // results in ExtJS 4 in the following configuration...
+     *     {
+     *         type: "memory",
+     *         reader: {
+     *             type: "json",
+     *             root: "dpis"
+     *         }
+     *     }
+     *     // ...while the same call in ExtJS 5 evaluates to
+     *     {
+     *         type: "memory",
+     *         reader: {
+     *             type: "json",
+     *             rootProperty: "dpis"
+     *         }
+     *     }
+     *
+     * This method is only used in the #constructor to set upo the stores for
+     * the available scales, DPIs and layouts.
+     *
+     * @private
+     */
+    getProxyConfiguration: function(rootPropertyName) {
+        var readerRootProperty = GeoExt.isExt4 ? 'root' : 'rootProperty',
+            readerCfg = {type: "json"},
+            proxyCfg;
+
+        readerCfg[readerRootProperty] = rootPropertyName;
+
+        proxyCfg = {
+            type: "memory",
+            reader: readerCfg
+        };
+
+        return proxyCfg;
     },
 
     /**
