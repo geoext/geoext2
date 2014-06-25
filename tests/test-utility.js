@@ -27,17 +27,17 @@
 
     // Export methods on the window object:
     global.showTestIframe = function(){
-        if (hiddenSpan) {
-            hiddenSpan.style.display = "";
-        } else {
-            error("Test iframe couldn't be found.");
-        }
+//        if (hiddenSpan) {
+//            hiddenSpan.style.display = "";
+//        } else {
+//            error("Test iframe couldn't be found.");
+//        }
     };
     global.hideTestIframe = function(){
-        if (hiddenSpan) {
-            hiddenSpan.style.display = "none";
-        } else {
-            error("Test iframe couldn't be found.");
-        }
+//        if (hiddenSpan) {
+//            hiddenSpan.style.display = "none";
+//        } else {
+//            error("Test iframe couldn't be found.");
+//        }
     };
 })(window);
