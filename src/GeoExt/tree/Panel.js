@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/tree/Column.js
- * @requires GeoExt/tree/View.js
- */
-
 /**
  * An Ext.tree.Panel pre-configured with a GeoExt.tree.Column.
  *

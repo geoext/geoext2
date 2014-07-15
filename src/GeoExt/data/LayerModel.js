@@ -7,10 +7,6 @@
  */
 
 /**
- * @requires GeoExt/Version.js
- */
-
-/**
  * The layer model class used by the stores.
  *
  * @class GeoExt.data.LayerModel

@@ -6,12 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Layer/Vector.js
- * @include OpenLayers/Control/TransformFeature.js
- * @include GeoExt/data/PrintPage.js
- */
-
 /**
  * Provides a way to show and modify the extents of print pages on the map. It
  * uses a layer to render the page extent and handle features of print pages,

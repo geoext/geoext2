@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/Version.js
- * @include OpenLayers/Format/WFSDescribeFeatureType.js
- */
-
 /**
  * A reader to create model objects from a DescribeFeatureType structure. Uses
  * `OpenLayers.Format.WFSDescribeFeatureType` internally for the parsing.

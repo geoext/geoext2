@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/Version.js
- * @include OpenLayers/Symbolizer/Raster.js
- */
-
 /**
  * A specific model for Raster Symbolizer classifications.
  *

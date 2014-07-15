@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Format/CQL.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * A specific model for CQL Style Rules.
  *

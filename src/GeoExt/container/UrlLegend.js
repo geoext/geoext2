@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/container/LayerLegend.js
- * @requires GeoExt/LegendImage.js
- */
-
 /**
  * Show a legend image in a BoxComponent and make sure load errors are
  * dealt with.

@@ -7,10 +7,6 @@
  */
 
 /**
- * @requires GeoExt/Version.js
- */
-
-/**
  * Base class for components of GeoExt.panel.Legend.
  *
  * @class GeoExt.container.LayerLegend

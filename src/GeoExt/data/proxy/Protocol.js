@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/Version.js
- */
-
 /**
  * A data proxy for use with OpenLayers.Protocol objects.
  *

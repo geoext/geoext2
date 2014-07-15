@@ -6,14 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Geometry/Polygon.js
- * @include OpenLayers/Geometry/LinearRing.js
- * @include OpenLayers/Geometry/Point.js
- * @include OpenLayers/Feature/Vector.js
- * @include GeoExt/panel/Map.js
- */
-
 /**
  * Provides a representation of a print page for
  * {@link GeoExt.data.MapfishPrintProvider}. The extent of the page is stored as

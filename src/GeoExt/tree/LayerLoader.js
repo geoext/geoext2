@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/tree/LayerNode.js
- */
-
 /**
  * A loader that will load layers from a GeoExt.data.LayerStore.
  * By default, only layers that have `displayInLayerSwitcher` set to `true`

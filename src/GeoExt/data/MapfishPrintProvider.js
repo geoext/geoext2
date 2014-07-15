@@ -6,16 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Format/JSON.js
- * @include OpenLayers/Format/GeoJSON.js
- * @include OpenLayers/Util.js
- * @include OpenLayers/Geometry/Point.js
- * @include OpenLayers/Feature/Vector.js
- * @include OpenLayers/Layer/Vector.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * Provides an interface to a Mapfish or GeoServer print module. For printing,
  * one or more instances of {@link GeoExt.data.PrintPage} are also required

@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/Form.js
- */
-
 /**
  * A specific `Ext.form.action.Action` to be used when using a form to
  * trigger search requests using an `OpenLayers.Protocol`.

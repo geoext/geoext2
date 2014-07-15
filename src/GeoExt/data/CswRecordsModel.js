@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/reader/CswRecords.js
- */
-
 /**
  * The model for the structure returned by CS-W GetRecords.
  *

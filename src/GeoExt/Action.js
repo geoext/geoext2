@@ -7,10 +7,6 @@
  */
 
 /**
- * @requires GeoExt/Version.js
- */
-
-/**
  * Action class to create GeoExt.Action
  *
  * Sample code to create a toolbar with an OpenLayers control into it.

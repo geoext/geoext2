@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/reader/Attribute.js
- */
-
 /**
  * @class GeoExt.data.AttributeModel
  *

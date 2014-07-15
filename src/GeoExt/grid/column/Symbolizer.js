@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/FeatureRenderer.js
- */
-
 /**
  * An Ext.grid.column.Column pre-configured with a GeoExt.FeatureRenderer
  * 

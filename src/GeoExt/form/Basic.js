@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/form/action/Search.js
- */
-
 /**
  * A specific `Ext.form.Basic` whose `#doAction` method creates
  * a GeoExt.form.action.Search if it is passed the string

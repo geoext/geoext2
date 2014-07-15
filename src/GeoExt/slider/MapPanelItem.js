@@ -7,10 +7,6 @@
  */
 
 /**
- * @requires GeoExt/Version.js
- */
-
-/**
  * A base class for sliders that can be rendered as items of a GeoExt.panel.Map.
  *
  * Usually you will not create instances of this class but rather of the

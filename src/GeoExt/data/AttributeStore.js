@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/AttributeModel.js
- * @requires GeoExt/data/OwsStore.js
- */
-
 /**
  * A store to work with DescribeFeatureType responses. This is a regular
  * Ext store preconfigured with a {@link GeoExt.data.AttributeModel}.

@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/LayerModel.js
- */
-
 /**
  * A store that synchronizes a layers array of an OpenLayers.Map with a
  * layer store holding {@link GeoExt.data.LayerModel} instances.
