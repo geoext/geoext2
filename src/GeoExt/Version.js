@@ -8,8 +8,8 @@
 (function() {
     var major = 2,
         minor = 0,
-        patch = 2,
-        label = '',
+        patch = 3,
+        label = 'dev',
         environment = [],
         v = '';
 
