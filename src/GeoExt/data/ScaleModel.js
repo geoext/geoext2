@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * The model for scale values.
  *

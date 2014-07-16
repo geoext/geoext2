@@ -7,6 +7,7 @@
  */
 
 /*
+ * @requires GeoExt/Version.js
  * @include OpenLayers/Symbolizer/Raster.js
  */
 

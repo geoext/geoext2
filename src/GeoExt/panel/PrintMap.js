@@ -9,7 +9,7 @@
 /*
  * @include OpenLayers/Layer/Vector.js
  * @requires GeoExt/panel/Map.js
- * @include GeoExt/data/PrintProvider.js
+ * @requires GeoExt/data/MapfishPrintProvider.js
  * @include GeoExt/data/PrintPage.js
  */
 

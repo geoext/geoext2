@@ -8,7 +8,8 @@
 
 /*
  * @include OpenLayers/Util.js
- * @include GeoExt/panel/Map.js
+ * @requires GeoExt/slider/MapPanelItem.js
+ * @requires GeoExt/panel/Map.js
  */
 
 /**

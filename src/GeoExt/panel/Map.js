@@ -7,7 +7,7 @@
  */
 
 /*
- * @include GeoExt/data/LayerStore.js
+ * @requires GeoExt/data/LayerStore.js
  * @include OpenLayers/Map.js
  */
 

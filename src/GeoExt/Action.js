@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * Action class to create GeoExt.Action
  *

@@ -10,7 +10,7 @@
  * @include OpenLayers/Layer/WMS.js
  * @include OpenLayers/Util.js
  * @requires GeoExt/container/LayerLegend.js
- * @include GeoExt/LegendImage.js
+ * @requires GeoExt/LegendImage.js
  */
 
 /**

@@ -10,6 +10,7 @@
  * @include OpenLayers/Format/WMSCapabilities.js
  * @include OpenLayers/Layer/WMS.js
  * @include OpenLayers/Util.js
+ * @requires GeoExt/Version.js
  */
 
 /**
@@ -42,6 +43,19 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
             this.format = new OpenLayers.Format.WMSCapabilities();
         }
     },
+
+    /**
+     * Should we keep the raw parsed result? If true, the result will be stored
+     * under the #raw property. Default is false.
+     * @cfg {Boolean}
+     */
+    keepRaw: false,
+
+    /**
+     * The raw parsed result, only set if #keepRaw is true.
+     * @cfg {Object}
+     */
+    raw: null,
 
     /**
      * CSS class name for the attribution DOM elements.
@@ -119,6 +133,15 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     },
 
     /**
+     * @private
+     */
+    destroyReader: function() {
+        var me = this;
+        delete me.raw;
+        this.callParent();
+    },
+
+    /**
      * Create a data block containing Ext.data.Records from an XML document.
      *
      * @param {DOMElement/String/Object} data A document element or XHR
@@ -139,6 +162,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         }
         if (!!data.error) {
             Ext.Error.raise({msg: "Error parsing WMS GetCapabilities", arg: data.error});
+        }
+        if (this.keepRaw) {
+            this.raw = data;
         }
         var version = data.version;
         var capability = data.capability || {};

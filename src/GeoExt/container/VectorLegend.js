@@ -8,7 +8,7 @@
 
 /*
  * @requires GeoExt/container/LayerLegend.js
- * @include GeoExt/FeatureRenderer.js
+ * @requires GeoExt/FeatureRenderer.js
  */
 
 /**
@@ -408,7 +408,7 @@ Ext.define('GeoExt.container.VectorLegend', {
         }
         if (newSelection) {
             var ruleEntry = this.getRuleEntry(rule);
-            ruleEntry.body.addClass("x-grid3-row-selected");
+            ruleEntry.body.addCls("x-boundlist-selected");
             this.selectedRule = rule;
             this.fireEvent("ruleselected", this, rule);
         }
@@ -424,7 +424,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     unselect: function() {
         this.rulesContainer.items.each(function(item, i) {
             if (this.rules[i] == this.selectedRule) {
-                item.body.removeClass("x-grid3-row-selected");
+                item.body.removeCls("x-boundlist-selected");
                 this.selectedRule = null;
                 this.fireEvent("ruleunselected", this, this.rules[i]);
             }
@@ -577,8 +577,8 @@ Ext.define('GeoExt.container.VectorLegend', {
             ddGroup: ct.id,
             onDragOut: function(e, targetId) {
                 var target = Ext.getCmp(targetId);
-                target.removeClass("gx-ruledrag-insert-above");
-                target.removeClass("gx-ruledrag-insert-below");
+                target.removeCls("gx-ruledrag-insert-above");
+                target.removeCls("gx-ruledrag-insert-below");
                 return Ext.dd.DragZone.prototype.onDragOut.apply(this, arguments);
             },
             onDragEnter: function(e, targetId) {
@@ -591,7 +591,7 @@ Ext.define('GeoExt.container.VectorLegend', {
                 } else if (sourcePos < targetPos) {
                     cls = "gx-ruledrag-insert-below";
                 }
-                cls && target.addClass(cls);
+                cls && target.addCls(cls);
                 return Ext.dd.DragZone.prototype.onDragEnter.apply(this, arguments);
             },
             onDragDrop: function(e, targetId) {
@@ -635,7 +635,7 @@ Ext.define('GeoExt.container.VectorLegend', {
             this.doLayout();
             // make sure that the selected rule is still selected after update
             if (this.selectedRule) {
-                this.getRuleEntry(this.selectedRule).body.addClass("x-grid3-row-selected");
+                this.getRuleEntry(this.selectedRule).body.addCls("x-boundlist-selected");
             }
         }
     },

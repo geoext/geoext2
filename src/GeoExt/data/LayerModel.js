@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * The layer model class used by the stores.
  *

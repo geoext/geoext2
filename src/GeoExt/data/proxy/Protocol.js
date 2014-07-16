@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * A data proxy for use with OpenLayers.Protocol objects.
  *
@@ -117,7 +121,7 @@ Ext.define('GeoExt.data.proxy.Protocol', {
         var scope = o.request.scope;
         var callback = o.request.callback;
         if (response.success()) {
-            var result = o.reader.read(response);
+            var result = o.reader.read(response.features || response);
             Ext.apply(operation, {
                 response: response,
                 resultSet: result

@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * The LayerNode plugin. This is used to create a node that is connected to
  * a layer, so the checkbox and the layer's visibility are in sync. A basic

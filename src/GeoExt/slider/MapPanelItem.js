@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * A base class for sliders that can be rendered as items of a GeoExt.panel.Map.
  *

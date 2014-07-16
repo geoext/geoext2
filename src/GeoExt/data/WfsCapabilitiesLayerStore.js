@@ -8,6 +8,7 @@
 
 /*
  * @include GeoExt/data/reader/WfsCapabilities.js
+ * @requires GeoExt/data/WfsCapabilitiesLayerModel.js
  * @requires GeoExt/data/OwsStore.js
  */
 

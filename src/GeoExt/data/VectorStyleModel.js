@@ -7,8 +7,9 @@
  */
 
 /*
-* @include OpenLayers/Format/CQL.js
-*/
+ * @include OpenLayers/Format/CQL.js
+ * @requires GeoExt/Version.js
+ */
 
 /**
  * A specific model for CQL Style Rules.

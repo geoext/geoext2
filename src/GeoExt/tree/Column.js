@@ -6,6 +6,10 @@
  * text of the license.
  */
 
+/*
+ * @requires GeoExt/Version.js
+ */
+
 /**
  * A subclass of {@link Ext.tree.Column}, which provides indentation and
  * folder structure markup for a Tree, taking into account depth and

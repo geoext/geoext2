@@ -8,6 +8,7 @@
 
 /*
  * @include OpenLayers/Feature/Vector.js
+ * @requires GeoExt/Version.js
  */
 
 /**
@@ -40,8 +41,6 @@ Ext.define('GeoExt.data.reader.Feature', {
      * @private
      */
     convertFeatureRecordData: function(convertedValues, feature, record) {
-        var records = [];
-
         if (feature) {
             var fields = record.fields;
             var values = {};
@@ -75,7 +74,5 @@ Ext.define('GeoExt.data.reader.Feature', {
             var id = (feature.state === OpenLayers.State.INSERT) ? undefined : feature.id;
             convertedValues['id'] = id;
         }
-
-        return records;
     }
 });
