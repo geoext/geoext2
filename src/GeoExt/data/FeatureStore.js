@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Feature/Vector.js
- * @requires GeoExt/data/reader/Feature.js
- */
-
 /**
  * A store that synchronizes a features array of an `OpenLayers.Layer.Vector`.
  *

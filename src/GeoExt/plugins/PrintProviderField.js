@@ -5,10 +5,6 @@
  * See https://github.com/geoext/geoext2/blob/master/license.txttxt for the full
  * text of the license.
  */
- 
-/*
- * @requires GeoExt/data/MapfishPrintProvider.js
- */
 
 /**
  * A plugin for Ext.form.Field components which provides synchronization

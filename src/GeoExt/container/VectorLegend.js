@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/container/LayerLegend.js
- * @requires GeoExt/FeatureRenderer.js
- */
-
 /**
  * Create a vector legend.
  *

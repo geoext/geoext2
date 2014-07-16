@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Format/WMC.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * Data reader class to create an array of records from a WMC document.
  *

@@ -7,10 +7,6 @@
  */
 
 /**
- * @requires GeoExt/Version.js
- */
-
-/**
  * The model for scale values.
  *
  * @class GeoExt.data.ScaleModel

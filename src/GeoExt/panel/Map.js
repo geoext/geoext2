@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/LayerStore.js
- * @include OpenLayers/Map.js
- */
-
 /**
  * Create a panel container for a map. The map contained by this panel
  * will initially be zoomed to either the center and zoom level configured

@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Format/CSWGetRecords.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * Data reader class to create an array of records from a CSW GetRecords
  * response. The raw response from the OpenLayers parser is available through

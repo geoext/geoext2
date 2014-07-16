@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Format/WMSDescribeLayer.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * Data reader class to create an array of layer description objects from a WMS
  * DescribeLayer response.

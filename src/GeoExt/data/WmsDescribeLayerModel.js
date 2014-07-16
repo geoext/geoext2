@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/data/reader/WmsDescribeLayer.js
- */
-
 /**
  * The model for the structure returned by SLD WMS DescribeLayer.
  *

@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Layer.js
- * @include GeoExt/data/LayerModel.js
- */
-
 /**
  * Create a slider to control the opacity of a layer.
  *

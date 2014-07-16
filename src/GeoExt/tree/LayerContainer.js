@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/tree/LayerLoader.js
- */
-
 /**
  * A layer node plugin that will collect all layers of an OpenLayers map. Only
  * layers that have `displayInLayerSwitcher` set to `true` will be included.

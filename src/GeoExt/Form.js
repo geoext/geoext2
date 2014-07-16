@@ -6,12 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires OpenLayers/Filter/Comparison.js
- * @requires OpenLayers/Filter/Logical.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * A set of useful static functions to work with forms.
  * 

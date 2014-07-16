@@ -6,13 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Layer/WMS.js
- * @include OpenLayers/Util.js
- * @requires GeoExt/container/LayerLegend.js
- * @requires GeoExt/LegendImage.js
- */
-
 /**
  * Show a legend image for a WMS layer. The image can be read from the styles
  * field of a layer record (if the record comes e.g. from a

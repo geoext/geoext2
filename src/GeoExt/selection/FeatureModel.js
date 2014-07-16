@@ -6,14 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Control/SelectFeature.js
- * @include OpenLayers/Layer/Vector.js
- * @include OpenLayers/Util.js
- * @include OpenLayers/BaseTypes/Class.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * A row selection model which enables automatic selection of features
  * in the map when rows are selected in the grid and vice-versa.

@@ -6,12 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/data/reader/WfsCapabilities.js
- * @requires GeoExt/data/WfsCapabilitiesLayerModel.js
- * @requires GeoExt/data/OwsStore.js
- */
-
 /**
  * Small helper class to make creating stores for remote WFS layer data easier.
  * 

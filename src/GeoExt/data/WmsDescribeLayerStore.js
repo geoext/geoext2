@@ -6,12 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/reader/WmsDescribeLayer.js
- * @requires GeoExt/data/WmsDescribeLayerModel.js
- * @requires GeoExt/data/OwsStore.js
- */
-
 /**
  * Small helper class to make creating stores for remote WMS layer description
  * easier. The store is pre-configured with a built-in Ext.data.proxy.Ajax and

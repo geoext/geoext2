@@ -6,12 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Util.js
- * @requires GeoExt/data/ScaleModel.js
- * @include GeoExt/panel/Map.js
- */
-
 /**
  * A store that contains a cache of available zoom levels.  The store can
  * optionally be kept synchronized with an {OpenLayers.Map} or

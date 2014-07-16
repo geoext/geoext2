@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @requires GeoExt/data/reader/WmsCapabilities.js
- */
-
 /**
  * The model for WMS layers coming from a WMS GetCapabilities document.
  *

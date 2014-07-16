@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Feature/Vector.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * Used to read the attributes of a feature.
  *

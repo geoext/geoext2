@@ -6,12 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Util.js
- * @requires GeoExt/slider/MapPanelItem.js
- * @requires GeoExt/panel/Map.js
- */
-
 /**
  * Create a slider to control the zoom of a layer.
  * Important: Due to changes in OpenLayers 2.13, you need to set 

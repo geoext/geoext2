@@ -6,13 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Layer/Vector.js
- * @requires GeoExt/panel/Map.js
- * @requires GeoExt/data/MapfishPrintProvider.js
- * @include GeoExt/data/PrintPage.js
- */
-
 /**
  * A GeoExt.panel.Map that controls scale and center of a print page. Based on
  * the current view (i.e. layers and extent) of a source map, this panel will be

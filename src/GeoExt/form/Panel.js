@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/form/Basic.js
- */
-
 /**
  * A specific {@link Ext.form.Panel} whose internal form is a
  * {@link GeoExt.form.Basic} instead of {@link Ext.form.Basic}.

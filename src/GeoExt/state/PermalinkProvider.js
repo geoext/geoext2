@@ -6,11 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Util.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * The permalink provider.
  *

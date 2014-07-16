@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/data/reader/WfsCapabilities.js
- */
-
 /**
  * The model for WFS layers coming from a WFS GetCapabilities document.
  *

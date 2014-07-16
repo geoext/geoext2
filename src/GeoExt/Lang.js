@@ -7,10 +7,6 @@
  */
 
 /**
- * @requires GeoExt/Version.js
- */
-
-/**
  * The GeoExt.Lang singleton is created when the library is loaded.
  * Include all relevant language files after this file in your build.
  *

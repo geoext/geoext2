@@ -6,10 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include GeoExt/tree/LayerContainer.js
- */
-
 /**
  * A layer node plugin that will collect all base layers of an OpenLayers
  * map. Only layers that have `displayInLayerSwitcher` set to `true`

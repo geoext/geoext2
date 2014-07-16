@@ -6,13 +6,6 @@
  * text of the license.
  */
 
-/*
- * @include OpenLayers/Feature/Vector.js
- * @include OpenLayers/Geometry.js
- * @include GeoExt/panel/Map.js
- * @requires GeoExt/Version.js
- */
-
 /**
  * A popup is a specialized window that supports anchoring to a particular
  * location in a {@link GeoExt.panel.Map MapPanel}.
