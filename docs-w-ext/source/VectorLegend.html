@@ -25,7 +25,7 @@
 
 /*
  * @requires GeoExt/container/LayerLegend.js
- * @include GeoExt/FeatureRenderer.js
+ * @requires GeoExt/FeatureRenderer.js
  */
 
 <span id='GeoExt-container-VectorLegend'>/**
@@ -425,7 +425,7 @@ Ext.define('GeoExt.container.VectorLegend', {
         }
         if (newSelection) {
             var ruleEntry = this.getRuleEntry(rule);
-            ruleEntry.body.addClass(&quot;x-grid3-row-selected&quot;);
+            ruleEntry.body.addCls(&quot;x-boundlist-selected&quot;);
             this.selectedRule = rule;
             this.fireEvent(&quot;ruleselected&quot;, this, rule);
         }
@@ -441,7 +441,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     unselect: function() {
         this.rulesContainer.items.each(function(item, i) {
             if (this.rules[i] == this.selectedRule) {
-                item.body.removeClass(&quot;x-grid3-row-selected&quot;);
+                item.body.removeCls(&quot;x-boundlist-selected&quot;);
                 this.selectedRule = null;
                 this.fireEvent(&quot;ruleunselected&quot;, this, this.rules[i]);
             }
@@ -594,8 +594,8 @@ Ext.define('GeoExt.container.VectorLegend', {
             ddGroup: ct.id,
             onDragOut: function(e, targetId) {
                 var target = Ext.getCmp(targetId);
-                target.removeClass(&quot;gx-ruledrag-insert-above&quot;);
-                target.removeClass(&quot;gx-ruledrag-insert-below&quot;);
+                target.removeCls(&quot;gx-ruledrag-insert-above&quot;);
+                target.removeCls(&quot;gx-ruledrag-insert-below&quot;);
                 return Ext.dd.DragZone.prototype.onDragOut.apply(this, arguments);
             },
             onDragEnter: function(e, targetId) {
@@ -608,7 +608,7 @@ Ext.define('GeoExt.container.VectorLegend', {
                 } else if (sourcePos &lt; targetPos) {
                     cls = &quot;gx-ruledrag-insert-below&quot;;
                 }
-                cls &amp;&amp; target.addClass(cls);
+                cls &amp;&amp; target.addCls(cls);
                 return Ext.dd.DragZone.prototype.onDragEnter.apply(this, arguments);
             },
             onDragDrop: function(e, targetId) {
@@ -652,7 +652,7 @@ Ext.define('GeoExt.container.VectorLegend', {
             this.doLayout();
             // make sure that the selected rule is still selected after update
             if (this.selectedRule) {
-                this.getRuleEntry(this.selectedRule).body.addClass(&quot;x-grid3-row-selected&quot;);
+                this.getRuleEntry(this.selectedRule).body.addCls(&quot;x-boundlist-selected&quot;);
             }
         }
     },

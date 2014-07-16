@@ -27,6 +27,7 @@
  * @include OpenLayers/Format/WMSCapabilities.js
  * @include OpenLayers/Layer/WMS.js
  * @include OpenLayers/Util.js
+ * @requires GeoExt/Version.js
  */
 
 <span id='GeoExt-data-reader-WmsCapabilities'>/**
@@ -59,6 +60,19 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
             this.format = new OpenLayers.Format.WMSCapabilities();
         }
     },
+
+<span id='GeoExt-data-reader-WmsCapabilities-cfg-keepRaw'>    /**
+</span>     * Should we keep the raw parsed result? If true, the result will be stored
+     * under the #raw property. Default is false.
+     * @cfg {Boolean}
+     */
+    keepRaw: false,
+
+<span id='GeoExt-data-reader-WmsCapabilities-cfg-raw'>    /**
+</span>     * The raw parsed result, only set if #keepRaw is true.
+     * @cfg {Object}
+     */
+    raw: null,
 
 <span id='GeoExt-data-reader-WmsCapabilities-cfg-attributionCls'>    /**
 </span>     * CSS class name for the attribution DOM elements.
@@ -135,6 +149,15 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         return layer.opaque == undefined || !layer.opaque;
     },
 
+<span id='GeoExt-data-reader-WmsCapabilities-method-destroyReader'>    /**
+</span>     * @private
+     */
+    destroyReader: function() {
+        var me = this;
+        delete me.raw;
+        this.callParent();
+    },
+
 <span id='GeoExt-data-reader-WmsCapabilities-method-readRecords'>    /**
 </span>     * Create a data block containing Ext.data.Records from an XML document.
      *
@@ -156,6 +179,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
         }
         if (!!data.error) {
             Ext.Error.raise({msg: &quot;Error parsing WMS GetCapabilities&quot;, arg: data.error});
+        }
+        if (this.keepRaw) {
+            this.raw = data;
         }
         var version = data.version;
         var capability = data.capability || {};
