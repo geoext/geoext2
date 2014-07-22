@@ -1,0 +1,13 @@
+[
+    {
+        "title": "Geo Ext 2 Guides",
+        "items": [
+        {
+            "name": "single_file_build",
+            "url": "guides/single_file_build",
+            "title": "Single file build",
+            "description": "Instructions on how to create a single file build of GeoExt 2 using either jsbuild or Sencha Cmd"
+        }
+        ]
+    }
+]
