@@ -266,6 +266,8 @@
         "OpenLayers.Symbolizer.Raster",
         "OpenLayers.Spherical"
     ],
+    // Include the guides tab
+    "--guides": "guides.json",
     // Include the examples tab
     "--examples": "examples.json",
 
