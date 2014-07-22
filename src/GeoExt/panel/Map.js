@@ -202,6 +202,10 @@ Ext.define('GeoExt.panel.Map', {
             );
         }
 
+        if (this.map.fallThrough !== true) {
+            this.warnMapFallThrough();
+        }
+
         var layers  = this.layers;
         if(!layers || layers instanceof Array) {
             this.layers = Ext.create('GeoExt.data.LayerStore', {
@@ -282,6 +286,21 @@ Ext.define('GeoExt.panel.Map', {
             "addlayer": this.onAddlayer,
             "removelayer": this.onRemovelayer,
             scope: this
+        });
+    },
+
+    /**
+     * Logs a warning to the console (if one is present) that tells the user to
+     * set the `fallThrough` property of an OpenLayers.Map to true when this map
+     * is being used inside of a GeoExt.panel.Map.
+     *
+     * @private
+     */
+    warnMapFallThrough: function(){
+        Ext.log({
+            level: 'warn',
+            msg: 'It is recommended to construct a GeoExt.panel.Map with' +
+                ' OpenLayers.Map#fallThrough set to true.'
         });
     },
 
