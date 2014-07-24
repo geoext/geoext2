@@ -120,6 +120,18 @@ Ext.define('GeoExt.panel.Map', {
 
     /**
      * A configured map or a configuration object for the map constructor.
+     *
+     * In most cases you will want your map to be configured with
+     * `fallThrough: true`, as other settings affect the dragging behaviour of
+     * overlayed `Ext.window.Window` instances in negative way. Such windows
+     * cannot be smoothly dragged over the the map panel. If you do not provide
+     * a map or map configuration object, the auto-created map will be
+     * configured with `fallThrough` being `true`.
+     *
+     * Having `fallThrough` being `false` is a misconfiguration most of the
+     * time, which is why we will issue a warning to the developer console if we
+     * detect this setting.
+     *
      * A configured map will be available after construction through the
      * {@link GeoExt.panel.Map#property-map} property.
      *
@@ -189,6 +201,15 @@ Ext.define('GeoExt.panel.Map', {
      * Initializes the map panel. Creates an OpenLayers map if
      * none was provided in the config options passed to the
      * constructor.
+     *
+     * Such an auto-created map will be configured with
+     *
+     *     {
+     *         allOverlays: true,
+               fallThrough: true
+     *     }
+     *
+     * See {@link GeoExt.panel.Map#cfg-map} for an explanation why we do this.
      *
      * @private
      */
