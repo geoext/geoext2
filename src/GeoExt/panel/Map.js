@@ -321,7 +321,9 @@ Ext.define('GeoExt.panel.Map', {
         Ext.log({
             level: 'warn',
             msg: 'It is recommended to construct a GeoExt.panel.Map with' +
-                ' OpenLayers.Map#fallThrough set to true.'
+                ' OpenLayers.Map#fallThrough == true. This way dragging' +
+                ' interactions with floating components (e.g. ' +
+                ' Ext.window.Window) on top of the map are smoother.'
         });
     },
 
