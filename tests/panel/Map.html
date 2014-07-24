@@ -80,7 +80,7 @@
         }
         
         function test_allOverlaysAndFallThrough(t) {
-            t.plan(8);
+            t.plan(12);
 
             // make the hidden span element visible, because setSize does not
             // work in iframes that are inside a hidden container in FF and IE.
@@ -88,6 +88,16 @@
             showTestIframe();
 
             var map, panel;
+            // a flag being reset after each test to see if a fallThrough
+            // warning has been issued upon Ext.create('GeoExt.panel.Map', {})
+            var warned;
+
+            // saving a reference to the original warning method
+            var origWarnMapFallThrough = GeoExt.panel.Map.prototype.warnMapFallThrough;
+            // overwrite it with a basic method setting our flag
+            GeoExt.panel.Map.prototype.warnMapFallThrough = function() {
+                warned = true;
+            };
             
             // Test if map-instances are respected and left untouched:
             // 2 tests
@@ -101,9 +111,13 @@
             t.eq(panel.map.fallThrough, OpenLayers.Map.prototype.fallThrough,
                     "fallThrough has the OpenLayers.Map-default value if map-" +
                     "instance is provided to panel");
+            t.eq(warned, true,
+                    "A warning was issued [fallThrough != true].");
+
             // since we created the map, we destroy it
             map.destroy();
             panel.destroy();
+            warned = undefined; // reset the warning flag
             
             // Test if our defaults are applied if neither map-instance nor
             // map-config are provided:
@@ -114,7 +128,10 @@
                     "allOverlays set to true if no map is provided to panel");
             t.eq(panel.map.fallThrough, true,
                     "fallThrough set to true if no map is provided to panel");
+            t.eq(warned, undefined,
+                    "No warning was issued [fallThrough == true].");
             panel.destroy();
+            warned = undefined; // reset the warning flag
             
             // Test if our defaults are applied when a map-config is being
             // used:
@@ -128,7 +145,10 @@
                     "allOverlays set to true if map config provided to panel");
             t.eq(panel.map.fallThrough, true,
                     "fallThrough set to true if map config provided to panel");
+            t.eq(warned, undefined,
+                    "No warning was issued [fallThrough == true].");
             panel.destroy();
+            warned = undefined; // reset the warning flag
 
             // Test if explicitly setting the allOverlays & fallThrough otions
             // takes precedence over our defaults
@@ -149,7 +169,12 @@
             t.eq(panel.map.fallThrough, false,
                     "Setting for fallThrough respected if map config provided" +
                     " to panel");
+            t.eq(warned, true,
+                    "A warning was issued [fallThrough != true].");
             panel.destroy();
+
+            // Restore the original warning method.
+            GeoExt.panel.Map.prototype.warnMapFallThrough = origWarnMapFallThrough;
 
             hideTestIframe();
         }
