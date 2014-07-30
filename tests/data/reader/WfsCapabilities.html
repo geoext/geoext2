@@ -53,6 +53,26 @@
             reader.destroy();
         }
 
+        /**
+         * See https://github.com/geoext/geoext2/issues/281 and
+         * https://github.com/geoext/geoext/pull/30
+         */
+        function test_readWFS11(t) {
+            t.plan(1);
+
+            var reader = Ext.create("GeoExt.data.reader.WfsCapabilities");
+            var records = reader.read({
+                responseXML : doc11,
+                responseText: true
+            });
+            var record = records.records[0];
+            var layer = record.getLayer();
+            var expectedUrl = "http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?";
+
+            t.eq(layer.protocol.url, expectedUrl,
+                    "[0] protocol has correct URL (WFS 1.1.0)");
+        }
+
         function test_read_layerOptions(t) {
             t.plan(6);
             var reader = Ext.create("GeoExt.data.reader.WfsCapabilities", {
