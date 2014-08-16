@@ -75,7 +75,7 @@ Ext.application({
             }]
         });
         
-        // update link when state chnages
+        // update link when state changes
         var onStatechange = function(provider) {
             var l = provider.getLink();
             Ext.get("permalink").update("<a href=" + l + ">" + l + "</a>");
