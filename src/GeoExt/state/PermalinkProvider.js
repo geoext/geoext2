@@ -35,7 +35,7 @@
  *     });
  *     // display permalink each time state is changed
  *     permalinkProvider.on({
- *         statechanged: function(provider, name, value) {
+ *         statechange: function(provider, name, value) {
  *             alert(provider.getLink());
  *         }
  *     });
