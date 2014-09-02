@@ -26,9 +26,9 @@
             t.ok(reader.format instanceof OpenLayers.Format.WFSCapabilities, "default format gets created");
             reader.destroy();
         }
-      
+
         function test_read(t) {
-            t.plan(8);
+            t.plan(10);
 
             var reader = Ext.create("GeoExt.data.reader.WfsCapabilities");
 
@@ -50,6 +50,8 @@
             t.eq(layer.protocol.CLASS_NAME, "OpenLayers.Protocol.WFS.v1_0_0", "[0] protocol is of type OpenLayers.Protocol.WFS.v1_0_0");
             t.eq(layer.protocol.url, "http://someserver.com:8080/geoserver/wfs?", "[0] protocol has correct URL");
             t.eq(layer.protocol.featureNS, "http://www.openplans.org/spearfish", "[0] protocol has correct featureNS");
+            t.eq(layer.projection.CLASS_NAME, "OpenLayers.Projection", "[0] layer projection is of type OpenLayers.Projection");
+            t.eq(layer.projection.getCode(), "EPSG:26713", "[0] projection code is EPSG:26713");
             reader.destroy();
         }
 
@@ -58,7 +60,7 @@
          * https://github.com/geoext/geoext/pull/30
          */
         function test_readWFS11(t) {
-            t.plan(1);
+            t.plan(3);
 
             var reader = Ext.create("GeoExt.data.reader.WfsCapabilities");
             var records = reader.read({
@@ -71,10 +73,12 @@
 
             t.eq(layer.protocol.url, expectedUrl,
                     "[0] protocol has correct URL (WFS 1.1.0)");
+            t.eq(layer.projection.CLASS_NAME, "OpenLayers.Projection", "[0] layer projection is of type OpenLayers.Projection");
+            t.eq(layer.projection.getCode(), "EPSG:42304", "[0] projection code is EPSG:42304");
         }
 
         function test_read_layerOptions(t) {
-            t.plan(6);
+            t.plan(8);
             var reader = Ext.create("GeoExt.data.reader.WfsCapabilities", {
                 // test layerOptions object
                 layerOptions: {
@@ -97,23 +101,30 @@
                     return {
                         visibility: false,
                         displayInLayerSwitcher: false,
-                        strategies: [new OpenLayers.Strategy.BBOX({ratio: 1})]
+                        strategies: [new OpenLayers.Strategy.BBOX({ratio: 1})],
+                        projection: new OpenLayers.Projection("EPSG:4326")
                     };
                 }
             });
             records = reader.read({responseXML : doc, responseText: true});
             record = records.records[0];
 
-            //3 tests -- testing the first record layer properties and objects
+            //4 tests -- testing the first record layer properties and objects
             var layer = record.getLayer();
             t.eq(layer.displayInLayerSwitcher, false, "(function) layer displayInLayerSwitcher correctly set to false");
             t.eq(layer.visibility, false, "(function) layer visibility property correctly set to false");
             t.eq(layer.strategies[0].CLASS_NAME, "OpenLayers.Strategy.BBOX", "(function) layer first strategy is type OpenLayers.Strategy.BBOX");
+            t.eq(layer.projection.getCode(), "EPSG:4326", "[0] projection is set to EPSG:4326");
 
             //1 test -- testing the first two records layer strategies.  Make
             //          sure they are not the same object instance.
             var log = layer.strategies[0] !== records.records[1].getLayer().strategies[0];
             t.ok(log, "Record layer strategies are unique OpenLayers.Strategy.BBOX object instances")
+
+            //1 test -- testing the first two records layer projections.  Make
+            //          sure they are not the same object instance.
+            var proj = layer.projection !== records.records[1].getLayer().projection;
+            t.ok(proj, "Record layer projections are unique OpenLayers.Projection object instances")
             reader.destroy();
         }
     </script>

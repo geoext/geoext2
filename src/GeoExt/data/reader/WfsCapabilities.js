@@ -129,7 +129,8 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
                 layerOptions = {
                     metadata: metadata,
                     protocol: new OpenLayers.Protocol.WFS(protocolOptions),
-                    strategies: [new OpenLayers.Strategy.Fixed()]
+                    strategies: [new OpenLayers.Strategy.Fixed()],
+                    projection: featureType.srs
                 };
                 var metaLayerOptions = this.layerOptions;
                 if (metaLayerOptions) {
