@@ -1,7 +1,7 @@
 Ext.require([
     'Ext.container.Viewport',
     'GeoExt.panel.Map',
-    'GeoExt.container.Overview'
+    'GeoExt.OverviewMap'
 ]);
 
 Ext.application({
@@ -38,7 +38,7 @@ Ext.application({
         });
 
         // Customized floating overview container
-        var overview = Ext.create('GeoExt.container.Overview', {
+        var overview = Ext.create('GeoExt.OverviewMap', {
             map: map,
             dynamic: true,
             autoShow: true,
@@ -111,7 +111,7 @@ Ext.application({
                             flex: 1,
                             layout: 'fit',
                             items: [{
-                                xtype: 'gx_overview'
+                                xtype: 'gx_overviewmap'
                             }]
                         }
                     ]
@@ -119,7 +119,7 @@ Ext.application({
             ]
         });
 
-        // Positioning the floating container relative to the viewport
+        // Positioning the floating component relative to the viewport
         var vOffset = -25 - overview.getHeight();
         var position = overview.getAlignToXY(viewport, 'bl', [25, vOffset]);
         overview.setPosition(position);

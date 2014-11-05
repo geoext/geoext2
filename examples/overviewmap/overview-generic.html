@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GeoExt Overview Example</title>
+    <title>GeoExt Simple Overview Example</title>
 
     <!-- ExtJS -->
     <script type="text/javascript" src="http://cdn.sencha.com/ext/gpl/4.2.1/examples/shared/include-ext.js"></script>
@@ -17,9 +17,9 @@
     <link rel="stylesheet" type="text/css" href="http://openlayers.org/api/2.13.1/theme/default/style.css">
 
     <script type="text/javascript" src="../loader.js"></script>
-    <script type="text/javascript" src="overview.js"></script>
+    <script type="text/javascript" src="overview-generic.js"></script>
     <style>
-        .gx-overview .olControlOverviewMapElement {
+        .gx-overview-map .olControlOverviewMapElement {
             padding: 0;
             background-color: rgba(0, 0, 0, 0.5)
         }
@@ -27,17 +27,17 @@
 </head>
 <body>
     <div id="desc">
-        <h1>GeoExt.container.Overview Components</h1>
-        <p>This example shows how to work with the overview component. It inherits
-        from Ext.container.Container wrapping the OpenLayers Overview control. This means
+        <h1>GeoExt.OverviewMap Components</h1>
+        <p>This example shows how to work with the OverviewMap component. It inherits
+        from Ext.Component wrapping the OpenLayers Overview control. This means
         you can place it in your applications layout as you would any other component.
-        The example shows the usage as a floating, resizable component positioned
-        absolutely above the map. The second container has been placed inside a vbox layout,
-        so the components size is determined by the parents dimensions.<br>
-        The floating overview map has been configured as "dynamic" which means it will
-        update itself to show the bound maps active baselayer.<p>
+        The example shows the usage of an GeoExt.OverviewMap as an item of a
+        Ext.panel.Panel inside a vbox layout. The overviews map size is ultimately
+        determined by the parents dimensions.<br>
+        The OverviewMap component has not been configured with a map so it defaults to the
+        GeoExt.panel.Map guessed at runtime.<p>
         <p>The js is not minified so it is readable. See
-        <a href="overview.js">overview.js</a>.</p>
+        <a href="overview-generic.js">overview-generic.js</a>.</p>
     </div>
 </body>
 </html>

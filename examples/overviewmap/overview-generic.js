@@ -1,7 +1,7 @@
 Ext.require([
     'Ext.container.Viewport',
     'GeoExt.panel.Map',
-    'GeoExt.container.Overview'
+    'GeoExt.OverviewMap'
 ]);
 
 Ext.application({
@@ -56,7 +56,7 @@ Ext.application({
                             title: 'Overview',
                             flex: 1,
                             layout: 'fit',
-                            items: { xtype: 'gx_overview' }
+                            items: { xtype: 'gx_overviewmap' }
                         }
                     ]
                 }

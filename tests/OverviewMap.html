@@ -11,13 +11,13 @@
             disableCaching: false,
             enabled: true,
             paths: {
-                GeoExt: '../../src/GeoExt'
+                GeoExt: '../src/GeoExt'
             }
         });
 
         Ext.Loader.syncRequire([
             'GeoExt.panel.Map',
-            'GeoExt.container.Overview'
+            'GeoExt.OverviewMap'
         ]);
 
         function test_lifecycle(t) {
@@ -46,7 +46,7 @@
                     map: map
                 });
 
-            var overview = Ext.create('GeoExt.container.Overview', {
+            var overview = Ext.create('GeoExt.OverviewMap', {
                     floating: true,
                     width: 300,
                     height: 150,
@@ -54,20 +54,20 @@
                 });
 
             t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 0,
-                'no overview control is added to the map if overview container is not shown');
+                'no overview control is added to the map if overview component is not shown');
 
             try {
                 overview.show();
-                t.ok(true, 'can show overview container');
+                t.ok(true, 'can show overview component');
             } catch (err) {
-                t.ok(false, 'showing an overview container leads to', err);
+                t.ok(false, 'showing an overview component leads to', err);
             }
 
             t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 1,
-                'one overview control is added to the map when overview container is shown');
+                'one overview control is added to the map when overview component is shown');
 
             t.ok(overview.ctrl.ovmap.layers[0].id !== map.layers[0].id,
-                'baselayer of overview map is not the same as bounds map baselayer');
+                'baselayer of overview map is not the same as the bounds map baselayer');
 
             t.ok(overview.ctrl.ovmap.layers[0].name === map.layers[0].name,
                 'clone of baselayer of bound map is used in overview map');
@@ -78,26 +78,26 @@
 
             try {
                 overview.hide();
-                t.ok(true, 'hiding the overview container works fine');
+                t.ok(true, 'hiding the overview component works fine');
             } catch (err) {
-                t.ok(false, 'hiding the overview container leads to ', err);
+                t.ok(false, 'hiding the overview component leads to ', err);
             }
 
             t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 0,
-                'overview control has been removed from bound map when container is hidden');
+                'overview control has been removed from bound map when component is hidden');
 
             // move map to check if overview reinits at correct center
             map.setCenter([51, 13]);
 
             try {
                 overview.show();
-                t.ok(true, 'showing the overview container after it has been hidden');
+                t.ok(true, 'showing the overview component after it has been hidden');
             } catch (err) {
-                t.ok(false, 'showing an overview container after it has been hidden leads to', err);
+                t.ok(false, 'showing an overview component after it has been hidden leads to', err);
             }
 
             t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 1,
-                'one overview control is been readded to the map when overview container is shown');
+                'one overview control is been readded to the map when overview component is shown');
 
             t.ok(overview.ctrl.ovmap.layers[0].id !== map.layers[0].id,
                 'baselayer of overview map is not the same as bounds map baselayer');
@@ -111,7 +111,7 @@
 
             try {
                 overview.destroy();
-                t.ok(true, 'overview container can be destroyed');
+                t.ok(true, 'overview component can be destroyed');
             } catch (err) {
                 t.ok('destroying component leads to ', err);
             }
@@ -137,28 +137,28 @@
             });
 
             // guess map at runtime
-            var overview = Ext.create('GeoExt.container.Overview', {
+            var overview = Ext.create('GeoExt.OverviewMap', {
                 floating: true,
                 width: 300,
                 height: 150,
                 cls: 'custom-user-cls'
             });
 
-            t.ok(overview.hasCls('custom-user-cls'));
-            t.ok(overview.hasCls('gx-overview'));
+            t.ok(overview.hasCls('custom-user-cls'), 'Custom cls parameter is set.');
+            t.ok(overview.hasCls('gx-overview-map'), 'GX cls parameter is set.');
 
             t.ok(mapPanel.map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 0,
-                'no overview control is added to the map if overview container is not shown');
+                'no overview control is added to the map if overview component is not shown');
 
             try {
                 overview.show();
-                t.ok(true, 'can show overview container');
+                t.ok(true, 'can show overview component');
             } catch (err) {
-                t.ok(false, 'showing an overview container leads to', err);
+                t.ok(false, 'showing an overview component leads to', err);
             }
 
             t.ok(mapPanel.map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 1,
-                'one overview control is added to the map when overview container is shown');
+                'one overview control is added to the map when overview component is shown');
 
         }
 
@@ -183,7 +183,7 @@
             var extent = [0, 0, 180, 90];
 
             // guess map at runtime
-            var overview = Ext.create('GeoExt.container.Overview', {
+            var overview = Ext.create('GeoExt.OverviewMap', {
                 floating: true,
                 width: 300,
                 height: 150,
@@ -197,9 +197,9 @@
 
             try {
                 overview.show();
-                t.ok(true, 'can show overview container');
+                t.ok(true, 'can show overview component');
             } catch (err) {
-                t.ok(false, 'showing an overview container leads to', err);
+                t.ok(false, 'showing an overview component leads to', err);
             }
 
             t.ok(overview.ctrl.autoPan === true,

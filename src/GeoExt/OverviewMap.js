@@ -7,34 +7,30 @@
  */
 
 /**
- * A container encapsulating an OpenLayers.Control.OverviewMap control.
+ * A component encapsulating an OpenLayers.Control.OverviewMap control.
  *
  * When you use this component in an application, make sure to include the
- * stylesheet 'overview.css' or add the following to your own stylesheet.
+ * stylesheet 'overviewmap.css' or add the following to your own stylesheet.
  *
  * <code>
- * .gx-overview .olControlOverviewMapElement { padding: 0; }
+ * .gx-overview-map .olControlOverviewMapElement { padding: 0; }
  * </code>
  *
- * @class GeoExt.container.Overview
+ * @class GeoExt.OverviewMap
  */
-Ext.define('GeoExt.container.Overview', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.gx_overview',
+Ext.define('GeoExt.OverviewMap', {
+    extend: 'Ext.Component',
+    alias: 'widget.gx_overviewmap',
+    requires: [
+        'GeoExt.Version'
+    ],
 
     /**
      * Custom CSS class added to this components #cls.
      *
      * @property {String}
      */
-    ovCls: 'gx-overview',
-
-    /**
-     * The default layout of the Overview component.
-     *
-     * @property {String}
-     */
-    layout: 'fit',
+    ovCls: 'gx-overview-map',
 
     /**
      * The OpenLayers.Map that this overview is bound to. If not set by the user
@@ -63,7 +59,7 @@ Ext.define('GeoExt.container.Overview', {
      * - "size" will default to the containers actual dimensions
      * - "maximized" will always be true to make the overview visible
      *
-     * If you want to hide the overview map, simple use the containers show/hide
+     * If you want to hide the overview map, simple use the components show/hide
      * methods.
      *
      * @cfg {Object}
@@ -85,8 +81,8 @@ Ext.define('GeoExt.container.Overview', {
         // add gx class making sure it won't be overridden on accident
         this.addCls(this.ovCls);
 
-        // bind to the containers events to make sure the overview is added
-        // and removed when the container is (in-)visible.
+        // bind to the components lifecycle events to make sure the overview is
+        // added and removed from the map when the component is (in-)visible.
         this.on({
             'show': this.reinitControl,
             'resize': this.reinitControl,
@@ -106,8 +102,8 @@ Ext.define('GeoExt.container.Overview', {
 
     /**
      * Destroys the encapsulated OpenLayers.Control.OverviewMap removing it from
-     * the maps controls and unbinding all mapped events from this component.
-     * Deletes the containers map and overviewOptions members.
+     * the map controls and unbinds all events from this component.
+     * Deletes the components ctrl, map and overviewOptions members.
      *
      * @private
      */
@@ -163,9 +159,7 @@ Ext.define('GeoExt.container.Overview', {
         // not set by user, the overview control will fail on construction.
         // This is to determine any layer to be shown in overview map.
         if (map.allOverlays) {
-            if (!options.layers
-                    && map.layers
-                    && map.layers.length > 0) {
+            if (!options.layers && map.layers && map.layers.length > 0) {
                 baselayer = map.layers[0].clone();
                 baselayer.setIsBaseLayer(true);
                 options.layers = [ baselayer ];
