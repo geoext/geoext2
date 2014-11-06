@@ -29,7 +29,7 @@ Ext.define('GeoExt.data.LayerModel',{
          * Convenience function for creating new layer model instance object
          * using a layer object.
          *
-         * @param {OpenLayers.Layer} layer
+         * @param {ol.layer.Layer} layer
          * @return {GeoExt.data.LayerModel}
          * @static
          */
@@ -38,11 +38,10 @@ Ext.define('GeoExt.data.LayerModel',{
         }
     },
     fields: [
-        'id',
-        {name: 'title', type: 'string', mapping: 'name'},
-        {name: 'legendURL', type: 'string', mapping: 'metadata.legendURL'},
-        {name: 'hideTitle', type: 'bool', mapping: 'metadata.hideTitle'},
-        {name: 'hideInLegend', type: 'bool', mapping: 'metadata.hideInLegend'}
+        {name: 'title', type: 'string', convert: function(v, record) { return record.dirty ? v : record.getLayer().get('title'); }},
+        {name: 'legendURL', type: 'string', convert: function(v, record) { return record.dirty ? v : record.getLayer().get('legendUrl'); }},
+        {name: 'hideTitle', type: 'bool', convert: function(v, record) { return record.dirty ? v : record.getLayer().get('hideTitle'); }}, 
+        {name: 'hideInLegend', type: 'bool', convert: function(v, record) { return record.dirty ? v : record.getLayer().get('hideInLegend'); }} 
     ],
     proxy: {
         type: 'memory',
@@ -51,9 +50,9 @@ Ext.define('GeoExt.data.LayerModel',{
         }
     },
     /**
-     * Returns the {OpenLayers.Layer} layer object used in this model instance.
+     * Returns the {ol.layer.Layer} layer object used in this model instance.
      *
-     * @return {OpenLayers.Layer}
+     * @return {ol.layer.Layer}
      */
     getLayer: function() {
         return this.raw;

@@ -8,7 +8,6 @@
 
 /*
  * @requires GeoExt/data/LayerStore.js
- * @include OpenLayers/Map.js
  */
 
 /**
@@ -16,7 +15,7 @@
  * will initially be zoomed to either the center and zoom level configured
  * by the `center` and `zoom` configuration options, or the configured
  * `extent`, or - if neither are provided - the extent returned by the
- * map's `getExtent()` method.
+ * map projection's `getExtent()` method.
  *
  * Example:
  *
@@ -25,8 +24,8 @@
  *         map: {
  *             // ...
  *             // optional, can be either
- *             //   - a valid OpenLayers.Map configuration or
- *             //   - an instance of OpenLayers.Map
+ *             //   - a valid ol.Map configuration or
+ *             //   - an instance of ol.Map
  *         },
  *         center: '12.31,51.48',
  *         zoom: 6
@@ -77,10 +76,10 @@ Ext.define('GeoExt.panel.Map', {
     /**
      * A location for the initial map center.  If an array is provided, the
      * first two items should represent x & y coordinates. If a string is
-     * provided, it should consist of a x & y coordinate seperated by a
+     * provided, it should consist of an x & y coordinate seperated by a
      * comma.
      *
-     * @cfg {OpenLayers.LonLat/Number[]/String} center
+     * @cfg {Number[]/String} center
      */
     center: null,
 
@@ -96,51 +95,22 @@ Ext.define('GeoExt.panel.Map', {
      * provided.  If an array, the first four items should be minx, miny,
      * maxx, maxy.
      *
-     * @cfg {OpenLayers.Bounds/Number[]} extent
+     * @cfg {Number[]} extent
      */
     extent: null,
 
     /**
-     * Set this to true if you want pretty strings in the MapPanel's state
-     * keys. More specifically, layer.name instead of layer.id will be used
-     * in the state keys if this option is set to true. But in that case
-     * you have to make sure you don't have two layers with the same name.
-     * Defaults to false.
-     *
-     * @cfg {Boolean} prettyStateKeys
-     */
-    /**
-     * Whether we want the state key to be pretty. See
-     * {@link #cfg-prettyStateKeys the config option prettyStateKeys} for
-     * details.
-     *
-     * @property {Boolean} prettyStateKeys
-     */
-    prettyStateKeys: false,
-
-    /**
      * A configured map or a configuration object for the map constructor.
-     *
-     * In most cases you will want your map to be configured with
-     * `fallThrough: true`, as other settings affect the dragging behaviour of
-     * overlayed `Ext.window.Window` instances in negative way. Such windows
-     * cannot be smoothly dragged over the the map panel. If you do not provide
-     * a map or map configuration object, the auto-created map will be
-     * configured with `fallThrough` being `true`.
-     *
-     * Having `fallThrough` being `false` is a misconfiguration most of the
-     * time, which is why we will issue a warning to the developer console if we
-     * detect this setting.
      *
      * A configured map will be available after construction through the
      * {@link GeoExt.panel.Map#property-map} property.
      *
-     * @cfg {OpenLayers.Map/Object} map
+     * @cfg {ol.Map/Object} map
      */
     /**
      * A map or map configuration.
      *
-     * @property {OpenLayers.Map/Object} map
+     * @property {ol.Map/Object} map
      */
     map: null,
 
@@ -149,20 +119,20 @@ Ext.define('GeoExt.panel.Map', {
      * typically a layout manager must be specified through the layout
      * configuration option.
      *
-     * @cfg {OpenLayers.Map/Object} layout
+     * @cfg {String} layout
      */
     /**
      * A layout or layout configuration.
      *
-     * @property {OpenLayers.Map/Object} layout
+     * @property {String} layout
      */
     layout: 'fit',
 
     /**
-     * The layers provided here will be added to this Map's
+     * The layers provided here will be added to this Map
      * {@link #property-map}.
      *
-     * @cfg {GeoExt.data.LayerStore/OpenLayers.Layer[]} layers
+     * @cfg {GeoExt.data.LayerStore/ol.layer.Layer[]} layers
      */
     /**
      * A store containing {@link GeoExt.data.LayerModel gx_layer-model}
@@ -179,17 +149,16 @@ Ext.define('GeoExt.panel.Map', {
      * @private
      */
     stateEvents: [
-        "aftermapmove",
-        "afterlayervisibilitychange",
-        "afterlayeropacitychange",
-        "afterlayerorderchange",
-        "afterlayernamechange",
+        "aftermoveend",
         "afterlayeradd",
-        "afterlayerremove"
+        "afterlayerremove",
+        "afterlayernamechange",
+        "afterlayeropacitychange",
+        "afterlayervisibilitychange"
     ],
 
     /**
-     * Whether we already rendered an OpenLayers.Map in this panel. Will be
+     * Whether we already rendered an ol.Map in this panel. Will be
      * updated in #onResize, after the first rendering happened.
      *
      * @property {Boolean} mapRendered
@@ -198,188 +167,76 @@ Ext.define('GeoExt.panel.Map', {
     mapRendered: false,
 
     /**
-     * Initializes the map panel. Creates an OpenLayers map if
+     * Initializes the map panel. Creates an ol.Map if
      * none was provided in the config options passed to the
      * constructor.
-     *
-     * Such an auto-created map will be configured with
-     *
-     *     {
-     *         allOverlays: true,
-     *         fallThrough: true
-     *     }
-     *
-     * See {@link GeoExt.panel.Map#cfg-map} for an explanation why we do this.
      *
      * @private
      */
     initComponent: function(){
-        if(!(this.map instanceof OpenLayers.Map)) {
-            this.map = new OpenLayers.Map(
-                Ext.applyIf(this.map || {}, {
-                    allOverlays: true,
-                    fallThrough: true
-                })
-            );
+        if(!(this.map instanceof ol.Map)) {
+            this.map = this.map || {};
+            Ext.applyIf(this.map, {
+                view: new ol.View()
+            });
+            this.map = new ol.Map(this.map);
         }
-
-        if (this.map.fallThrough !== true) {
-            this.warnMapFallThrough();
-        }
-
         var layers  = this.layers;
-        if(!layers || layers instanceof Array) {
-            this.layers = Ext.create('GeoExt.data.LayerStore', {
+        if(!layers || Ext.isArray(layers)) {
+           if (Ext.isArray(layers)) {
+               for (var i=0, ii=layers.length; i<ii; ++i) {
+                   layers[i].on('propertychange', this.layerPropertyChange, this);
+               }
+           }
+           this.layers = Ext.create('GeoExt.data.LayerStore', {
                 layers: layers,
-                map: this.map.layers.length > 0 ? this.map : null
+                map: this.map.getLayers().getLength() > 0 ? this.map : null
             });
         }
-
         if (Ext.isString(this.center)) {
-            this.center = OpenLayers.LonLat.fromString(this.center);
-        } else if(Ext.isArray(this.center)) {
-            this.center = new OpenLayers.LonLat(this.center[0], this.center[1]);
+            this.center = this.center.split(',').map(parseFloat);
         }
         if (Ext.isString(this.extent)) {
-            this.extent = OpenLayers.Bounds.fromString(this.extent);
-        } else if(Ext.isArray(this.extent)) {
-            this.extent = OpenLayers.Bounds.fromArray(this.extent);
+            this.extent = this.extent.split(',').map(parseFloat);
         }
 
         this.callParent(arguments);
 
-        // The map is renderer and its size is updated when we receive
+        // The map is renderer and its size are updated when we receive
         // "resize" events.
         this.on('resize', this.onResize, this);
-
-        //TODO This should be handled by a LayoutManager
-        this.on("afterlayout", function() {
-            //TODO remove function check when we require OpenLayers > 2.11
-            if (typeof this.map.getViewport === "function") {
-                this.items.each(function(cmp) {
-                    if (typeof cmp.addToMapPanel === "function") {
-                        cmp.getEl().appendTo(this.body);
-                    }
-                }, this);
-            }
+        this.map.getView().on("change:center", function(e) {
+            this.fireEvent("aftermoveend", this, this.map, e);
         }, this);
-
-        /**
-         * Fires after the map is moved.
-         *
-         * @event aftermapmove
-         */
-        /**
-         * Fires after a layer changed visibility.
-         *
-         * @event afterlayervisibilitychange
-         */
-        /**
-         * Fires after a layer changed opacity.
-         *
-         * @event afterlayeropacitychange
-         */
-        /**
-         * Fires after a layer order changed.
-         *
-         * @event afterlayerorderchange
-         */
-        /**
-         * Fires after a layer name changed.
-         *
-         * @event afterlayernamechange
-         */
-        /**
-         * Fires after a layer added to the map.
-         *
-         * @event afterlayeradd
-         */
-        /**
-         * Fires after a layer removed from the map.
-         *
-         * @event afterlayerremove
-         */
-
-        // bind various listeners to the corresponding OpenLayers.Map-events
-        this.map.events.on({
-            "moveend": this.onMoveend,
-            "changelayer": this.onChangelayer,
-            "addlayer": this.onAddlayer,
-            "removelayer": this.onRemovelayer,
+        this.layers.on({
+            'add': function(store, records) {
+                for (var i=0, ii=records.length; i<ii; ++i) {
+                    records[i].getLayer().on('propertychange', this.layerPropertyChange, this);
+                }
+                this.fireEvent("afterlayeradd");
+            },
+            'remove': function(store, record) {
+                record.getLayer().un('propertychange', this.layerPropertyChange, this);
+                this.fireEvent("afterlayerremove");
+            },
             scope: this
         });
     },
 
     /**
-     * Logs a warning to the console (if one is present) that tells the user to
-     * set the `fallThrough` property of an OpenLayers.Map to true when this map
-     * is being used inside of a GeoExt.panel.Map.
+     * Private method called after a layer's propertychange event has fired.
      *
+     * @param {Object} evt The event object.
      * @private
      */
-    warnMapFallThrough: function(){
-        Ext.log({
-            level: 'warn',
-            msg: 'It is recommended to construct a GeoExt.panel.Map with' +
-                ' OpenLayers.Map#fallThrough == true. This way dragging' +
-                ' interactions with floating components (e.g.' +
-                ' Ext.window.Window) on top of the map are smoother.'
-        });
-    },
-
-    /**
-     * The "moveend" listener bound to the
-     * {@link GeoExt.panel.Map#property-map}.
-     *
-     * @param {Object} e
-     * @private
-     */
-    onMoveend: function(e) {
-        this.fireEvent("aftermapmove", this, this.map, e);
-    },
-
-    /**
-     * The "changelayer" listener bound to the
-     * {@link GeoExt.panel.Map#property-map}.
-     *
-     * @param {Object} e
-     * @private
-     */
-    onChangelayer: function(e) {
-        var map = this.map;
-        if (e.property) {
-            if (e.property === "visibility") {
-                this.fireEvent("afterlayervisibilitychange", this, map, e);
-            } else if (e.property === "order") {
-                this.fireEvent("afterlayerorderchange", this, map, e);
-            } else if (e.property === "nathis") {
-                this.fireEvent("afterlayernathischange", this, map, e);
-            } else if (e.property === "opacity") {
-                this.fireEvent("afterlayeropacitychange", this, map, e);
-            }
+    layerPropertyChange: function(evt) {
+        if (evt.key === 'title') {
+            this.fireEvent("afterlayernamechange");
+        } else if (evt.key === 'opacity') {
+            this.fireEvent("afterlayeropacitychange");
+        } else if (evt.key === 'visible') {
+            this.fireEvent("afterlayervisibilitychange");
         }
-    },
-
-    /**
-     * The "addlayer" listener bound to the
-     * {@link GeoExt.panel.Map#property-map}.
-     *
-     * @param {Object} e
-     * @private
-     */
-    onAddlayer: function() {
-        this.fireEvent("afterlayeradd");
-    },
-
-    /**
-     * The "removelayer" listener bound to the
-     * {@link GeoExt.panel.Map#property-map}.
-     *
-     * @param {Object} e
-     * @private
-     */
-    onRemovelayer: function() {
-        this.fireEvent("afterlayerremove");
     },
 
     /**
@@ -390,14 +247,14 @@ Ext.define('GeoExt.panel.Map', {
      */
     onResize: function() {
         var map = this.map;
-        if(!this.mapRendered && this.body.dom !== map.div) {
+        if(!this.mapRendered && this.body.dom !== map.getTarget()) {
             // the map has not been rendered yet
-            map.render(this.body.dom);
+            map.setTarget(this.body.dom);
             this.mapRendered = true;
 
             this.layers.bind(map);
 
-            if (map.layers.length > 0) {
+            if (map.getLayers().getLength() > 0) {
                 this.setInitialExtent();
             } else {
                 this.layers.on("add", this.setInitialExtent, this,
@@ -415,35 +272,26 @@ Ext.define('GeoExt.panel.Map', {
      */
     setInitialExtent: function() {
         var map = this.map;
-        if (!map.getCenter()) {
+        if (!map.getView().getCenter()) {
             if (this.center || this.zoom ) {
                 // center and/or zoom?
-                map.setCenter(this.center, this.zoom);
-            } else if (this.extent instanceof OpenLayers.Bounds) {
+                map.getView().setCenter(this.center);
+                map.getView().setZoom(this.zoom);
+            } else if (this.extent) {
                 // extent
-                map.zoomToExtent(this.extent, true);
-            }else {
-                map.zoomToMaxExtent();
+                map.getView().fitExtent(this.extent, map.getSize());
+            } else {
+                map.getView().fitExtent(map.getView().getProjection().getExtent(), map.getSize());
             }
         }
     },
 
     /**
-     * Returns a state of the Map as keyed Object. Depending on the point in
-     * time this method is being called, the following keys will be available:
+     * Returns a state of the Map as keyed Object. The following keys will be available:
      *
      * * `x`
      * * `y`
      * * `zoom`
-     *
-     * And for all layers present in the map the object will contain the
-     * following keys
-     *
-     * * `visibility_<XXX>`
-     * * `opacity_<XXX>`
-     *
-     * The &lt;XXX&gt; suffix is either the title or id of the layer record, it
-     * can be influenced by setting #prettyStateKeys to `true` or `false`.
      *
      * @return {Object}
      * @private
@@ -451,36 +299,32 @@ Ext.define('GeoExt.panel.Map', {
     getState: function() {
         var me = this,
             map = me.map,
-            state = me.callParent(arguments) || {},
-            layer;
+            state = me.callParent(arguments) || {};
 
         // Ext delays the call to getState when a state event
         // occurs, so the MapPanel may have been destroyed
         // between the time the event occurred and the time
         // getState is called
-        if(!map) {
+        if (!map) {
             return;
         }
 
         // record location and zoom level
-        var center = map.getCenter();
-        // map may not be centered yet, because it may still have zero
-        // dimensions or no layers
+        var center = map.getView().getCenter();
+        // map may not be centered yet
         center && Ext.applyIf(state, {
-            "x": center.lon,
-            "y": center.lat,
-            "zoom": map.getZoom()
+            "x": center[0],
+            "y": center[1],
+            "zoom": map.getView().getZoom()
         });
 
         me.layers.each(function(modelInstance) {
             layer = modelInstance.getLayer();
-            layerId = this.prettyStateKeys
-                   ? modelInstance.get('title')
-                   : modelInstance.get('id');
+            layerId = modelInstance.get('title');
             state = me.addPropertyToState(state, "visibility_" + layerId,
-                layer.getVisibility());
+                layer.getVisible());
             state = me.addPropertyToState(state, "opacity_" + layerId,
-                (layer.opacity === null) ? 1 : layer.opacity);
+                (layer.getOpacity() === undefined) ? 1 : layer.getOpacity());
         }, me);
 
         return state;
@@ -495,36 +339,8 @@ Ext.define('GeoExt.panel.Map', {
     applyState: function(state) {
         var me = this;
             map = me.map;
-        // if we get strings for state.x, state.y or state.zoom
-        // OpenLayers will take care of converting them to the
-        // appropriate types so we don't bother with that
-        me.center = new OpenLayers.LonLat(state.x, state.y);
-        me.zoom = state.zoom;
-
-        // TODO refactor with me.layers.each
-        // set layer visibility and opacity
-        var i, l, layer, layerId, visibility, opacity;
-        var layers = map.layers;
-        for(i=0, l=layers.length; i<l; i++) {
-            layer = layers[i];
-            layerId = me.prettyStateKeys ? layer.name : layer.id;
-            visibility = state["visibility_" + layerId];
-            if(visibility !== undefined) {
-                // convert to boolean
-                visibility = (/^true$/i).test(visibility);
-                if(layer.isBaseLayer) {
-                    if(visibility) {
-                        map.setBaseLayer(layer);
-                    }
-                } else {
-                    layer.setVisibility(visibility);
-                }
-            }
-            opacity = state["opacity_" + layerId];
-            if(opacity !== undefined) {
-                layer.setOpacity(opacity);
-            }
-        }
+        me.center = [state.x, state.y].map(parseFloat);
+        me.zoom = parseFloat(state.zoom);
     },
 
     /**
@@ -547,20 +363,13 @@ Ext.define('GeoExt.panel.Map', {
      * @private
      */
     beforeDestroy: function() {
-        if(this.map && this.map.events) {
-            this.map.events.un({
-                "moveend": this.onMoveend,
-                "changelayer": this.onChangelayer,
-                scope: this
-            });
-        }
         // if the map panel was passed a map instance, this map instance
         // is under the user's responsibility
         if(!this.initialConfig.map ||
-           !(this.initialConfig.map instanceof OpenLayers.Map)) {
+           !(this.initialConfig.map instanceof ol.Map)) {
             // we created the map, we destroy it
-            if(this.map && this.map.destroy) {
-                this.map.destroy();
+            if(this.map) {
+                this.map.setTarget(null);
             }
         }
         delete this.map;
