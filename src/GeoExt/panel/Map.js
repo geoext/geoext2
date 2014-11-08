@@ -501,12 +501,10 @@ Ext.define('GeoExt.panel.Map', {
         me.center = new OpenLayers.LonLat(state.x, state.y);
         me.zoom = state.zoom;
 
-        // TODO refactor with me.layers.each
         // set layer visibility and opacity
-        var i, l, layer, layerId, visibility, opacity;
-        var layers = map.layers;
-        for(i=0, l=layers.length; i<l; i++) {
-            layer = layers[i];
+        var layer, layerId, visibility, opacity;
+        me.layers.each(function(layerRec) {
+            layer = layerRec.getLayer();
             layerId = me.prettyStateKeys ? layer.name : layer.id;
             visibility = state["visibility_" + layerId];
             if(visibility !== undefined) {
@@ -524,7 +522,7 @@ Ext.define('GeoExt.panel.Map', {
             if(opacity !== undefined) {
                 layer.setOpacity(opacity);
             }
-        }
+        });
     },
 
     /**
