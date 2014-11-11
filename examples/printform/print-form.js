@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -32,7 +32,8 @@ Ext.application({
         // The printProvider that connects us to the print service
         var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
             method: "GET", // "POST" recommended for production use
-            capabilities: printCapabilities, // from the info.json script in the html
+            // from the info.json script in the html
+            capabilities: printCapabilities,
             customParams: {
                 mapTitle: "Printing Demo"
             }
@@ -45,14 +46,16 @@ Ext.application({
         // A layer to display the print page extent
         var pageLayer = new OpenLayers.Layer.Vector();
         pageLayer.addFeatures(printPage.feature);
-    
+
         // The map we want to print
         mapPanel = Ext.create('GeoExt.panel.Map', {
             region: "center",
             map: {
                 eventListeners: {
                     // recenter/resize page extent after pan/zoom
-                    "moveend": function(){ printPage.fit(this, {mode: "screen"}); }
+                    "moveend": function(){
+                        printPage.fit(this, {mode: "screen"});
+                    }
                 }
             },
             layers: [
@@ -61,8 +64,8 @@ Ext.application({
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
-                            'Data &copy; OpenStreetMap ' +
-                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'Data &copy; OpenStreetMap <a ' +
+                            'href="http://www.openstreetmap.org/copyright/en"' +
                             'target="_blank">contributors<a>'
                     }
                 ),
@@ -103,8 +106,14 @@ Ext.application({
                 store: printProvider.dpis,
                 displayField: "name",
                 fieldLabel: "Resolution",
-                displayTpl: Ext.create('Ext.XTemplate', '<tpl for=".">{name} dpi</tpl>'),
-                tpl: '<tpl for="."><li role="option" class="x-boundlist-item">{name} dpi</li></tpl>',
+                displayTpl: Ext.create('Ext.XTemplate',
+                    '<tpl for=".">{name} dpi</tpl>'
+                ),
+                tpl: '<tpl for=".">' +
+                    '<li role="option" class="x-boundlist-item">' +
+                    '{name} dpi' +
+                    '</li>' +
+                    '</tpl>',
                 typeAhead: true,
                 queryMode: "local",
                 triggerAction: "all",
