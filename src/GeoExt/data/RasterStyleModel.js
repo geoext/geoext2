@@ -43,7 +43,8 @@ Ext.define('GeoExt.data.RasterStyleModel',{
         type: 'memory',
         reader: {
             type: 'json',
-            root: 'colorMap'
+            root: 'colorMap', // Ext JS 4 compatibility
+            rootProperty: 'colorMap'
         }
     },
     listeners:{

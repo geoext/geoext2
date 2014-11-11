@@ -54,7 +54,6 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
                     });
                 }
             }, 0);
-            meta.css = "gx-grid-symbolizercol";
             return Ext.String.format('<div id="{0}"></div>', id);
         }
     }

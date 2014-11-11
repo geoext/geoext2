@@ -26,7 +26,7 @@ Ext.define('GeoExt.data.VectorStyleModel', {
     ],
     fields : [{
         name : "elseFilter",
-        defaultValue : null
+        defaultValue : undefined
     }, {
         name : "label",
         mapping : "title",
@@ -47,7 +47,7 @@ Ext.define('GeoExt.data.VectorStyleModel', {
             }
             return symbolizers;
         },
-        defaultValue : null
+        defaultValue : undefined
     }, {
         name : "filter",
         convert : function(filter) {
@@ -56,13 +56,14 @@ Ext.define('GeoExt.data.VectorStyleModel', {
             }
             return filter;
         },
-        defaultValue : null
+        defaultValue : undefined
     }],
     proxy : {
         type : 'memory',
         reader : {
             type : 'json',
-            root : "rules"
+            root: "rules", // Ext JS 4 compatibility
+            rootProperty : "rules"
         }
     }
 });

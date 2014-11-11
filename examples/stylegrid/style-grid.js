@@ -26,6 +26,7 @@ var vectorGrid, rasterGrid;
 Ext.require([
     'GeoExt.data.StyleStore',
     'GeoExt.grid.column.Symbolizer',
+    'GeoExt.Version',
     'Ext.grid.GridPanel',
     'Ext.grid.plugin.RowEditing',
     'Ext.grid.plugin.DragDrop',
