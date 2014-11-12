@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -168,58 +168,61 @@ Ext.require([
     'GeoExt.FeatureRenderer'
 ]);
 
-Ext.application({
-    name: 'FeatureRenderer GeoExt2',
-    launch: function() {
-        for(var i=0; i<configs.length; ++i) {
-            Ext.create("GeoExt.FeatureRenderer", configs[i]);
+Ext.onReady(function(){
+
+    Ext.application({
+        name: 'FeatureRenderer GeoExt2',
+        launch: function() {
+            for(var i=0; i<configs.length; ++i) {
+                Ext.create("GeoExt.FeatureRenderer", configs[i]);
+            }
+            document.getElementById("render").onclick = render;
         }
-        document.getElementById("render").onclick = render;
+    });
+
+    var format = new OpenLayers.Format.WKT();
+    var renderer, win;
+    function render() {
+        var wkt = document.getElementById("wkt").value;
+        var feature;
+        try {
+            feature = format.read(wkt);
+        } catch(err) {
+            document.getElementById("wkt").value = "Bad WKT: " + err;
+        }
+        var symbolizers;
+        try {
+            var value = document.getElementById("symbolizers").value;
+            symbolizers = eval("(" + value + ")");
+            if (!symbolizers || symbolizers.constructor !== Array) {
+                throw "Must be an array literal";
+            }
+        } catch(err) {
+            document.getElementById("symbolizers").value = "Bad symbolizers: " + err + "\n\n" + value;
+            symbolizers = null;
+        }
+        if(feature && symbolizers) {
+            if(!win) {
+                renderer = Ext.create("GeoExt.FeatureRenderer", {
+                    feature: feature,
+                    symbolizers: symbolizers,
+                    width: 150,
+                    style: {margin: 4}
+                });
+                win = Ext.create("Ext.Window", {
+                    closeAction: "hide",
+                    layout: "fit",
+                    width: 175,
+                    items: [renderer]
+                });
+            } else {
+                renderer.update({
+                    feature: feature,
+                    symbolizers: symbolizers
+                });
+            }
+            win.show();
+        }
     }
+
 });
-
-var format = new OpenLayers.Format.WKT();
-var renderer, win;
-function render() {
-    var wkt = document.getElementById("wkt").value;
-    var feature;
-    try {
-        feature = format.read(wkt);
-    } catch(err) {
-        document.getElementById("wkt").value = "Bad WKT: " + err;
-    }
-    var symbolizers;
-    try {
-        var value = document.getElementById("symbolizers").value;
-        symbolizers = eval("(" + value + ")");
-        if (!symbolizers || symbolizers.constructor !== Array) {
-            throw "Must be an array literal";
-        }
-    } catch(err) {
-        document.getElementById("symbolizers").value = "Bad symbolizers: " + err + "\n\n" + value;
-        symbolizers = null;
-    }
-    if(feature && symbolizers) {
-        if(!win) {
-            renderer = Ext.create("GeoExt.FeatureRenderer", {
-                feature: feature,
-                symbolizers: symbolizers,
-                width: 150,
-                style: {margin: 4}
-            });
-            win = Ext.create("Ext.Window", {
-                closeAction: "hide",
-                layout: "fit",
-                width: 175,
-                items: [renderer]
-            });
-        } else {
-            renderer.update({
-                feature: feature,
-                symbolizers: symbolizers
-            });
-        }
-        win.show();
-    }
-}
-
