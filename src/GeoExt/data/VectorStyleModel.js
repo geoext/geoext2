@@ -46,8 +46,7 @@ Ext.define('GeoExt.data.VectorStyleModel', {
                 }
             }
             return symbolizers;
-        },
-        defaultValue : null
+        }
     }, {
         name : "filter",
         convert : function(filter) {
@@ -60,9 +59,20 @@ Ext.define('GeoExt.data.VectorStyleModel', {
     }],
     proxy : {
         type : 'memory',
-        reader : {
-            type : 'json',
-            root : "rules"
-        }
+        // TODO GeoExt ist not defined on construction so we're checking the ExtJS-Version without
+        // GeoExt.isExt4. Maybe this can be improved/beautified
+        reader: (function(){
+            if (Ext.versions.extjs.major > 4) {
+                return {
+                    type: 'json',
+                    rootProperty: 'rules'
+                }
+            } else {
+                return {
+                    type: 'json',
+                    root: 'rules'
+                }
+            }
+        })()
     }
 });
