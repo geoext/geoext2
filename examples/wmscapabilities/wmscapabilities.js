@@ -25,14 +25,14 @@ Ext.require([
 Ext.application({
     name: 'WMSGetCapabilities',
     launch: function() {
-        
+
         // create a new WMS capabilities store
         store = Ext.create('GeoExt.data.WmsCapabilitiesStore', {
             storeId: 'wmscapsStore',
             url: "../data/wmscap.xml",
             autoLoad: true
         });
-    
+
         // create a grid to display records from the store
         var grid = Ext.create('Ext.grid.Panel', {
             title: "WMS Capabilities",
@@ -50,7 +50,7 @@ Ext.application({
                 itemdblclick: mapPreview
             }
         });
-        
+
         function mapPreview(grid, record) {
             var layer = record.getLayer().clone();
             var win = Ext.create('Ext.Window', {
