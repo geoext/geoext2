@@ -143,7 +143,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
     constructor: function(config) {
         if (config.layer) {
             this.layer = this.getLayer(config.layer);
-            this.bind();
+            this.bindMap();
             this.complementaryLayer = this.getLayer(config.complementaryLayer);
             // before we call getOpacityValue inverse should be set
             if (config.inverse !== undefined) {
@@ -162,7 +162,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      *
      * @private
      */
-    bind: function() {
+    bindMap: function() {
         if (this.layer && this.layer.map) {
             this.layer.map.events.on({
                 changelayer: this.update,
@@ -176,7 +176,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      *
      * @private
      */
-    unbind: function() {
+    unbindMap: function() {
         if (this.layer && this.layer.map && this.layer.map.events) {
             this.layer.map.events.un({
                 changelayer: this.update,
@@ -204,10 +204,10 @@ Ext.define('GeoExt.slider.LayerOpacity', {
      * @param {OpenLayers.Layer/GeoExt.data.LayerModel} layer
      */
     setLayer: function(layer) {
-        this.unbind();
+        this.unbindMap();
         this.layer = this.getLayer(layer);
         this.setValue(this.getOpacityValue(layer));
-        this.bind();
+        this.bindMap();
     },
 
     /**
@@ -288,7 +288,7 @@ Ext.define('GeoExt.slider.LayerOpacity', {
                 buffer: this.changeVisibilityDelay
             });
         }
-        this.on("beforedestroy", this.unbind, this);
+        this.on("beforedestroy", this.unbindMap, this);
     },
 
     /**

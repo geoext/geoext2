@@ -20,7 +20,7 @@
  * the method #removeFromMapPanel, which take care of the dimensions of the
  * sliders DOM-elements and register/unregister appropriate eventlisteners.
  *
- * Subclasses may implement #unbind, which will be called when a slider is
+ * Subclasses may implement #unbindMap, which will be called when a slider is
  * being removed from the map panel.
  *
  * @class GeoExt.slider.MapPanelItem
@@ -151,7 +151,7 @@ Ext.define('GeoExt.slider.MapPanelItem', {
             click: me.stopMouseEvents,
             scope: me
         });
-        me.unbind();
+        me.unbindMap();
     },
 
     /**
@@ -160,7 +160,7 @@ Ext.define('GeoExt.slider.MapPanelItem', {
      *
      * @protected
      */
-    unbind: Ext.emptyFn,
+    unbindMap: Ext.emptyFn,
 
     /**
      * Stops the event from propagating.
