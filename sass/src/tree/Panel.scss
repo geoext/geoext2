@@ -1,10 +1,8 @@
-$cdn: 'http://cdn.sencha.com/ext/gpl/4.2.1/';
-$radio-url: $cdn + 'resources/#{$theme-name}/images/form/radio.#{$image-extension}';
-
 .gx-tree-radio {
-    width: $form-radio-size;
-    height: $form-radio-size;
-    background-image: url(#{$radio-url});
+    background-image: url('images/' + $form-radio-image + '.' + $image-extension);
+}
+.gx-tree-radio .#{$prefix}tree-checkbox-checked {
+    background-position: 0 (0 - $form-radio-size);
 }
 .gx-tree-component-off {
     display: none;
