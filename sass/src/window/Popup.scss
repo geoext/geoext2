@@ -1,0 +1,26 @@
+$gx-popup-anc-height: 16px;
+$gx-popup-anc-offset: 5px;
+
+.gx-popup {
+    overflow: visible;
+}
+
+.gx-popup-anc {
+    background: transparent theme-background-image('#{$theme-name}/anchor', 'png', false) no-repeat 0 0;
+    position: absolute;
+    left: $gx-popup-anc-offset;
+    z-index: 2;
+    height: $gx-popup-anc-height;
+    width: 31px;
+    pointer-events: none;
+}
+
+.gx-popup-anc.top {
+    background: transparent theme-background-image('#{$theme-name}/anchor-top', 'png', false) no-repeat 0 0;
+    top: -$gx-popup-anc-height;
+}
+
+.gx-popup-anc.right {
+    left: auto;
+    right: $gx-popup-anc-offset;
+}

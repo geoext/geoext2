@@ -2,9 +2,9 @@
 
 
 .gx-popup-anc {
-    background: transparent url(../images/default/anchor-neptune.png) no-repeat 0 0;
+    background: transparent url(../images/ext-theme-neptune/anchor.png) no-repeat 0 0;
 }
 
 .gx-popup-anc.top {
-    background: transparent url(../images/default/anchor-top-neptune.png) no-repeat 0 0;
+    background: transparent url(../images/ext-theme-neptune/anchor-top.png) no-repeat 0 0;
 }

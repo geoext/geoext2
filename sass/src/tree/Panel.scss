@@ -1,0 +1,14 @@
+$cdn: 'http://cdn.sencha.com/ext/gpl/4.2.1/';
+$radio-url: $cdn + 'resources/#{$theme-name}/images/form/radio.#{$image-extension}';
+
+.gx-tree-radio {
+    width: $form-radio-size;
+    height: $form-radio-size;
+    background-image: url(#{$radio-url});
+}
+.gx-tree-component-off {
+    display: none;
+}
+.gx-tree-baselayer-icon {
+    background-image: theme-background-image('default/map', 'png');
+}
