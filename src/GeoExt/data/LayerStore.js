@@ -103,7 +103,7 @@ Ext.define('GeoExt.data.LayerStore', {
         me.callParent([config]);
 
         if(map) {
-            this.bind(map, options);
+            this.bindMap(map, options);
         }
     },
 
@@ -114,7 +114,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * @param {OpenLayers.Map} map The map instance.
      * @param {Object} options
      */
-    bind: function(map, options) {
+    bindMap: function(map, options) {
         var me = this;
 
         if(me.map) {
@@ -166,7 +166,7 @@ Ext.define('GeoExt.data.LayerStore', {
     /**
      * Unbind this store from the map it is currently bound.
      */
-    unbind: function() {
+    unbindMap: function() {
         var me = this;
 
         if(me.map) {
@@ -189,7 +189,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for layer changes.  When layer order changes, this moves the
+     * Handler for layer changes. When layer order changes, this moves the
      * appropriate record within the store.
      *
      * @param {Object} evt
@@ -246,7 +246,7 @@ Ext.define('GeoExt.data.LayerStore', {
      */
     onRemoveLayer: function(evt){
         //TODO replace the check for undloadDestroy with a listener for the
-        // map's beforedestroy event, doing unbind(). This can be done as soon
+        // map's beforedestroy event, doing unbindMap(). This can be done as soon
         // as http://trac.openlayers.org/ticket/2136 is fixed.
         if(this.map.unloadDestroy) {
             if(!this._removing) {
@@ -259,7 +259,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 }
             }
         } else {
-            this.unbind();
+            this.unbindMap();
         }
     },
 
@@ -425,7 +425,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * @private
      */
     destroy: function() {
-        this.unbind();
+        this.unbindMap();
         this.callParent();
     },
 
