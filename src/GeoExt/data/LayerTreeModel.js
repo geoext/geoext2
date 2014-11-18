@@ -134,8 +134,9 @@ Ext.define('GeoExt.data.LayerTreeModel',{
 
     /**
      * @private
+     * Method arguments vary between ExtJS4 and ExtJS5
      */
-    constructor: function(data, id, raw, convertedData) {
+    constructor: function(data) {
         var me = this;
 
         me.callParent(arguments);
