@@ -156,6 +156,13 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      * @private
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
+
         if (Ext.isArray(data)) {
             return this.callParent(data);
         }

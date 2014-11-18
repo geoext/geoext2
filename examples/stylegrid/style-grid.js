@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -34,82 +34,85 @@ Ext.require([
     'Ext.util.Point'
 ]);
 
-Ext.application({
-    name: 'Feature Grid - GeoExt2',
-    launch: function() {
-    
-    var columns = [
-        {dataIndex: "symbolizers", width: 30, xtype: "gx_symbolizercolumn"},
-        {header: "Label", dataIndex: "label", editor: {xtype: "textfield"}},
-        {header: "Filter", dataIndex: "filter", editor: {xtype: "textfield"},flex: 1}
-    ];
-    
-        
-    vectorGrid = Ext.create('Ext.grid.GridPanel',{
-        width: 220,
-        height: 200,
-        columns: columns.concat(),
-        viewConfig: {
-            autoFill: true,
-            plugins: {
-                ptype: 'gridviewdragdrop',
-                dragText: 'Drag and drop to reorganize'
-            }
-        },
-        plugins: {
-            ptype: 'rowediting', 
-            clicksToEdit: 1
-        },
-        store: Ext.create('GeoExt.data.StyleStore', {
-            data: vectorStyle,
-            storeId: 'vectorstyle'
-        }),
-        renderTo: "vectorgrid",
-        enableDragDrop: true,
-        //ddGroup: "vgrid",
-        listeners: {
-            edit: function(g,e,opt) {e.record.commit();},
-/*            render: function makeDD(grid) {
-                store = grid.store;
-                new Ext.dd.DropTarget(grid.getView().mainBody, {
-                    ddGroup : "vgrid",
-                    notifyDrop: function(dd, e, data){
-                        var sm = grid.getSelectionModel();
-                        var rows = sm.getSelections();
-                        var cindex = dd.getDragData(e).rowIndex;
-                        if (sm.hasSelection()) {
-                            for (var i=0, ii=rows.length; i<ii; ++i) {
-                                store.remove(store.getById(rows[i].id));
-                                store.insert(cindex,rows[i]);
-                                store.commitChanges();
-                            }
-                            sm.selectRecords(rows);
-                        }  
+Ext.onReady(function(){
+
+    Ext.application({
+        name: 'Feature Grid - GeoExt2',
+        launch: function() {
+
+            var columns = [
+                {dataIndex: "symbolizers", width: 30, xtype: "gx_symbolizercolumn"},
+                {header: "Label", dataIndex: "label", editor: {xtype: "textfield"}},
+                {header: "Filter", dataIndex: "filter", editor: {xtype: "textfield"},flex: 1}
+            ];
+
+            vectorGrid = Ext.create('Ext.grid.GridPanel',{
+                width: 220,
+                height: 200,
+                columns: columns.concat(),
+                viewConfig: {
+                    autoFill: true,
+                    plugins: {
+                        ptype: 'gridviewdragdrop',
+                        dragText: 'Drag and drop to reorganize'
                     }
-                });
-            },*/
-            scope: this
+                },
+                plugins: {
+                    ptype: 'rowediting',
+                    clicksToEdit: 1
+                },
+                store: Ext.create('GeoExt.data.StyleStore', {
+                    data: vectorStyle,
+                    storeId: 'vectorstyle'
+                }),
+                renderTo: "vectorgrid",
+                enableDragDrop: true,
+                //ddGroup: "vgrid",
+                listeners: {
+                    edit: function(g,e,opt) {e.record.commit();},
+        /*            render: function makeDD(grid) {
+                        store = grid.store;
+                        new Ext.dd.DropTarget(grid.getView().mainBody, {
+                            ddGroup : "vgrid",
+                            notifyDrop: function(dd, e, data){
+                                var sm = grid.getSelectionModel();
+                                var rows = sm.getSelections();
+                                var cindex = dd.getDragData(e).rowIndex;
+                                if (sm.hasSelection()) {
+                                    for (var i=0, ii=rows.length; i<ii; ++i) {
+                                        store.remove(store.getById(rows[i].id));
+                                        store.insert(cindex,rows[i]);
+                                        store.commitChanges();
+                                    }
+                                    sm.selectRecords(rows);
+                                }
+                            }
+                        });
+                    },*/
+                    scope: this
+                }
+            });
+
+            rasterGrid = Ext.create('Ext.grid.GridPanel',{
+                width: 220,
+                height: 115,
+                columns: columns.concat(),
+                viewConfig: {autoFill: true},
+                selType: 'rowmodel',
+                plugins: [
+                    Ext.create('Ext.grid.plugin.RowEditing', {
+                        clicksToEdit: 1
+                    })
+                ],
+                store: Ext.create('GeoExt.data.StyleStore', {
+                    data: rasterStyle.rules[0].symbolizers[0],
+                    storeId: 'rasterstyle'
+                }),
+                renderTo: "rastergrid",
+                listeners: {
+                    edit: function(g,e,opt) {e.record.commit();}
+                }
+            });
         }
     });
-    rasterGrid = Ext.create('Ext.grid.GridPanel',{
-        width: 220,
-        height: 115,
-        columns: columns.concat(),
-        viewConfig: {autoFill: true},
-        selType: 'rowmodel',
-        plugins: [
-            Ext.create('Ext.grid.plugin.RowEditing', {
-                clicksToEdit: 1
-            })
-        ],
-        store: Ext.create('GeoExt.data.StyleStore', {
-            data: rasterStyle.rules[0].symbolizers[0],
-            storeId: 'rasterstyle'
-        }), 
-        renderTo: "rastergrid",
-        listeners: {
-            edit: function(g,e,opt) {e.record.commit();}
-        }
-    });
-}
 });
