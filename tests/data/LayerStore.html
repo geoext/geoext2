@@ -163,7 +163,7 @@
 
             var reinit_test_data = function () {
                 // unbind store
-                store.unbind();
+                store.unbindMap();
 
                 // remove all existing records and layers
                 store.removeAll();
@@ -186,7 +186,7 @@
                 // test if the bind event works
                 t.eq(m.id, map.id, "bind event triggered with the correct map.");
             }, null, {single: true});
-            store.bind(map, {initDir: GeoExt.data.LayerStore.STORE_TO_MAP});
+            store.bindMap(map, {initDir: GeoExt.data.LayerStore.STORE_TO_MAP});
             t.eq(map.layers.length, 4, "initial records are synchronized to map");
             t.eq(store.getCount(), 2, "initial layers are not synchronized to store");
             map.removeLayer(layers[0]);
@@ -195,7 +195,7 @@
 
             // test map to store synchronization
             reinit_test_data();
-            store.bind(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE});
+            store.bindMap(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE});
             t.eq(map.layers.length, 2, "initial records are not synchronized to map");
             t.eq(store.getCount(), 4, "initial layers are synchronized to store");
             store.remove(store.getAt(0));
@@ -204,14 +204,14 @@
 
             // test both synchronization
             reinit_test_data();
-            store.bind(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE |
+            store.bindMap(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE |
                                       GeoExt.data.LayerStore.STORE_TO_MAP});
             t.eq(map.layers.length, 4, "initial records are synchronized to map");
             t.eq(store.getCount(), 4, "initial layers are synchronized to store");
 
             // test no synchronization
             reinit_test_data();
-            store.bind(map, {initDir: 0});
+            store.bindMap(map, {initDir: 0});
             t.eq(map.layers.length, 2, "initial records are not synchronized to map");
             t.eq(store.getCount(), 2, "initial layers are not synchronized to store");
         }
