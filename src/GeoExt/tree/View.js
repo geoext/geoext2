@@ -55,30 +55,32 @@ Ext.define('GeoExt.tree.View', {
     onItem: function(records, index, node, options) {
         var me = this;
 
-        if(!(records instanceof Array)) {
+        if(!(Ext.isArray(records))) {
             records = [records]
         }
 
-        for(var i=0; i<records.length; i++) {
-            this.onNodeRendered(records[i]);
-        }
+        Ext.each(records, function(record, i){
+            me.onNodeRendered(record)
+        })
     },
 
     /**
      * Called when a node is being rendered.
-     * 
-     * 
+     *
+     *
      */
     onNodeRendered: function(node) {
         var me = this;
 
         var el = Ext.get('tree-record-'+node.id);
+
         if(!el) {
             return;
         }
 
-        if(node.get('layer'))
+        if(node.get('layer')) {
             me.fireEvent('createchild', el, node);
+        }
 
         if(node.hasChildNodes()) {
             node.eachChild(function(node) {
