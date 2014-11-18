@@ -161,6 +161,11 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         var me = this;
         me.id = me.recordnameToItemId(me.id);
     },
+
+    // TODO this isn't called anymore find another way for checking if checkchange
+    // In ExtJS5 this is called by the private callJoined-method with the first argument
+    // 'afterEdit'. We can not override this method as ExtJS raises warning when overwriting
+    // private methods.
     /**
      * Fires the #afteredit event after the node's fields were modified.
      *
@@ -169,6 +174,6 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     afterEdit: function(modifiedFieldNames) {
         var me = this;
         me.callParent(arguments);
-        me.fireEvent('afteredit', this, modifiedFieldNames);
+        me.fireEvent('afteredit', me, modifiedFieldNames);
     }
 });
