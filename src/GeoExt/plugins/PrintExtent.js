@@ -42,9 +42,6 @@
  * @class GeoExt.plugins.PrintExtent
  */
 Ext.define('GeoExt.plugins.PrintExtent', {
-    mixins: {
-        observable: 'Ext.mixin.Observable'
-    },
     requires: ['GeoExt.data.PrintPage'],
     alias : 'widget.gx_printextent',
     alternateClassName : 'GeoExt.PrintExtent',
@@ -137,6 +134,12 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      */
     constructor: function(config) {
         config = config || {};
+
+        if(GeoExt.isExt4){
+            this.self.mixin('observable', Ext.util.Observable);
+        } else {
+            this.self.mixin('observable', Ext.mixin.Observable);
+        }
 
         Ext.apply(this, config);
         this.initialConfig = config;
