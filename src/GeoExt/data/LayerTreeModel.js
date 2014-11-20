@@ -68,6 +68,61 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         type: "memory"
     },
 
+    // TODO This is also been used in WmsLegend, refactor so this can be reused
+    // or shared
+    /**
+     * A regular expression to validate whether a given string is a valid id
+     * ready to be used either as `id` or `itemId` property. In Ext 5 we can
+     * use #Ext.validIdRe, in Ext 4 we define our own regular expression.
+     * See #layernameToItemId.
+     *
+     * @private
+     */
+    validIdRe: Ext.validIdRe || (/^[a-z_][a-z0-9\-_]*$/i),
+
+    /**
+     * A regular expression matching all non allowed characters in possible
+     * itemId. See #layernameToItemId.
+     *
+     * @private
+     */
+    illegalItemIdRe: (/[^\w\-]+/g),
+
+    /**
+     * A string we use as a prefix when we need to construct our own itemIds
+     * out of user supplied layer names. See #layernameToItemId
+     *
+     * @private
+     */
+    itemIdPrefix: "gx_itemId_",
+
+    /**
+     * Turns a given recordname into a string suitable for usage as an
+     * itemId-property. See {Ext.Component#itemId}:
+     *
+     * "Valid identifiers start with a letter or underscore and are followed
+     * by (optional) additional letters, underscores, digits or hyphens."
+     *
+     * @param {String} name The recordname to convert.
+     * @return {String} A string that is now ready to be used as itemId.
+     */
+    recordnameToItemId: function(name){
+        var me = this,
+            layername = name ? "" + name : "",
+            prefix = me.itemIdPrefix,
+            validIdRe = me.validIdRe,
+            illegalItemIdRe = me.illegalItemIdRe,
+            replace = "-",
+            itemId;
+
+        if (validIdRe.test(layername)) {
+            itemId = layername;
+        } else {
+            itemId = prefix + layername.replace(illegalItemIdRe, replace);
+        }
+        return itemId
+    },
+
     /**
      * Fires after the node's fields were modified.
      *
@@ -79,8 +134,9 @@ Ext.define('GeoExt.data.LayerTreeModel',{
 
     /**
      * @private
+     * Method arguments vary between ExtJS4 and ExtJS5
      */
-    constructor: function(data, id, raw, convertedData) {
+    constructor: function(data) {
         var me = this;
 
         me.callParent(arguments);
@@ -101,6 +157,15 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         });
     },
 
+    init: function(){
+        var me = this;
+        me.id = me.recordnameToItemId(me.id);
+    },
+
+    // TODO this isn't called anymore find another way for checking if checkchange
+    // In ExtJS5 this is called by the private callJoined-method with the first argument
+    // 'afterEdit'. We can not override this method as ExtJS raises warning when overwriting
+    // private methods.
     /**
      * Fires the #afteredit event after the node's fields were modified.
      *
@@ -109,6 +174,6 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     afterEdit: function(modifiedFieldNames) {
         var me = this;
         me.callParent(arguments);
-        me.fireEvent('afteredit', this, modifiedFieldNames);
+        me.fireEvent('afteredit', me, modifiedFieldNames);
     }
 });

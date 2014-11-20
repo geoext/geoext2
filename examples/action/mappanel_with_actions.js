@@ -8,16 +8,22 @@
 
 Ext.require([
     'Ext.container.Viewport',
+    'Ext.layout.container.Fit',
     'Ext.window.MessageBox',
     'GeoExt.panel.Map',
     'GeoExt.Action'
 ]);
 
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'ActionExample',
     launch: function(){
 
-        var map = new OpenLayers.Map({});
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         var wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
@@ -174,3 +180,6 @@ Ext.application({
         });
     }
 });
+
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)

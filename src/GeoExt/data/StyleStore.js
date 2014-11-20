@@ -53,7 +53,7 @@ Ext.define('GeoExt.data.StyleStore', {
                 }];
             } else {
                 config.model = 'GeoExt.data.VectorStyleModel';
-            }            
+            }
         }
         this.callParent([config]);
     }

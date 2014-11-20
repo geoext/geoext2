@@ -37,7 +37,59 @@ Ext.define('GeoExt.container.WmsLegend', {
          */
         supports: function(layerRecord) {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
-        }
+        },
+
+        /**
+         * A regular expression to validate whether a given string is a valid id
+         * ready to be used either as `id` or `itemId` property. In Ext 5 we can
+         * use #Ext.validIdRe, in Ext 4 we define our own regular expression.
+         * See #layernameToItemId.
+         *
+         * @private
+         */
+        validIdRe: Ext.validIdRe || (/^[a-z_][a-z0-9\-_]*$/i),
+
+        /**
+         * A regular expression matching all non allowed characters in possible
+         * itemId. See #layernameToItemId.
+         *
+         * @private
+         */
+        illegalItemIdRe: (/[^\w\-]+/g),
+
+        /**
+         * A string we use as a prefix when we need to construct our own itemIds
+         * out of user supplied layer names. See #layernameToItemId
+         *
+         * @private
+         */
+        itemIdPrefix: "gx_itemId_",
+
+        /**
+         * Turns a given layername into a string suitable for usage as an
+         * itemId-property. See {Ext.Component#itemId}:
+         *
+         * "Valid identifiers start with a letter or underscore and are followed
+         * by (optional) additional letters, underscores, digits or hyphens."
+         *
+         * @param {String} name The layername to convert.
+         * @return {String} A string that is now ready to be used as itemId.
+         */
+        layernameToItemId: function(name){
+            var layername = name ? "" + name : "",
+                staticMe = GeoExt.container.WmsLegend,
+                prefix = staticMe.itemIdPrefix,
+                validIdRe = staticMe.validIdRe,
+                illegalItemIdRe = staticMe.illegalItemIdRe,
+                replace = "-",
+                itemId;
+            if (validIdRe.test(layername)) {
+                itemId = layername;
+            } else {
+                itemId = prefix + layername.replace(illegalItemIdRe, replace);
+            }
+            return itemId
+        },
     },
 
     /**
@@ -86,7 +138,6 @@ Ext.define('GeoExt.container.WmsLegend', {
 
     initComponent: function(){
         var me = this;
-        me.addEvents('legendimageloaded');
         me.callParent();
         var layer = me.layerRecord.getLayer();
         me._noMap = !layer.map;
@@ -193,14 +244,23 @@ Ext.define('GeoExt.container.WmsLegend', {
         }
         this.callParent();
 
-        var layerNames, layerName, i, len;
+        var layerNames,
+            layerName,
+            i,
+            len,
+            itemIdCandidate,
+            itemIdCandidates = [];
 
         layerNames = [layer.params.LAYERS].join(",").split(",");
+
+        Ext.each(layerNames, function(name){
+            itemIdCandidates.push(this.self.layernameToItemId(name));
+        }, this);
 
         var destroyList = [];
         var textCmp = this.items.get(0);
         this.items.each(function(cmp) {
-            i = Ext.Array.indexOf(layerNames, cmp.itemId);
+            i = Ext.Array.indexOf(itemIdCandidates, cmp.itemId);
             if(i < 0 && cmp != textCmp) {
                 destroyList.push(cmp);
             } else if(cmp !== textCmp){
@@ -221,11 +281,12 @@ Ext.define('GeoExt.container.WmsLegend', {
 
         for(i = 0, len = layerNames.length; i<len; i++) {
             layerName = layerNames[i];
-            if(!this.items || !this.getComponent(layerName)) {
+            itemIdCandidate = this.self.layernameToItemId(layerName);
+            if(!this.items || !this.getComponent(itemIdCandidate)) {
                 this.add({
                     xtype: "gx_legendimage",
                     url: this.getLegendUrl(layerName, layerNames),
-                    itemId: layerName,
+                    itemId: itemIdCandidate,
                     listeners: {
                         'legendimageloaded': function() {
                             this.fireEvent('legendimageloaded', this);

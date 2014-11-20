@@ -29,6 +29,11 @@ Ext.require([
 
 var permalinkProvider;
 
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'HelloGeoExt2',
     launch: function() {
@@ -37,7 +42,7 @@ Ext.application({
         });
         Ext.state.Manager.setProvider(permalinkProvider);
 
-        var map = new OpenLayers.Map({});
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var ol_wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
             "http://ows.terrestris.de/osm/service?",
@@ -86,3 +91,6 @@ Ext.application({
 
     }
 });
+
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)

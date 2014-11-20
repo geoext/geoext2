@@ -49,6 +49,7 @@
 Ext.define('GeoExt.panel.Map', {
     extend: 'Ext.panel.Panel',
     requires: [
+        'Ext.layout.container.Fit',
         'GeoExt.data.LayerStore'
     ],
     alias: 'widget.gx_mappanel',
@@ -395,7 +396,7 @@ Ext.define('GeoExt.panel.Map', {
             map.render(this.body.dom);
             this.mapRendered = true;
 
-            this.layers.bind(map);
+            this.layers.bindMap(map);
 
             if (map.layers.length > 0) {
                 this.setInitialExtent();

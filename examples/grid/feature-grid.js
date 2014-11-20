@@ -23,11 +23,17 @@ Ext.require([
     'Ext.layout.container.Border'
 ]);
 
+
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'Feature Grid - GeoExt2',
     launch: function() {
         // create map instance
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var wmsLayer = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
             "http://ows.terrestris.de/osm/service?",
@@ -93,13 +99,14 @@ Ext.application({
                 {
                     name: 'symbolizer',
                     convert: function(v, r) {
-                        return r.raw.layer.styleMap.createSymbolizer(r.raw, 'default');
+                        var dataKey = GeoExt.isExt4 ? 'raw' : 'data',
+                            data = r[dataKey];
+                        return data.layer.styleMap.createSymbolizer(data, 'default');
                     }
                 },
                 {name: 'name', type: 'string'},
                 {name: 'elevation', type: 'float'}
-            ],
-            autoLoad: true
+            ]
         });
 
         // create grid panel configured with feature store
@@ -114,7 +121,7 @@ Ext.application({
                 width: 30,
                 xtype: 'gx_symbolizercolumn',
                 dataIndex: "symbolizer"
-            },{
+            }, {
                 header: "Name",
                 width: 200,
                 dataIndex: "name"
@@ -138,3 +145,5 @@ Ext.application({
     }
 });
 
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)

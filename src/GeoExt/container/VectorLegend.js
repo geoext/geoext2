@@ -155,6 +155,58 @@ Ext.define('GeoExt.container.VectorLegend', {
     currentScaleDenominator: null,
 
     /**
+     * Fires when a rule title is clicked.
+     *
+     * @event titleclick
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule whose title was clicked.
+     */
+
+    /**
+     * Fires when a rule symbolizer is clicked.
+     *
+     * @event symbolclick
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule whose symbol was clicked.
+     */
+
+    /**
+     * Fires when a rule entry is clicked (fired with symbolizer or
+     * title click).
+     *
+     * @event ruleclick
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was clicked.
+     */
+
+    /**
+     * Fires when a rule is clicked and `selectOnClick` is set to
+     * `true`.
+     *
+     * @event ruleselected
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was selected.
+     */
+
+    /**
+     * Fires when the selected rule is clicked and `#selectOnClick`
+     * is set to `true`, or when a rule is unselected by selecting a
+     * different one.
+     *
+     * @event ruleunselected
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was unselected.
+     */
+
+    /**
+     * Fires when a rule is moved.
+     *
+     * @event rulemoved
+     * @param {GeoExt.VectorLegend} comp This component.
+     * @param {OpenLayers.Rule} rule The rule that was moved.
+     */
+
+    /**
      * Initializes this VectorLegend.
      */
     initComponent: function(){
@@ -202,66 +254,6 @@ Ext.define('GeoExt.container.VectorLegend', {
         });
 
         this.add(this.rulesContainer);
-
-        this.addEvents(
-            /**
-             * Fires when a rule title is clicked.
-             *
-             * @event titleclick
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule whose title was clicked.
-             */
-            "titleclick",
-
-            /**
-             * Fires when a rule symbolizer is clicked.
-             *
-             * @event symbolclick
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule whose symbol was clicked.
-             */
-            "symbolclick",
-
-            /**
-             * Fires when a rule entry is clicked (fired with symbolizer or
-             * title click).
-             *
-             * @event ruleclick
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was clicked.
-             */
-            "ruleclick",
-
-            /**
-             * Fires when a rule is clicked and `selectOnClick` is set to
-             * `true`.
-             *
-             * @event ruleselected
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was selected.
-             */
-            "ruleselected",
-
-            /**
-             * Fires when the selected rule is clicked and `#selectOnClick`
-             * is set to `true`, or when a rule is unselected by selecting a
-             * different one.
-             *
-             * @event ruleunselected
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was unselected.
-             */
-            "ruleunselected",
-
-            /**
-             * Fires when a rule is moved.
-             *
-             * @event rulemoved
-             * @param {GeoExt.VectorLegend} comp This component.
-             * @param {OpenLayers.Rule} rule The rule that was moved.
-             */
-            "rulemoved"
-        );
 
         this.update();
 
@@ -714,20 +706,28 @@ Ext.define('GeoExt.container.VectorLegend', {
      *
      * @param {Ext.data.Store} store The store from which the record was
      *     removed.
-     * @param {Ext.data.Record} record The record object corresponding
-     *     to the removed layer.
-     * @param {Integer} index The index in the store.
+     * @param {Ext.data.Record/Ext.data.Record[]} records The record object
+     *     corresponding to the removed layer. When using ExtJS 5 this will be
+     *     an array of removed records.
+     * @param {Integer} index The index of the removed record(s).
      * @private
      */
-    onStoreRemove: function(store, record, index) {
-        if (record.getLayer() === this.layer) {
-            if (this.map && this.map.events) {
-                this.map.events.un({
-                    "zoomend": this.onMapZoom,
-                    scope: this
-                });
-            }
+    onStoreRemove: function(store, records, index) {
+        var me = this,
+            recArray = records;
+        if (!Ext.isArray(records)) {
+            recArray = [records];
         }
+        Ext.each(recArray, function(record) {
+            if (record.getLayer() === me.layer) {
+                if (me.map && me.map.events) {
+                    me.map.events.un({
+                        "zoomend": me.onMapZoom,
+                        scope: me
+                    });
+                }
+            }
+        });
     },
 
     /**

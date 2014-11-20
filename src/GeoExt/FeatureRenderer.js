@@ -135,6 +135,19 @@ Ext.define('GeoExt.FeatureRenderer', {
      */
     renderer: null,
 
+    /**
+     * Fires when the feature is clicked on.
+     *
+     * Listener arguments:
+     *
+     *  * renderer - GeoExt.FeatureRenderer This feature renderer.
+     *
+     * @event click
+     */
+
+    /**
+     *
+     */
     initComponent: function(){
         var me = this;
 
@@ -180,18 +193,6 @@ Ext.define('GeoExt.FeatureRenderer', {
                 draw: false
             });
         }
-        this.addEvents(
-            /**
-             * Fires when the feature is clicked on.
-             *
-             * Listener arguments:
-             *
-             *  * renderer - GeoExt.FeatureRenderer This feature renderer.
-             *
-             * @event
-             */
-            "click"
-        );
     },
 
     /**
@@ -211,8 +212,8 @@ Ext.define('GeoExt.FeatureRenderer', {
      * @private
      */
     clearCustomEvents: function() {
-        if (this.el && this.el.removeAllListeners) {
-            this.el.removeAllListeners();
+        if (this.el && this.el.clearListeners) {
+            this.el.clearListeners();
         }
     },
 

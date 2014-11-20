@@ -24,12 +24,15 @@ Ext.require([
     'GeoExt.panel.Legend'
 ]);
 
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'LegendPanel GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map({
-            allOverlays: true
-        });
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         map.addLayers([
             new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",
@@ -154,3 +157,4 @@ Ext.application({
 });
 
 
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)

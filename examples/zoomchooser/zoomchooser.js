@@ -22,10 +22,15 @@ Ext.require([
     'GeoExt.data.ScaleStore'
 ]);
 
+// Wrap the application initialization in Ext.onReady, this is needed because of
+// the way we include ExtJS dynamically in these examples.
+Ext.onReady(function(){
+
+
 Ext.application({
     name: 'ScaleStore GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var layer = new OpenLayers.Layer.WMS(
             "Global Imagery",
             "http://maps.opengeo.org/geowebcache/service/wms",
@@ -56,7 +61,7 @@ Ext.application({
 
         map.events.register('zoomend', this, function() {
             var scale = scaleStore.queryBy(function(record){
-                return this.map.getZoom() == record.data.level;
+                return map.getZoom() == record.data.level;
             });
 
             if (scale.length > 0) {
@@ -82,3 +87,5 @@ Ext.application({
     }
 });
 
+
+}); // end of Ext.onReady (needed for the way we include ExtJS dynamically)

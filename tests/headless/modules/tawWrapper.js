@@ -12,10 +12,25 @@
  * @returns {String[]} The names of the referenced test files.
  */
 function getTestFiles() {
-    var links = document.querySelectorAll('li');
-    return Array.prototype.map.call(links, function(e) {
-        return e.innerHTML;
+    var testFileUrlVariants = [
+            ''
+            // Once we know how we can reference an online version of ExtJS 5
+            // we can use the URL-parameter below. For now this will only work
+            // if a local copy of ExtJS is available and correctly referenced by
+            // include-base-libraries.js.
+            //
+            //  ,'extjs=5.0.0'
+        ],
+        listItems = document.querySelectorAll('li'),
+        files = [];
+    Array.prototype.forEach.call(listItems, function(listItem) {
+        var file = listItem.innerHTML;
+        testFileUrlVariants.forEach(function(variant) {
+            file += (variant ? "?" + variant : '');
+            files.push(file)
+        });
     });
+    return files;
 }
 
 /**
@@ -114,7 +129,7 @@ function runOneTestFunc(name, filename) {
                 mockMethod + ", ",
                 testName + "(t), ",
                 filename,
-                (other ? other : ''),
+                (other ? (', ' + other) : ''),
                 "]"
             ].join("");
         },
@@ -131,7 +146,6 @@ function runOneTestFunc(name, filename) {
                 }
             },
             eq: function(got, exp, msg) {
-                //if (got !== exp) {
                 if(!eqFunc(got, exp)) {
                     results.push({
                         pass: false,

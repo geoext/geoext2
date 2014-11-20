@@ -40,7 +40,6 @@ Ext.define('GeoExt.tree.LayerNode', {
      * @private
      */
     init: function(target) {
-
         this.target = target;
         var layer = target.get('layer');
 

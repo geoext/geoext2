@@ -25,28 +25,49 @@ Ext.define('GeoExt.data.RasterStyleModel',{
          'GeoExt.Version'
     ],
     idProperty: "filter",
-    fields: [
-        {name: "symbolizers", mapping: function(v) {
+    fields: [{
+        name: "symbolizers",
+        mapping: function(v) {
             return {
                 fillColor: v.color,
                 fillOpacity: v.opacity,
                 stroke: false
             };
-        }, defaultValue: null},
-        {name: "filter", mapping: "quantity", type: "float", sortType: 'asFloat', sortDir: 'ASC'},
-        {name: "label", mapping: function(v) {
+        },
+        defaultValue: null
+    }, {
+        name: "filter",
+        mapping: "quantity",
+        type: "float",
+        sortType: 'asFloat',
+        sortDir: 'ASC'
+    }, {
+        name: "label",
+        mapping: function(v) {
             // fill label with quantity if empty
             return v.label || v.quantity;
-        }}
-    ],
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'json',
-            root: 'colorMap'
         }
+    }],
+    proxy: {
+        type : 'memory',
+        // TODO GeoExt ist not defined on construction so we're checking the ExtJS-Version without
+        // GeoExt.isExt4. Maybe this can be improved/beautified
+        reader: (function(){
+            if (Ext.versions.extjs.major > 4) {
+                return {
+                    type: 'json',
+                    rootProperty: 'colorMap'
+                }
+            } else {
+                return {
+                    type: 'json',
+                    root: 'colorMap'
+                }
+            }
+        })()
     },
     listeners:{
+        // TODO cleanup when ExtJS4-Support is no longer needed Removed in ExtJS5
         idchanged:function(rec){
             for(var i=0;i<rec.stores.length;i++){
                 var store = rec.stores[i];
