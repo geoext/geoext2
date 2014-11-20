@@ -352,8 +352,8 @@ Ext.define('GeoExt.panel.Map', {
                 this.fireEvent("afterlayervisibilitychange", this, map, e);
             } else if (e.property === "order") {
                 this.fireEvent("afterlayerorderchange", this, map, e);
-            } else if (e.property === "nathis") {
-                this.fireEvent("afterlayernathischange", this, map, e);
+            } else if (e.property === "name") {
+                this.fireEvent("afterlayernamechange", this, map, e);
             } else if (e.property === "opacity") {
                 this.fireEvent("afterlayeropacitychange", this, map, e);
             }
