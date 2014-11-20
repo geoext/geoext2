@@ -25,9 +25,15 @@
         
     </script>
 
+    <!--
+     | Include a script that will set-up a global variable 'printCapabilities'
+     | which is the static version of using a script with 'src' pointing to e.g.
+     | http://ows.terrestris.de/print/pdf/info.json?var=printCapabilities
+     | -->
+    <script type="text/javascript" src="../print-capabilities-variable.js"></script>
+
     <script type="text/javascript">
-        var printCapabilities = {"scales":[{"name":"1:25.000","value":"25000"},{"name":"1:50.000","value":"50000"},{"name":"1:100.000","value":"100000"},{"name":"1:200.000","value":"200000"},{"name":"1:500.000","value":"500000"},{"name":"1:1.000.000","value":"1000000"},{"name":"1:2.000.000","value":"2000000"},{"name":"1:4.000.000","value":"4000000"}],"dpis":[{"name":"75","value":"75"},{"name":"150","value":"150"},{"name":"300","value":"300"}],"outputFormats":[{"name":"bmp"},{"name":"jpg"},{"name":"tif"},{"name":"png"},{"name":"pdf"},{"name":"gif"},{"name":"tiff"}],"layouts":[{"name":"A4 portrait","map":{"width":440,"height":483},"rotation":true},{"name":"Legal","map":{"width":440,"height":483},"rotation":false}],"printURL":"http://ows.terrestris.de/print/pdf/print.pdf","createURL":"http://ows.terrestris.de/print/pdf/create.json"};
-       
+
         function test_ctor(t) {
             t.plan(1);
 
