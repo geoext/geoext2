@@ -832,6 +832,66 @@
 
              hideTestIframe();
          }
+
+         function test_events(t) {
+             t.plan(7);
+
+             // setup
+             var map = createMap(),
+                 layer = map.layers[0],
+                 newLayer = layer.clone(),
+                 mapPanel = Ext.create('GeoExt.panel.Map', {
+                     // panel options
+                     renderTo: "mappanel",
+                     height: 400,
+                     width: 600,
+                     map: map,
+                     center: [5, 45],
+                     zoom: 4
+                 }),
+                 testedEventsCallCnt = {
+                     afterlayeradd: 0,
+                     afterlayerremove: 0,
+                     aftermapmove: 0,
+                     afterlayervisibilitychange: 0,
+                     afterlayerorderchange: 0,
+                     afterlayernamechange: 0,
+                     afterlayeropacitychange: 0
+                 };
+
+             // bind all the listeners which will increment the matching key
+             Ext.iterate(testedEventsCallCnt, function(eventName){
+                 mapPanel.on(eventName, function(){
+                     testedEventsCallCnt[eventName]++;
+                 });
+             });
+
+             // manipulate the map / layers in various ways.
+             // - test afterlayeradd
+             map.addLayer(newLayer);
+             // - test aftermapmove
+             map.pan(1, 1, {animate:false, dragging:false});
+             // - test afterlayervisibilitychange
+             newLayer.setVisibility(false);
+             // - test afterlayerorderchange
+             map.raiseLayer(layer, 1);
+             // - test afterlayernamechange
+             layer.setName('Humpty-Dumpty');
+             // - test afterlayeropacitychange
+             layer.setOpacity(0.2);
+             // - test afterlayerremove
+             map.removeLayer(newLayer);
+
+             // Now iterate again over the object with the events and actually
+             // test whether we were called.
+             Ext.iterate(testedEventsCallCnt, function(eventName, callCnt){
+                 t.eq(callCnt, 1, 'Event "' + eventName + '" called once.')
+             });
+
+             // teardown
+             mapPanel.destroy();
+             map.destroy();
+         }
     </script>
   </head>
   <body>
