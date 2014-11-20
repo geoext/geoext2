@@ -30,7 +30,7 @@
     </script>
 
     <script type="text/javascript">
-        var printCapabilities = {"scales":[{"name":"1:25.000","value":"25000"},{"name":"1:50.000","value":"50000"},{"name":"1:100.000","value":"100000"},{"name":"1:200.000","value":"200000"},{"name":"1:500.000","value":"500000"},{"name":"1:1.000.000","value":"1000000"},{"name":"1:2.000.000","value":"2000000"},{"name":"1:4.000.000","value":"4000000"}],"dpis":[{"name":"75","value":"75"},{"name":"150","value":"150"},{"name":"300","value":"300"}],"outputFormats":[{"name":"bmp"},{"name":"jpg"},{"name":"tif"},{"name":"png"},{"name":"pdf"},{"name":"gif"},{"name":"tiff"}],"layouts":[{"name":"A4 portrait","map":{"width":440,"height":483},"rotation":true},{"name":"Legal","map":{"width":440,"height":483},"rotation":false}],"printURL":"http://ows.terrestris.de:8080/print/pdf/print.pdf","createURL":"http://ows.terrestris.de:8080/print/pdf/create.json"};
+        var printCapabilities = {"scales":[{"name":"1:25.000","value":"25000"},{"name":"1:50.000","value":"50000"},{"name":"1:100.000","value":"100000"},{"name":"1:200.000","value":"200000"},{"name":"1:500.000","value":"500000"},{"name":"1:1.000.000","value":"1000000"},{"name":"1:2.000.000","value":"2000000"},{"name":"1:4.000.000","value":"4000000"}],"dpis":[{"name":"75","value":"75"},{"name":"150","value":"150"},{"name":"300","value":"300"}],"outputFormats":[{"name":"bmp"},{"name":"jpg"},{"name":"tif"},{"name":"png"},{"name":"pdf"},{"name":"gif"},{"name":"tiff"}],"layouts":[{"name":"A4 portrait","map":{"width":440,"height":483},"rotation":true},{"name":"Legal","map":{"width":440,"height":483},"rotation":false}],"printURL":"http://ows.terrestris.de/print/pdf/print.pdf","createURL":"http://ows.terrestris.de/print/pdf/create.json"};
         
         function test_constructor(t) {
             t.plan(9);
@@ -53,7 +53,7 @@
             t.eq(printProvider.customParams, {}, "customParams initialized properly.");
             t.ok(log.loadcapabilities[0] == printProvider, "printProvider passed as 1st argument of the loadcapabilities listener.");
             t.ok(log.loadcapabilities[1] == printProvider.capabilities, "capabilities passed as 2nd argument of the loadcapabilities listener.");
-            t.eq(printProvider.capabilities.createURL, "http://ows.terrestris.de:8080/print/pdf/create.json", "capabilities available and createURL correct after loadcapabilities event");
+            t.eq(printProvider.capabilities.createURL, "http://ows.terrestris.de/print/pdf/create.json", "capabilities available and createURL correct after loadcapabilities event");
             t.ok(printProvider.layout == printProvider.layouts.getAt(0), "layout set to first available layout record.");
             t.ok(printProvider.dpi == printProvider.dpis.getAt(0), "dpi set to first available dpi record.");
             t.eq(printProvider.scales.getCount(), 8, "8 scales read in properly.");
