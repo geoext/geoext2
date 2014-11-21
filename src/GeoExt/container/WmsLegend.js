@@ -129,6 +129,7 @@ Ext.define('GeoExt.container.WmsLegend', {
         [layer.params.STYLES].join(",").split(",");
         var idx = Ext.Array.indexOf(layerNames, layerName);
         var styleName = styleNames && styleNames[idx];
+        var params = {};
         // check if we have a legend URL in the record's
         // "styles" data field
         if(styles && styles.length > 0) {
@@ -141,9 +142,10 @@ Ext.define('GeoExt.container.WmsLegend', {
                 !layer.params.SLD && !layer.params.SLD_BODY) {
                 url = styles[0].legend && styles[0].legend.href;
             }
+            params = Ext.apply({}, this.baseParams);
         }
         if(!url) {
-            url = layer.getFullRequestString({
+            var paramObject = Ext.apply({
                 REQUEST: "GetLegendGraphic",
                 WIDTH: null,
                 HEIGHT: null,
@@ -155,9 +157,11 @@ Ext.define('GeoExt.container.WmsLegend', {
                 SRS: null,
                 FORMAT: null,
                 TIME: null
-            });
+            }, this.baseParams);
+            
+            url = layer.getFullRequestString(paramObject);
+            params = {};
         }
-        var params = Ext.apply({}, this.baseParams);
         if (layer.params._OLSALT) {
             // update legend after a forced layer redraw
             params._OLSALT = layer.params._OLSALT;
