@@ -1,6 +1,6 @@
 /**
  * Modified from ext-5.0.0/shared/include-ext.js
- * 
+ *
  * This file includes the required ext-all js and css files based upon "theme" and "rtl"
  * url parameters.  It first searches for these parameters on the page url, and if they
  * are not found there, it looks for them on the script tag src query string.
@@ -40,9 +40,11 @@
     }
 
     var scriptEls = document.getElementsByTagName('script'),
-        path = 'http://cdn.sencha.com/ext/gpl/5.0.1/build',
+        v = getQueryParam('extjs') ? getQueryParam('extjs') : '5.0.1',
+        basePath = 'http://cdn.sencha.com/ext/gpl/'+ v,
+        path = (v[0] == 4) ? basePath : basePath + '/build',
         rtl = getQueryParam('rtl'),
-        theme = getQueryParam('theme') || 'crisp',
+        theme = getQueryParam('theme') || 'neptune',
         includeCSS = !hasOption('nocss', path),
         hasOverrides = !hasOption('nooverrides', path) && !!{
             // TODO: remove neptune
@@ -74,7 +76,7 @@
                             (rtl ? '-rtl' : '') + '-debug.js"></script>');
 
     if (hasOverrides) {
-        // since document.write('<script>') does not block execution in IE, we need to 
+        // since document.write('<script>') does not block execution in IE, we need to
         // makes sure we prevent ext-theme-neptune.js from executing before ext-all.js
         // normally this can be done using the defer attribute on the script tag, however
         // this method does not work in IE when in repoDevMode.  It seems the reason for

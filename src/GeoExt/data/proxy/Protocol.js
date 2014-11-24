@@ -63,8 +63,17 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      */
     doRequest: function(operation, callback, scope) {
         var me = this,
-            params = Ext.applyIf(operation.params || {}, me.extraParams || {}),
+            params,
             request;
+
+        if(GeoExt.isExt5){
+            callback = operation.getCallback();
+            scope = operation.getScope();
+            params = Ext.applyIf(operation.getParams() || {}, me.extraParams || {});
+        }
+        else {
+            params = Ext.applyIf(operation.params || {}, me.extraParams || {});
+        }
 
         //copy any sorters, filters etc into the params so they can be sent over the wire
         params = Ext.applyIf(params, me.getParams(operation));
@@ -75,7 +84,7 @@ Ext.define('GeoExt.data.proxy.Protocol', {
             request: {
                 callback: callback,
                 scope: scope,
-                arg: operation.arg
+                arg: operation.arg || operation.config.arg
             },
             reader: this.getReader()
         };
@@ -88,12 +97,16 @@ Ext.define('GeoExt.data.proxy.Protocol', {
             callback: cb,
             scope: this
         };
-        Ext.applyIf(options, operation.arg);
+        Ext.applyIf(options, operation.arg || operation.config.arg);
         if (this.setParamsAsOptions === true) {
             Ext.applyIf(options, options.params);
             delete options.params;
         }
-        this.response = this.protocol.read(options);
+        if(GeoExt.isExt4){
+            this.response = this.protocol.read(options);
+        } else {
+            this.response = this.config.protocol.read(options);
+        }
     },
 
     /**

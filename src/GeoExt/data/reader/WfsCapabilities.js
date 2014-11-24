@@ -37,7 +37,7 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WfsCapabilitiesLayerModel';
+            this.setModel('GeoExt.data.WfsCapabilitiesLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {

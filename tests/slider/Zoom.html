@@ -7,10 +7,8 @@
         Use the URL-parameter `extjs` to require a specific
         version of Ext, e.g. `Zoom.html?extjs=5.0.0`
     -->
-    <script src="../include-base-libraries.js"></script>
-
-    <script src="../test-utility.js"></script>
-
+    <script src="../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -26,7 +24,6 @@
         ]);
        
         function test_zoomslider(t) {
-            showTestIframe();
             t.plan(7);
             
             var map = new OpenLayers.Map({
@@ -76,7 +73,6 @@
                     }
 
                     map.destroy();
-                    hideTestIframe();
                 });
             });
             
@@ -84,7 +80,6 @@
         }
         
         function test_zoomslider_aggressive(t) {
-            showTestIframe();
             t.plan(2);
             var slider1 = new GeoExt.ZoomSlider({
                 renderTo: document.body
@@ -109,7 +104,6 @@
             
             slider1.destroy();
             slider2.destroy();
-            hideTestIframe();
         }
 
     </script>
