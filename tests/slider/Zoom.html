@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.0`
+    -->
+    <script src="../../examples/include-ext.js"></script>
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-
-    <script src="../test-utility.js"></script>
-
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -22,7 +24,6 @@
         ]);
        
         function test_zoomslider(t) {
-            showTestIframe();
             t.plan(7);
             
             var map = new OpenLayers.Map({
@@ -72,7 +73,6 @@
                     }
 
                     map.destroy();
-                    hideTestIframe();
                 });
             });
             
@@ -80,7 +80,6 @@
         }
         
         function test_zoomslider_aggressive(t) {
-            showTestIframe();
             t.plan(2);
             var slider1 = new GeoExt.ZoomSlider({
                 renderTo: document.body
@@ -105,7 +104,6 @@
             
             slider1.destroy();
             slider2.destroy();
-            hideTestIframe();
         }
 
     </script>

@@ -31,7 +31,7 @@ Ext.define('GeoExt.data.reader.Wmc', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WmcLayerModel';
+            this.setModel('GeoExt.data.WmcLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {

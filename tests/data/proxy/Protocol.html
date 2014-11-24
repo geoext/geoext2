@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-   <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.0`
+    -->
+    <script src="../../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
 
@@ -27,10 +32,16 @@
             protocol = new OpenLayers.Protocol();
             // test
             proxy = Ext.create("GeoExt.data.proxy.Protocol", {
-                protocol: protocol        
+                protocol: protocol
             });
-            t.ok(proxy.protocol == protocol,
-                 "ctor sets protocol in protocol property");
+
+            if(GeoExt.isExt4){
+                t.ok(proxy.protocol == protocol,
+                    "ctor sets protocol in protocol property");
+            }else {
+                t.ok(proxy.config.protocol == protocol,
+                    "ctor sets protocol in protocol property");
+            }
         }
 
         function test_load(t) {
@@ -78,8 +89,16 @@
                 t.eq(o.success, true,
                      "callback called with expected success boolean");
             };
+
             // 8 tests
-            proxy.doRequest(Ext.create("Ext.data.Operation", {params: params, arg: arg}), callback, scope);
+            if(GeoExt.isExt4){
+                proxy.doRequest(Ext.create("Ext.data.Operation",
+                    {params: params, arg: arg}), callback, scope);
+            } else {
+                proxy.doRequest(Ext.create("Ext.data.Operation",
+                    {params: params, arg: arg, callback: callback, scope: scope}));
+            }
+
         }
 
         function test_readFeatures(t) {
@@ -90,7 +109,7 @@
             });
             var protocol = new OpenLayers.Protocol({
                 read: function(o) {
-                    o.callback.call(o.scope, response); 
+                    o.callback.call(o.scope, response);
                 }
             });
             Ext.define('My.Model', {
@@ -110,7 +129,7 @@
             };
             proxy.doRequest(Ext.create("Ext.data.Operation"), callback);
         }
-        
+
         function test_abort(t) {
             t.plan(1);
 
@@ -146,7 +165,14 @@
                 setParamsAsOptions: true,
                 protocol: protocol
             });
-            proxy.doRequest({params: params});
+
+            if(GeoExt.isExt4){
+                proxy.doRequest(Ext.create("Ext.data.Operation",
+                    {params: params}));
+            } else {
+                proxy.doRequest(Ext.create("Ext.data.Operation",
+                    {params: params, arg: arg, callback: callback, scope: scope}));
+            }
         }
 
     </script>

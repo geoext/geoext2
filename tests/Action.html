@@ -7,9 +7,8 @@
         Use the URL-parameter `extjs` to require a specific
         version of Ext, e.g. `Action.html?extjs=5.0.0`
     -->
-    <script src="./include-base-libraries.js"></script>
-
-    <script src="./test-utility.js"></script>
+    <script src="../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
         Ext.Loader.setConfig({
@@ -305,7 +304,6 @@
         }
 
         function test_toggle_group(t) {
-            showTestIframe();
             t.plan(12);
 
             var menu, menuBtn, tb, ctrl1, ctrl2;
@@ -441,8 +439,6 @@
             menuBtn.hideMenu();
             t.eq(deactivateCtrl1Cnt, 1, "click on item2 deactivates ctrl1 once");
             t.eq(activateCtrl2Cnt, 1, "click on item2 activates ctrl2 once");
-
-            hideTestIframe();
         }
         function test_pressed(t) {
 

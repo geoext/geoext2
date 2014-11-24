@@ -7,10 +7,8 @@
         Use the URL-parameter `extjs` to require a specific
         version of Ext, e.g. `Action.html?extjs=5.0.0`
     -->
-    <script src="../include-base-libraries.js"></script>
-
-    <script src="../test-utility.js"></script>
-
+    <script src="../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
     <script type="text/javascript">
 
         Ext.Loader.setConfig({
@@ -26,8 +24,7 @@
             'GeoExt.window.Popup'
         ]);
 
-        function setupContext(options) {        
-            showTestIframe();
+        function setupContext(options) {
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -62,7 +59,6 @@
         }
 
         function setupMultiFeatureContext() {
-            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -113,14 +109,12 @@
             });
             context.map.destroy();
             context.mapPanel.destroy();
-            hideTestIframe();
         }
         
         function tearDown(context) {
             context.feature.destroy();
             context.map.destroy();
             context.mapPanel.destroy();
-            hideTestIframe();
         }
 
         function popup(feature, map, options) {
