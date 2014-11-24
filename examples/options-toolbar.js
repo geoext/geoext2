@@ -16,7 +16,7 @@
     }
 
     var scriptTags = document.getElementsByTagName('script'),
-        defaultTheme = 'crisp',
+        defaultTheme = 'neptune',
         defaultRtl = false,
         i = scriptTags.length,
         requires = [
@@ -113,6 +113,22 @@
         }
 
         setTimeout(function() {
+            var v = getQueryParam('extjs') ? getQueryParam('extjs') : '5.0.1',
+                extJs5Themes = [
+                    { value: 'neptune', name: 'Neptune' },
+                    { value: 'neptune-touch', name: 'Neptune Touch' },
+                    { value: 'crisp', name: 'Crisp' },
+                    { value: 'crisp-touch', name: 'Crisp Touch' },
+                    { value: 'classic', name: 'Classic' },
+                    { value: 'gray', name: 'Gray' }
+                ],
+                extJs4Themes= [
+                   { value: 'neptune', name: 'Neptune' },
+                   { value: 'access', name: 'Accessibility' },
+                   { value: 'classic', name: 'Classic' },
+                   { value: 'gray', name: 'Gray' }
+               ];
+
             toolbar = Ext.widget({
                 xtype: 'toolbar',
                 border: true,
@@ -136,14 +152,7 @@
                     margin: '0 5 0 0',
                     store: Ext.create('Ext.data.Store', {
                         fields: ['value', 'name'],
-                        data : [
-                            { value: 'neptune', name: 'Neptune' },
-                            { value: 'neptune-touch', name: 'Neptune Touch' },
-                            { value: 'crisp', name: 'Crisp' },
-                            { value: 'crisp-touch', name: 'Crisp Touch' },
-                            { value: 'classic', name: 'Classic' },
-                            { value: 'gray', name: 'Gray' }
-                        ]
+                        data : (v[0] == 4) ? extJs4Themes : extJs5Themes
                     }),
                     value: theme,
                     listeners: {

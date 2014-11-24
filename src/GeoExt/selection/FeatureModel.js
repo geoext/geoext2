@@ -149,7 +149,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
             }
         }
         if (this.selectControl) {
-            this.bind(this.selectControl);
+            this.bindLayer(this.selectControl);
         }
     },
 
@@ -187,7 +187,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * @return {OpenLayers.Control.SelectFeature} The select feature control
      *     this selection model uses.
      */
-    bind: function(obj, options) {
+    bindLayer: function(obj, options) {
         if (!this.bound) {
             options = options || {};
             this.selectControl = obj;
@@ -218,7 +218,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * @return {OpenLayers.Control.SelectFeature} The select feature control
      *     this selection model used.
      */
-    unbind: function() {
+    unbindLayer: function() {
         var selectControl = this.selectControl;
         if (this.bound) {
             var layers = this.getLayers();

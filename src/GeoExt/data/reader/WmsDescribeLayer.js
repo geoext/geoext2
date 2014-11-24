@@ -44,7 +44,7 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WmsDescribeLayerModel';
+            this.setModel('GeoExt.data.WmsDescribeLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.0`
+    -->
+    <script src="../../examples/include-ext.js"></script>
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-
-    <script src="../test-utility.js"></script>
-
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -315,7 +316,7 @@
             selectControl.unselect(features[0]);
 
             // bind the select control to the selection model
-            sm.bind(selectControl);
+            sm.bindLayer(selectControl);
 
             // simulate a mousedown on the second row
             // test that the second feature is selected in the layer
@@ -339,7 +340,7 @@
             sm.clearSelections();
 
             // unbind row and feature selection
-            sm.unbind();
+            sm.unbindLayer();
             // (side effect: selectControl is deactivated)
 
             // simulate a mousedown on the first row
@@ -363,7 +364,7 @@
             selectControl.unselect(features[0]);
 
             // bind selection of features on a layer to rows
-            sm.bind(layer, {controlConfig: {hover: true}});
+            sm.bindLayer(layer, {controlConfig: {hover: true}});
 
             // verify that controlConfig has been applied
             t.eq(sm.selectControl.hover, true,
@@ -397,7 +398,6 @@
         }
 
         function test_autopan_map_on_selection(t) {
-            showTestIframe();
             t.plan(4);
 
             /*
@@ -490,7 +490,6 @@
                  * Tear down
                  */
                 grid.destroy();
-                hideTestIframe();
             });
 
         }
