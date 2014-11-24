@@ -160,6 +160,17 @@ Ext.define('GeoExt.window.Popup', {
      */
     anchorPosition: "auto",
 
+    /**
+     * Shall this popup be always on top? Setting this to true helps in cases
+     * where the popups are working on a map panel that itself is inside of a
+     * window. Future versions of ExtJS do also have such a configuration option
+     * (http://docs.sencha.com/extjs/5.0.1/#!/api/Ext.util.Floating-cfg-alwaysOnTop)
+     * We do not full mimic the behaviour of that configuration but only support
+     * the boolean variant.
+     *
+     * @cfg {Boolean} alwaysOnTop
+     */
+    alwaysOnTop: false,
 
     initComponent: function() {
         if(this.map instanceof GeoExt.panel.Map) {
@@ -349,6 +360,20 @@ Ext.define('GeoExt.window.Popup', {
             }
 
             this.setPosition(left, top);
+            this.handleAlwaysOnTop();
+        }
+    },
+
+    /**
+     * If we have been configured with #alwaysOnTop being `true`, we only need
+     * to manually change our z-indexing in ExtJS 4. ExtJS 5 brings its own
+     * version of `alwaysOnTop`.
+     *
+     * @private
+     */
+    handleAlwaysOnTop: function() {
+        if (this.alwaysOnTop && Ext.versions.core.major === 4) {
+            Ext.WindowManager.bringToFront(this.id);
         }
     },
 
