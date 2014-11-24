@@ -2,7 +2,7 @@
  * Loads the resources of ExtJS and OpenLayers.
  *
  * Use the URL-parameter `extjs` to require a specific
- * version of Ext, e.g. `Action.html?extjs=5.0.0`
+ * version of Ext, e.g. `Action.html?extjs=5.0.1`
  */
 (function(win, doc){
     var // OpenLayers from the official website
