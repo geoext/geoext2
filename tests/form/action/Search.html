@@ -32,20 +32,24 @@
         /*
          * Set up
          */
-
-        var form, action, protocol;
-
-        form = Ext.create('Ext.form.Basic', Ext.get("form"));
-        protocol = new OpenLayers.Protocol();
-        action = Ext.create('GeoExt.form.action.Search',
-                            {form: form, protocol: protocol});
+        var formPanel = Ext.create('Ext.form.Panel', {
+                renderTo:'form'
+            }),
+            form = formPanel.getForm(),
+            protocol = new OpenLayers.Protocol(),
+            action = Ext.create('GeoExt.form.action.Search', {
+                form: form,
+                protocol: protocol
+            });
 
         /*
          * Test
          */
-
         t.ok(action.protocol == protocol,
              "Search Action constructor properly sets protocol in instance");
+
+        // cleanup
+        form.destroy();
     }
 
     function test_run(t) {
