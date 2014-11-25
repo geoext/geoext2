@@ -49,11 +49,13 @@ Ext.onReady(function() {
             popupOpts = Ext.apply({
                 title: 'My Popup',
                 location: feature,
+                closeAction: 'destroy',
                 width:200,
                 html: bogusMarkup,
                 maximizable: true,
                 collapsible: true,
-                anchorPosition: 'auto'
+                anchorPosition: 'auto',
+                alwaysOnTop: true // Not implemented in ExtJS4
             }, constrainOpts);
 
         popup = Ext.create('GeoExt.window.Popup', popupOpts);
@@ -61,9 +63,8 @@ Ext.onReady(function() {
         // is closed
         popup.on({
             close: function() {
-                if(OpenLayers.Util.indexOf(vectorLayer.selectedFeatures,
-                                           this.feature) > -1) {
-                    selectCtrl.unselect(this.feature);
+                if(OpenLayers.Util.indexOf(vectorLayer.selectedFeatures, feature) > -1) {
+                    selectCtrl.unselect(feature);
                 }
             }
         });
@@ -81,7 +82,7 @@ Ext.onReady(function() {
     var mapwin = Ext.create('Ext.Window', {
         layout: "fit",
         title: "Map",
-        closeAction: "hide",
+        closable: false,
         width: 600,
         height: 400,
         x: 20,
