@@ -79,6 +79,7 @@
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
             model: 'test_setFeatureModel'
         });
+
         var feature = new OpenLayers.Feature.Vector();
         reader.setFeature(feature);
 
@@ -86,8 +87,21 @@
             "setFeature sets the feature in the instance");
 
         var ModelClass = Ext.ClassManager.get('test_setFeatureModel');
-        t.ok(ModelClass.prototype.fields.get("value") !== undefined,
-            "setFeature adds the value field to the model");
+
+        if(GeoExt.isExt4){
+            t.ok(ModelClass.prototype.fields.get("value") !== undefined,
+                "setFeature adds the value field to the model");
+        } else {
+            var valueExisting = false;
+            Ext.each(ModelClass.prototype.fields, function(field){
+                if (field.getName() == 'value'){
+                    valueExisting = true;
+                    return false // to stop the Ext.each iteration
+                }
+            })
+            t.ok(valueExisting,
+                "setFeature adds the value field to the model");
+        }
     }
 
     function test_read(t) {
@@ -110,10 +124,19 @@
 
         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
-        t.ok(reader.raw, "raw property populated when keepRaw is true");
+        if(GeoExt.isExt4){
+            t.ok(reader.raw, "raw property populated when keepRaw is true");
+        } else {
+            t.ok(reader.rawData,
+                "rawData (equivalent to raw) is always populated in ExtJS5");
+        }
 
         //1 test
-        t.eq(records.totalRecords, 23, 'readRecords returns correct number of records');
+        if(GeoExt.isExt4){
+            t.eq(records.totalRecords, 23, 'readRecords returns correct number of records');
+        } else {
+            t.eq(records.getTotal(), 23, 'readRecords returns correct number of records');
+        }
 
         var record = records.records[2];
 
@@ -191,7 +214,13 @@
         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
-        t.eq(records.totalRecords, 19, 'right number of records are ignored (ignores String)');
+        if(GeoExt.isExt4){
+            t.eq(records.totalRecords, 19,
+                'right number of records are ignored (ignores String)');
+        } else {
+            t.eq(records.getTotal(), 19,
+            'right number of records are ignored (ignores String)');
+        }
     }
 
     function test_ignoreArray(t) {
@@ -212,7 +241,13 @@
          var records = reader.read({responseXML : doc, responseText: 'foo'});
 
          //1 test
-         t.eq(records.totalRecords, 4, 'right number of records are ignored (ignores Array)');
+         if(GeoExt.isExt4){
+             t.eq(records.totalRecords, 4,
+                 'right number of records are ignored (ignores Array)');
+         } else {
+             t.eq(records.getTotal(), 4,
+                     'right number of records are ignored (ignores Array)');
+         }
     }
 
     function test_ignoreRegexp(t) {
@@ -233,7 +268,13 @@
         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
-        t.eq(records.totalRecords, 17, 'right number of records are ignored (ignores RegExp)');
+        if(GeoExt.isExt4){
+            t.eq(records.totalRecords, 17,
+                'right number of records are ignored (ignores RegExp)');
+        } else {
+            t.eq(records.getTotal(), 17,
+                'right number of records are ignored (ignores RegExp)');
+        }
     }
 
     </script>
