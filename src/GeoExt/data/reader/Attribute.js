@@ -88,17 +88,40 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * @param {Object} [config] Config object.
      */
     constructor: function(config) {
-        if (!this.model) {
-            this.model= 'GeoExt.data.AttributeModel';
-            // TODO this should be working
-            // this.setModel('GeoExt.data.AttributeModel');
+        if(config.model){
+            this.setModel(config.model)
+        } else{
+            this.setModel('GeoExt.data.AttributeModel');
         }
 
+        this.initConfig(config);
         this.callParent([config]);
 
-        if (this.feature) {
+        if (GeoExt.isExt4 && this.feature) {
             this.setFeature(this.feature);
         }
+    },
+
+    /**
+     * Overwriting the initConfig method for ExtJS5 cause the default method
+     * from Sencha drops the classes somewhere. Couldn't reproduce this in a
+     * Sencha fiddle so there is a TODO to fix this in the GeoExt code if
+     * possible.
+     * @param {Object} config
+     */
+    initConfig: function(config) {
+        var me = this;
+        // only add functionality for ExtJS5
+        if(GeoExt.isExt5){
+            Ext.Object.each(config, function(key, value){
+                // Only for properties defined in this.config
+                if(Ext.Array.contains(Ext.Object.getKeys(me.config), key)){
+                    me['_'+key] = value;
+                    delete config.key
+                }
+            });
+        }
+        me.callParent(config);
     },
 
     /**
@@ -122,7 +145,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
         });
         var model = this.model,
             fields;
-        if (Ext.isString(model) && this.getModel) {
+        if (this.getModel) {
             // ExtJS 5 needs the getter
             model = this.getModel();
         }
@@ -185,7 +208,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
         }
         var feature = this.feature || this.getFeature();
         var model = this.model;
-        if (Ext.isString(model) && this.getModel) {
+        if (this.getModel) {
             // ExtJS 5 needs the getter
             model = this.getModel();
         }
@@ -236,9 +259,11 @@ Ext.define('GeoExt.data.reader.Attribute', {
      * @return {Boolean} True if the attribute should be ignored.
      */
     ignoreAttribute: function(name, value) {
-        var ignore = false;
-        if(this.ignore && this.ignore[name]) {
-            var matches = this.ignore[name];
+        var ignore = false,
+            myIgnore = GeoExt.isExt4 ? this.ignore : this.getIgnore();
+
+        if(myIgnore && myIgnore[name]) {
+            var matches = myIgnore[name];
             if(typeof matches == "string") {
                 ignore = (matches === value);
             } else if(matches instanceof Array) {
