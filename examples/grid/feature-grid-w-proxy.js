@@ -56,9 +56,22 @@ Ext.application({
             graphicName: "circle"
         };
         var style = new OpenLayers.Style(template);
+        var defStyle = new OpenLayers.Style(template);
+        var selStyle = new OpenLayers.Style(
+            Ext.apply(
+                Ext.apply({}, template),
+                {
+                    strokeWidth: 3,
+                    pointRadius: 15,
+                    fontSize: "15px",
+                    fontWeight: "bold"
+               }
+            )
+        );
         var vecLayer = new OpenLayers.Layer.Vector("vector", {
             styleMap: new OpenLayers.StyleMap({
-                'default': style
+                'default': defStyle,
+                'select': selStyle
             })
         });
         map.addLayers([wmsLayer, vecLayer]);
