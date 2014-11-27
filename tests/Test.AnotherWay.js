@@ -37,6 +37,7 @@ Test.AnotherWay._g_pages_to_run = null; // list of pages to run automatically af
 Test.AnotherWay._g_run_on_main_load = false; // special handling for run_pages_to_run when it might be called before onload or before list of test pages is known.
 Test.AnotherWay._g_run_on_list_load = false;
 Test.AnotherWay._g_main_loaded = false;
+Test.AnotherWay._test_page_onload_delay_ms = 2000; // Number of milliseconds to wait after the iframe fired the onload event
 
 Test.AnotherWay._run_pages_to_run = function(called_from_outside){
     if (!Test.AnotherWay._g_main_loaded) {
