@@ -53,7 +53,8 @@ Ext.onReady(function() {
                 html: bogusMarkup,
                 maximizable: true,
                 collapsible: true,
-                anchorPosition: 'auto'
+                anchorPosition: 'auto',
+                alwaysOnTop: true
             }, constrainOpts);
 
         popup = Ext.create('GeoExt.window.Popup', popupOpts);
