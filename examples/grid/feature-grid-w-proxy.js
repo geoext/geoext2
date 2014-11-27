@@ -55,7 +55,6 @@ Ext.application({
             strokeColor: "yellow",
             graphicName: "circle"
         };
-        var style = new OpenLayers.Style(template);
         var defStyle = new OpenLayers.Style(template);
         var selStyle = new OpenLayers.Style(
             Ext.apply(
