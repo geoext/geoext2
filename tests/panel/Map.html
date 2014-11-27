@@ -6,8 +6,6 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
-    <script src="../test-utility.js"></script>
-
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -31,11 +29,6 @@
 
         function test_mappanel(t) {
             t.plan(4)
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var moveToCnt;
 
@@ -75,17 +68,10 @@
             map.destroy();
             
             mapPanel.destroy();
-
-            hideTestIframe();
         }
         
         function test_allOverlaysAndFallThrough(t) {
             t.plan(12);
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var map, panel;
             // a flag being reset after each test to see if a fallThrough
@@ -175,17 +161,10 @@
 
             // Restore the original warning method.
             GeoExt.panel.Map.prototype.warnMapFallThrough = origWarnMapFallThrough;
-
-            hideTestIframe();
         }
 
         function test_zoom(t) {
             t.plan(1);
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var panel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
@@ -199,17 +178,10 @@
             t.eq(panel.map.zoom, 4, "zoom correctly set");
             
             panel.destroy();
-
-            hideTestIframe();
         }
 
         function test_extent(t) {
             t.plan(4);
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var map, panel, log = {};
             
@@ -273,17 +245,10 @@
             panel.map.addLayer(new OpenLayers.Layer());
             t.ok(panel.map.getExtent(), "map has an extent after layer is added");
             panel.destroy();
-
-            hideTestIframe();
         }
         
         function test_center(t) {
             t.plan(3);
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var map, panel, log = {};
             
@@ -337,8 +302,6 @@
             // since we created the map, we destroy it
             map.destroy();
             panel.destroy();
-
-            hideTestIframe();
         }
         
         function test_destroy(t) {
@@ -352,11 +315,6 @@
              */
 
             t.plan(3);
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
             
             var panel = Ext.create('GeoExt.panel.Map', {
                 renderTo: "mappanel",
@@ -380,19 +338,12 @@
                 t.fail("panel.destroy causes problems: " + err);
             }
             t.ok(!panel.map, "panel has no reference to a map");
-
-            hideTestIframe();
         }
 
         function test_applyState_called(t) {
             t.plan(1);
 
             // set up
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var provider, applyState, mapPanel, log;
 
@@ -425,18 +376,12 @@
 
             GeoExt.panel.Map.prototype.applyState = applyState;
             mapPanel.destroy();
-            hideTestIframe();
         }
 
         function test_applyState(t) {
             t.plan(21);
 
             // set up
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var state;
 
@@ -549,18 +494,12 @@
             // tear down
 
             mapPanel.destroy();
-            hideTestIframe();
         }
 
         function test_getState_called(t) {
             t.plan(6);
 
             // set up
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var getState, mapPanel, log;
 
@@ -641,19 +580,12 @@
                 GeoExt.panel.Map.prototype.getState = getState;
                 mapPanel.destroy();
             });
-
-            hideTestIframe();
         }
 
         function test_getState(t) {
             t.plan(14);
 
             // set up
-
-            // make the hidden span element visible, because setSize does not
-            // work in iframes that are inside a hidden container in FF and IE.
-            // (hidden again at the end of the test)
-            showTestIframe();
 
             var state;
 
@@ -732,11 +664,9 @@
                  "state.opacity_barid correctly set");
 
             mapPanel.destroy();
-            hideTestIframe();
         }
         
         function test_add(t) {
-            showTestIframe();
             t.plan(1);
             var layers = [
                 new OpenLayers.Layer("foo", {visibility: true}),
@@ -758,13 +688,11 @@
             t.ok(mapPanel.items.get(0).getEl().dom.parentNode === mapPanel.body.dom,
                  "Map Panel item has the panels's body div as parent.");
             mapPanel.destroy();
-            hideTestIframe();
         }
 
         // This test is originally coming from issue #61:
         // https://github.com/geoext/geoext2/pull/61
         function test_destroyInTabbedPanelTest(t) {
-            showTestIframe();
             t.plan(3);
 
              var layers = [
@@ -829,8 +757,6 @@
              mappanel.destroy();
 
              t.eq(panel.items.length, 0, "Panel destroy was successful");
-
-             hideTestIframe();
          }
 
          function test_events(t) {

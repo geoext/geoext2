@@ -6,8 +6,6 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
-    <script src="../test-utility.js"></script>
-
     <script type="text/javascript">
 
         Ext.Loader.setConfig({
@@ -24,7 +22,6 @@
         ]);
 
         function setupContext(options) {        
-            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -60,7 +57,6 @@
         }
 
         function setupMultiFeatureContext() {
-            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -112,14 +108,12 @@
             });
             context.map.destroy();
             context.mapPanel.destroy();
-            hideTestIframe();
         }
         
         function tearDown(context) {
             context.feature.destroy();
             context.map.destroy();
             context.mapPanel.destroy();
-            hideTestIframe();
         }
 
         function popup(feature, map, options) {
