@@ -1,0 +1,88 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "id": "osm-busstops.fid-450a1ab3_149e7ccb0c9_30ad",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1218828.5056681812,
+            6620850.261476886]
+        },
+        "geometry_name": "geometry",
+        "properties": {
+            "id": 1130170,
+            "osm_id": 1688977159,
+            "name": "Salomonsborn",
+            "type": "bus_stop",
+            "ref": ""
+        }
+    },
+    {
+        "type": "Feature",
+        "id": "osm-busstops.fid-450a1ab3_149e7da3233_e78",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [599198.5191414315,
+            5359744.431373389]
+        },
+        "geometry_name": "geometry",
+        "properties": {
+            "id": 1130233,
+            "osm_id": 1689159158,
+            "name": "Barbini Loubon",
+            "type": "bus_stop",
+            "ref": ""
+        }
+    },
+    {
+        "type": "Feature",
+        "id": "osm-busstops.fid-450a1ab3_149e7ccb0c9_30af",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [954416.1508209753,
+            6012682.402613947]
+        },
+        "geometry_name": "geometry",
+        "properties": {
+            "id": 1130181,
+            "osm_id": 1689025037,
+            "name": "Opfikon, Schulstrasse",
+            "type": "bus_stop",
+            "ref": ""
+        }
+    },
+    {
+        "type": "Feature",
+        "id": "osm-busstops.fid-450a1ab3_149e7ccb0c9_30b5",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [1816615.967539551,
+            5948768.54551049]
+        },
+        "geometry_name": "geometry",
+        "properties": {
+            "id": 1130187,
+            "osm_id": 1689043500,
+            "name": "Unterlangzeil Nr.5",
+            "type": "bus_stop",
+            "ref": ""
+        }
+    },
+    {
+        "type": "Feature",
+        "id": "osm-busstops.fid-450a1ab3_149e7da3233_-20e8",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [-696436.2255883364,
+            7037778.549495307]
+        },
+        "geometry_name": "geometry",
+        "properties": {
+            "id": 1130192,
+            "osm_id": 1689050200,
+            "name": "Churchtown Rd. Upper/Jct. Beaumont Avenue",
+            "type": "bus_stop",
+            "ref": "1035"
+        }
+    }]
+}
