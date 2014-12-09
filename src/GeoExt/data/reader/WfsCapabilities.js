@@ -45,6 +45,18 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
         }
     },
 
+    config: {
+        /**
+         *
+         */
+        layerOptions: null,
+
+        /**
+         *
+         */
+        protocolOptions: null
+    },
+
     /**
      * Gets the records.
      *
@@ -127,7 +139,7 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
                     protocol: new OpenLayers.Protocol.WFS(protocolOptions),
                     strategies: [new OpenLayers.Strategy.Fixed()]
                 };
-                var metaLayerOptions = this.layerOptions;
+                var metaLayerOptions = this.getLayerOptions();
                 if (metaLayerOptions) {
                     Ext.apply(layerOptions, Ext.isFunction(metaLayerOptions) ?
                         metaLayerOptions() : metaLayerOptions);
