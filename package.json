@@ -2,13 +2,39 @@
     "name": "GeoExt",
     "type": "code",
     "framework": "ext",
-    "creator": "The Open Source Geospatial Foundation",
-    "summary": "JavaScript Toolkit for Rich Web Mapping Applications.",
-    "detailedDescription": "GeoExt is Open Source and enables building desktop-like GIS applications through the web. It is a JavaScript framework that combines the GIS functionality of OpenLayers with the user interface savvy of the ExtJS library provided by Sencha.",
-    "version": "2.0.3",
-    "compatVersion": "2.0.0",
+    "creator": "anonymous",
+    "summary": "Short summary",
+    "detailedDescription": "Long description of package",
+    "version": "1.0.0",
+    "compatVersion": "1.0.0",
     "format": "1",
-    "output": "${package.dir}/build",
+    "slicer": {
+        "js": [
+            {
+                "path": "${package.dir}/sass/example/custom.js",
+                "isWidgetManifest": true
+            }
+        ]
+    },
+    "builds": {
+        "classic": {
+            "theme": "ext-theme-classic"
+        },
+        "gray": {
+            "theme": "ext-theme-gray"
+        },
+        "neptune": {
+            "theme": "ext-theme-neptune"
+        },
+        "access": {
+            "theme": "ext-theme-access"
+        }
+    },
+    "output": {
+        "base": "${package.dir}/build/${build.id}",
+        "js": "..",
+        "sass":""
+    },
     "local": true,
     "requires": []
 }
