@@ -35,7 +35,8 @@
 
         protocol = new OpenLayers.Protocol();
 
-        form = Ext.create('GeoExt.form.Basic', Ext.get("form"), {
+        panel = Ext.create('Ext.panel.Panel');
+        form = Ext.create('GeoExt.form.Basic', panel, {
             protocol: protocol
         });
 
@@ -64,7 +65,8 @@
             }
         });
 
-        form = Ext.create('GeoExt.form.Basic', Ext.get("form"), {
+        panel = Ext.create('Ext.panel.Panel');
+        form = Ext.create('GeoExt.form.Basic', panel, {
             protocol: protocol,
             getValues: function() {
                 return {"foo0__eq": "bar0", "foo1__like": "bar1"};
@@ -93,7 +95,4 @@
         t.wait_result(1);
     }
     </script>
-  <body>
-    <div id="form"></div>
-  </body>
 </html>
