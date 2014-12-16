@@ -184,7 +184,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) > -1,
                  "click on row 0 selects feature 0");
@@ -196,13 +196,13 @@
                 shiftKey: false,
                 ctrlKey: true
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) > -1, // with extjs 4 the line still be selected
                  "click on row 0 deselects feature 0");
 
             // simulate a mousedown on the second row
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            sm.selectWithEvent(store.getAt(1), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[1]) > -1,
                  "click on row 1 selects feature 1");
@@ -302,7 +302,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) < 0,
                  "click on row 0 does not select feature 0");
@@ -325,7 +325,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            sm.selectWithEvent(store.getAt(1), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[1]) > -1,
                  "click on row 1 selects feature 1");
@@ -350,7 +350,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) < 0,
                  "click on row 0 does not select feature 0");
@@ -377,7 +377,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            sm.selectWithEvent(store.getAt(1), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[1]) > -1,
                  "click on row 1 selects feature 1");
@@ -460,7 +460,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
 
             t.eq(map.getCenter().toString(), "lon=10,lat=10", "Map recentered to lon=10,lat=10 on selection of one feature");
             t.eq(map.getZoom(), 0, "Map' s zoom has not changed because feature is visible on this zoom level");
@@ -479,7 +479,7 @@
                     shiftKey: false,
                     ctrlKey: true
                 };
-                sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+                sm.selectWithEvent(store.getAt(1), e);
 
                 t.eq(map.getCenter().toString(), "lon=6,lat=6", "Map recentered to lon=6,lat=6 to make multiple selected features visible");
                 t.eq(map.getZoom(), 4, "Map' s zoom has changed in order to make multiple selected features visible");
