@@ -141,7 +141,8 @@ Ext.define('GeoExt.selection.FeatureModel', {
     bindComponent: function() {
         this.callParent(arguments);
         if (this.layerFromStore) {
-            var layer = this.view.getStore() && this.view.getStore().layer;
+            var view = this.view || this.views[0],
+                layer = view.getStore() && view.getStore().layer;
             if (layer && !(this.selectControl instanceof
                     OpenLayers.Control.SelectFeature)) {
                 this.selectControl = this.createSelectControl(
