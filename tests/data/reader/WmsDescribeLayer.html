@@ -40,8 +40,9 @@
             var records = reader.read({responseXML : doc, responseText: true});
             t.ok(reader.raw, "When keepRaw is true, the raw property is populated");
 
+            var total = GeoExt.isExt4 ? records.total : records.getTotal();
             //1 test
-            t.eq(records.totalRecords, 2, 'readRecords returns correct number of records');
+            t.eq(total, 2, 'readRecords returns correct number of records');
             
             var record = records.records[0];
 

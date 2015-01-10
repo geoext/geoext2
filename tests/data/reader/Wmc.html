@@ -41,7 +41,8 @@
             var records = reader.read({responseXML: doc, responseText: true});
 
             //1 test
-            t.eq(records.totalRecords, 3, 'readRecords returns correct number of records');
+            var total = GeoExt.isExt4 ? records.total : records.getTotal();
+            t.eq(total, 3, 'readRecords returns correct number of records');
 
             var record = records.records[1];
             t.eq(record.get("name"), "geob:communes_geofla", "correct name record field");
@@ -53,8 +54,9 @@
             reader = Ext.create("GeoExt.data.reader.Wmc");
             records = reader.read({responseXML: doc, responseText: true});
 
+            var total2 = GeoExt.isExt4 ? records.total : records.getTotal();
             //1 test
-            t.eq(records.totalRecords, 3, 'readRecords returns correct number of records');
+            t.eq(total2, 3, 'readRecords returns correct number of records');
 
             var record = records.records[1];
             //10 tests -- testing the fields of a record
