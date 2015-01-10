@@ -25,7 +25,8 @@ Ext.define('GeoExt.tree.Panel', {
     alias: 'widget.gx_treepanel',
     requires: [
         'GeoExt.tree.Column',
-        'GeoExt.tree.View'
+        'GeoExt.tree.View',
+        'GeoExt.tree.Util'
     ],
     viewType: 'gx_treeview',
     
@@ -44,6 +45,8 @@ Ext.define('GeoExt.tree.Panel', {
                 dataIndex: me.displayField         
             }];
         }
+        // bind checkchange for tree nodes to steer visibility of the layers
+        me.on('checkchange', GeoExt.tree.Util.updateLayerVisibilityByNode);
 
         me.callParent();
     }
