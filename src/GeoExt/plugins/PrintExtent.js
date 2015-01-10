@@ -185,7 +185,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      */
     init: function(mapPanel) {
         this.map = mapPanel.map;
-        mapPanel.on("destroy", this.onMapPanelDestroy, this);
+        mapPanel.on("beforedestroy", this.beforeMapPanelDestroy, this);
 
         if (!this.layer) {
             this.layer = new OpenLayers.Layer.Vector(null, {
@@ -302,8 +302,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      *
      * @private
      */
-    onMapPanelDestroy: function() {
-
+    beforeMapPanelDestroy: function() {
         var map = this.map;
 
         for(var len = this.pages.length - 1, i = len; i>=0; i--) {
