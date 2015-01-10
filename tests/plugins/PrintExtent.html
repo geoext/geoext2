@@ -75,8 +75,8 @@
             
             t.ok(printExtent.map === mapPanel.map,
                  "init sets mapPanel");
-            t.ok(mapPanel.hasListener("destroy"),
-                 "plugin listens to the panel destroy event");
+            t.ok(mapPanel.hasListener("beforedestroy"),
+                 "plugin listens to the panel beforedestroy event");
 
             mapPanel.destroy();
          }
