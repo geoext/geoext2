@@ -139,6 +139,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
             this.self.mixin('observable', Ext.util.Observable);
         } else {
             this.self.mixin('observable', Ext.mixin.Observable);
+            this.mixins.observable.constructor.call(this, config);
         }
 
         Ext.apply(this, config);
