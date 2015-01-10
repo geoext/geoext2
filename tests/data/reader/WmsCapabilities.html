@@ -65,7 +65,9 @@
             });
             records = reader.read({responseXML: doc, responseText: true});
             t.ok(!reader.raw, "raw property not populated by default");
-            t.eq(records.totalRecords, 22, 'readRecords returns correct number of records');
+
+            var total = GeoExt.isExt4 ? records.totalRecords : records.getTotal();
+            t.eq(total, 22, 'readRecords returns correct number of records');
 
             var layer;
 
