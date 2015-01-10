@@ -29,7 +29,8 @@ Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',
     alias: 'plugin.gx_layer',
     requires: [
-        'GeoExt.Version'
+        'GeoExt.Version',
+        'GeoExt.tree.Util'
     ],
     /**
      * The init method is invoked after initComponent method has been run for
@@ -60,7 +61,7 @@ Ext.define('GeoExt.tree.LayerNode', {
             "visibilitychanged": this.onLayerVisibilityChanged,
             scope: this
         });
-        this.enforceOneVisible();
+        GeoExt.tree.Util.enforceOneLayerVisible(this.target);
     },
 
     /**
@@ -74,7 +75,7 @@ Ext.define('GeoExt.tree.LayerNode', {
         var me = this;
 
         if(~Ext.Array.indexOf(modifiedFields, 'checked')) {
-            me.onCheckChange();
+            GeoExt.tree.Util.updateLayerVisibilityByNode(this.target, this.target.get('checked'));
         }
     },
 
@@ -86,59 +87,6 @@ Ext.define('GeoExt.tree.LayerNode', {
     onLayerVisibilityChanged: function() {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
-        }
-    },
-
-    /**
-     * Updates the visibility of the layer that is connected to the target
-     * node.
-     *
-     * @private
-     */
-    onCheckChange: function() {
-        var node = this.target,
-            checked = this.target.get('checked');
-
-        if(checked != node.get('layer').getVisibility()) {
-            node._visibilityChanging = true;
-            var layer = node.get('layer');
-            if(checked && layer.isBaseLayer && layer.map) {
-                layer.map.setBaseLayer(layer);
-            } else if(!checked && layer.isBaseLayer && layer.map &&
-                      layer.map.baseLayer && layer.id == layer.map.baseLayer.id) {
-                // Must prevent the unchecking of radio buttons
-                node.set('checked', layer.getVisibility());
-            } else {
-                layer.setVisibility(checked);
-            }
-            delete node._visibilityChanging;
-        }
-        this.enforceOneVisible();
-    },
-
-    enforceOneVisible: function() {
-        var attributes = this.target.data;
-        var group = attributes.checkedGroup;
-        // If we are in the baselayer group, the map will take care of
-        // enforcing visibility.
-        if(group && group !== "gx_baselayer") {
-            var layer = this.target.get('layer');
-            var checkedNodes = this.target.getOwnerTree().getChecked();
-            var checkedCount = 0;
-            // enforce "not more than one visible"
-            Ext.each(checkedNodes, function(n){
-                var l = n.data.layer;
-                if(!n.data.hidden && n.data.checkedGroup === group) {
-                    checkedCount++;
-                    if(l != layer && attributes.checked) {
-                        l.setVisibility(false);
-                    }
-                }
-            });
-            // enforce "at least one visible"
-            if(checkedCount === 0 && attributes.checked == false) {
-                layer.setVisibility(true);
-            }
         }
     }
 
