@@ -24,6 +24,10 @@ Ext.define('GeoExt.data.reader.Wmc', {
         'GeoExt.Version'
     ],
 
+    config: {
+        preserveRawData: true
+    },
+
     /**
      * Creates new Reader.
      *
