@@ -29,6 +29,11 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     requires: [
         'GeoExt.Version'
     ],
+
+    config: {
+        preserveRawData: true
+    },
+
     /**
      * Creates new Reader.
      *
