@@ -56,6 +56,6 @@ Ext.define('GeoExt.data.LayerModel',{
      * @return {OpenLayers.Layer}
      */
     getLayer: function() {
-        return (GeoExt.isExt4) ? this.raw : this.data;
+        return this.raw;
     }
 });
