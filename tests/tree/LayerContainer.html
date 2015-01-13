@@ -39,7 +39,7 @@
             var store = Ext.create('GeoExt.data.LayerStore');
             var defaults = {foo: "bar"};
 
-            if(GeoExt.isExt4){
+            if(GeoExt.isExt4) {
                 var treeStore = Ext.create('Ext.data.TreeStore', {
                     model: 'GeoExt.data.LayerTreeModel',
                     root: {
@@ -60,7 +60,7 @@
                             ptype: 'gx_layercontainer',
                             loader: {
                                 store: store,
-                                baseAttrs: defaults
+                                baseParams: defaults
                             }
                         }]
                     }
@@ -70,9 +70,14 @@
             treeStore.load();
 
             t.delay_call(.1, function() {
-                var node = GeoExt.isExt4 ? treeStore.tree.root : treeStore.tree.rootProperty;
-                t.ok(node.get('container').loader.store === store, "layerStore set");
-                t.eq(node.get('container').loader.baseAttrs.foo, "bar", "baseAttrs set");
+                if(GeoExt.isExt4) {
+                    var node = treeStore.getRootNode();
+                    t.ok(node.get('container').loader.store === store, "layerStore set");
+                    t.eq(node.get('container').loader.baseAttrs.foo, "bar", "baseAttrs set");
+                } else {
+                    t.ok(treeStore.rootProperty.plugins[0].loader.store === store, "layerStore set");
+                    t.eq(treeStore.rootProperty.plugins[0].loader.baseParams.foo, "bar", "baseAttrs set");
+                }
 
                 store.destroy();
                 treeStore.destroy();
@@ -94,20 +99,35 @@
                 map: map
             });
 
-            var treeStore = Ext.create('Ext.data.TreeStore', {
-                model: 'GeoExt.data.LayerTreeModel',
-                root: {
-                    plugins: [{
-                        ptype: 'gx_layercontainer',
-                        loader: {store: store}
-                    }],
-                    expanded: true
-                }
-            });
+            var treeStore, node;
+            if(GeoExt.isExt4) {
+                treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    root: {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            loader: {store: store}
+                        }],
+                        expanded: true
+                    }
+                });
+                node = treeStore.tree.root;
+            } else {
+                treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    root: {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            loader: {store: store}
+                        }],
+                        expanded: true
+                    }
+                });
+                node = treeStore.root;
+            }
             treeStore.load();
 
             t.delay_call(.1, function() {
-                var node = treeStore.tree.root;
                 t.eq(node.childNodes && node.childNodes.length, 1, "container has one child");
                 t.ok(node.firstChild.get('layer') === layer, "child layer is correct");
                 t.eq(node.firstChild.get('iconCls'), "gx-tree-layer-icon", "iconClass for child set correctly");
@@ -132,17 +152,32 @@
                 map: map
             });
 
-            var treeStore = Ext.create('Ext.data.TreeStore', {
-                model: 'GeoExt.data.LayerTreeModel',
-                root: {
-                    plugins: [{
-                        ptype: 'gx_layercontainer',
-                        loader: {store: store}
-                    }],
-                    expanded: true
-                }
-            });
-            var root = treeStore.tree.root;
+            var treeStore, root;
+            if(GeoExt.isExt4) {
+                treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    root: {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            loader: {store: store}
+                        }],
+                        expanded: true
+                    }
+                });
+                root = treeStore.tree.root;
+            } else {
+                treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    root: {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            loader: {store: store}
+                        }],
+                        expanded: true
+                    }
+                });
+                root = treeStore.root;
+            }
 
             var a = new OpenLayers.Layer("a");
             var b = new OpenLayers.Layer("b");
@@ -150,7 +185,7 @@
             var d = new OpenLayers.Layer("d");
 
             // add two records to empty root
-            store.add(store.proxy.reader.read([a, b]).records);
+            store.add(store.getProxy().getReader().read([a, b]).records);
             t.delay_call(.1, function() {
                 t.eq(root.childNodes.length, 2, "[a, b] two records added");
                 t.eq(root.childNodes[0].get('layer').name, "b", "[a, b] last layer drawn at top of root");
@@ -210,26 +245,53 @@
                 map: map
             });
 
-            var treeStore = Ext.create('Ext.data.TreeStore', {
-                model: 'GeoExt.data.LayerTreeModel',
-                root: {
-                    expanded: true
-                },
-                listeners: {
-                    beforemove: function(node, oldParent, newParent, index){
-                        // change the group when moving to a new container
-                        if (oldParent !== newParent) {
-                            var index = store.findBy(function(r){
-                                return r.getLayer() === node.get('layer');
-                            });
-                            var layer = store.getAt(index).getLayer();
-                            layer.displayInLayerSwitcher = !layer.displayInLayerSwitcher;
-                        }
+
+            var treeStore, root;
+            if(GeoExt.isExt4) {
+                treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    root: {
+                        expanded: true
                     },
-                    scope: this
-                }
-            });
-            var root = treeStore.tree.root;
+                    listeners: {
+                        beforemove: function(node, oldParent, newParent, index){
+                            // change the group when moving to a new container
+                            if (oldParent !== newParent) {
+                                var index = store.findBy(function(r){
+                                    return r.getLayer() === node.get('layer');
+                                });
+                                var layer = store.getAt(index).getLayer();
+                                layer.displayInLayerSwitcher = !layer.displayInLayerSwitcher;
+                            }
+                        },
+                        scope: this
+                    }
+                });
+                root = treeStore.tree.root;
+            } else {
+                treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    rootProperty: {
+                        expanded: true,
+                        children: []
+                    },
+                    listeners: {
+                        beforemove: function(node, oldParent, newParent, index){
+                            // change the group when moving to a new container
+                            if (oldParent !== newParent) {
+                                var index = store.findBy(function(r){
+                                    return r.getLayer() === node.get('layer');
+                                });
+                                var layer = store.getAt(index).getLayer();
+                                layer.displayInLayerSwitcher = !layer.displayInLayerSwitcher;
+                            }
+                        },
+                        scope: this
+                    }
+                });
+                treeStore.load();
+                root = treeStore.getRootNode();
+            }
 
             root.appendChild({
                 plugins: [{
