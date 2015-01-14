@@ -35,13 +35,8 @@
                 protocol: protocol
             });
 
-            if(GeoExt.isExt4){
-                t.ok(proxy.protocol == protocol,
+            t.ok(proxy.getProtocol() == protocol,
                     "ctor sets protocol in protocol property");
-            }else {
-                t.ok(proxy.config.protocol == protocol,
-                    "ctor sets protocol in protocol property");
-            }
         }
 
         function test_load(t) {
@@ -66,12 +61,11 @@
                 }
             });
             result = "fake result";
-            reader = {
-                read: function(r) {
-                    t.ok(r == response,
-                         "reader is passed expected response obj");
-                    return result;
-                }
+            reader = Ext.create('Ext.data.reader.Json');
+            reader.read = function(r) {
+                t.ok(r == response,
+                     "reader is passed expected response obj");
+                return result;
             };
             proxy = Ext.create("GeoExt.data.proxy.Protocol", {
                 protocol: protocol,
@@ -91,13 +85,8 @@
             };
 
             // 8 tests
-            if(GeoExt.isExt4){
-                proxy.doRequest(Ext.create("Ext.data.Operation",
+            proxy.doRequest(Ext.create("Ext.data.Operation",
                     {params: params, arg: arg}), callback, scope);
-            } else {
-                proxy.doRequest(Ext.create("Ext.data.Operation",
-                    {params: params, arg: arg, callback: callback, scope: scope}));
-            }
 
         }
 
@@ -105,7 +94,9 @@
             t.plan(1);
             var response = new OpenLayers.Protocol.Response({
                 code: OpenLayers.Protocol.Response.SUCCESS,
-                features: [new OpenLayers.Feature.Vector(null, {'foo': 'bar'})]
+                features: [
+                    new OpenLayers.Feature.Vector(null, {'foo': 'bar'})
+                ]
             });
             var protocol = new OpenLayers.Protocol({
                 read: function(o) {
@@ -125,7 +116,8 @@
                 reader: reader
             });
             var callback = function(o) {
-                t.eq(o.resultSet.records[0].get('foo'), "bar", "feature read correctly");
+                t.eq(o.resultSet.records[0].get('foo'), "bar",
+                        "feature read correctly");
             };
             proxy.doRequest(Ext.create("Ext.data.Operation"), callback);
         }
@@ -138,17 +130,22 @@
                     return new OpenLayers.Protocol.Response();
                 },
                 abort: function(response) {
-                    t.ok("protocol.abort called");
+                    t.ok(true, "protocol.abort called");
                 }
             });
             var proxy = Ext.create("GeoExt.data.proxy.Protocol", {
                 protocol: protocol
             });
 
-            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort not called because proxy.response is null
-            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort called
-            proxy.abortPrevious = false;
-            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort not called because proxy.abortPrevious is false
+            // abort not called because proxy.response is null
+            proxy.doRequest(Ext.create("Ext.data.Operation"));
+
+            // abort called
+            proxy.doRequest(Ext.create("Ext.data.Operation"));
+            proxy.setAbortPrevious(false);
+
+            // abort not called because proxy.abortPrevious is false
+            proxy.doRequest(Ext.create("Ext.data.Operation"));
         }
 
         function test_setParamsAsOptions(t) {
@@ -166,13 +163,7 @@
                 protocol: protocol
             });
 
-            if(GeoExt.isExt4){
-                proxy.doRequest(Ext.create("Ext.data.Operation",
-                    {params: params}));
-            } else {
-                proxy.doRequest(Ext.create("Ext.data.Operation",
-                    {params: params, arg: arg, callback: callback, scope: scope}));
-            }
+            proxy.doRequest(Ext.create("Ext.data.Operation", {params: params}));
         }
 
     </script>
