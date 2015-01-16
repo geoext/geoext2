@@ -121,7 +121,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
                 }
             });
         }
-        me.callParent(config);
+        me.callParent([config]);
     },
 
     /**
