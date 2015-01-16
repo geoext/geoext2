@@ -118,13 +118,14 @@ function runOneTestFunc(name, filename) {
             }
             return a === b;
         },
-        debugInfo = function(mockMethod, testName, filename, other) {
+        debugInfo = function(mockMethod, testName, filename, other, dump) {
             return [
                 " [",
                 mockMethod + ", ",
                 testName + "(t), ",
                 filename,
                 (other ? (', ' + other) : ''),
+                (dump ? (', dump: ' + JSON.stringify(dump)) : ''),
                 "]"
             ].join("");
         },
@@ -147,7 +148,8 @@ function runOneTestFunc(name, filename) {
                         msg: msg +
                             debugInfo(
                                 "t.eq", name, filename,
-                                "exp: " + exp + ", got: " + got
+                                "exp: " + exp + ", got: " + got,
+                                Array.prototype.slice.call(arguments)
                             )
                     });
                 } else {
