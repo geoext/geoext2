@@ -125,7 +125,7 @@ function runOneTestFunc(name, filename) {
                     results.push({
                         pass: false,
                         msg: msg + debugInfo("t.ok", name, filename)
-                    })
+                    });
                 } else {
                     results.push({pass: true, msg: msg});
                 }

@@ -1,38 +1,25 @@
+
 var fs = require('fs'),
-    system = require('system'),
-    dash = fs.separator,
-    currentFile = system.args[4], // the full path to run-testsuite.js
-    curFileParts = fs.absolute(currentFile).split(dash);
+    host = casper.cli.has('host') ? casper.cli.get('host') : 'http://localhost:8080/',
+    testsPath = host + 'tests/',
+    tawListOfTestsFile = testsPath + 'list-tests.html',
+    modulesPath = fs.workingDirectory + '/tests/headless/modules/';
 
-// remove filename 'run-testsuite.js'
-curFileParts.pop();
-// remove containing folder 'headless' 
-curFileParts.pop();
-
-var basePath = curFileParts.join(dash) + dash;
-var modulePath = basePath  + 'headless' + dash + 'modules' + dash;
-
-// the html file with the links
-var tawListOfTestsFile = basePath + 'list-tests.html';
-
-var strUtil = require(modulePath + 'strUtil'),
+var strUtil = require(modulesPath + 'strUtil'),
     padLeft = strUtil.padLeft,
     padRight = strUtil.padRight;
 
-var tawWrapper = require(modulePath + 'tawWrapper'),
+var tawWrapper = require(modulesPath + 'tawWrapper'),
     getTestFiles = tawWrapper.getTestFiles,
     getTestFunctions = tawWrapper.getTestFunctions,
     runOneTestFunc = tawWrapper.runOneTestFunc;
 
-
 // the variables we'll fill during the first phase and iterate over in the
 // second phase
-var links = [];
-var funcCnt = 0;
-var results = [];
-var total = 0;
-
-
+var links = [],
+    funcCnt = 0,
+    results = [],
+    total = 0;
 
 // Open the TAW-list of urls
 casper.start(tawListOfTestsFile);
@@ -45,7 +32,7 @@ casper.then(function() {
 casper.then(function() {
     links.forEach(function(link) {
         var funcs;
-        casper.thenOpen(basePath + link, function(){
+        casper.thenOpen(testsPath + link, function(){
             funcs = this.evaluate(getTestFunctions);
         });
         casper.then(function() {
@@ -62,7 +49,7 @@ casper.then(function() {
                 );
             }, this);
         });
-        
+
     });
 });
 
@@ -77,7 +64,7 @@ casper.then(function(){
                 } else {
                     var message = padLeft((++cnt), 4) + ") " + result.msg;
                     if (result.skip) {
-                        test.skip(1, message)
+                        test.skip(1, message);
                     } else {
                         test.assert(result.pass, message);
                     }

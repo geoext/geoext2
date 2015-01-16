@@ -1,6 +1,19 @@
 language: node_js
+
 node_js: 0.10
-# installs dependencies for testing
-install: npm install -g casperjs@1.1.0-beta3
-# command to run tests
-script: casperjs test tests/headless/run-testsuite.js
+
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+install:
+  - npm install -g http-server
+  - npm install -g slimerjs@0.9.2
+  - npm install -g casperjs@1.1.0-beta3
+
+before_script:
+  - http-server -s -a 0.0.0.0 -p 8080 &
+
+script:
+  - casperjs test tests/headless/run-testsuite.js --host=http://0.0.0.0:8080/
+  - ./tests/run-slimerjs.sh
