@@ -65,6 +65,8 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      * similar inheritance strategy as OpenLayers 2 has.
      *
      * TODO Find a way to have this functionality shared or get rid of it.
+     *
+     * @param {Object} config the configuration as passed by the user.
      */
     initConfig: function(config){
         var me = this,
