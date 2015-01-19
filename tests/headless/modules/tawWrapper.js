@@ -14,7 +14,7 @@
 function getTestFiles() {
     var testFileUrlVariants = [
            'extjs=4.2.1',
-           'extjs=5.0.1'
+           'extjs=5.1.0'
         ],
         listItems = document.querySelectorAll('li'),
         files = [];
