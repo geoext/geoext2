@@ -103,25 +103,33 @@ Ext.define('GeoExt.data.reader.Attribute', {
     },
 
     /**
-     * Overwriting the initConfig method for ExtJS5 cause the default method
-     * from Sencha drops the classes somewhere. Couldn't reproduce this in a
-     * Sencha fiddle so there is a TODO to fix this in the GeoExt code if
-     * possible.
-     * @param {Object} config
+     * We need to override this as the OpenLayers classes passed as configs
+     * loose their class-nature and seem to be copied by ExtJS somewhere.
+     *
+     * We deal with this elsewhere in a different manner and should see if
+     * we can either share code or get rid of this special handling all
+     * together. The problem isn't reproducible for other 'classes' with a
+     * similar inheritance strategy as OpenLayers 2 has.
+     *
+     * TODO Find a way to have this functionality shared or get rid of it.
+     *
+     * @param {Object} config the configuration as passed by the user.
      */
-    initConfig: function(config) {
-        var me = this;
-        // only add functionality for ExtJS5
-        if(GeoExt.isExt5){
-            Ext.Object.each(config, function(key, value){
-                // Only for properties defined in this.config
-                if(Ext.Array.contains(Ext.Object.getKeys(me.config), key)){
-                    me['_'+key] = value;
-                    delete config.key
-                }
-            });
-        }
-        me.callParent([config]);
+    initConfig: function(config){
+        var me = this,
+            cfg = config || {},
+            prefix = me.$configPrefixed ? '_' : '',
+            olConfigs = [
+                'format',
+                'feature'
+            ];
+        Ext.each(olConfigs, function(olConfig){
+            if (cfg[olConfig]) {
+                me[prefix + olConfig] = cfg[olConfig];
+                delete cfg[olConfig];
+            }
+        });
+        me.callParent([cfg]);
     },
 
     /**
