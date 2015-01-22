@@ -331,7 +331,7 @@ Ext.define('GeoExt.panel.PrintMap', {
             height = targetHeight;
         }
 
-        return {width: width, height: height};
+        return {width: Math.round(width), height: Math.round(height)};
     },
 
     /**
