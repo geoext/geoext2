@@ -136,6 +136,15 @@ Ext.define('GeoExt.container.WmsLegend', {
      */
     baseParams: null,
 
+    /**
+     * Fires after wms legend image has loaded.
+     *
+     * @event legendimageloaded
+     */
+
+    /**
+     * Initializes this component.
+     */
     initComponent: function(){
         var me = this;
         me.callParent();

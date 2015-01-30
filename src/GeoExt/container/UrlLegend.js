@@ -79,6 +79,12 @@ Ext.define('GeoExt.container.UrlLegend', {
     baseParams: null,
 
     /**
+     * Fires after url legend image has loaded.
+     *
+     * @event legendimageloaded
+     */
+
+    /**
      * Initializes this UrlLegend.
      */
     initComponent: function(){
