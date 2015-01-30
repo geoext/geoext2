@@ -14,7 +14,7 @@
 
 /**
  * A set of useful static functions to work with forms.
- * 
+ *
  * @class GeoExt.Form
  * @singleton
  */
@@ -56,7 +56,7 @@
         /**
          * Use `GeoExt.Form.ENDS_WITH` as the `wildcard` param to `#toFilter`
          * if you want wildcards to be prepended to LIKE field values.
-         * 
+         *
          * @property {Number} ENDS_WITH
          */
         ENDS_WITH: 1,
@@ -64,7 +64,7 @@
         /**
          * Use `GeoExt.Form.STARTS_WITH` as the `wildcard` param to `#toFilter`
          * if you want wildcards to be appended to LIKE field values.
-         * 
+         *
          * @property {Number} STARTS_WITH
          */
         STARTS_WITH: 2,
@@ -73,7 +73,7 @@
          * Use `GeoExt.Form.CONTAINS` as the `wildcard` param to `#toFilter`
          * if you want a wildcards to be both prepended and appended to LIKE
          * field values.
-         * 
+         *
          * @property {Number} CONTAINS
          */
         CONTAINS: 3,
@@ -81,10 +81,10 @@
         /**
          * Create an `OpenLayers.Filter` object from an `Ext.form.Basic`
          * or an `Ext.form.Panel` instance.
-         * 
+         *
          * @param {Ext.form.Form/Ext.form.Panel} form The form.
          * @param {String} logicalOp Either `OpenLayers.Filter.Logical.AND` or
-         *     `OpenLayers.Filter.Logical.OR`. If null or undefined, we use 
+         *     `OpenLayers.Filter.Logical.OR`. If null or undefined, we use
          *     `OpenLayers.Filter.Logical.AND`
          * @param {Integer} wildcard Determines the wildcard behaviour of LIKE
          *     queries. See #ENDS_WITH, #STARTS_WITH and #CONTAINS.
@@ -100,7 +100,7 @@
 
                 var value = values[prop], type;
 
-                if(s.length > 1 && 
+                if(s.length > 1 &&
                    (type = FILTER_MAP[s[1]]) !== undefined) {
                     prop = s[0];
                 } else {
@@ -160,7 +160,7 @@
          *       set to `false`). Default is `"font-weight: bold;"`.
          * * `labelTpl` - `Ext.Template` or `String` or `Array` If set, the
          *       field label is obtained by applying the record's data hash to
-         *       this  template. This allows for very customizable field labels. 
+         *       this  template. This allows for very customizable field labels.
          *
          * See for instance :
          *
@@ -179,7 +179,7 @@
          *                             return '';
          *                         }
          *                         var type = v.type.split(":").pop();
-         *                         return OpenLayers.i18n(type) + 
+         *                         return OpenLayers.i18n(type) +
          *                             (v.nillable ? '' : ' (required)');
          *                     }
          *                 }
@@ -202,12 +202,12 @@
                 return type;
             }
             type = type.split(":").pop(); // remove ns prefix
-            
+
             var field;
             var name = record.get("name");
             var restriction = record.get("restriction") || {};
             var nillable = record.get("nillable") || false;
-            
+
             var label = record.get("label");
             var labelTpl = options.labelTpl;
             if (labelTpl) {
@@ -219,12 +219,12 @@
                 // use name for label if label isn't defined in the record
                 label = name;
             }
-            
+
             var baseOptions = {
                 name: name,
-                labelStyle: nillable ? '' : 
-                                options.mandatoryFieldLabelStyle != null ? 
-                                    options.mandatoryFieldLabelStyle : 
+                labelStyle: nillable ? '' :
+                                options.mandatoryFieldLabelStyle != null ?
+                                    options.mandatoryFieldLabelStyle :
                                     'font-weight:bold;'
             };
 
