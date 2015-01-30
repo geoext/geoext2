@@ -14,7 +14,7 @@
                 "GeoExt": "../../src/GeoExt"
             }
         });
-        
+
         Ext.Loader.syncRequire([
             'GeoExt.tree.Panel',
             'Ext.data.TreeStore',
@@ -23,34 +23,50 @@
             'GeoExt.tree.LayerLoader',
             'GeoExt.tree.LayerContainer'
         ]);
-        
+
     </script>
 
     <script type="text/javascript">
 
         function test_constructor(t) {
-        
+
             t.plan(2);
-        
+
             var store = Ext.create('GeoExt.data.LayerStore');
             var defaults = {foo: "bar"};
-                
-            var treeStore = Ext.create('Ext.data.TreeStore', {
-                model: 'GeoExt.data.LayerTreeModel',
-                root: {
-                    plugins: [{
-                        ptype: 'gx_layercontainer',
-                        loader: {
-                            store: store,
-                            baseAttrs: defaults
-                        }
-                    }]
-                }
-            });
+
+            if(GeoExt.isExt4){
+                var treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    root: {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            loader: {
+                                store: store,
+                                baseAttrs: defaults
+                            }
+                        }]
+                    }
+                });
+            } else {
+                var treeStore = Ext.create('Ext.data.TreeStore', {
+                    model: 'GeoExt.data.LayerTreeModel',
+                    rootProperty: {
+                        plugins: [{
+                            ptype: 'gx_layercontainer',
+                            loader: {
+                                store: store,
+                                baseAttrs: defaults
+                            }
+                        }]
+                    }
+                });
+            }
+
             treeStore.load();
-            
+
             t.delay_call(.1, function() {
-                var node = treeStore.tree.root;
+                var node = GeoExt.isExt4 ? treeStore.tree.root : treeStore.tree.rootProperty;
                 t.ok(node.get('container').loader.store === store, "layerStore set");
                 t.eq(node.get('container').loader.baseAttrs.foo, "bar", "baseAttrs set");
 
@@ -58,22 +74,22 @@
                 treeStore.destroy();
             });
         }
-    
+
         function test_render(t) {
-        
+
             t.plan(3);
-        
+
             var map = new OpenLayers.Map({
                 div: "map",
                 allOverlays: true
             });
             var layer = new OpenLayers.Layer();
             map.addLayer(layer);
-        
+
             var store = Ext.create('GeoExt.data.LayerStore', {
                 map: map
             });
-        
+
             var treeStore = Ext.create('Ext.data.TreeStore', {
                 model: 'GeoExt.data.LayerTreeModel',
                 root: {
@@ -85,7 +101,7 @@
                 }
             });
             treeStore.load();
-        
+
             t.delay_call(.1, function() {
                 var node = treeStore.tree.root;
                 t.eq(node.childNodes && node.childNodes.length, 1, "container has one child");
@@ -96,22 +112,22 @@
                 treeStore.destroy();
                 map.destroy();
             });
-        
+
         }
-    
+
         function test_order(t) {
-        
+
             t.plan(16);
-        
+
             var map = new OpenLayers.Map({
                 div: "map",
                 allOverlays: true
             });
-        
+
             var store = Ext.create('GeoExt.data.LayerStore', {
                 map: map
             });
-        
+
             var treeStore = Ext.create('Ext.data.TreeStore', {
                 model: 'GeoExt.data.LayerTreeModel',
                 root: {
@@ -123,12 +139,12 @@
                 }
             });
             var root = treeStore.tree.root;
-        
+
             var a = new OpenLayers.Layer("a");
             var b = new OpenLayers.Layer("b");
             var c = new OpenLayers.Layer("c");
             var d = new OpenLayers.Layer("d");
-        
+
             // add two records to empty root
             store.add(store.proxy.reader.read([a, b]).records);
             t.delay_call(.1, function() {
@@ -168,17 +184,17 @@
                 store.destroy();
                 treeStore.destroy();
                 map.destroy();
-            });        
+            });
         }
-    
+
         function test_group_move(t) {
             t.plan(8);
-        
+
             var map = new OpenLayers.Map({
                 div: "map",
                 allOverlays: true
             });
-        
+
             map.addLayers([
                 new OpenLayers.Layer("a"),
                 new OpenLayers.Layer("b"),
@@ -220,7 +236,7 @@
                             return !record.getLayer().displayInLayerSwitcher
                         }
                     },
-                    expanded: true                    
+                    expanded: true
                 }]
             });
             root.appendChild({
@@ -235,11 +251,11 @@
                     expanded: true
                 }]
             });
-            
+
             t.delay_call(.1, function() {
                 var container1 = root.childNodes[0];
                 var container2 = root.childNodes[1];
-                
+
                 // testing if layers get grouped by filter properly
                 t.eq(container1.childNodes[0].get('text'), "d", "d is 1st node on container1");
                 t.eq(container1.childNodes[1].get('text'), "c", "c is 2nd node on container1");
