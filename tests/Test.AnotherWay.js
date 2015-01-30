@@ -129,8 +129,8 @@ Test.AnotherWay._show_error = function(msg){
 };
 
 Test.AnotherWay._testpage_variants_url_params = [
-    '',
-    'extjs=5.0.0'
+    'extjs=4.2.1',
+    'extjs=5.0.1'
 ];
 
 // read urls from the list in the html file inside the list_iframe
