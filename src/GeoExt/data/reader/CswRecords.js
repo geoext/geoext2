@@ -43,7 +43,7 @@ Ext.define('GeoExt.data.reader.CswRecords', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.CswRecordsModel';
+            this.setModel('GeoExt.data.CswRecordsModel');
         }
         this.callParent([config]);
         if (!this.format) {

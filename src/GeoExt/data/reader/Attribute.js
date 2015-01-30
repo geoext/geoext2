@@ -89,7 +89,7 @@ Ext.define('GeoExt.data.reader.Attribute', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.AttributeModel';
+            this.setModel('GeoExt.data.AttributeModel');
         }
 
         this.callParent([config]);
