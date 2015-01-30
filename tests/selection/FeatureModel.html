@@ -313,7 +313,7 @@
             selectControl.unselect(features[0]);
 
             // bind the select control to the selection model
-            sm.bind(selectControl);
+            sm.bindLayer(selectControl);
 
             // simulate a mousedown on the second row
             // test that the second feature is selected in the layer
@@ -337,7 +337,7 @@
             sm.clearSelections();
 
             // unbind row and feature selection
-            sm.unbind();
+            sm.unbindLayer();
             // (side effect: selectControl is deactivated)
 
             // simulate a mousedown on the first row
@@ -361,7 +361,7 @@
             selectControl.unselect(features[0]);
 
             // bind selection of features on a layer to rows
-            sm.bind(layer, {controlConfig: {hover: true}});
+            sm.bindLayer(layer, {controlConfig: {hover: true}});
 
             // verify that controlConfig has been applied
             t.eq(sm.selectControl.hover, true,
