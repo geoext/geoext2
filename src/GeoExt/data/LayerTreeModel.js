@@ -62,7 +62,8 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         {name: 'container'},
         {name: 'checkedGroup', type: 'string'},
         {name: 'fixedText', type: 'bool'},
-        {name: 'component'}
+        {name: 'component'},
+        {name: 'disabled', type: 'bool', defaultValue: 'false'}
     ],
     proxy: {
         type: "memory"
