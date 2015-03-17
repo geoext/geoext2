@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -60,6 +60,17 @@ Ext.application({
                         format: "image/png"
                     }, {
                         isBaseLayer: false,
+                        resolutions: [
+                            1.40625,
+                            0.703125,
+                            0.3515625,
+                            0.17578125,
+                            0.087890625,
+                            0.0439453125,
+                            0.02197265625,
+                            0.010986328125,
+                            0.0054931640625
+                        ],
                         buffer: 0
                     }
                 ),
@@ -110,7 +121,7 @@ Ext.application({
 
         // create our own layer node UI class, using the TreeNodeUIEventMixin
         //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
-        
+
         /*var treeConfig = [
             {nodeType: 'gx_layercontainer', layerStore: map.layers}
         {
@@ -160,7 +171,7 @@ Ext.application({
                 ]
             }
         });
-        
+
         var layer;
 
         // create the tree with the configuration from above
@@ -189,7 +200,7 @@ Ext.application({
                 }
             }]
         });
-    
+
         Ext.create('Ext.Viewport', {
             layout: "fit",
             hideBorders: true,
