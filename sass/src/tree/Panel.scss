@@ -1,0 +1,12 @@
+.gx-tree-radio {
+    background-image: url('images/' + $form-radio-image + '.' + $image-extension);
+}
+.gx-tree-radio .#{$prefix}tree-checkbox-checked {
+    background-position: 0 (0 - $form-radio-size);
+}
+.gx-tree-component-off {
+    display: none;
+}
+.gx-tree-baselayer-icon {
+    background-image: theme-background-image('default/map', 'png');
+}

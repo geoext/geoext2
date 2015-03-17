@@ -1,0 +1,40 @@
+{
+    "name": "GeoExt",
+    "type": "code",
+    "framework": "ext",
+    "creator": "anonymous",
+    "summary": "Short summary",
+    "detailedDescription": "Long description of package",
+    "version": "1.0.0",
+    "compatVersion": "1.0.0",
+    "format": "1",
+    "slicer": {
+        "js": [
+            {
+                "path": "${package.dir}/sass/example/custom.js",
+                "isWidgetManifest": true
+            }
+        ]
+    },
+    "builds": {
+        "classic": {
+            "theme": "ext-theme-classic"
+        },
+        "gray": {
+            "theme": "ext-theme-gray"
+        },
+        "neptune": {
+            "theme": "ext-theme-neptune"
+        },
+        "access": {
+            "theme": "ext-theme-access"
+        }
+    },
+    "output": {
+        "base": "${package.dir}/build/${build.id}",
+        "js": "..",
+        "sass":""
+    },
+    "local": true,
+    "requires": []
+}
