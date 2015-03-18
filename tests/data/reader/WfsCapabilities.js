@@ -327,3 +327,157 @@ var doc = (new OpenLayers.Format.XML).read(
     '</ogc:Filter_Capabilities>'+
 '</WFS_Capabilities>'
 );
+var doc11 = (new OpenLayers.Format.XML).read(
+'<?xml version="1.0" encoding="ISO-8859-1"?>' +
+'<wfs:WFS_Capabilities xmlns:gml="http://www.opengis.net/gml" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ows="http://www.opengis.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ogc="http://www.opengis.net/ogc" xmlns="http://www.opengis.net/wfs" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd">' +
+'  <ows:ServiceIdentification>' +
+'    <ows:Title>GMap WMS Demo Server</ows:Title>' +
+'    <ows:Abstract/>' +
+'    <ows:ServiceType codeSpace="OGC">OGC WFS</ows:ServiceType>' +
+'    <ows:ServiceTypeVersion>1.1.0</ows:ServiceTypeVersion>' +
+'    <ows:Fees/>' +
+'    <ows:AccessConstraints/>' +
+'  </ows:ServiceIdentification>' +
+'  <ows:ServiceProvider>' +
+'    <ows:ProviderName/>' +
+'    <ows:ProviderSite xlink:type="simple" xlink:href=""/>' +
+'    <ows:ServiceContact>' +
+'      <ows:IndividualName/>' +
+'      <ows:PositionName/>' +
+'      <ows:ContactInfo>' +
+'        <ows:Phone>' +
+'          <ows:Voice/>' +
+'          <ows:Facsimile/>' +
+'        </ows:Phone>' +
+'        <ows:Address>' +
+'          <ows:DeliveryPoint/>' +
+'          <ows:City/>' +
+'          <ows:AdministrativeArea/>' +
+'          <ows:PostalCode/>' +
+'          <ows:Country/>' +
+'          <ows:ElectronicMailAddress/>' +
+'        </ows:Address>' +
+'        <ows:OnlineResource xlink:type="simple" xlink:href=""/>' +
+'        <ows:HoursOfService/>' +
+'        <ows:ContactInstructions/>' +
+'      </ows:ContactInfo>' +
+'      <ows:Role/>' +
+'    </ows:ServiceContact>' +
+'  </ows:ServiceProvider>' +
+'  <ows:OperationsMetadata>' +
+'    <ows:Operation name="GetCapabilities">' +
+'      <ows:DCP>' +
+'        <ows:HTTP>' +
+'          <ows:Get xlink:type="simple" xlink:href="http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?"/>' +
+'          <ows:Post xlink:type="simple" xlink:href="http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?"/>' +
+'        </ows:HTTP>' +
+'      </ows:DCP>' +
+'      <ows:Parameter name="service">' +
+'        <ows:Value>WFS</ows:Value>' +
+'      </ows:Parameter>' +
+'      <ows:Parameter name="AcceptVersions">' +
+'        <ows:Value>1.0.0</ows:Value>' +
+'        <ows:Value> 1.1.0</ows:Value>' +
+'      </ows:Parameter>' +
+'      <ows:Parameter name="AcceptFormats">' +
+'        <ows:Value>text/xml</ows:Value>' +
+'      </ows:Parameter>' +
+'    </ows:Operation>' +
+'    <ows:Operation name="DescribeFeatureType">' +
+'      <ows:DCP>' +
+'        <ows:HTTP>' +
+'          <ows:Get xlink:type="simple" xlink:href="http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?"/>' +
+'          <ows:Post xlink:type="simple" xlink:href="http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?"/>' +
+'        </ows:HTTP>' +
+'      </ows:DCP>' +
+'      <ows:Parameter name="outputFormat">' +
+'        <ows:Value>XMLSCHEMA</ows:Value>' +
+'        <ows:Value>text/xml; subtype=gml/2.1.2</ows:Value>' +
+'        <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>' +
+'      </ows:Parameter>' +
+'    </ows:Operation>' +
+'    <ows:Operation name="GetFeature">' +
+'      <ows:DCP>' +
+'        <ows:HTTP>' +
+'          <ows:Get xlink:type="simple" xlink:href="http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?"/>' +
+'          <ows:Post xlink:type="simple" xlink:href="http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?"/>' +
+'        </ows:HTTP>' +
+'      </ows:DCP>' +
+'      <ows:Parameter name="resultType">' +
+'        <ows:Value>results</ows:Value>' +
+'      </ows:Parameter>' +
+'      <ows:Parameter name="outputFormat">' +
+'        <ows:Value>text/xml; subtype=gml/3.1.1</ows:Value>' +
+'      </ows:Parameter>' +
+'    </ows:Operation>' +
+'  </ows:OperationsMetadata>' +
+'  <FeatureTypeList>' +
+'    <Operations>' +
+'      <Operation>Query</Operation>' +
+'    </Operations>' +
+'    <FeatureType>' +
+'      <Name>park</Name>' +
+'      <Title>Parks</Title>' +
+'      <DefaultSRS>EPSG:42304</DefaultSRS>' +
+'      <OutputFormats>' +
+'        <Format>text/xml; subtype=gml/3.1.1</Format>' +
+'      </OutputFormats>' +
+'      <ows:WGS84BoundingBox dimensions="2">' +
+'        <ows:LowerCorner>-173.433267989715 41.4271118471489</ows:LowerCorner>' +
+'        <ows:UpperCorner>-13.0481388603488 83.7465953038598</ows:UpperCorner>' +
+'      </ows:WGS84BoundingBox>' +
+'    </FeatureType>' +
+'    <FeatureType>' +
+'      <Name>popplace</Name>' +
+'      <Title>Cities</Title>' +
+'      <DefaultSRS>EPSG:42304</DefaultSRS>' +
+'      <OutputFormats>' +
+'        <Format>text/xml; subtype=gml/3.1.1</Format>' +
+'      </OutputFormats>' +
+'      <ows:WGS84BoundingBox dimensions="2">' +
+'        <ows:LowerCorner>-172.301407169865 36.354098687089</ows:LowerCorner>' +
+'        <ows:UpperCorner>-12.9698018843271 83.4831811841595</ows:UpperCorner>' +
+'      </ows:WGS84BoundingBox>' +
+'    </FeatureType>' +
+'  </FeatureTypeList>' +
+'  <ogc:Filter_Capabilities>' +
+'    <ogc:Spatial_Capabilities>' +
+'      <ogc:GeometryOperands>' +
+'        <ogc:GeometryOperand>gml:Point</ogc:GeometryOperand>' +
+'        <ogc:GeometryOperand>gml:LineString</ogc:GeometryOperand>' +
+'        <ogc:GeometryOperand>gml:Polygon</ogc:GeometryOperand>' +
+'        <ogc:GeometryOperand>gml:Envelope</ogc:GeometryOperand>' +
+'      </ogc:GeometryOperands>' +
+'      <ogc:SpatialOperators>' +
+'        <ogc:SpatialOperator name="Equals"/>' +
+'        <ogc:SpatialOperator name="Disjoint"/>' +
+'        <ogc:SpatialOperator name="Touches"/>' +
+'        <ogc:SpatialOperator name="Within"/>' +
+'        <ogc:SpatialOperator name="Overlaps"/>' +
+'        <ogc:SpatialOperator name="Crosses"/>' +
+'        <ogc:SpatialOperator name="Intersects"/>' +
+'        <ogc:SpatialOperator name="Contains"/>' +
+'        <ogc:SpatialOperator name="DWithin"/>' +
+'        <ogc:SpatialOperator name="Beyond"/>' +
+'        <ogc:SpatialOperator name="BBOX"/>' +
+'      </ogc:SpatialOperators>' +
+'    </ogc:Spatial_Capabilities>' +
+'    <ogc:Scalar_Capabilities>' +
+'      <ogc:LogicalOperators/>' +
+'      <ogc:ComparisonOperators>' +
+'        <ogc:ComparisonOperator>LessThan</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>GreaterThan</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>LessThanEqualTo</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>GreaterThanEqualTo</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>EqualTo</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>NotEqualTo</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>Like</ogc:ComparisonOperator>' +
+'        <ogc:ComparisonOperator>Between</ogc:ComparisonOperator>' +
+'      </ogc:ComparisonOperators>' +
+'    </ogc:Scalar_Capabilities>' +
+'    <ogc:Id_Capabilities>' +
+'      <ogc:FID/>' +
+'    </ogc:Id_Capabilities>' +
+'  </ogc:Filter_Capabilities>' +
+'</wfs:WFS_Capabilities>'
+);

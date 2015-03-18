@@ -266,10 +266,12 @@
         "OpenLayers.Symbolizer.Raster",
         "OpenLayers.Spherical"
     ],
+    // Include the guides tab
+    "--guides": "guides.json",
     // Include the examples tab
     "--examples": "examples.json",
 
-    "--title": "GeoExt 2.0.1 Documentation",
+    "--title": "GeoExt 2.0.3 Documentation",
     "-o": "docs",
     // "--title": "GeoExt 2.0.1 Documentation (incl. ExtJS classes)",
     // "-o": "docs-w-ext",

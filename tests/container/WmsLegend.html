@@ -88,7 +88,7 @@
 
             url = l.items.get(1) && l.items.get(1).url;
             t.eq(!!url, true, "legend image loaded even when MapPanel is not rendered at legend instantiation.")
-            expectedUrl = "/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=a&FORMAT=image%2Fpng&foo=bar%20bar";
+            expectedUrl = "/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=a&foo=bar%20bar";
             t.eq(url, expectedUrl, "GetLegendGraphic url is generated correctly");
             l.destroy()
 
@@ -193,6 +193,36 @@
             delete mapPanel.map.layers[0].params.SLD_BODY;
 
             mapPanel.destroy();
+        }
+
+        // See https://github.com/geoext/geoext2/pull/309
+        function test_baseParamsNoDuplicates(t) {
+            t.plan(3);
+
+            var mapPanel = loadMapPanel(false),
+                layerRec = mapPanel.layers.getAt(0),
+                expExceptionVal = 'i-am-the-only-exception-allowed-in-url',
+                wmsLegendContainer = Ext.create('GeoExt.container.WmsLegend', {
+                    renderTo: 'legendwms',
+                    baseParams: {
+                        EXCEPTIONS: expExceptionVal
+                    },
+                    layerRecord: layerRec
+                });
+
+            mapPanel.render("mappanel");
+
+            var legendUrl = wmsLegendContainer.items.get(1).url;
+
+            var numExceptionParamInUrl = legendUrl.match(/EXCEPTIONS/g).length;
+            var queryObj = Ext.Object.fromQueryString(legendUrl);
+
+            t.eq(numExceptionParamInUrl, 1,
+                    'Parameter occurs only once in URL.');
+            t.ok(Ext.isString(queryObj.EXCEPTIONS),
+                    'Value is a plain string, not an array.')
+            t.eq(queryObj.EXCEPTIONS, expExceptionVal,
+                    'Parameter has expected value.');
         }
 
         function test_update(t) {
@@ -301,6 +331,28 @@
 
             l.destroy();
             mapPanel.destroy();
+        }
+        
+        function test_legendwmsimageloaded(t) {
+            t.plan(1);
+            
+            var l, url, expectedUrl;
+            var mapPanel = loadMapPanel(false);
+
+            l = Ext.create("GeoExt.container.WmsLegend", {
+                renderTo: 'legendwms',
+                baseParams: {FORMAT: 'image/png', foo: 'bar bar'},
+                useScaleParameter: false,
+                layerRecord: mapPanel.layers.getAt(0),
+                listeners: {
+                    "legendimageloaded": function() {
+                        t.ok(true, "legendimageloaded triggered after image loading");
+                    }
+                }
+            });
+            mapPanel.render("mappanel");
+
+            t.wait_result( 1 );
         }
 
 

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html debug="true">
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
+    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+
+    <script type="text/javascript">
+        Ext.Loader.setConfig({
+            disableCaching: false,
+            enabled: true,
+            paths: {
+                GeoExt: '../src/GeoExt'
+            }
+        });
+
+        Ext.Loader.syncRequire([
+            'GeoExt.panel.Map',
+            'GeoExt.OverviewMap'
+        ]);
+
+        function test_lifecycle(t) {
+            t.plan(14);
+
+            var layer = new OpenLayers.Layer.WMS("test", '/ows',
+                    { layers: 'a' },
+                    { isBaseLayer: true }
+                );
+
+            var map = new OpenLayers.Map({
+                    allOverlays: false,
+                    fallThrough: true,
+                    center: [13.73, 51.05],
+                    zoom: 7,
+                    layers: [ layer ]
+                });
+
+            var mapPanel = Ext.create("GeoExt.panel.Map", {
+                    // panel options
+                    id: "map-panel",
+                    title: "GeoExt MapPanel",
+                    renderTo: "mappanel",
+                    height: 400,
+                    width: 600,
+                    map: map
+                });
+
+            var overview = Ext.create('GeoExt.OverviewMap', {
+                    floating: true,
+                    width: 300,
+                    height: 150,
+                    map: map
+                });
+
+            t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 0,
+                'no overview control is added to the map if overview component is not shown');
+
+            try {
+                overview.show();
+                t.ok(true, 'can show overview component');
+            } catch (err) {
+                t.ok(false, 'showing an overview component leads to', err);
+            }
+
+            t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 1,
+                'one overview control is added to the map when overview component is shown');
+
+            t.ok(overview.ctrl.ovmap.layers[0].id !== map.layers[0].id,
+                'baselayer of overview map is not the same as the bounds map baselayer');
+
+            t.ok(overview.ctrl.ovmap.layers[0].name === map.layers[0].name,
+                'clone of baselayer of bound map is used in overview map');
+
+            var ovCenter = overview.ctrl.ovmap.getCenter();
+            t.ok(map.getCenter().equals(ovCenter),
+                'overview map is at same center as bound map.');
+
+            try {
+                overview.hide();
+                t.ok(true, 'hiding the overview component works fine');
+            } catch (err) {
+                t.ok(false, 'hiding the overview component leads to ', err);
+            }
+
+            t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 0,
+                'overview control has been removed from bound map when component is hidden');
+
+            // move map to check if overview reinits at correct center
+            map.setCenter([51, 13]);
+
+            try {
+                overview.show();
+                t.ok(true, 'showing the overview component after it has been hidden');
+            } catch (err) {
+                t.ok(false, 'showing an overview component after it has been hidden leads to', err);
+            }
+
+            t.ok(map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 1,
+                'one overview control is been readded to the map when overview component is shown');
+
+            t.ok(overview.ctrl.ovmap.layers[0].id !== map.layers[0].id,
+                'baselayer of overview map is not the same as bounds map baselayer');
+
+            t.ok(overview.ctrl.ovmap.layers[0].name === map.layers[0].name,
+                'clone of baselayer of bound map is used in overview map');
+
+            ovCenter = overview.ctrl.ovmap.getCenter();
+            t.ok(map.getCenter().equals(ovCenter),
+                'overview map is at same center as bound map even if it has been panned with overview hidden.');
+
+            try {
+                overview.destroy();
+                t.ok(true, 'overview component can be destroyed');
+            } catch (err) {
+                t.ok('destroying component leads to ', err);
+            }
+
+        }
+
+        function test_lifecycle_generic(t) {
+            t.plan(5);
+
+            // generic GeoExt mapPanel with allOverlays = true
+            var mapPanel = Ext.create("GeoExt.panel.Map", {
+                // panel options
+                id: "map-panel",
+                title: "GeoExt MapPanel",
+                renderTo: "mappanel",
+                height: 400,
+                width: 600,
+                layers: [
+                    new OpenLayers.Layer.WMS("test", '/ows',
+                        { layers: 'a' }
+                    )
+                ]
+            });
+
+            // guess map at runtime
+            var overview = Ext.create('GeoExt.OverviewMap', {
+                floating: true,
+                width: 300,
+                height: 150,
+                cls: 'custom-user-cls'
+            });
+
+            t.ok(overview.hasCls('custom-user-cls'), 'Custom cls parameter is set.');
+            t.ok(overview.hasCls('gx-overview-map'), 'GX cls parameter is set.');
+
+            t.ok(mapPanel.map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 0,
+                'no overview control is added to the map if overview component is not shown');
+
+            try {
+                overview.show();
+                t.ok(true, 'can show overview component');
+            } catch (err) {
+                t.ok(false, 'showing an overview component leads to', err);
+            }
+
+            t.ok(mapPanel.map.getControlsByClass('OpenLayers.Control.OverviewMap').length === 1,
+                'one overview control is added to the map when overview component is shown');
+
+        }
+
+        function test_ovoptions(t) {
+            t.plan(3);
+
+            // generic GeoExt mapPanel with allOverlays = true
+            var mapPanel = Ext.create("GeoExt.panel.Map", {
+                // panel options
+                id: "map-panel",
+                title: "GeoExt MapPanel",
+                renderTo: "mappanel",
+                height: 400,
+                width: 600,
+                layers: [
+                    new OpenLayers.Layer.WMS("test", '/ows',
+                        { layers: 'a' }
+                    )
+                ]
+            });
+
+            var extent = [0, 0, 180, 90];
+
+            // guess map at runtime
+            var overview = Ext.create('GeoExt.OverviewMap', {
+                floating: true,
+                width: 300,
+                height: 150,
+                overviewOptions: {
+                    autoPan: true,
+                    mapOptions: {
+                        restrictedExtent: extent
+                    }
+                }
+            });
+
+            try {
+                overview.show();
+                t.ok(true, 'can show overview component');
+            } catch (err) {
+                t.ok(false, 'showing an overview component leads to', err);
+            }
+
+            t.ok(overview.ctrl.autoPan === true,
+                'custom option has been set on encapsulated overview control');
+
+            var ovmapextent = overview.ctrl.ovmap.restrictedExtent;
+            ovmapextent = ovmapextent ? ovmapextent.toArray() : null;
+            t.ok(Ext.Array.equals(extent, ovmapextent),
+                'custom map option has been set on overview controls map');
+        }
+    </script>
+  </head>
+  <body>
+    <div id="mappanel"></div>
+  </body>
+</html>

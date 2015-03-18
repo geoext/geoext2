@@ -6,8 +6,6 @@
 
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
-    <script src="../test-utility.js"></script>
-
     <script type="text/javascript">
 
         Ext.Loader.setConfig({
@@ -24,7 +22,6 @@
         ]);
 
         function setupContext(options) {        
-            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -60,7 +57,6 @@
         }
 
         function setupMultiFeatureContext() {
-            showTestIframe();
 
             var map = new OpenLayers.Map({panMethod: null}); // avoid tween panning for tests
             var layer = new OpenLayers.Layer("test", {isBaseLayer: true});
@@ -112,14 +108,12 @@
             });
             context.map.destroy();
             context.mapPanel.destroy();
-            hideTestIframe();
         }
         
         function tearDown(context) {
             context.feature.destroy();
             context.map.destroy();
             context.mapPanel.destroy();
-            hideTestIframe();
         }
 
         function popup(feature, map, options) {
@@ -521,18 +515,80 @@
         }
 
         function test_Popup_fixedPosition(t) {
-	    t.plan(8);
-	    var context = setupMultiFeatureContext();
+            t.plan(8);
+            var context = setupMultiFeatureContext();
 
-	    Ext.each(context.features, function(feat) {
-    		var pop = popup(feat, context.mapPanel, {anchorPosition: "bottom-left"});
-    		pop.show();
-    		t.eq(pop.anchorPosition, "bottom-left", "fixed position set correctly");
-    		t.ok(!pop.el.child("div.top"), "popups with fixed position 'bottom-left' do not have an extra CSS class");
-    		pop.destroy();
-	    });
-	    tearDownMultiFeature(context);
-	}
+            Ext.each(context.features, function(feat) {
+                var pop = popup(feat, context.mapPanel, {anchorPosition: "bottom-left"});
+                pop.show();
+                t.eq(pop.anchorPosition, "bottom-left", "fixed position set correctly");
+                t.ok(!pop.el.child("div.top"), "popups with fixed position 'bottom-left' do not have an extra CSS class");
+                pop.destroy();
+            });
+            tearDownMultiFeature(context);
+        }
+
+        /**
+         * See https://github.com/geoext/geoext2/issues/303
+         */
+        function test_popupAlwaysOnTop(t) {
+            t.plan(2);
+            var map = new OpenLayers.Map({
+                    allOverlays: true,
+                    fallThrough:true
+                }),
+                vector = new OpenLayers.Layer.Vector('vector'),
+                feature =new OpenLayers.Feature.Vector(
+                    new OpenLayers.Geometry.Point(-45, 5)
+                ),
+                mapWin = Ext.create('Ext.Window', {
+                    layout: 'fit',
+                    width: 600,
+                    height: 400,
+                    x: 20,
+                    y: 250,
+                    items: {
+                        xtype: 'gx_mappanel',
+                        region: 'center',
+                        map: map,
+                        layers: [
+                            vector
+                        ],
+                        center: [0,0],
+                        zoom: 0
+                    }
+                }),
+                pop;
+            mapWin.show();
+            vector.addFeatures([feature]);
+
+            // 1 test: is alwaysOnTop = true working?
+            var pop = popup(feature, map, {alwaysOnTop: true});
+            pop.show();
+            // first focus the map:
+            mapWin.focus();
+            // pan the map a little bit
+            map.pan(1, 1, {animate:false, dragging:false});
+
+            t.ok(pop.el.getZIndex() > mapWin.el.getZIndex(),
+                    'Popup has bigger z-index when alwaysOnTop is true');
+            // cleanup
+            pop.destroy();
+
+            // 1 test: is alwaysOnTop = true working?
+            pop = popup(feature, map, {alwaysOnTop: false});
+            pop.show();
+            // first focus the map:
+            mapWin.focus();
+            // pan the map a little bit
+            map.pan(1, 1, {animate:false, dragging:false});
+
+            t.ok(pop.el.getZIndex() < mapWin.el.getZIndex(),
+                    'Popup has lower z-index when alwaysOnTop is false');
+            // cleanup
+            pop.destroy();
+            mapWin.destroy();
+        }
 
     </script>
   </head>

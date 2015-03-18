@@ -28,21 +28,23 @@
         }
 
         function test_read(t) {
-            t.plan(4);
+            t.plan(6);
 
-            var reader = Ext.create("GeoExt.data.reader.WmsDescribeLayer");
+            var reader = Ext.create("GeoExt.data.reader.WmsDescribeLayer", {keepRaw: true});
 
             var records = reader.read({responseXML : doc, responseText: true});
+            t.ok(reader.raw, "When keepRaw is true, the raw property is populated");
 
             //1 test
             t.eq(records.totalRecords, 2, 'readRecords returns correct number of records');
             
             var record = records.records[0];
 
-            //3 tests -- testing the fields of a record
+            //4 tests -- testing the fields of a record
             t.eq(record.get("owsType"), "WFS", "[0] correct owsType");
             t.eq(record.get("owsURL"), "http://demo.opengeo.org/geoserver/wfs/WfsDispatcher?", "[0] correct owsURL");
-            t.eq(record.get("typeName"),"topp:states", "[0] correct typeName");
+            t.eq(record.get("typeName"), "topp:states", "[0] correct typeName");
+            t.eq(record.get("layerName"), "topp:states", "[0] correct layerName");
             reader.destroy();
         }
 

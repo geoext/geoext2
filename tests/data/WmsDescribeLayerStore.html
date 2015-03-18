@@ -20,13 +20,18 @@
         ]);
 
         function test_constructor(t) {
-            t.plan(2);
+            t.plan(6);
             var url = "http://foo";
             var store = Ext.create("GeoExt.data.WmsDescribeLayerStore", {
                 url: url,
+                baseParams: {REQUEST: 'DescribeLayer'},
                 format: new OpenLayers.Format.JSON()
             });
             t.eq(store.proxy.url, url, "URL gets passed on to the proxy");
+            t.eq(store.proxy.startParam, false, "startParam set to false");
+            t.eq(store.proxy.limitParam, false, "limitParam set to false");
+            t.eq(store.proxy.pageParam, false, "pageParam set to false");
+            t.eq(store.proxy.extraParams.REQUEST, 'DescribeLayer', "extraParams set correctly");
             t.ok(store.proxy.reader.format instanceof OpenLayers.Format.JSON, "Custom format passed on");
             store.destroy();
         }

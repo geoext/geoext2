@@ -84,7 +84,7 @@
     }
 
     function test_read(t) {
-        t.plan(5);
+        t.plan(6);
 
         var Model = Ext.Class({
             extend: 'Ext.data.Model',
@@ -97,10 +97,13 @@
         });
 
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
+            keepRaw: true,
             model: Model
         });
 
         var records = reader.read({responseXML : doc, responseText: 'foo'});
+
+        t.ok(reader.raw, "raw property populated when keepRaw is true");
 
         //1 test
         t.eq(records.totalRecords, 23, 'readRecords returns correct number of records');

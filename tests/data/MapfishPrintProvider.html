@@ -29,9 +29,15 @@
 
     </script>
 
+    <!--
+     | Include a script that will set-up a global variable 'printCapabilities'
+     | which is the static version of using a script with 'src' pointing to e.g.
+     | http://ows.terrestris.de/print/pdf/info.json?var=printCapabilities
+     | -->
+    <script type="text/javascript" src="../print-capabilities-variable.js"></script>
+
     <script type="text/javascript">
-        var printCapabilities = {"scales":[{"name":"1:25,000","value":"25000"},{"name":"1:50,000","value":"50000"},{"name":"1:100,000","value":"100000"},{"name":"1:200,000","value":"200000"},{"name":"1:500,000","value":"500000"},{"name":"1:1,000,000","value":"1000000"},{"name":"1:2,000,000","value":"2000000"},{"name":"1:4,000,000","value":"4000000"}],"dpis":[{"name":"75","value":"75"},{"name":"150","value":"150"},{"name":"300","value":"300"}],"layouts":[{"name":"A4 portrait","map":{"width":440,"height":483},"rotation":true},{"name":"Legal","map":{"width":440,"height":483},"rotation":false}],"printURL":"http://demo.opengeo.org/geoserver/pdf/print.pdf","createURL":"http://demo.opengeo.org/geoserver/pdf/create.json"};
-        
+
         function test_constructor(t) {
             t.plan(9);
             var log = {};
@@ -53,7 +59,7 @@
             t.eq(printProvider.customParams, {}, "customParams initialized properly.");
             t.ok(log.loadcapabilities[0] == printProvider, "printProvider passed as 1st argument of the loadcapabilities listener.");
             t.ok(log.loadcapabilities[1] == printProvider.capabilities, "capabilities passed as 2nd argument of the loadcapabilities listener.");
-            t.eq(printProvider.capabilities.createURL, "http://demo.opengeo.org/geoserver/pdf/create.json", "capabilities available and createURL correct after loadcapabilities event");
+            t.eq(printProvider.capabilities.createURL, "http://ows.terrestris.de/print/pdf/create.json", "capabilities available and createURL correct after loadcapabilities event");
             t.ok(printProvider.layout == printProvider.layouts.getAt(0), "layout set to first available layout record.");
             t.ok(printProvider.dpi == printProvider.dpis.getAt(0), "dpi set to first available dpi record.");
             t.eq(printProvider.scales.getCount(), 8, "8 scales read in properly.");
@@ -114,7 +120,7 @@
             t.plan(2);
             
             var getAbsoluteUrl = GeoExt.data.MapfishPrintProvider.prototype.getAbsoluteUrl;
-            var baseUrl = parent.location.href.substr(0, parent.location.href.indexOf("/tests/run-tests.html"));
+            var baseUrl = location.href.substr(0, location.href.indexOf("/tests/data/MapfishPrintProvider.html"));
             t.eq(getAbsoluteUrl("/foo/bar.html"), location.protocol + "//" + location.host + "/foo/bar.html", "Relative url converted to absolute url correctly.");
             t.eq(getAbsoluteUrl("../../bar.html"), baseUrl + "/bar.html", "Relative url with relative path converted to absolute url correctly.");
         }

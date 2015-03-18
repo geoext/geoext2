@@ -16,6 +16,7 @@
         });
 
         Ext.Loader.syncRequire([
+            'GeoExt.data.reader.Feature',
             'GeoExt.data.proxy.Protocol'
         ]);
 
@@ -79,6 +80,35 @@
             };
             // 8 tests
             proxy.doRequest(Ext.create("Ext.data.Operation", {params: params, arg: arg}), callback, scope);
+        }
+
+        function test_readFeatures(t) {
+            t.plan(1);
+            var response = new OpenLayers.Protocol.Response({
+                code: OpenLayers.Protocol.Response.SUCCESS,
+                features: [new OpenLayers.Feature.Vector(null, {'foo': 'bar'})]
+            });
+            var protocol = new OpenLayers.Protocol({
+                read: function(o) {
+                    o.callback.call(o.scope, response); 
+                }
+            });
+            Ext.define('My.Model', {
+                extend: 'Ext.data.Model',
+                fields: [
+                    {name: 'foo'}
+                ]
+            });
+            var reader = Ext.create("GeoExt.data.reader.Feature");
+            var proxy = Ext.create("GeoExt.data.proxy.Protocol", {
+                model: 'My.Model',
+                protocol: protocol,
+                reader: reader
+            });
+            var callback = function(o) {
+                t.eq(o.resultSet.records[0].get('foo'), "bar", "feature read correctly");
+            };
+            proxy.doRequest(Ext.create("Ext.data.Operation"), callback);
         }
         
         function test_abort(t) {
