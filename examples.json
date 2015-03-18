@@ -25,7 +25,7 @@
                 },
                 {
                     "name": "feature-grid",
-                    "title": "Freature Grid",
+                    "title": "Feature Grid",
                     "description": "An Ext.grid.Panel loaded with features read from a GeoJSON document.",
                     "url": "../../../examples/grid/feature-grid.html",
                     "icon": "../../../examples/grid/thumb.png"
@@ -50,6 +50,13 @@
                     "description": "Create a simple GeoExt.panel.Map container for a map.",
                     "url": "../../../examples/mappanel/mappanel.html",
                     "icon": "../../../examples/mappanel/thumb.png"
+                },
+		{
+                    "name": "floating-overview",
+                    "title": "Floating Overview Map",
+                    "description": "Showcases a floating Overview Map on a map panel.",
+                    "url": "../../../examples/overviewmap/overview.html",
+                    "icon": "../../../examples/overviewmap/thumb.png"
                 },
                 {
                     "name": "permalink",

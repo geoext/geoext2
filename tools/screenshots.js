@@ -34,6 +34,8 @@ var examples = [
         clipRect: { top: 136, left:20, width: 800, height: 400 }
     },
     "mappanel/mappanel.html",
+    "overviewmap/overview.html",
+    "overviewmap/overview-generic.html",
     {
         url:"permalink/permalink.html",
         clipRect: { top: 550, left: 20, width: 118, height: 90}
