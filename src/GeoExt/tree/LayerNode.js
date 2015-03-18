@@ -34,7 +34,7 @@ Ext.define('GeoExt.tree.LayerNode', {
     /**
      * The init method is invoked after initComponent method has been run for
      * the client Component. It performs plugin initialization.
-     * 
+     *
      * @param {Ext.Component} target The client Component which owns this
      *     plugin.
      * @private
@@ -57,10 +57,16 @@ Ext.define('GeoExt.tree.LayerNode', {
         }
 
         target.on('afteredit', this.onAfterEdit, this);
+
         layer.events.on({
-            "visibilitychanged": this.onLayerVisibilityChanged,
+            'visibilitychanged': this.onLayerVisibilityChanged,
             scope: this
         });
+
+        if (!layer.alwaysInRange && layer.map) {
+            layer.map.events.register('moveend', this, this.onMapMoveend);
+        }
+
         this.enforceOneVisible();
     },
 
@@ -88,6 +94,16 @@ Ext.define('GeoExt.tree.LayerNode', {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
         }
+    },
+
+    /**
+     *  handler for map moveend events to determine if node should be
+     *  disabled or enabled
+     *
+     * @private
+     */
+    onMapMoveend: function(e) {
+        this.target.set('disabled', !this.target.get('layer').inRange);
     },
 
     /**
