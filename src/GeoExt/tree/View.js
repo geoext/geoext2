@@ -44,6 +44,9 @@ Ext.define('GeoExt.tree.View', {
         return me.callParent(arguments);
     },
 
+    /**
+     * @inheritdoc
+     */
     getRowClass: function(record, rowIndex, rowParams, store) {
         return record.get('disabled') ? 'gx-tree-row-disabled' : '';
     },

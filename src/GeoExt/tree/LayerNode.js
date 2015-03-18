@@ -20,6 +20,24 @@
  *         layer: myLayer
  *     }
  *
+ * When the layer associated with this GeoExt.tree.LayerNode is no longer in
+ * range (invisible due to resolution constraints), the layer will be visually
+ * marked as disabled.
+ *
+ * If you do not want this behaviour, include the following CSS code:
+ *
+ *     .gx-tree-row-disabled span.x-tree-node-text {
+ *         opacity: inherit;
+ *         font-style: inherit;
+ *     }
+ *
+ * If additionally you want to make the nodes checkbox unusable when the node is
+ * disabled, you could use the following CSS-snippet:
+ *
+ *     .gx-tree-row-disabled input {
+ *         visibility: hidden;
+ *     }
+ *
  * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the
  * node configuration.
  *

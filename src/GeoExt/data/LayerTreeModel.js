@@ -24,6 +24,8 @@
  *   dynamically if the name of the connected layer changes, if any. Read only.
  * * **component** Ext.Component: The component to be rendered with this node,
  *   if any.
+ * * **disabled** Boolean: Used to reflect whether the associated layer is
+ *   in range (visible in the current map scale).
  *
  * A typical configuration that makes use of some of these extended sttings
  * could look like this:
