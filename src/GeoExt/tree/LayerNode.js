@@ -20,6 +20,24 @@
  *         layer: myLayer
  *     }
  *
+ * When the layer associated with this GeoExt.tree.LayerNode is no longer in
+ * range (invisible due to resolution constraints), the layer will be visually
+ * marked as disabled.
+ *
+ * If you do not want this behaviour, include the following CSS code:
+ *
+ *     .gx-tree-row-disabled span.x-tree-node-text {
+ *         opacity: inherit;
+ *         font-style: inherit;
+ *     }
+ *
+ * If additionally you want to make the nodes checkbox unusable when the node is
+ * disabled, you could use the following CSS-snippet:
+ *
+ *     .gx-tree-row-disabled input {
+ *         visibility: hidden;
+ *     }
+ *
  * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the
  * node configuration.
  *
@@ -34,7 +52,7 @@ Ext.define('GeoExt.tree.LayerNode', {
     /**
      * The init method is invoked after initComponent method has been run for
      * the client Component. It performs plugin initialization.
-     * 
+     *
      * @param {Ext.Component} target The client Component which owns this
      *     plugin.
      * @private
@@ -57,10 +75,16 @@ Ext.define('GeoExt.tree.LayerNode', {
         }
 
         target.on('afteredit', this.onAfterEdit, this);
+
         layer.events.on({
-            "visibilitychanged": this.onLayerVisibilityChanged,
+            'visibilitychanged': this.onLayerVisibilityChanged,
             scope: this
         });
+
+        if (!layer.alwaysInRange && layer.map) {
+            layer.map.events.register('moveend', this, this.onMapMoveend);
+        }
+
         this.enforceOneVisible();
     },
 
@@ -88,6 +112,16 @@ Ext.define('GeoExt.tree.LayerNode', {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
         }
+    },
+
+    /**
+     *  handler for map moveend events to determine if node should be
+     *  disabled or enabled
+     *
+     * @private
+     */
+    onMapMoveend: function(e) {
+        this.target.set('disabled', !this.target.get('layer').inRange);
     },
 
     /**

@@ -32,6 +32,23 @@ Ext.define('GeoExt.data.AttributeStore', {
         /**
          * The ignore object passed to the reader.
          *
+         *     // ... ignore attributes of certain type or with specified name:
+         *     var ignoreObj = {
+         *         type: [
+         *             'gml:GeometryPropertyType',
+         *             'gml:PointPropertyType',
+         *             'gml:LineStringPropertyType',
+         *             'gml:SurfacePropertyType',
+         *             'gml:MultiPointPropertyType',
+         *             'gml:MultiLineStringPropertyType',
+         *             'gml:MultiSurfacePropertyType'
+         *         ],
+         *         name: [
+         *             'id',
+         *             'another_ignored_attr'
+         *         ]
+         *     };
+         *
          * @cfg {Object}
          */
         ignore: null,

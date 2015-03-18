@@ -45,6 +45,13 @@ Ext.define('GeoExt.tree.View', {
     },
 
     /**
+     * @inheritdoc
+     */
+    getRowClass: function(record, rowIndex, rowParams, store) {
+        return record.get('disabled') ? 'gx-tree-row-disabled' : '';
+    },
+
+    /**
      * Called when an item updates or is added.
      *
      * @param {Ext.data.Model} record The model instance
@@ -66,8 +73,8 @@ Ext.define('GeoExt.tree.View', {
 
     /**
      * Called when a node is being rendered.
-     * 
-     * 
+     *
+     *
      */
     onNodeRendered: function(node) {
         var me = this;

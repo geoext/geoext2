@@ -84,8 +84,19 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
         var featureType, metadata, field, v, parts, layer;
         var layerOptions, protocolOptions;
 
+        var wfs11version = 1.1,
+            url,
+            opMeta;
+        if (parseFloat(data.version) >= wfs11version) {
+            // WFS 1.1.0 needs special treatment
+            opMeta = data.operationsMetadata;
+            url = opMeta && opMeta.GetFeature.dcp.http.post[0].url;
+        } else {
+            url = data.capability.request.getfeature.href.post;
+        }
+
         var protocolDefaults = {
-            url: data.capability.request.getfeature.href.post
+            url: url
         };
 
         var records = [];
@@ -118,7 +129,8 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
                 layerOptions = {
                     metadata: metadata,
                     protocol: new OpenLayers.Protocol.WFS(protocolOptions),
-                    strategies: [new OpenLayers.Strategy.Fixed()]
+                    strategies: [new OpenLayers.Strategy.Fixed()],
+                    projection: featureType.srs
                 };
                 var metaLayerOptions = this.layerOptions;
                 if (metaLayerOptions) {

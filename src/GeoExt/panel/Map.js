@@ -120,6 +120,18 @@ Ext.define('GeoExt.panel.Map', {
 
     /**
      * A configured map or a configuration object for the map constructor.
+     *
+     * In most cases you will want your map to be configured with
+     * `fallThrough: true`, as other settings affect the dragging behaviour of
+     * overlayed `Ext.window.Window` instances in negative way. Such windows
+     * cannot be smoothly dragged over the the map panel. If you do not provide
+     * a map or map configuration object, the auto-created map will be
+     * configured with `fallThrough` being `true`.
+     *
+     * Having `fallThrough` being `false` is a misconfiguration most of the
+     * time, which is why we will issue a warning to the developer console if we
+     * detect this setting.
+     *
      * A configured map will be available after construction through the
      * {@link GeoExt.panel.Map#property-map} property.
      *
@@ -190,6 +202,15 @@ Ext.define('GeoExt.panel.Map', {
      * none was provided in the config options passed to the
      * constructor.
      *
+     * Such an auto-created map will be configured with
+     *
+     *     {
+     *         allOverlays: true,
+     *         fallThrough: true
+     *     }
+     *
+     * See {@link GeoExt.panel.Map#cfg-map} for an explanation why we do this.
+     *
      * @private
      */
     initComponent: function(){
@@ -200,6 +221,10 @@ Ext.define('GeoExt.panel.Map', {
                     fallThrough: true
                 })
             );
+        }
+
+        if (this.map.fallThrough !== true) {
+            this.warnMapFallThrough();
         }
 
         var layers  = this.layers;
@@ -286,6 +311,23 @@ Ext.define('GeoExt.panel.Map', {
     },
 
     /**
+     * Logs a warning to the console (if one is present) that tells the user to
+     * set the `fallThrough` property of an OpenLayers.Map to true when this map
+     * is being used inside of a GeoExt.panel.Map.
+     *
+     * @private
+     */
+    warnMapFallThrough: function(){
+        Ext.log({
+            level: 'warn',
+            msg: 'It is recommended to construct a GeoExt.panel.Map with' +
+                ' OpenLayers.Map#fallThrough == true. This way dragging' +
+                ' interactions with floating components (e.g.' +
+                ' Ext.window.Window) on top of the map are smoother.'
+        });
+    },
+
+    /**
      * The "moveend" listener bound to the
      * {@link GeoExt.panel.Map#property-map}.
      *
@@ -310,8 +352,8 @@ Ext.define('GeoExt.panel.Map', {
                 this.fireEvent("afterlayervisibilitychange", this, map, e);
             } else if (e.property === "order") {
                 this.fireEvent("afterlayerorderchange", this, map, e);
-            } else if (e.property === "nathis") {
-                this.fireEvent("afterlayernathischange", this, map, e);
+            } else if (e.property === "name") {
+                this.fireEvent("afterlayernamechange", this, map, e);
             } else if (e.property === "opacity") {
                 this.fireEvent("afterlayeropacitychange", this, map, e);
             }
@@ -459,12 +501,10 @@ Ext.define('GeoExt.panel.Map', {
         me.center = new OpenLayers.LonLat(state.x, state.y);
         me.zoom = state.zoom;
 
-        // TODO refactor with me.layers.each
         // set layer visibility and opacity
-        var i, l, layer, layerId, visibility, opacity;
-        var layers = map.layers;
-        for(i=0, l=layers.length; i<l; i++) {
-            layer = layers[i];
+        var layer, layerId, visibility, opacity;
+        me.layers.each(function(layerRec) {
+            layer = layerRec.getLayer();
             layerId = me.prettyStateKeys ? layer.name : layer.id;
             visibility = state["visibility_" + layerId];
             if(visibility !== undefined) {
@@ -482,7 +522,7 @@ Ext.define('GeoExt.panel.Map', {
             if(opacity !== undefined) {
                 layer.setOpacity(opacity);
             }
-        }
+        });
     },
 
     /**
