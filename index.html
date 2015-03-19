@@ -58,8 +58,12 @@
       <p>
         Version 2 of GeoExt is the successor to the GeoExt 1.x-series and is
         built atop the newest official installments of it's base libraries;
-        OpenLayers 2.13.1 and ExtJS 4.2.1. 
+        OpenLayers 2.13.1 and ExtJS 4.2.1.
       </p>
+      <p>
+      	We are working hard on supporting ExtJS 5 with an upcoming release. Expect a
+        pre-release that is capable of working with ExtJS 4 and 5 in the next days.
+      <p>
     </div>
 
     <div class="row">
@@ -99,12 +103,12 @@
       <h1 class="span12 topic">Download</h1>
       <div class="span12">
         <p>
-        The current released version of GeoExt is 2.0.2.
+        The current released version of GeoExt is 2.0.3.
         </p>
         <p>
           Please download <a
-          href="https://github.com/geoext/geoext2/releases/tag/v2.0.2">GeoExt
-          2.0.2</a>,
+          href="https://github.com/geoext/geoext2/releases/tag/v2.0.3">GeoExt
+          2.0.3</a>,
           use it, and give feedback. Thanks!
         </p>
       </div>
@@ -114,6 +118,7 @@
       <h1 class="span12 topic">Examples</h1>
     </div>
     <div class="examples_container">
+
       <div class="row">
         <div class="span4">
           <a href="./examples/action/mappanel_with_actions.html" class="big-link">
@@ -137,6 +142,7 @@
           </a>
         </div>
       </div>
+
       <div class="row">
         <div class="span4">
           <a href="./examples/grid/feature-grid.html" class="big-link">
@@ -158,6 +164,7 @@
           </a>
         </div>
       </div>
+
       <div class="row">
         <div class="span4">
           <a href="./examples/mappanel/mappanel.html" class="big-link">
@@ -165,7 +172,22 @@
             <p>Create a simple GeoExt.panel.Map container for a map.</p>
           </a>
         </div>
-        <div class="span4">
+	<div class="span4">
+          <a href="./examples/overviewmap/overview.html" class="big-link">
+            <h3>Various Overviewmaps</h3>
+            <p>Showcases different varants of Overviewmaps</p>
+          </a>
+        </div>
+	<div class="span4">
+          <a href="./examples/overviewmap/overview-generic.html" class="big-link">
+            <h3>Basic Overviewmap</h3>
+            <p>Showthe use of the Overviewmap class</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="row">
+	<div class="span4">
           <a href="./examples/permalink/permalink.html" class="big-link">
             <h3>Permalink</h3>
             <p>Generate permalinks with the current map position and visible layers.</p>
@@ -178,8 +200,6 @@
              location in a MapPanel.</p>
           </a>
         </div>
-      </div>
-      <div class="row">
         <div class="span4">
           <a href="./examples/printextent/print-extent.html" class="big-link">
             <h3>Print Extent</h3>
@@ -187,7 +207,10 @@
              It requires the MapFish or GeoServer print module.</p>
           </a>
         </div>
-        <div class="span4">
+      </div>
+
+      <div class="row">
+	<div class="span4">
           <a href="./examples/printpreview/print-preview.html" class="big-link">
             <h3>PrintPreview</h3>
             <p>How to create a printable PDF with GeoExt.data.MapfishPrintProvider and GeoExt.PrintMapPanel.</p>
@@ -199,8 +222,6 @@
             <p>The FeatureRenderer renderers arbitrary OpenLayers.Feature.Vector objects given a list of symbolizers.</p>
           </a>
         </div>
-      </div>
-      <div class="row">
         <div class="span4">
           <a href="./examples/stylegrid/style-grid.html" class="big-link">
             <h3>Style Grid</h3>
@@ -208,7 +229,10 @@
              so they can easily be shown in a grid.</p>
           </a>
         </div>
-        <div class="span4">
+      </div>
+
+      <div class="row">
+	<div class="span4">
           <a href="./examples/tree/tree.html" class="big-link">
             <h3>LayerTree</h3>
             <p>This example shows how to work with a layer tree.</p>
@@ -220,15 +244,16 @@
             <p>This example shows how to add legends to the layer nodes in a tree.</p>
           </a>
         </div>
-      </div>
-      <div class="row">
         <div class="span4">
           <a href="./examples/wfscapabilities/wfscapabilities.html" class="big-link">
             <h3>WFS Capabilities</h3>
             <p>Load a grid with data from a WFS capabilities document.</p>
           </a>
         </div>
-        <div class="span4">
+      </div>
+
+      <div class="row">
+	<div class="span4">
           <a href="./examples/wmscapabilities/wmscapabilities.html" class="big-link">
             <h3>WMS Capabilities</h3>
             <p>Load a grid with data from a WMS capabilities document.</p>
@@ -241,8 +266,6 @@
              to list the available zoom levels for a map.</p>
           </a>
         </div>
-      </div>
-      <div class="row">
         <div class="span4">
           <a href="./examples/zoomslider/zoomslider.html" class="big-link">
             <h3>Zoom Slider</h3>
