@@ -61,6 +61,13 @@ Ext.define('GeoExt.tree.View', {
         return me.callParent(arguments);
     },
 
+<span id='GeoExt-tree-View-method-getRowClass'>    /**
+</span>     * @inheritdoc
+     */
+    getRowClass: function(record, rowIndex, rowParams, store) {
+        return record.get('disabled') ? 'gx-tree-row-disabled' : '';
+    },
+
 <span id='GeoExt-tree-View-method-onItem'>    /**
 </span>     * Called when an item updates or is added.
      *
@@ -83,8 +90,8 @@ Ext.define('GeoExt.tree.View', {
 
 <span id='GeoExt-tree-View-method-onNodeRendered'>    /**
 </span>     * Called when a node is being rendered.
-     * 
-     * 
+     *
+     *
      */
     onNodeRendered: function(node) {
         var me = this;

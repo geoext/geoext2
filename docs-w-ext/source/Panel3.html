@@ -35,387 +35,228 @@ at http://www.sencha.com/contact.
 
 Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
-<span id='Ext-form-Panel'>/**
-</span> * @docauthor Jason Johnston &lt;jason@sencha.com&gt;
- * 
- * FormPanel provides a standard container for forms. It is essentially a standard {@link Ext.panel.Panel} which
- * automatically creates a {@link Ext.form.Basic BasicForm} for managing any {@link Ext.form.field.Field}
- * objects that are added as descendants of the panel. It also includes conveniences for configuring and
- * working with the BasicForm and the collection of Fields.
- * 
- * # Layout
- * 
- * By default, FormPanel is configured with `{@link Ext.layout.container.Anchor layout:'anchor'}` for
- * the layout of its immediate child items. This can be changed to any of the supported container layouts.
- * The layout of sub-containers is configured in {@link Ext.container.Container#layout the standard way}.
- * 
- * # BasicForm
- * 
- * Although **not listed** as configuration options of FormPanel, the FormPanel class accepts all
- * of the config options supported by the {@link Ext.form.Basic} class, and will pass them along to
- * the internal BasicForm when it is created.
- * 
- * The following events fired by the BasicForm will be re-fired by the FormPanel and can therefore be
- * listened for on the FormPanel itself:
- * 
- * - {@link Ext.form.Basic#beforeaction beforeaction}
- * - {@link Ext.form.Basic#actionfailed actionfailed}
- * - {@link Ext.form.Basic#actioncomplete actioncomplete}
- * - {@link Ext.form.Basic#validitychange validitychange}
- * - {@link Ext.form.Basic#dirtychange dirtychange}
- * 
- * # Field Defaults
- * 
- * The {@link #fieldDefaults} config option conveniently allows centralized configuration of default values
- * for all fields added as descendants of the FormPanel. Any config option recognized by implementations
- * of {@link Ext.form.Labelable} may be included in this object. See the {@link #fieldDefaults} documentation
- * for details of how the defaults are applied.
- * 
- * # Form Validation
- * 
- * With the default configuration, form fields are validated on-the-fly while the user edits their values.
- * This can be controlled on a per-field basis (or via the {@link #fieldDefaults} config) with the field
- * config properties {@link Ext.form.field.Field#validateOnChange} and {@link Ext.form.field.Base#checkChangeEvents},
- * and the FormPanel's config properties {@link #pollForChanges} and {@link #pollInterval}.
- * 
- * Any component within the FormPanel can be configured with `formBind: true`. This will cause that
- * component to be automatically disabled when the form is invalid, and enabled when it is valid. This is most
- * commonly used for Button components to prevent submitting the form in an invalid state, but can be used on
- * any component type.
- * 
- * For more information on form validation see the following:
- * 
- * - {@link Ext.form.field.Field#validateOnChange}
- * - {@link #pollForChanges} and {@link #pollInterval}
- * - {@link Ext.form.field.VTypes}
- * - {@link Ext.form.Basic#doAction BasicForm.doAction clientValidation notes}
- * 
- * # Form Submission
- * 
- * By default, Ext Forms are submitted through Ajax, using {@link Ext.form.action.Action}. See the documentation for
- * {@link Ext.form.Basic} for details.
+<span id='Ext-grid-Panel'>/**
+</span> * @author Aaron Conran
+ * @docauthor Ed Spencer
  *
- * # Example usage
- * 
+ * Grids are an excellent way of showing large amounts of tabular data on the client side. Essentially a supercharged
+ * `&lt;table&gt;`, GridPanel makes it easy to fetch, sort and filter large amounts of data.
+ *
+ * Grids are composed of two main pieces - a {@link Ext.data.Store Store} full of data and a set of columns to render.
+ *
+ * ## Basic GridPanel
+ *
  *     @example
- *     Ext.create('Ext.form.Panel', {
- *         title: 'Simple Form',
- *         bodyPadding: 5,
- *         width: 350,
- * 
- *         // The form will submit an AJAX request to this URL when submitted
- *         url: 'save-form.php',
- * 
- *         // Fields will be arranged vertically, stretched to full width
- *         layout: 'anchor',
- *         defaults: {
- *             anchor: '100%'
- *         },
- * 
- *         // The fields
- *         defaultType: 'textfield',
- *         items: [{
- *             fieldLabel: 'First Name',
- *             name: 'first',
- *             allowBlank: false
- *         },{
- *             fieldLabel: 'Last Name',
- *             name: 'last',
- *             allowBlank: false
- *         }],
- * 
- *         // Reset and Submit buttons
- *         buttons: [{
- *             text: 'Reset',
- *             handler: function() {
- *                 this.up('form').getForm().reset();
+ *     Ext.create('Ext.data.Store', {
+ *         storeId:'simpsonsStore',
+ *         fields:['name', 'email', 'phone'],
+ *         data:{'items':[
+ *             { 'name': 'Lisa',  &quot;email&quot;:&quot;lisa@simpsons.com&quot;,  &quot;phone&quot;:&quot;555-111-1224&quot;  },
+ *             { 'name': 'Bart',  &quot;email&quot;:&quot;bart@simpsons.com&quot;,  &quot;phone&quot;:&quot;555-222-1234&quot; },
+ *             { 'name': 'Homer', &quot;email&quot;:&quot;home@simpsons.com&quot;,  &quot;phone&quot;:&quot;555-222-1244&quot;  },
+ *             { 'name': 'Marge', &quot;email&quot;:&quot;marge@simpsons.com&quot;, &quot;phone&quot;:&quot;555-222-1254&quot;  }
+ *         ]},
+ *         proxy: {
+ *             type: 'memory',
+ *             reader: {
+ *                 type: 'json',
+ *                 root: 'items'
  *             }
- *         }, {
- *             text: 'Submit',
- *             formBind: true, //only enabled once the form is valid
- *             disabled: true,
- *             handler: function() {
- *                 var form = this.up('form').getForm();
- *                 if (form.isValid()) {
- *                     form.submit({
- *                         success: function(form, action) {
- *                            Ext.Msg.alert('Success', action.result.msg);
- *                         },
- *                         failure: function(form, action) {
- *                             Ext.Msg.alert('Failed', action.result.msg);
- *                         }
- *                     });
- *                 }
- *             }
- *         }],
+ *         }
+ *     });
+ *
+ *     Ext.create('Ext.grid.Panel', {
+ *         title: 'Simpsons',
+ *         store: Ext.data.StoreManager.lookup('simpsonsStore'),
+ *         columns: [
+ *             { text: 'Name',  dataIndex: 'name' },
+ *             { text: 'Email', dataIndex: 'email', flex: 1 },
+ *             { text: 'Phone', dataIndex: 'phone' }
+ *         ],
+ *         height: 200,
+ *         width: 400,
  *         renderTo: Ext.getBody()
  *     });
  *
+ * The code above produces a simple grid with three columns. We specified a Store which will load JSON data inline.
+ * In most apps we would be placing the grid inside another container and wouldn't need to use the
+ * {@link #height}, {@link #width} and {@link #renderTo} configurations but they are included here to make it easy to get
+ * up and running.
+ *
+ * The grid we created above will contain a header bar with a title ('Simpsons'), a row of column headers directly underneath
+ * and finally the grid rows under the headers.
+ *
+ * ## Configuring columns
+ *
+ * By default, each column is sortable and will toggle between ASC and DESC sorting when you click on its header. Each
+ * column header is also reorderable by default, and each gains a drop-down menu with options to hide and show columns.
+ * It's easy to configure each column - here we use the same example as above and just modify the columns config:
+ *
+ *     columns: [
+ *         {
+ *             text: 'Name',
+ *             dataIndex: 'name',
+ *             sortable: false,
+ *             hideable: false,
+ *             flex: 1
+ *         },
+ *         {
+ *             text: 'Email',
+ *             dataIndex: 'email',
+ *             hidden: true
+ *         },
+ *         {
+ *             text: 'Phone',
+ *             dataIndex: 'phone',
+ *             width: 100
+ *         }
+ *     ]
+ *
+ * We turned off sorting and hiding on the 'Name' column so clicking its header now has no effect. We also made the Email
+ * column hidden by default (it can be shown again by using the menu on any other column). We also set the Phone column to
+ * a fixed with of 100px and flexed the Name column, which means it takes up all remaining width after the other columns
+ * have been accounted for. See the {@link Ext.grid.column.Column column docs} for more details.
+ *
+ * ## Renderers
+ *
+ * As well as customizing columns, it's easy to alter the rendering of individual cells using renderers. A renderer is
+ * tied to a particular column and is passed the value that would be rendered into each cell in that column. For example,
+ * we could define a renderer function for the email column to turn each email address into a mailto link:
+ *
+ *     columns: [
+ *         {
+ *             text: 'Email',
+ *             dataIndex: 'email',
+ *             renderer: function(value) {
+ *                 return Ext.String.format('&lt;a href=&quot;mailto:{0}&quot;&gt;{1}&lt;/a&gt;', value, value);
+ *             }
+ *         }
+ *     ]
+ *
+ * See the {@link Ext.grid.column.Column column docs} for more information on renderers.
+ *
+ * ## Selection Models
+ *
+ * Sometimes all you want is to render data onto the screen for viewing, but usually it's necessary to interact with or
+ * update that data. Grids use a concept called a Selection Model, which is simply a mechanism for selecting some part of
+ * the data in the grid. The two main types of Selection Model are RowSelectionModel, where entire rows are selected, and
+ * CellSelectionModel, where individual cells are selected.
+ *
+ * Grids use a Row Selection Model by default, but this is easy to customise like so:
+ *
+ *     Ext.create('Ext.grid.Panel', {
+ *         selType: 'cellmodel',
+ *         store: ...
+ *     });
+ *
+ * Specifying the `cellmodel` changes a couple of things. Firstly, clicking on a cell now
+ * selects just that cell (using a {@link Ext.selection.RowModel rowmodel} will select the entire row), and secondly the
+ * keyboard navigation will walk from cell to cell instead of row to row. Cell-based selection models are usually used in
+ * conjunction with editing.
+ *
+ * ## Sorting &amp; Filtering
+ *
+ * Every grid is attached to a {@link Ext.data.Store Store}, which provides multi-sort and filtering capabilities. It's
+ * easy to set up a grid to be sorted from the start:
+ *
+ *     var myGrid = Ext.create('Ext.grid.Panel', {
+ *         store: {
+ *             fields: ['name', 'email', 'phone'],
+ *             sorters: ['name', 'phone']
+ *         },
+ *         columns: [
+ *             { text: 'Name',  dataIndex: 'name' },
+ *             { text: 'Email', dataIndex: 'email' }
+ *         ]
+ *     });
+ *
+ * Sorting at run time is easily accomplished by simply clicking each column header. If you need to perform sorting on
+ * more than one field at run time it's easy to do so by adding new sorters to the store:
+ *
+ *     myGrid.store.sort([
+ *         { property: 'name',  direction: 'ASC' },
+ *         { property: 'email', direction: 'DESC' }
+ *     ]);
+ *
+ * See {@link Ext.data.Store} for examples of filtering.
+ *
+ * ## State saving
+ * 
+ * When configured {@link #stateful}, grids save their column state (order and width) encapsulated within the default
+ * Panel state of changed width and height and collapsed/expanded state.
+ *
+ * Each {@link #columns column} of the grid may be configured with a {@link Ext.grid.column.Column#stateId stateId} which
+ * identifies that column locally within the grid.
+ *
+ * ## Plugins and Features
+ *
+ * Grid supports addition of extra functionality through features and plugins:
+ *
+ * - {@link Ext.grid.plugin.CellEditing CellEditing} - editing grid contents one cell at a time.
+ *
+ * - {@link Ext.grid.plugin.RowEditing RowEditing} - editing grid contents an entire row at a time.
+ *
+ * - {@link Ext.grid.plugin.DragDrop DragDrop} - drag-drop reordering of grid rows.
+ *
+ * - {@link Ext.toolbar.Paging Paging toolbar} - paging through large sets of data.
+ *
+ * - {@link Ext.grid.plugin.BufferedRenderer Infinite scrolling} - another way to handle large sets of data.
+ *
+ * - {@link Ext.grid.RowNumberer RowNumberer} - automatically numbered rows.
+ *
+ * - {@link Ext.grid.feature.Grouping Grouping} - grouping together rows having the same value in a particular field.
+ *
+ * - {@link Ext.grid.feature.Summary Summary} - a summary row at the bottom of a grid.
+ *
+ * - {@link Ext.grid.feature.GroupingSummary GroupingSummary} - a summary row at the bottom of each group.
  */
-Ext.define('Ext.form.Panel', {
-    extend:'Ext.panel.Panel',
-    mixins: {
-        fieldAncestor: 'Ext.form.FieldAncestor'
-    },
-    alias: 'widget.form',
-    alternateClassName: ['Ext.FormPanel', 'Ext.form.FormPanel'],
-    requires: ['Ext.form.Basic', 'Ext.util.TaskRunner'],
+Ext.define('Ext.grid.Panel', {
+    extend: 'Ext.panel.Table',
+    requires: ['Ext.grid.View'],
+    alias: ['widget.gridpanel', 'widget.grid'],
+    alternateClassName: ['Ext.list.ListView', 'Ext.ListView', 'Ext.grid.GridPanel'],
+<span id='Ext-grid-Panel-cfg-viewType'>    viewType: 'gridview',
+</span>
+<span id='Ext-grid-Panel-property-lockable'>    lockable: false,
+</span>
+<span id='Ext-grid-Panel-cfg-rowLines'>    /**
+</span>     * @cfg {Boolean} rowLines False to remove row line styling
+     */
+    rowLines: true
 
-<span id='Ext-form-Panel-cfg-pollForChanges'>    /**
-</span>     * @cfg {Boolean} pollForChanges
-     * If set to `true`, sets up an interval task (using the {@link #pollInterval}) in which the
-     * panel's fields are repeatedly checked for changes in their values. This is in addition to the normal detection
-     * each field does on its own input element, and is not needed in most cases. It does, however, provide a
-     * means to absolutely guarantee detection of all changes including some edge cases in some browsers which
-     * do not fire native events. Defaults to `false`.
+    // Columns config is required in Grid
+<span id='Ext-grid-Panel-cfg-columns'>    /**
+</span>     * @cfg {Ext.grid.column.Column[]/Object} columns (required)
+     * @inheritdoc
      */
 
-<span id='Ext-form-Panel-cfg-pollInterval'>    /**
-</span>     * @cfg {Number} pollInterval
-     * Interval in milliseconds at which the form's fields are checked for value changes. Only used if
-     * the {@link #pollForChanges} option is set to `true`. Defaults to 500 milliseconds.
+<span id='Ext-grid-Panel-event-beforereconfigure'>    /**
+</span>     * @event beforereconfigure
+     * Fires before a reconfigure to enable modification of incoming Store and columns.
+     * @param {Ext.grid.Panel} this
+     * @param {Ext.data.Store} store The store that was passed to the {@link #method-reconfigure} method
+     * @param {Object[]} columns The column configs that were passed to the {@link #method-reconfigure} method
+     * @param {Ext.data.Store} oldStore The store that will be replaced
+     * @param {Ext.grid.column.Column[]} The column headers that will be replaced.
      */
 
-<span id='Ext-form-Panel-cfg-layout'>    /**
-</span>     * @cfg {Ext.enums.Layout/Object} layout
-     * The {@link Ext.container.Container#layout} for the form panel's immediate child items.
+<span id='Ext-grid-Panel-event-reconfigure'>    /**
+</span>     * @event reconfigure
+     * Fires after a reconfigure.
+     * @param {Ext.grid.Panel} this
+     * @param {Ext.data.Store} store The store that was passed to the {@link #method-reconfigure} method
+     * @param {Object[]} columns The column configs that were passed to the {@link #method-reconfigure} method
+     * @param {Ext.data.Store} oldStore The store that was replaced
+     * @param {Ext.grid.column.Column[]} The column headers that were replaced.
      */
-    layout: 'anchor',
 
-<span id='Ext-form-Panel-property-ariaRole'>    ariaRole: 'form',
-</span>    
-<span id='Ext-form-Panel-property-basicFormConfigs'>    basicFormConfigs: [
-</span>        'api', 
-        'baseParams', 
-        'errorReader', 
-        'jsonSubmit',
-        'method', 
-        'paramOrder',
-        'paramsAsHash',
-        'reader',
-        'standardSubmit',
-        'timeout',
-        'trackResetOnLoad',
-        'url',
-        'waitMsgTarget',
-        'waitTitle'
-    ],
-
-<span id='Ext-form-Panel-method-initComponent'>    initComponent: function() {
-</span>        var me = this;
-
-        if (me.frame) {
-            me.border = false;
-        }
-
-        me.initFieldAncestor();
-        me.callParent();
-
-        me.relayEvents(me.form, [
-<span id='Ext-form-Panel-event-beforeaction'>            /**
-</span>             * @event beforeaction
-             * @inheritdoc Ext.form.Basic#beforeaction
-             */
-            'beforeaction',
-<span id='Ext-form-Panel-event-actionfailed'>            /**
-</span>             * @event actionfailed
-             * @inheritdoc Ext.form.Basic#actionfailed
-             */
-            'actionfailed',
-<span id='Ext-form-Panel-event-actioncomplete'>            /**
-</span>             * @event actioncomplete
-             * @inheritdoc Ext.form.Basic#actioncomplete
-             */
-            'actioncomplete',
-<span id='Ext-form-Panel-event-validitychange'>            /**
-</span>             * @event validitychange
-             * @inheritdoc Ext.form.Basic#validitychange
-             */
-            'validitychange',
-<span id='Ext-form-Panel-event-dirtychange'>            /**
-</span>             * @event dirtychange
-             * @inheritdoc Ext.form.Basic#dirtychange
-             */
-            'dirtychange'
-        ]);
-
-        // Start polling if configured
-        if (me.pollForChanges) {
-            me.startPolling(me.pollInterval || 500);
-        }
-    },
-
-<span id='Ext-form-Panel-method-initItems'>    initItems: function() {
-</span>        // Create the BasicForm
-        this.callParent();
-        this.initMonitor();
-        this.form = this.createForm();
-    },
-
-<span id='Ext-form-Panel-method-afterFirstLayout'>    // Initialize the BasicForm after all layouts have been completed.
-</span>    afterFirstLayout: function() {
-        this.callParent(arguments);
-        this.form.initialize();
-    },
-
-<span id='Ext-form-Panel-method-createForm'>    /**
-</span>     * @private
+<span id='Ext-grid-Panel-method-reconfigure'>    /**
+</span>     * @method reconfigure
+     * Reconfigures the grid with a new store/columns. Either the store or the columns can be omitted if you don't wish
+     * to change them.
+     * @param {Ext.data.Store} store (Optional) The new store.
+     * @param {Object[]} columns (Optional) An array of column configs
      */
-    createForm: function() {
-        var cfg = {},
-            props = this.basicFormConfigs,
-            len = props.length,
-            i = 0,
-            prop;
-            
-        for (; i &lt; len; ++i) {
-            prop = props[i];
-            cfg[prop] = this[prop];
-        }
-        return new Ext.form.Basic(this, cfg);
-    },
-
-<span id='Ext-form-Panel-method-getForm'>    /**
-</span>     * Provides access to the {@link Ext.form.Basic Form} which this Panel contains.
-     * @return {Ext.form.Basic} The {@link Ext.form.Basic Form} which this Panel contains.
-     */
-    getForm: function() {
-        return this.form;
-    },
-
-<span id='Ext-form-Panel-method-loadRecord'>    /**
-</span>     * Loads an {@link Ext.data.Model} into this form (internally just calls {@link Ext.form.Basic#loadRecord})
-     * See also {@link Ext.form.Basic#trackResetOnLoad trackResetOnLoad}.
-     * @param {Ext.data.Model} record The record to load
-     * @return {Ext.form.Basic} The Ext.form.Basic attached to this FormPanel
-     */
-    loadRecord: function(record) {
-        return this.getForm().loadRecord(record);
-    },
-
-<span id='Ext-form-Panel-method-getRecord'>    /**
-</span>     * Returns the currently loaded Ext.data.Model instance if one was loaded via {@link #loadRecord}.
-     * @return {Ext.data.Model} The loaded instance
-     */
-    getRecord: function() {
-        return this.getForm().getRecord();
-    },
-    
-<span id='Ext-form-Panel-method-updateRecord'>    /**
-</span>     * Persists the values in this form into the passed {@link Ext.data.Model} object in a beginEdit/endEdit block.
-     * If the record is not specified, it will attempt to update (if it exists) the record provided to {@link #loadRecord}.
-     * @param {Ext.data.Model} [record] The record to edit
-     * @return {Ext.form.Basic} The Ext.form.Basic attached to this FormPanel
-     */
-    updateRecord: function(record) {
-        return this.getForm().updateRecord(record);
-    },
-
-<span id='Ext-form-Panel-method-getValues'>    /**
-</span>     * Convenience function for fetching the current value of each field in the form. This is the same as calling
-     * {@link Ext.form.Basic#getValues this.getForm().getValues()}.
-     *
-     * @inheritdoc Ext.form.Basic#getValues
-     */
-    getValues: function(asString, dirtyOnly, includeEmptyText, useDataValues) {
-        return this.getForm().getValues(asString, dirtyOnly, includeEmptyText, useDataValues);
-    },
-    
-<span id='Ext-form-Panel-method-isDirty'>    /**
-</span>     * Convenience function to check if the form has any dirty fields. This is the same as calling
-     * {@link Ext.form.Basic#isDirty this.getForm().isDirty()}.
-     *
-     * @inheritdoc Ext.form.Basic#isDirty
-     */
-    isDirty: function () {
-        return this.form.isDirty();
-    },
-    
-<span id='Ext-form-Panel-method-isValid'>    /**
-</span>     * Convenience function to check if the form has all valid fields. This is the same as calling
-     * {@link Ext.form.Basic#isValid this.getForm().isValid()}.
-     *
-     * @inheritdoc Ext.form.Basic#isValid
-     */
-    isValid: function () {
-       return this.form.isValid();
-    },
-    
-<span id='Ext-form-Panel-method-hasInvalidField'>    /**
-</span>     * Convenience function to check if the form has any invalid fields. This is the same as calling
-     * {@link Ext.form.Basic#hasInvalidField this.getForm().hasInvalidField()}.
-     *
-     * @inheritdoc Ext.form.Basic#hasInvalidField
-     */
-    hasInvalidField: function () {
-        return this.form.hasInvalidField();
-    },
-
-<span id='Ext-form-Panel-method-beforeDestroy'>    beforeDestroy: function() {
-</span>        this.stopPolling();
-        this.form.destroy();
-        this.callParent();
-    },
-
-<span id='Ext-form-Panel-method-load'>    /**
-</span>     * This is a proxy for the underlying BasicForm's {@link Ext.form.Basic#load} call.
-     * @param {Object} options The options to pass to the action (see {@link Ext.form.Basic#load} and
-     * {@link Ext.form.Basic#doAction} for details)
-     */
-    load: function(options) {
-        this.form.load(options);
-    },
-
-<span id='Ext-form-Panel-method-submit'>    /**
-</span>     * This is a proxy for the underlying BasicForm's {@link Ext.form.Basic#submit} call.
-     * @param {Object} options The options to pass to the action (see {@link Ext.form.Basic#submit} and
-     * {@link Ext.form.Basic#doAction} for details)
-     */
-    submit: function(options) {
-        this.form.submit(options);
-    },
-
-<span id='Ext-form-Panel-method-startPolling'>    /**
-</span>     * Start an interval task to continuously poll all the fields in the form for changes in their
-     * values. This is normally started automatically by setting the {@link #pollForChanges} config.
-     * @param {Number} interval The interval in milliseconds at which the check should run.
-     */
-    startPolling: function(interval) {
-        this.stopPolling();
-        var task = new Ext.util.TaskRunner(interval);
-        task.start({
-            interval: 0,
-            run: this.checkChange,
-            scope: this
-        });
-        this.pollTask = task;
-    },
-
-<span id='Ext-form-Panel-method-stopPolling'>    /**
-</span>     * Stop a running interval task that was started by {@link #startPolling}.
-     */
-    stopPolling: function() {
-        var task = this.pollTask;
-        if (task) {
-            task.stopAll();
-            delete this.pollTask;
-        }
-    },
-
-<span id='Ext-form-Panel-method-checkChange'>    /**
-</span>     * Forces each field within the form panel to
-     * {@link Ext.form.field.Field#checkChange check if its value has changed}.
-     */
-    checkChange: function() {
-        var fields = this.form.getFields().items,
-            f,
-            fLen   = fields.length;
-
-        for (f = 0; f &lt; fLen; f++) {
-            fields[f].checkChange();
-        }
-    }
-});
-</pre>
+});</pre>
 </body>
 </html>

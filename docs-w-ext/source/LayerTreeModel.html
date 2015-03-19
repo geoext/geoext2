@@ -41,6 +41,8 @@
  *   dynamically if the name of the connected layer changes, if any. Read only.
  * * **component** Ext.Component: The component to be rendered with this node,
  *   if any.
+ * * **disabled** Boolean: Used to reflect whether the associated layer is
+ *   in range (visible in the current map scale).
  *
  * A typical configuration that makes use of some of these extended sttings
  * could look like this:
@@ -79,7 +81,8 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         {name: 'container'},
         {name: 'checkedGroup', type: 'string'},
         {name: 'fixedText', type: 'bool'},
-        {name: 'component'}
+        {name: 'component'},
+        {name: 'disabled', type: 'bool', defaultValue: 'false'}
     ],
 <span id='GeoExt-data-LayerTreeModel-cfg-proxy'>    proxy: {
 </span>        type: &quot;memory&quot;
@@ -128,6 +131,7 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         me.callParent(arguments);
         me.fireEvent('afteredit', this, modifiedFieldNames);
     }
-});</pre>
+});
+</pre>
 </body>
 </html>

@@ -35,869 +35,749 @@ at http://www.sencha.com/contact.
 
 Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
-<span id='Ext-tree-View'>/**
-</span> * Used as a view by {@link Ext.tree.Panel TreePanel}.
+<span id='Ext-view-View'>/**
+</span> * A mechanism for displaying data using custom layout templates and formatting.
+ *
+ * The View uses an {@link Ext.XTemplate} as its internal templating mechanism, and is bound to an
+ * {@link Ext.data.Store} so that as the data in the store changes the view is automatically updated
+ * to reflect the changes. The view also provides built-in behavior for many common events that can
+ * occur for its contained items including click, doubleclick, mouseover, mouseout, etc. as well as a
+ * built-in selection model. **In order to use these features, an {@link #itemSelector} config must
+ * be provided for the View to determine what nodes it will be working with.**
+ *
+ * The example below binds a View to a {@link Ext.data.Store} and renders it into an {@link Ext.panel.Panel}.
+ *
+ *     @example
+ *     Ext.define('Image', {
+ *         extend: 'Ext.data.Model',
+ *         fields: [
+ *             { name:'src', type:'string' },
+ *             { name:'caption', type:'string' }
+ *         ]
+ *     });
+ *
+ *     Ext.create('Ext.data.Store', {
+ *         id:'imagesStore',
+ *         model: 'Image',
+ *         data: [
+ *             { src:'http://www.sencha.com/img/20110215-feat-drawing.png', caption:'Drawing &amp; Charts' },
+ *             { src:'http://www.sencha.com/img/20110215-feat-data.png', caption:'Advanced Data' },
+ *             { src:'http://www.sencha.com/img/20110215-feat-html5.png', caption:'Overhauled Theme' },
+ *             { src:'http://www.sencha.com/img/20110215-feat-perf.png', caption:'Performance Tuned' }
+ *         ]
+ *     });
+ *
+ *     var imageTpl = new Ext.XTemplate(
+ *         '&lt;tpl for=&quot;.&quot;&gt;',
+ *             '&lt;div style=&quot;margin-bottom: 10px;&quot; class=&quot;thumb-wrap&quot;&gt;',
+ *               '&lt;img src=&quot;{src}&quot; /&gt;',
+ *               '&lt;br/&gt;&lt;span&gt;{caption}&lt;/span&gt;',
+ *             '&lt;/div&gt;',
+ *         '&lt;/tpl&gt;'
+ *     );
+ *
+ *     Ext.create('Ext.view.View', {
+ *         store: Ext.data.StoreManager.lookup('imagesStore'),
+ *         tpl: imageTpl,
+ *         itemSelector: 'div.thumb-wrap',
+ *         emptyText: 'No images available',
+ *         renderTo: Ext.getBody()
+ *     });
  */
-Ext.define('Ext.tree.View', {
-    extend: 'Ext.view.Table',
-    alias: 'widget.treeview',
+Ext.define('Ext.view.View', {
+    extend: 'Ext.view.AbstractView',
+    alternateClassName: 'Ext.DataView',
+    alias: 'widget.dataview',
 
-    requires: [
-        'Ext.data.NodeStore'
-    ],
+<span id='Ext-view-View-property-deferHighlight'>    // private delay to buffer row highlighting/unhighlighting on mouse move.
+</span>    // This is ignored if the public mouseOverOutBuffer remains a non-zero value
+    deferHighlight: Ext.isIE7m ? 100 : 0,
 
-<span id='Ext-tree-View-property-isTreeView'>    /**
-</span>     * @property {Boolean} isTreeView
-     * `true` in this class to identify an object as an instantiated TreeView, or subclass thereof.
+<span id='Ext-view-View-cfg-mouseOverOutBuffer'>    /**
+</span>     * @cfg {Number} [mouseOverOutBuffer=20]
+     * The number of milliseconds to buffer mouseover and mouseout event handling on view items.
+     * 
+     * Configure this as `false` to process mouseover and mouseout events immediately.
      */
-    isTreeView: true,
+    mouseOverOutBuffer: 20,
 
-<span id='Ext-tree-View-cfg-loadingCls'>    loadingCls: Ext.baseCSSPrefix + 'grid-tree-loading',
-</span><span id='Ext-tree-View-property-expandedCls'>    expandedCls: Ext.baseCSSPrefix + 'grid-tree-node-expanded',
-</span><span id='Ext-tree-View-property-leafCls'>    leafCls: Ext.baseCSSPrefix + 'grid-tree-node-leaf',
+<span id='Ext-view-View-property-inputTagRe'>    inputTagRe: /^textarea$|^input$/i,
 </span>
-<span id='Ext-tree-View-property-expanderSelector'>    expanderSelector: '.' + Ext.baseCSSPrefix + 'tree-expander',
-</span><span id='Ext-tree-View-property-checkboxSelector'>    checkboxSelector: '.' + Ext.baseCSSPrefix + 'tree-checkbox',
-</span><span id='Ext-tree-View-property-expanderIconOverCls'>    expanderIconOverCls: Ext.baseCSSPrefix + 'tree-expander-over',
-</span>
-<span id='Ext-tree-View-property-nodeAnimWrapCls'>    // Class to add to the node wrap element used to hold nodes when a parent is being
-</span>    // collapsed or expanded. During the animation, UI interaction is forbidden by testing
-    // for an ancestor node with this class.
-    nodeAnimWrapCls: Ext.baseCSSPrefix + 'tree-animator-wrap',
-
-<span id='Ext-tree-View-cfg-blockRefresh'>    blockRefresh: true,
-</span>
-<span id='Ext-tree-View-cfg-loadMask'>    /**
-</span>     * @cfg {Boolean}
-     * @inheritdoc
-     */
-    loadMask: false,
-
-<span id='Ext-tree-View-cfg-rootVisible'>    /**
-</span>     * @cfg {Boolean} rootVisible
-     * False to hide the root node.
-     */
-    rootVisible: true,
-
-<span id='Ext-tree-View-cfg-deferInitialRefresh'>    /**
-</span>     * @cfg {Boolean} deferInitialRefresh
-     * Must be false for Tree Views because the root node must be rendered in order to be updated with its child nodes.
-     */
-    deferInitialRefresh: false,
-
-<span id='Ext-tree-View-cfg-animate'>    /**
-</span>     * @cfg {Boolean} animate
-     * True to enable animated expand/collapse (defaults to the value of {@link Ext#enableFx Ext.enableFx})
-     */
-
-    expandDuration: 250,
-<span id='Ext-tree-View-property-collapseDuration'>    collapseDuration: 250,
-</span>
-<span id='Ext-tree-View-property-toggleOnDblClick'>    toggleOnDblClick: true,
-</span>
-<span id='Ext-tree-View-cfg-stripeRows'>    stripeRows: false,
-</span>
-<span id='Ext-tree-View-property-uiFields'>    // fields that will trigger a change in the ui that aren't likely to be bound to a column
-</span>    uiFields: ['expanded', 'loaded', 'checked', 'expandable', 'leaf', 'icon', 'iconCls', 'loading', 'qtip', 'qtitle'],
-
-<span id='Ext-tree-View-property-treeRowTpl'>    // treeRowTpl which is inserted into thwe rowTpl chain before the base rowTpl. Sets tree-specific classes and attributes
-</span>    treeRowTpl: [
-        '{%',
-            'this.processRowValues(values);',
-            'this.nextTpl.applyOut(values, out, parent);',
-            'delete values.rowAttr[&quot;data-qtip&quot;];',
-            'delete values.rowAttr[&quot;data-qtitle&quot;];',
-        '%}', {
-            priority: 10,
-            processRowValues: function(rowValues) {
-                var record = rowValues.record,
-                    view = rowValues.view,
-                    qtip = record.get('qtip'),
-                    qtitle = record.get('qttle');
-
-                rowValues.rowAttr = {};
-                if (qtip) {
-                    rowValues.rowAttr['data-qtip'] = qtip;
-                }
-                if (qtitle) {
-                    rowValues.rowAttr['data-qtitle'] = qtitle;
-                }
-                if (record.isExpanded()) {
-                    rowValues.rowClasses.push(view.expandedCls);
-                }
-                if (record.isLeaf()) {
-                    rowValues.rowClasses.push(view.leafCls);
-                }
-                if (record.isLoading()) {
-                    rowValues.rowClasses.push(view.loadingCls);
-                }
-            }
-        }
-    ],
-
-<span id='Ext-tree-View-method-initComponent'>    initComponent: function() {
-</span>        var me = this,
-            treeStore = me.panel.getStore(),
-            store = me.store;
-
-        if (me.initialConfig.animate === undefined) {
-            me.animate = Ext.enableFx;
-        }
-
-        if (!store || store === treeStore) {
-            me.store = store = new Ext.data.NodeStore({
-                treeStore: treeStore,
-                recursive: true,
-                rootVisible: me.rootVisible
-            });
-        }
-
-        if (me.node) {
-            me.setRootNode(me.node);
-        }
-        me.animQueue = {};
-        me.animWraps = {};
-        me.addEvents(
-<span id='Ext-tree-View-event-afteritemexpand'>            /**
-</span>             * @event afteritemexpand
-             * Fires after an item has been visually expanded and is visible in the tree. 
-             * @param {Ext.data.NodeInterface} node         The node that was expanded
-             * @param {Number} index                        The index of the node
-             * @param {HTMLElement} item                    The HTML element for the node that was expanded
-             */
-            'afteritemexpand',
-<span id='Ext-tree-View-event-afteritemcollapse'>            /**
-</span>             * @event afteritemcollapse
-             * Fires after an item has been visually collapsed and is no longer visible in the tree. 
-             * @param {Ext.data.NodeInterface} node         The node that was collapsed
-             * @param {Number} index                        The index of the node
-             * @param {HTMLElement} item                    The HTML element for the node that was collapsed
-             */
-            'afteritemcollapse',
-<span id='Ext-tree-View-event-nodedragover'>            /**
-</span>             * @event nodedragover
-             * Fires when a tree node is being targeted for a drag drop, return false to signal drop not allowed.
-             * @param {Ext.data.NodeInterface} targetNode The target node
-             * @param {String} position The drop position, &quot;before&quot;, &quot;after&quot; or &quot;append&quot;,
-             * @param {Object} dragData Data relating to the drag operation
-             * @param {Ext.EventObject} e The event object for the drag 
-             */
-            'nodedragover'
-        );
-        me.callParent(arguments);
-        me.addRowTpl(Ext.XTemplate.getTpl(me, 'treeRowTpl'));
-    },
-
-<span id='Ext-tree-View-method-onBeforeFill'>    onBeforeFill: function(treeStore, fillRoot) {
-</span>        this.store.suspendEvents();
-    },
-
-<span id='Ext-tree-View-method-onFillComplete'>    onFillComplete: function(treeStore, fillRoot, newNodes) {
-</span>        var me = this,
-            store = me.store,
-            start = store.indexOf(newNodes[0]);
-
-        store.resumeEvents();
-
-        // Always update the current node, since the load may be triggered
-        // by .load() directly instead of .expand() on the node
-        fillRoot.triggerUIUpdate();
-
-        // In the cases of expand, the records might not be in the store yet,
-        // so jump out early and expand will handle it later
-        if (!newNodes.length || start === -1) {
-            return;
-        }
-
-        // Insert new nodes into the view
-        me.onAdd(me.store, newNodes, start);
-
-        me.refreshPartner();
-    },
-
-<span id='Ext-tree-View-method-onBeforeSort'>    onBeforeSort: function() {
-</span>        this.store.suspendEvents(); 
-    },
-
-<span id='Ext-tree-View-method-onSort'>    onSort: function(o) {
-</span>        // The store will fire sort events for the nodes that bubble from the tree.
-        // We only want the final one when sorting is completed, fired by the store
-        if (o.isStore) {
-            this.store.resumeEvents();
-            this.refresh();
-            this.refreshPartner();
+    inheritableStatics: {
+<span id='Ext-view-View-static-property-EventMap'>        EventMap: {
+</span>            mousedown: 'MouseDown',
+            mouseup: 'MouseUp',
+            click: 'Click',
+            dblclick: 'DblClick',
+            contextmenu: 'ContextMenu',
+            mouseover: 'MouseOver',
+            mouseout: 'MouseOut',
+            mouseenter: 'MouseEnter',
+            mouseleave: 'MouseLeave',
+            keydown: 'KeyDown',
+            focus: 'Focus'
         }
     },
 
-<span id='Ext-tree-View-method-refreshPartner'>    refreshPartner: function() {
-</span>        var partner = this.lockingPartner;
-        if (partner) {
-            partner.refresh();
-        }
-    },
-
-<span id='Ext-tree-View-method-getMaskStore'>    getMaskStore: function() {
-</span>        return this.panel.getStore();
-    },
-
-<span id='Ext-tree-View-method-afterRender'>    afterRender: function() {
+<span id='Ext-view-View-method-initComponent'>    initComponent: function() {
 </span>        var me = this;
-        me.callParent(arguments);
+        me.callParent();
+        
+        // 
+        if (me.mouseOverOutBuffer) {
+            me.handleMouseOverOrOut = 
+                Ext.Function.createBuffered(me.handleMouseOverOrOut, me.mouseOverOutBuffer, me);
+            me.lastMouseOverOutEvent = new Ext.EventObjectImpl();
+        }
+        
+        // Not buffering mouse over/out handling - buffer item highlighting.
+        else if (me.deferHighlight){
+            me.setHighlightedItem =
+                Ext.Function.createBuffered(me.setHighlightedItem, me.deferHighlight, me);
+        }
+    },
 
-        me.el.on({
+<span id='Ext-view-View-method-addCmpEvents'>    addCmpEvents: function() {
+</span>        this.addEvents(
+<span id='Ext-view-View-event-beforeitemmousedown'>            /**
+</span>             * @event beforeitemmousedown
+             * Fires before the mousedown event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemmousedown',
+<span id='Ext-view-View-event-beforeitemmouseup'>            /**
+</span>             * @event beforeitemmouseup
+             * Fires before the mouseup event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemmouseup',
+<span id='Ext-view-View-event-beforeitemmouseenter'>            /**
+</span>             * @event beforeitemmouseenter
+             * Fires before the mouseenter event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemmouseenter',
+<span id='Ext-view-View-event-beforeitemmouseleave'>            /**
+</span>             * @event beforeitemmouseleave
+             * Fires before the mouseleave event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemmouseleave',
+<span id='Ext-view-View-event-beforeitemclick'>            /**
+</span>             * @event beforeitemclick
+             * Fires before the click event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemclick',
+<span id='Ext-view-View-event-beforeitemdblclick'>            /**
+</span>             * @event beforeitemdblclick
+             * Fires before the dblclick event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemdblclick',
+<span id='Ext-view-View-event-beforeitemcontextmenu'>            /**
+</span>             * @event beforeitemcontextmenu
+             * Fires before the contextmenu event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforeitemcontextmenu',
+<span id='Ext-view-View-event-beforeitemkeydown'>            /**
+</span>             * @event beforeitemkeydown
+             * Fires before the keydown event on an item is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object. Use {@link Ext.EventObject#getKey getKey()} to retrieve the key that was pressed.
+             */
+            'beforeitemkeydown',
+<span id='Ext-view-View-event-itemmousedown'>            /**
+</span>             * @event itemmousedown
+             * Fires when there is a mouse down on an item
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemmousedown',
+<span id='Ext-view-View-event-itemmouseup'>            /**
+</span>             * @event itemmouseup
+             * Fires when there is a mouse up on an item
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemmouseup',
+<span id='Ext-view-View-event-itemmouseenter'>            /**
+</span>             * @event itemmouseenter
+             * Fires when the mouse enters an item.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemmouseenter',
+<span id='Ext-view-View-event-itemmouseleave'>            /**
+</span>             * @event itemmouseleave
+             * Fires when the mouse leaves an item.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemmouseleave',
+<span id='Ext-view-View-event-itemclick'>            /**
+</span>             * @event itemclick
+             * Fires when an item is clicked.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemclick',
+<span id='Ext-view-View-event-itemdblclick'>            /**
+</span>             * @event itemdblclick
+             * Fires when an item is double clicked.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemdblclick',
+<span id='Ext-view-View-event-itemcontextmenu'>            /**
+</span>             * @event itemcontextmenu
+             * Fires when an item is right clicked.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'itemcontextmenu',
+<span id='Ext-view-View-event-itemkeydown'>            /**
+</span>             * @event itemkeydown
+             * Fires when a key is pressed while an item is currently selected.
+             * @param {Ext.view.View} this
+             * @param {Ext.data.Model} record The record that belongs to the item
+             * @param {HTMLElement} item The item's element
+             * @param {Number} index The item's index
+             * @param {Ext.EventObject} e The raw event object. Use {@link Ext.EventObject#getKey getKey()} to retrieve the key that was pressed.
+             */
+            'itemkeydown',
+<span id='Ext-view-View-event-beforecontainermousedown'>            /**
+</span>             * @event beforecontainermousedown
+             * Fires before the mousedown event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainermousedown',
+<span id='Ext-view-View-event-beforecontainermouseup'>            /**
+</span>             * @event beforecontainermouseup
+             * Fires before the mouseup event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainermouseup',
+<span id='Ext-view-View-event-beforecontainermouseover'>            /**
+</span>             * @event beforecontainermouseover
+             * Fires before the mouseover event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainermouseover',
+<span id='Ext-view-View-event-beforecontainermouseout'>            /**
+</span>             * @event beforecontainermouseout
+             * Fires before the mouseout event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainermouseout',
+<span id='Ext-view-View-event-beforecontainerclick'>            /**
+</span>             * @event beforecontainerclick
+             * Fires before the click event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainerclick',
+<span id='Ext-view-View-event-beforecontainerdblclick'>            /**
+</span>             * @event beforecontainerdblclick
+             * Fires before the dblclick event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainerdblclick',
+<span id='Ext-view-View-event-beforecontainercontextmenu'>            /**
+</span>             * @event beforecontainercontextmenu
+             * Fires before the contextmenu event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'beforecontainercontextmenu',
+<span id='Ext-view-View-event-beforecontainerkeydown'>            /**
+</span>             * @event beforecontainerkeydown
+             * Fires before the keydown event on the container is processed. Returns false to cancel the default action.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object. Use {@link Ext.EventObject#getKey getKey()} to retrieve the key that was pressed.
+             */
+            'beforecontainerkeydown',
+<span id='Ext-view-View-event-containermouseup'>            /**
+</span>             * @event containermouseup
+             * Fires when there is a mouse up on the container
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'containermouseup',
+<span id='Ext-view-View-event-containermouseover'>            /**
+</span>             * @event containermouseover
+             * Fires when you move the mouse over the container.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'containermouseover',
+<span id='Ext-view-View-event-containermouseout'>            /**
+</span>             * @event containermouseout
+             * Fires when you move the mouse out of the container.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'containermouseout',
+<span id='Ext-view-View-event-containerclick'>            /**
+</span>             * @event containerclick
+             * Fires when the container is clicked.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'containerclick',
+<span id='Ext-view-View-event-containerdblclick'>            /**
+</span>             * @event containerdblclick
+             * Fires when the container is double clicked.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'containerdblclick',
+<span id='Ext-view-View-event-containercontextmenu'>            /**
+</span>             * @event containercontextmenu
+             * Fires when the container is right clicked.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object
+             */
+            'containercontextmenu',
+<span id='Ext-view-View-event-containerkeydown'>            /**
+</span>             * @event containerkeydown
+             * Fires when a key is pressed while the container is focused, and no item is currently selected.
+             * @param {Ext.view.View} this
+             * @param {Ext.EventObject} e The raw event object. Use {@link Ext.EventObject#getKey getKey()} to retrieve the key that was pressed.
+             */
+            'containerkeydown',
+
+<span id='Ext-view-View-event-selectionchange'>            /**
+</span>             * @event
+             * @inheritdoc Ext.selection.DataViewModel#selectionchange
+             */
+            'selectionchange',
+<span id='Ext-view-View-event-beforeselect'>            /**
+</span>             * @event
+             * @inheritdoc Ext.selection.DataViewModel#beforeselect
+             */
+            'beforeselect',
+<span id='Ext-view-View-event-beforedeselect'>            /**
+</span>             * @event
+             * @inheritdoc Ext.selection.DataViewModel#beforedeselect
+             */
+            'beforedeselect',
+<span id='Ext-view-View-event-select'>            /**
+</span>             * @event
+             * @inheritdoc Ext.selection.DataViewModel#select
+             */
+            'select',
+<span id='Ext-view-View-event-deselect'>            /**
+</span>             * @event
+             * @inheritdoc Ext.selection.DataViewModel#deselect
+             */
+            'deselect',
+<span id='Ext-view-View-event-focuschange'>            /**
+</span>             * @event
+             * @inheritdoc Ext.selection.DataViewModel#focuschange
+             */
+            'focuschange',
+            
+<span id='Ext-view-View-event-highlightitem'>            /**
+</span>             * @event highlightitem
+             * Fires when a node is highlighted using keyboard navigation, or mouseover.
+             * @param {Ext.view.View} view This View Component.
+             * @param {Ext.Element} node The highlighted node.
+             */
+            'highlightitem',
+            
+<span id='Ext-view-View-event-unhighlightitem'>            /**
+</span>             * @event unhighlightitem
+             * Fires when a node is unhighlighted using keyboard navigation, or mouseout.
+             * @param {Ext.view.View} view This View Component.
+             * @param {Ext.Element} node The previously highlighted node.
+             */
+            'unhighlightitem'
+        );
+    },
+
+<span id='Ext-view-View-method-getFocusEl'>    getFocusEl: function() {
+</span>        return this.getTargetEl();
+    },
+
+<span id='Ext-view-View-method-afterRender'>    // @private
+</span>    afterRender: function(){
+        var me = this,
+            onMouseOverOut = me.mouseOverOutBuffer ? me.onMouseOverOut : me.handleMouseOverOrOut;
+
+        me.callParent();
+        me.mon(me.getTargetEl(), {
             scope: me,
-            delegate: me.expanderSelector,
-            mouseover: me.onExpanderMouseOver,
-            mouseout: me.onExpanderMouseOut,
-            click: {
-                delegate: me.checkboxSelector,
-                fn: me.onCheckboxChange,
-                scope: me
-            }
+            /*
+             * We need to make copies of this since some of the events fired here will end up triggering
+             * a new event to be called and the shared event object will be mutated. In future we should
+             * investigate if there are any issues with creating a new event object for each event that
+             * is fired.
+             */
+            freezeEvent: true,
+            click: me.handleEvent,
+            mousedown: me.handleEvent,
+            mouseup: me.handleEvent,
+            dblclick: me.handleEvent,
+            contextmenu: me.handleEvent,
+            keydown: me.handleEvent,
+            mouseover: onMouseOverOut,
+            mouseout:  onMouseOverOut
         });
     },
 
-<span id='Ext-tree-View-method-afterComponentLayout'>    afterComponentLayout: function() {
-</span>        this.callParent(arguments);
-        var stretcher = this.stretcher;
-        if (stretcher) {
-            stretcher.setWidth((this.getWidth() - Ext.getScrollbarSize().width));
-        }
-    },
-
-<span id='Ext-tree-View-method-processUIEvent'>    processUIEvent: function(e) {
-</span>        // If the clicked node is part of an animation, ignore the click.
-        // This is because during a collapse animation, the associated Records
-        // will already have been removed from the Store, and the event is not processable.
-        if (e.getTarget('.' + this.nodeAnimWrapCls, this.el)) {
-            return false;
-        }
-        return this.callParent(arguments);
-    },
-
-<span id='Ext-tree-View-method-onClear'>    onClear: function() {
-</span>        this.store.removeAll();
-    },
-
-<span id='Ext-tree-View-method-setRootNode'>    setRootNode: function(node) {
+<span id='Ext-view-View-method-onMouseOverOut'>    onMouseOverOut: function(e) {
 </span>        var me = this;
-        me.store.setNode(node);
-        me.node = node;
+
+        // Determining if we are entering or leaving view items is deferred until
+        // mouse move churn settles down.
+        me.lastMouseOverOutEvent.setEvent(e.browserEvent, true);
+        me.handleMouseOverOrOut(me.lastMouseOverOutEvent);
     },
 
-<span id='Ext-tree-View-method-onCheckboxChange'>    onCheckboxChange: function(e, t) {
+<span id='Ext-view-View-method-handleMouseOverOrOut'>    handleMouseOverOrOut: function(e) {
 </span>        var me = this,
-            item = e.getTarget(me.getItemSelector(), me.getTargetEl());
+            isMouseout = e.type === 'mouseout',
+            method = isMouseout ? e.getRelatedTarget : e.getTarget,
+            nowOverItem = method.call(e, me.itemSelector) || method.call(e, me.dataRowSelector);
+
+        // If the mouse event of whatever type tells use that we are no longer over the current mouseOverItem...
+        if (!me.mouseOverItem || nowOverItem !== me.mouseOverItem) {
+
+            // First fire mouseleave for the item we just left
+            if (me.mouseOverItem) {
+                e.item = me.mouseOverItem;
+                e.newType = 'mouseleave';
+                me.handleEvent(e);
+            }
+
+            // If we are over an item, fire the mouseenter
+            me.mouseOverItem = nowOverItem;
+            if (me.mouseOverItem) {
+                e.item = me.mouseOverItem;
+                e.newType = 'mouseenter';
+                me.handleEvent(e);
+            }
+        }
+    },
+
+<span id='Ext-view-View-method-handleEvent'>    handleEvent: function(e) {
+</span>        var me = this,
+            key = e.type == 'keydown' &amp;&amp; e.getKey();
+
+        if (me.processUIEvent(e) !== false) {
+            me.processSpecialEvent(e);
+        }
+
+        // After all listeners have processed the event, then unless the user is typing into an input field,
+        // prevent browser's default action on SPACE which is to focus the event's target element.
+        // Focusing causes the browser to attempt to scroll the element into view.
+        if (key === e.SPACE) {
+            if (!me.inputTagRe.test(e.getTarget().tagName)) {
+                e.stopEvent();
+            }
+        }
+    },
+
+<span id='Ext-view-View-method-processItemEvent'>    // Private template method
+</span>    processItemEvent: Ext.emptyFn,
+<span id='Ext-view-View-method-processContainerEvent'>    processContainerEvent: Ext.emptyFn,
+</span><span id='Ext-view-View-method-processSpecialEvent'>    processSpecialEvent: Ext.emptyFn,
+</span>
+<span id='Ext-view-View-method-processUIEvent'>    processUIEvent: function(e) {
+</span>
+        // If the target event has been removed from the body (data update causing view DOM to be updated),
+        // do not process. isAncestor uses native methods to check.
+        if (!Ext.getBody().isAncestor(e.target)) {
+            return;
+        }
+
+        var me = this,
+            item = e.getTarget(me.getItemSelector(), me.getTargetEl()),
+            map = this.statics().EventMap,
+            index, record,
+            type = e.type,
+            newType = e.type,
+            sm;
+
+        // If the event is a mouseover/mouseout event converted to a mouseenter/mouseleave,
+        // use that event type and ensure that the item is correct.
+        if (e.newType) {
+            newType = e.newType;
+            item = e.item;
+        }
+
+        // For keydown events, try to get either the last focused item or the selected item.
+        // If we have not focused an item, we'll just fire a container keydown event.
+        if (!item &amp;&amp; type == 'keydown') {
+            sm = me.getSelectionModel();
+            record = sm.lastFocused || sm.getLastSelected();
+            if (record) {
+                item = me.getNode(record, true);
+            }
+        }
 
         if (item) {
-            me.onCheckChange(me.getRecord(item));
-        }
-    },
-
-<span id='Ext-tree-View-method-onCheckChange'>    onCheckChange: function(record) {
-</span>        var checked = record.get('checked');
-        if (Ext.isBoolean(checked)) {
-            checked = !checked;
-            record.set('checked', checked);
-            this.fireEvent('checkchange', record, checked);
-        }
-    },
-
-<span id='Ext-tree-View-method-getChecked'>    getChecked: function() {
-</span>        var checked = [];
-        this.node.cascadeBy(function(rec){
-            if (rec.get('checked')) {
-                checked.push(rec);
+            if (!record) {
+                record = me.getRecord(item);
             }
-        });
-        return checked;
-    },
+            index = me.indexInStore ? me.indexInStore(record) : me.indexOf(item);
 
-<span id='Ext-tree-View-method-isItemChecked'>    isItemChecked: function(rec) {
-</span>        return rec.get('checked');
-    },
-
-<span id='Ext-tree-View-method-createAnimWrap'>    /**
-</span>     * @private
-     */
-    createAnimWrap: function(record, index) {
-        var me = this,
-            node = me.getNode(record),
-            tmpEl, nodeEl,
-            columnSizer = [];
-
-        me.renderColumnSizer(columnSizer);
-        nodeEl = Ext.get(node);
-        tmpEl = nodeEl.insertSibling({
-            tag: 'tr',
-            html: [
-                '&lt;td colspan=&quot;' + me.panel.headerCt.getColumnCount() + '&quot;&gt;',
-                    '&lt;div class=&quot;' + me.nodeAnimWrapCls + '&quot;&gt;',
-                        // Table has to have correct classes to get sized by the dynamic CSS rules
-                        '&lt;table class=&quot;' + Ext.baseCSSPrefix + me.id + '-table ' + Ext.baseCSSPrefix + 'grid-table&quot; style=&quot;border:0&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;',
-                        columnSizer.join(''),
-                        '&lt;tbody&gt;&lt;/tbody&gt;&lt;/table&gt;',
-                    '&lt;/div&gt;',
-                '&lt;/td&gt;'
-            ].join('')
-        }, 'after');
-
-        return {
-            record: record,
-            node: node,
-            el: tmpEl,
-            expanding: false,
-            collapsing: false,
-            animating: false,
-            animateEl: tmpEl.down('div'),
-            targetEl: tmpEl.down('tbody')
-        };
-    },
-
-<span id='Ext-tree-View-method-getAnimWrap'>    /**
-</span>     * @private
-     * Returns the animation wrapper element for the specified parent node, used to wrap the child nodes as
-     * they slide up or down during expand/collapse.
-     *
-     * @param parent The parent node to be expanded or collapsed
-     *
-     * @param [bubble=true] If the passed parent node does not already have a wrap element created, by default
-     * this function will bubble up to each parent node looking for a valid wrap element to reuse, returning
-     * the first one it finds. This is the appropriate behavior, e.g., for the collapse direction, so that the
-     * entire expanded set of branch nodes can collapse as a single unit.
-     *
-     * However for expanding each parent node should instead always create its own animation wrap if one
-     * doesn't exist, so that its children can expand independently of any other nodes -- this is crucial
-     * when executing the &quot;expand all&quot; behavior. If multiple nodes attempt to reuse the same ancestor wrap
-     * element concurrently during expansion it will lead to problems as the first animation to complete will
-     * delete the wrap el out from under other running animations. For that reason, when expanding you should
-     * always pass `bubble: false` to be on the safe side.
-     *
-     * If the passed parent has no wrap (or there is no valid ancestor wrap after bubbling), this function
-     * will return null and the calling code should then call {@link #createAnimWrap} if needed.
-     *
-     * @return {Ext.Element} The wrapping element as created in {@link #createAnimWrap}, or null
-     */
-    getAnimWrap: function(parent, bubble) {
-        if (!this.animate) {
-            return null;
-        }
-
-        var wraps = this.animWraps,
-            wrap = wraps[parent.internalId];
-
-        if (bubble !== false) {
-            while (!wrap &amp;&amp; parent) {
-                parent = parent.parentNode;
-                if (parent) {
-                    wrap = wraps[parent.internalId];
-                }
+            // It is possible for an event to arrive for which there is no record... this
+            // can happen with dblclick where the clicks are on removal actions (think a
+            // grid w/&quot;delete row&quot; action column)
+            if (!record || me.processItemEvent(record, item, index, e) === false) {
+                return false;
             }
+
+            if (
+                (me['onBeforeItem' + map[newType]](record, item, index, e) === false) ||
+                (me.fireEvent('beforeitem' + newType, me, record, item, index, e) === false) ||
+                (me['onItem' + map[newType]](record, item, index, e) === false)
+            ) {
+                return false;
+            }
+
+            me.fireEvent('item' + newType, me, record, item, index, e);
         }
-        return wrap;
-    },
-
-<span id='Ext-tree-View-method-doAdd'>    doAdd: function(records, index) {
-</span>        // If we are adding records which have a parent that is currently expanding
-        // lets add them to the animation wrap
-        var me = this,
-            nodes = me.bufferRender(records, index, true),
-            record = records[0],
-            parent = record.parentNode,
-            all = me.all,
-            relativeIndex,
-            animWrap = me.getAnimWrap(parent),
-            targetEl, children, len;
-
-        if (!animWrap || !animWrap.expanding) {
-            return me.callParent(arguments);
-        }
-
-        // We need the parent that has the animWrap, not the node's parent
-        parent = animWrap.record;
-
-        // If there is an anim wrap we do our special magic logic
-        targetEl = animWrap.targetEl;
-        children = targetEl.dom.childNodes;
-        len = children.length;
-
-        // The relative index is the index in the full flat collection minus the index of the wraps parent
-        relativeIndex = index - me.indexInStore(parent) - 1;
-
-        // If we are adding records to the wrap that have a higher relative index then there are currently children
-        // it means we have to append the nodes to the wrap
-        if (!len || relativeIndex &gt;= len) {
-            targetEl.appendChild(nodes);
-        }
-        // If there are already more children then the relative index it means we are adding child nodes of
-        // some expanded node in the anim wrap. In this case we have to insert the nodes in the right location
         else {
-            Ext.fly(children[relativeIndex]).insertSibling(nodes, 'before', true);
+            if (
+                (me.processContainerEvent(e) === false) ||
+                (me['onBeforeContainer' + map[type]](e) === false) ||
+                (me.fireEvent('beforecontainer' + type, me, e) === false) ||
+                (me['onContainer' + map[type]](e) === false)
+            ) {
+                return false;
+            }
+
+            me.fireEvent('container' + type, me, e);
         }
 
-        // We also have to update the node cache of the DataView
-        all.insert(index, nodes);
+        return true;
+    },
 
-        // If we were in an animation we need to now change the animation
-        // because the targetEl just got higher.
-        if (animWrap.isAnimating) {
-            me.onExpand(parent);
+<span id='Ext-view-View-method-onItemMouseEnter'>    // @private
+</span>    onItemMouseEnter: function(record, item, index, e) {
+        if (this.trackOver) {
+            this.highlightItem(item);
         }
     },
 
-<span id='Ext-tree-View-method-onRemove'>    onRemove : function(ds, records, indexes) {
-</span>        var me = this,
-            empty, i;
+<span id='Ext-view-View-method-onItemMouseLeave'>    // @private
+</span>    onItemMouseLeave : function(record, item, index, e) {
+        if (this.trackOver) {
+            this.clearHighlight();
+        }
+    },
 
+<span id='Ext-view-View-method-onItemMouseDown'>    // private, template methods
+</span>    onItemMouseDown: Ext.emptyFn,
+<span id='Ext-view-View-method-onItemMouseUp'>    onItemMouseUp: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onItemFocus'>    onItemFocus: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onItemClick'>    onItemClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onItemDblClick'>    onItemDblClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onItemContextMenu'>    onItemContextMenu: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onItemKeyDown'>    onItemKeyDown: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemMouseDown'>    onBeforeItemMouseDown: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemMouseUp'>    onBeforeItemMouseUp: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemFocus'>    onBeforeItemFocus: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemMouseEnter'>    onBeforeItemMouseEnter: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemMouseLeave'>    onBeforeItemMouseLeave: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemClick'>    onBeforeItemClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemDblClick'>    onBeforeItemDblClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemContextMenu'>    onBeforeItemContextMenu: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeItemKeyDown'>    onBeforeItemKeyDown: Ext.emptyFn,
+</span>
+<span id='Ext-view-View-method-onContainerMouseDown'>    // private, template methods
+</span>    onContainerMouseDown: Ext.emptyFn,
+<span id='Ext-view-View-method-onContainerMouseUp'>    onContainerMouseUp: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onContainerMouseOver'>    onContainerMouseOver: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onContainerMouseOut'>    onContainerMouseOut: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onContainerClick'>    onContainerClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onContainerDblClick'>    onContainerDblClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onContainerContextMenu'>    onContainerContextMenu: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onContainerKeyDown'>    onContainerKeyDown: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerMouseDown'>    onBeforeContainerMouseDown: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerMouseUp'>    onBeforeContainerMouseUp: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerMouseOver'>    onBeforeContainerMouseOver: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerMouseOut'>    onBeforeContainerMouseOut: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerClick'>    onBeforeContainerClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerDblClick'>    onBeforeContainerDblClick: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerContextMenu'>    onBeforeContainerContextMenu: Ext.emptyFn,
+</span><span id='Ext-view-View-method-onBeforeContainerKeyDown'>    onBeforeContainerKeyDown: Ext.emptyFn,
+</span>
+<span id='Ext-view-View-method-setHighlightedItem'>    // @private
+</span>    setHighlightedItem: function(item){
+        var me = this,
+            highlighted = me.highlightedItem,
+            overItemCls = me.overItemCls,
+            beforeOverItemCls = me.beforeOverItemCls,
+            previous;
+
+        if (highlighted != item){
+            if (highlighted) {
+                Ext.fly(highlighted).removeCls(overItemCls);
+                previous = highlighted.previousSibling;
+                if (beforeOverItemCls &amp;&amp; previous) {
+                    Ext.fly(previous).removeCls(beforeOverItemCls);
+                }
+                me.fireEvent('unhighlightitem', me, highlighted);
+            }
+
+            me.highlightedItem = item;
+
+            if (item) {
+                Ext.fly(item).addCls(me.overItemCls);
+                previous = item.previousSibling;
+                if (beforeOverItemCls &amp;&amp; previous) {
+                    Ext.fly(previous).addCls(beforeOverItemCls);
+                }
+                me.fireEvent('highlightitem', me, item);
+            }
+        }
+    },
+
+<span id='Ext-view-View-method-highlightItem'>    /**
+</span>     * Highlights a given item in the View. This is called by the mouseover handler if {@link #overItemCls}
+     * and {@link #trackOver} are configured, but can also be called manually by other code, for instance to
+     * handle stepping through the list via keyboard navigation.
+     * @param {HTMLElement} item The item to highlight
+     */
+    highlightItem: function(item) {
+        this.setHighlightedItem(item);
+    },
+
+<span id='Ext-view-View-method-clearHighlight'>    /**
+</span>     * Un-highlights the currently highlighted item, if any.
+     */
+    clearHighlight: function() {
+        this.setHighlightedItem(undefined);
+    },
+    
+<span id='Ext-view-View-method-onUpdate'>    onUpdate: function(store, record){
+</span>        var me = this,
+            node,
+            newNode,
+            highlighted;
+        
         if (me.viewReady) {
-            empty = me.store.getCount() === 0;
-
-            // Nothing left, just refresh the view.
-            if (empty) {
-                me.refresh();
-            }
-            else {
-                // Remove in reverse order so that indices remain correct
-                for (i = indexes.length - 1; i &gt;= 0; --i) {
-                    me.doRemove(records[i], indexes[i]);
-                }
-            }
-
-            // Only loop through firing the event if there's anyone listening
-            if (me.hasListeners.itemremove) {
-                for (i = indexes.length - 1; i &gt;= 0; --i) {
-                    me.fireEvent('itemremove', records[i], indexes[i]);
-                }
-            }
-        }
-    },
-
-<span id='Ext-tree-View-method-doRemove'>    doRemove: function(record, index) {
-</span>        // If we are adding records which have a parent that is currently expanding
-        // lets add them to the animation wrap
-        var me = this,
-            all = me.all,
-            animWrap = me.getAnimWrap(record),
-            item = all.item(index),
-            node = item ? item.dom : null;
-
-        if (!node || !animWrap || !animWrap.collapsing) {
-            return me.callParent(arguments);
-        }
-
-        // Insert the item at the beginning of the animate el - child nodes are removed
-        // in reverse order so that the index can be used.
-        animWrap.targetEl.dom.insertBefore(node, animWrap.targetEl.dom.firstChild);
-        all.removeElement(index);
-    },
-
-<span id='Ext-tree-View-method-onBeforeExpand'>    onBeforeExpand: function(parent, records, index) {
-</span>        var me = this,
-            animWrap;
-
-        if (me.rendered &amp;&amp; me.all.getCount() &amp;&amp; me.animate) {
-            if (me.getNode(parent)) {
-                animWrap = me.getAnimWrap(parent, false);
-                if (!animWrap) {
-                    animWrap = me.animWraps[parent.internalId] = me.createAnimWrap(parent);
-                    animWrap.animateEl.setHeight(0);
-                }
-                else if (animWrap.collapsing) {
-                    // If we expand this node while it is still expanding then we
-                    // have to remove the nodes from the animWrap.
-                    animWrap.targetEl.select(me.itemSelector).remove();
-                }
-                animWrap.expanding = true;
-                animWrap.collapsing = false;
-            }
-        }
-    },
-
-<span id='Ext-tree-View-method-onExpand'>    onExpand: function(parent) {
-</span>        var me = this,
-            queue = me.animQueue,
-            id = parent.getId(),
-            node = me.getNode(parent),
-            index = node ? me.indexOf(node) : -1,
-            animWrap,
-            animateEl,
-            targetEl,
-            fromHeight = Ext.isIEQuirks ? 1 : 0 // Quirks mode on IE seems to have issues with 0;
-
-        if (me.singleExpand) {
-            me.ensureSingleExpand(parent);
-        }
-
-        // The item is not visible yet
-        if (index === -1) {
-            return;
-        }
-
-        animWrap = me.getAnimWrap(parent, false);
-
-        if (!animWrap) {
-            parent.isExpandingOrCollapsing = false;
-            me.fireEvent('afteritemexpand', parent, index, node);
-            me.refreshSize();
-            return;
-        }
-
-        animateEl = animWrap.animateEl;
-        targetEl = animWrap.targetEl;
-
-        animateEl.stopAnimation();
-        queue[id] = true;
-
-        // Must set element height because animation does not set initial condition until first tick has elapsed
-        animateEl.dom.style.height = fromHeight + 'px';
-        animateEl.animate({
-            from: {
-                height: fromHeight
-            },
-            to: {
-                height: targetEl.getHeight()
-            },
-            duration: me.expandDuration,
-            listeners: {
-                afteranimate: function() {
-                    // Move all the nodes out of the anim wrap to their proper location
-                    // Must do this in afteranimate because lastframe does not fire if the
-                    // animation is stopped.
-                    var items = targetEl.query(me.itemSelector);
-                    if (items.length) {
-                        animWrap.el.insertSibling(items, 'before', true);
-                    }
-                    animWrap.el.remove();
-                    me.refreshSize();
-                    delete me.animWraps[animWrap.record.internalId];
-                    delete queue[id];
-                }
-            },
-            callback: function() {
-                parent.isExpandingOrCollapsing = false;
-                me.fireEvent('afteritemexpand', parent, index, node);
-            }
-        });
-
-        animWrap.isAnimating = true;
-    },
-
-<span id='Ext-tree-View-method-onBeforeCollapse'>    // Triggered by the NodeStore's onNodeCollapse event.
-</span>    onBeforeCollapse: function(parent, records, index, callback, scope) {
-        var me = this,
-            animWrap;
-
-        if (me.rendered &amp;&amp; me.all.getCount()) {
-            if (me.animate) {
-                // Only process if the collapsing node is in the UI.
-                // A node may be collapsed as part of a recursive ancestor collapse, and if it
-                // has already been removed from the UI by virtue of an ancestor being collapsed, we should not do anything.
-                if (Ext.Array.contains(parent.stores, me.store)) {
-                    animWrap = me.getAnimWrap(parent);
-                    if (!animWrap) {
-                        animWrap = me.animWraps[parent.internalId] = me.createAnimWrap(parent, index);
-                    }
-                    else if (animWrap.expanding) {
-                        // If we collapse this node while it is still expanding then we
-                        // have to remove the nodes from the animWrap.
-                        animWrap.targetEl.select(this.itemSelector).remove();
-                    }
-                    animWrap.expanding = false;
-                    animWrap.collapsing = true;
-                    animWrap.callback = callback;
-                    animWrap.scope = scope;
-                }
-            } else {
-                // Cache any passed callback for use in the onCollapse post collapse handler non-animated codepath
-                me.onCollapseCallback = callback;
-                me.onCollapseScope = scope;
-            }
-        }
-    },
-
-<span id='Ext-tree-View-method-onCollapse'>    onCollapse: function(parent) {
-</span>        var me = this,
-            queue = me.animQueue,
-            id = parent.getId(),
-            node = me.getNode(parent),
-            index = node ? me.indexOf(node) : -1,
-            animWrap = me.getAnimWrap(parent),
-            animateEl;
-
-        // If the collapsed node is already removed from the UI
-        // by virtue of being a descendant of a collapsed node, then
-        // we have nothing to do here.
-        if (!me.all.getCount() || !Ext.Array.contains(parent.stores, me.store)) {
-            return;
-        }
-
-        // Not animating, all items will have been added, so updateLayout and resume layouts
-        if (!animWrap) {
-            parent.isExpandingOrCollapsing = false;
-            me.fireEvent('afteritemcollapse', parent, index, node);
-            me.refreshSize();
-
-            // Call any collapse callback cached in the onBeforeCollapse handler
-            Ext.callback(me.onCollapseCallback, me.onCollapseScope);
-            me.onCollapseCallback = me.onCollapseScope = null;
-            return;
-        }
-
-        animateEl = animWrap.animateEl;
-
-        queue[id] = true;
-
-        animateEl.stopAnimation();
-        animateEl.animate({
-            to: {
-                height: Ext.isIEQuirks ? 1 : 0 // Quirks mode on IE seems to have issues with 0
-            },
-            duration: me.collapseDuration,
-            listeners: {
-                afteranimate: function() {
-                    // In case lastframe did not fire because the animation was stopped.
-                    animWrap.el.remove();
-                    me.refreshSize();
-                    delete me.animWraps[animWrap.record.internalId];
-                    delete queue[id];
-                }
-            },
-            callback: function() {
-                parent.isExpandingOrCollapsing = false;
-                me.fireEvent('afteritemcollapse', parent, index, node);
-
-                // Call any collapse callback cached in the onBeforeCollapse handler
-                Ext.callback(animWrap.callback, animWrap.scope);
-                animWrap.callback = animWrap.scope = null;
-            }
-        });
-        animWrap.isAnimating = true;
-    },
-
-<span id='Ext-tree-View-method-isAnimating'>    /**
-</span>     * Checks if a node is currently undergoing animation
-     * @private
-     * @param {Ext.data.Model} node The node
-     * @return {Boolean} True if the node is animating
-     */
-    isAnimating: function(node) {
-        return !!this.animQueue[node.getId()];
-    },
-
-<span id='Ext-tree-View-method-expand'>    /**
-</span>     * Expands a record that is loaded in the view.
-     *
-     * If an animated collapse or expand of the record is in progress, this call will be ignored.
-     * @param {Ext.data.Model} record The record to expand
-     * @param {Boolean} [deep] True to expand nodes all the way down the tree hierarchy.
-     * @param {Function} [callback] The function to run after the expand is completed
-     * @param {Object} [scope] The scope of the callback function.
-     */
-    expand: function(record, deep, callback, scope) {
-        var me = this,
-            doAnimate = !!me.animate,
-            result;
-
-        // Block toggling if we are already animating an expand or collapse operation.
-        if (!doAnimate || !record.isExpandingOrCollapsing) {
-            if (!record.isLeaf()) {
-                record.isExpandingOrCollapsing = doAnimate;
-            }
-
-            // Need to suspend layouts because the expand process makes multiple changes to the UI
-            // in addition to inserting new nodes. Folder and elbow images have to change, so we
-            // need to coalesce all resulting layouts.
-            Ext.suspendLayouts();
-            result = record.expand(deep, callback, scope);
-            Ext.resumeLayouts(true);
-            return result;
-        }
-    },
-
-<span id='Ext-tree-View-method-collapse'>    /**
-</span>     * Collapses a record that is loaded in the view.
-     *
-     * If an animated collapse or expand of the record is in progress, this call will be ignored.
-     * @param {Ext.data.Model} record The record to collapse
-     * @param {Boolean} [deep] True to collapse nodes all the way up the tree hierarchy.
-     * @param {Function} [callback] The function to run after the collapse is completed
-     * @param {Object} [scope] The scope of the callback function.
-     */
-    collapse: function(record, deep, callback, scope) {
-        var me = this,
-            doAnimate = !!me.animate;
-
-        // Block toggling if we are already animating an expand or collapse operation.
-        if (!doAnimate || !record.isExpandingOrCollapsing) {
-            if (!record.isLeaf()) {
-                record.isExpandingOrCollapsing = doAnimate;
-            }
-            return record.collapse(deep, callback, scope);
-        }
-    },
-
-<span id='Ext-tree-View-method-toggle'>    /**
-</span>     * Toggles a record between expanded and collapsed.
-     *
-     * If an animated collapse or expand of the record is in progress, this call will be ignored.
-     * @param {Ext.data.Model} record
-     * @param {Boolean} [deep] True to collapse nodes all the way up the tree hierarchy.
-     * @param {Function} [callback] The function to run after the expand/collapse is completed
-     * @param {Object} [scope] The scope of the callback function.
-     */
-    toggle: function(record, deep, callback, scope) {
-        if (record.isExpanded()) {
-            this.collapse(record, deep, callback, scope);
-        } else {
-            this.expand(record, deep, callback, scope);
-        }
-    },
-
-<span id='Ext-tree-View-method-onItemDblClick'>    onItemDblClick: function(record, item, index) {
-</span>        var me = this,
-            editingPlugin = me.editingPlugin;
+            node = me.getNode(record);
+            newNode = me.callParent(arguments);
+            highlighted = me.highlightedItem;
             
-        me.callParent(arguments);
-        if (me.toggleOnDblClick &amp;&amp; record.isExpandable() &amp;&amp; !(editingPlugin &amp;&amp; editingPlugin.clicksToEdit === 2)) {
-            me.toggle(record);
+            if (highlighted &amp;&amp; highlighted === node) {
+                delete me.highlightedItem;
+                if (newNode) {
+                    me.highlightItem(newNode);
+                }
+            }
         }
     },
 
-<span id='Ext-tree-View-method-onBeforeItemMouseDown'>    onBeforeItemMouseDown: function(record, item, index, e) {
-</span>        if (e.getTarget(this.expanderSelector, item)) {
-            return false;
-        }
-        return this.callParent(arguments);
-    },
-
-<span id='Ext-tree-View-method-onItemClick'>    onItemClick: function(record, item, index, e) {
-</span>        if (e.getTarget(this.expanderSelector, item) &amp;&amp; record.isExpandable()) {
-            this.toggle(record, e.ctrlKey);
-            return false;
-        }
-        return this.callParent(arguments);
-    },
-
-<span id='Ext-tree-View-method-onExpanderMouseOver'>    onExpanderMouseOver: function(e, t) {
-</span>        e.getTarget(this.cellSelector, 10, true).addCls(this.expanderIconOverCls);
-    },
-
-<span id='Ext-tree-View-method-onExpanderMouseOut'>    onExpanderMouseOut: function(e, t) {
-</span>        e.getTarget(this.cellSelector, 10, true).removeCls(this.expanderIconOverCls);
+<span id='Ext-view-View-method-refresh'>    refresh: function() {
+</span>        this.clearHighlight();
+        this.callParent(arguments);
     },
     
-<span id='Ext-tree-View-method-getStoreListeners'>    getStoreListeners: function(){
-</span>        var me = this,
-            listeners = me.callParent(arguments);
-            
-        return Ext.apply(listeners, {
-            beforeexpand: me.onBeforeExpand,
-            expand: me.onExpand,
-            beforecollapse: me.onBeforeCollapse,
-            collapse: me.onCollapse,
-            write: me.onStoreWrite,
-            datachanged: me.onStoreDataChanged
-        });    
-    },
-    
-<span id='Ext-tree-View-method-onBindStore'>    onBindStore: function(){
-</span>        var me = this,
-            treeStore = me.getTreeStore();
-        
-        me.callParent(arguments);
-        
-        me.mon(treeStore, {
-            scope: me,
-            beforefill: me.onBeforeFill,
-            fillcomplete: me.onFillComplete
-        });
-
-        if (!treeStore.remoteSort) {
-            // If we're local sorting, we don't want the view to be
-            // continually updated during the sort process
-            me.mon(treeStore, {
-                scope: me,
-                beforesort: me.onBeforeSort,
-                sort: me.onSort
-            });
-        }
-    },
-    
-<span id='Ext-tree-View-method-onUnbindStore'>    onUnbindStore: function(){
-</span>        var me = this,
-            treeStore = me.getTreeStore();
-            
-        me.callParent(arguments);
-        
-        me.mun(treeStore, {
-            scope: me,
-            beforefill: me.onBeforeFill,
-            fillcomplete: me.onFillComplete
-        });
-
-        if (!treeStore.remoteSort) {
-            me.mun(treeStore, {
-                scope: me,
-                beforesort: me.onBeforeSort,
-                sort: me.onSort
-            });
-        }
-    },
-
-<span id='Ext-tree-View-method-getTreeStore'>    /**
-</span>     * Gets the base TreeStore from the bound TreePanel.
+<span id='Ext-view-View-method-focusNode'>    /**
+</span>     * Focuses a node in the view.
+     * @param {Ext.data.Model} rec The record associated to the node that is to be focused.
      */
-    getTreeStore: function() {
-        return this.panel.store;
-    },
+    focusNode: function(rec){
+        var me          = this,
+            node        = me.getNode(rec, true),
+            el          = me.el,
+            adjustmentY = 0,
+            adjustmentX = 0,
+            elRegion    = el.getRegion(),
+            nodeRegion;
 
-<span id='Ext-tree-View-method-ensureSingleExpand'>    ensureSingleExpand: function(node) {
-</span>        var parent = node.parentNode;
-        if (parent) {
-            parent.eachChild(function(child) {
-                if (child !== node &amp;&amp; child.isExpanded()) {
-                    child.collapse();
-                }
-            });
-        }
-    },
-
-<span id='Ext-tree-View-method-shouldUpdateCell'>    shouldUpdateCell: function(record, column, changedFieldNames){
-</span>        if (changedFieldNames) {
-            var i = 0,
-                len = changedFieldNames.length;
-
-            for (; i &lt; len; ++i) {
-                if (Ext.Array.contains(this.uiFields, changedFieldNames[i])) {
-                    return true;
-                }
+        // Viewable region must not include scrollbars, so use
+        // DOM client dimensions
+        elRegion.bottom = elRegion.top + el.dom.clientHeight;
+        elRegion.right = elRegion.left + el.dom.clientWidth;
+        if (node) {
+            nodeRegion = Ext.fly(node).getRegion();
+            // node is above
+            if (nodeRegion.top &lt; elRegion.top) {
+                adjustmentY = nodeRegion.top - elRegion.top;
+            // node is below
+            } else if (nodeRegion.bottom &gt; elRegion.bottom) {
+                adjustmentY = nodeRegion.bottom - elRegion.bottom;
             }
+
+            // node is left
+            if (nodeRegion.left &lt; elRegion.left) {
+                adjustmentX = nodeRegion.left - elRegion.left;
+            // node is right
+            } else if (nodeRegion.right &gt; elRegion.right) {
+                adjustmentX = nodeRegion.right - elRegion.right;
+            }
+
+            if (adjustmentX || adjustmentY) {
+                me.scrollBy(adjustmentX, adjustmentY, false);
+            }
+            el.focus();
         }
-        return this.callParent(arguments);
-    },
-
-<span id='Ext-tree-View-method-onStoreWrite'>    /**
-</span>     * Re-fires the NodeStore's &quot;write&quot; event as a TreeStore event
-     * @private
-     * @param {Ext.data.NodeStore} store
-     * @param {Ext.data.Operation} operation
-     */
-    onStoreWrite: function(store, operation) {
-        var treeStore = this.panel.store;
-        treeStore.fireEvent('write', treeStore, operation);
-    },
-
-<span id='Ext-tree-View-method-onStoreDataChanged'>    /**
-</span>     * Re-fires the NodeStore's &quot;datachanged&quot; event as a TreeStore event
-     * @private
-     * @param {Ext.data.NodeStore} store
-     * @param {Ext.data.Operation} operation
-     */
-    onStoreDataChanged: function(store, operation) {
-        var treeStore = this.panel.store;
-        treeStore.fireEvent('datachanged', treeStore);
     }
-});
-</pre>
+});</pre>
 </body>
 </html>

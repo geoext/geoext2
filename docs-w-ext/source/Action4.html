@@ -35,391 +35,284 @@ at http://www.sencha.com/contact.
 
 Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
-<span id='Ext-grid-column-Action'>/**
-</span> * A Grid header type which renders an icon, or a series of icons in a grid cell, and offers a scoped click
- * handler for each icon.
+<span id='Ext-Action'>/**
+</span> * An Action is a piece of reusable functionality that can be abstracted out of any particular component so that it
+ * can be usefully shared among multiple components.  Actions let you share handlers, configuration options and UI
+ * updates across any components that support the Action interface (primarily {@link Ext.toolbar.Toolbar},
+ * {@link Ext.button.Button} and {@link Ext.menu.Menu} components).
  *
- *     @example
- *     Ext.create('Ext.data.Store', {
- *         storeId:'employeeStore',
- *         fields:['firstname', 'lastname', 'seniority', 'dep', 'hired'],
- *         data:[
- *             {firstname:&quot;Michael&quot;, lastname:&quot;Scott&quot;},
- *             {firstname:&quot;Dwight&quot;, lastname:&quot;Schrute&quot;},
- *             {firstname:&quot;Jim&quot;, lastname:&quot;Halpert&quot;},
- *             {firstname:&quot;Kevin&quot;, lastname:&quot;Malone&quot;},
- *             {firstname:&quot;Angela&quot;, lastname:&quot;Martin&quot;}
- *         ]
+ * Use a single Action instance as the config object for any number of UI Components which share the same configuration. The
+ * Action not only supplies the configuration, but allows all Components based upon it to have a common set of methods
+ * called at once through a single call to the Action.
+ *
+ * Any Component that is to be configured with an Action must also support
+ * the following methods:
+ *
+ * - setText(string)
+ * - setIconCls(string)
+ * - setDisabled(boolean)
+ * - setVisible(boolean)
+ * - setHandler(function)
+ *
+ * This allows the Action to control its associated Components.
+ *
+ * Example usage:
+ *
+ *     // Define the shared Action.  Each Component below will have the same
+ *     // display text and icon, and will display the same message on click.
+ *     var action = new Ext.Action({
+ *         {@link #text}: 'Do something',
+ *         {@link #handler}: function(){
+ *             Ext.Msg.alert('Click', 'You did something.');
+ *         },
+ *         {@link #iconCls}: 'do-something',
+ *         {@link #itemId}: 'myAction'
  *     });
  *
- *     Ext.create('Ext.grid.Panel', {
- *         title: 'Action Column Demo',
- *         store: Ext.data.StoreManager.lookup('employeeStore'),
- *         columns: [
- *             {text: 'First Name',  dataIndex:'firstname'},
- *             {text: 'Last Name',  dataIndex:'lastname'},
+ *     var panel = new Ext.panel.Panel({
+ *         title: 'Actions',
+ *         width: 500,
+ *         height: 300,
+ *         tbar: [
+ *             // Add the Action directly to a toolbar as a menu button
+ *             action,
  *             {
- *                 xtype:'actioncolumn',
- *                 width:50,
- *                 items: [{
- *                     icon: 'extjs/examples/shared/icons/fam/cog_edit.png',  // Use a URL in the icon config
- *                     tooltip: 'Edit',
- *                     handler: function(grid, rowIndex, colIndex) {
- *                         var rec = grid.getStore().getAt(rowIndex);
- *                         alert(&quot;Edit &quot; + rec.get('firstname'));
- *                     }
- *                 },{
- *                     icon: 'extjs/examples/restful/images/delete.png',
- *                     tooltip: 'Delete',
- *                     handler: function(grid, rowIndex, colIndex) {
- *                         var rec = grid.getStore().getAt(rowIndex);
- *                         alert(&quot;Terminate &quot; + rec.get('firstname'));
- *                     }
- *                 }]
+ *                 text: 'Action Menu',
+ *                 // Add the Action to a menu as a text item
+ *                 menu: [action]
  *             }
  *         ],
- *         width: 250,
+ *         items: [
+ *             // Add the Action to the panel body as a standard button
+ *             new Ext.button.Button(action)
+ *         ],
  *         renderTo: Ext.getBody()
  *     });
  *
- * The action column can be at any index in the columns array, and a grid can have any number of
- * action columns.
+ *     // Change the text for all components using the Action
+ *     action.setText('Something else');
+ *
+ *     // Reference an Action through a container using the itemId
+ *     var btn = panel.getComponent('myAction');
+ *     var aRef = btn.baseAction;
+ *     aRef.setText('New text');
  */
-Ext.define('Ext.grid.column.Action', {
-    extend: 'Ext.grid.column.Column',
-    alias: ['widget.actioncolumn'],
-    alternateClassName: 'Ext.grid.ActionColumn',
+Ext.define('Ext.Action', {
 
-<span id='Ext-grid-column-Action-cfg-icon'>    /**
-</span>     * @cfg {String} icon
-     * The URL of an image to display as the clickable element in the column.
+    /* Begin Definitions */
+
+    /* End Definitions */
+
+<span id='Ext-Action-cfg-text'>    /**
+</span>     * @cfg {String} [text='']
+     * The text to set for all components configured by this Action.
+     */
+<span id='Ext-Action-cfg-iconCls'>    /**
+</span>     * @cfg {String} [iconCls='']
+     * The CSS class selector that specifies a background image to be used as the header icon for
+     * all components configured by this Action.
      *
-     * Defaults to `{@link Ext#BLANK_IMAGE_URL}`.
+     * An example of specifying a custom icon class would be something like:
+     *
+     *     // specify the property in the config for the class:
+     *          ...
+     *          iconCls: 'do-something'
+     *
+     *     // css class that specifies background image to be used as the icon image:
+     *     .do-something { background-image: url(../images/my-icon.gif) 0 6px no-repeat !important; }
      */
-<span id='Ext-grid-column-Action-cfg-iconCls'>    /**
-</span>     * @cfg {String} iconCls
-     * A CSS class to apply to the icon image. To determine the class dynamically, configure the Column with
-     * a `{@link #getClass}` function.
+<span id='Ext-Action-cfg-disabled'>    /**
+</span>     * @cfg {Boolean} [disabled=false]
+     * True to disable all components configured by this Action, false to enable them.
      */
-<span id='Ext-grid-column-Action-cfg-handler'>    /**
+<span id='Ext-Action-cfg-hidden'>    /**
+</span>     * @cfg {Boolean} [hidden=false]
+     * True to hide all components configured by this Action, false to show them.
+     */
+<span id='Ext-Action-cfg-handler'>    /**
 </span>     * @cfg {Function} handler
-     * A function called when the icon is clicked.
-     * @cfg {Ext.view.Table} handler.view The owning TableView.
-     * @cfg {Number} handler.rowIndex The row index clicked on.
-     * @cfg {Number} handler.colIndex The column index clicked on.
-     * @cfg {Object} handler.item The clicked item (or this Column if multiple {@link #cfg-items} were not configured).
-     * @cfg {Event} handler.e The click event.
-     * @cfg {Ext.data.Model} handler.record The Record underlying the clicked row.
-     * @cfg {HTMLElement} handler.row The table row clicked upon.
+     * The function that will be invoked by each component tied to this Action
+     * when the component's primary event is triggered.
      */
-<span id='Ext-grid-column-Action-cfg-scope'>    /**
+<span id='Ext-Action-cfg-itemId'>    /**
+</span>     * @cfg {String} itemId
+     * See {@link Ext.Component}.{@link Ext.Component#itemId itemId}.
+     */
+<span id='Ext-Action-cfg-scope'>    /**
 </span>     * @cfg {Object} scope
-     * The scope (`this` reference) in which the `{@link #handler}`, `{@link #getClass}`, `{@link #cfg-isDisabled}` and `{@link #getTip}` fuctions are executed.
-     * Defaults to this Column.
-     */
-<span id='Ext-grid-column-Action-cfg-tooltip'>    /**
-</span>     * @cfg {String} tooltip
-     * A tooltip message to be displayed on hover. {@link Ext.tip.QuickTipManager#init Ext.tip.QuickTipManager} must
-     * have been initialized.
-     * 
-     * The tooltip may also be determined on a row by row basis by configuring a {@link #getTip} method.
-     */
-<span id='Ext-grid-column-Action-cfg-disabled'>    /**
-</span>     * @cfg {Boolean} disabled
-     * If true, the action will not respond to click events, and will be displayed semi-opaque.
-     * 
-     * This Column may also be disabled on a row by row basis by configuring a {@link #cfg-isDisabled} method.
-     */
-<span id='Ext-grid-column-Action-cfg-stopSelection'>    /**
-</span>     * @cfg {Boolean} [stopSelection=true]
-     * Prevent grid selection upon mousedown.
-     */
-<span id='Ext-grid-column-Action-cfg-getClass'>    /**
-</span>     * @cfg {Function} getClass
-     * A function which returns the CSS class to apply to the icon image.
-     * @cfg {Object} getClass.v The value of the column's configured field (if any).
-     * @cfg {Object} getClass.metadata An object in which you may set the following attributes:
-     * @cfg {String} getClass.metadata.css A CSS class name to add to the cell's TD element.
-     * @cfg {String} getClass.metadata.attr An HTML attribute definition string to apply to the data container
-     * element *within* the table cell (e.g. 'style=&quot;color:red;&quot;').
-     * @cfg {Ext.data.Model} getClass.r The Record providing the data.
-     * @cfg {Number} getClass.rowIndex The row index.
-     * @cfg {Number} getClass.colIndex The column index.
-     * @cfg {Ext.data.Store} getClass.store The Store which is providing the data Model.
-     */
-<span id='Ext-grid-column-Action-cfg-isDisabled'>    /**
-</span>     * @cfg {Function} isDisabled A function which determines whether the action item for any row is disabled and returns `true` or `false`.
-     * @cfg {Ext.view.Table} isDisabled.view The owning TableView.
-     * @cfg {Number} isDisabled.rowIndex The row index.
-     * @cfg {Number} isDisabled.colIndex The column index.
-     * @cfg {Object} isDisabled.item The clicked item (or this Column if multiple {@link #cfg-items} were not configured).
-     * @cfg {Ext.data.Model} isDisabled.record The Record underlying the row.
-     */
-<span id='Ext-grid-column-Action-cfg-getTip'>    /**
-</span>     * @cfg {Function} getTip A function which returns the tooltip string for any row.
-     * @cfg {Object} getTip.v The value of the column's configured field (if any).
-     * @cfg {Object} getTip.metadata An object in which you may set the following attributes:
-     * @cfg {String} getTip.metadata.css A CSS class name to add to the cell's TD element.
-     * @cfg {String} getTip.metadata.attr An HTML attribute definition string to apply to the data
-     * container element _within_ the table cell (e.g. 'style=&quot;color:red;&quot;').
-     * @cfg {Ext.data.Model} getTip.r The Record providing the data.
-     * @cfg {Number} getTip.rowIndex The row index.
-     * @cfg {Number} getTip.colIndex The column index.
-     * @cfg {Ext.data.Store} getTip.store The Store which is providing the data Model.
-     *
-     */
-<span id='Ext-grid-column-Action-cfg-items'>    /**
-</span>     * @cfg {Object[]} items
-     * An Array which may contain multiple icon definitions, each element of which may contain:
-     *
-     * @cfg {String} items.icon The url of an image to display as the clickable element in the column.
-     *
-     * @cfg {String} items.iconCls A CSS class to apply to the icon image. To determine the class dynamically,
-     * configure the item with a `getClass` function.
-     *
-     * @cfg {Function} items.getClass A function which returns the CSS class to apply to the icon image.
-     * @cfg {Object} items.getClass.v The value of the column's configured field (if any).
-     * @cfg {Object} items.getClass.metadata An object in which you may set the following attributes:
-     * @cfg {String} items.getClass.metadata.css A CSS class name to add to the cell's TD element.
-     * @cfg {String} items.getClass.metadata.attr An HTML attribute definition string to apply to the data
-     * container element _within_ the table cell (e.g. 'style=&quot;color:red;&quot;').
-     * @cfg {Ext.data.Model} items.getClass.r The Record providing the data.
-     * @cfg {Number} items.getClass.rowIndex The row index.
-     * @cfg {Number} items.getClass.colIndex The column index.
-     * @cfg {Ext.data.Store} items.getClass.store The Store which is providing the data Model.
-     *
-     * @cfg {Function} items.handler A function called when the icon is clicked.
-     * @cfg {Ext.view.Table} items.handler.view The owning TableView.
-     * @cfg {Number} items.handler.rowIndex The row index clicked on.
-     * @cfg {Number} items.handler.colIndex The column index clicked on.
-     * @cfg {Object} items.handler.item The clicked item (or this Column if multiple {@link #cfg-items} were not configured).
-     * @cfg {Event} items.handler.e The click event.
-     * @cfg {Ext.data.Model} items.handler.record The Record underlying the clicked row.
-     * @cfg {HTMLElement} items.row The table row clicked upon.
-     *
-     * @cfg {Function} items.isDisabled A function which determines whether the action item for any row is disabled and returns `true` or `false`.
-     * @cfg {Ext.view.Table} items.isDisabled.view The owning TableView.
-     * @cfg {Number} items.isDisabled.rowIndex The row index.
-     * @cfg {Number} items.isDisabled.colIndex The column index.
-     * @cfg {Object} items.isDisabled.item The clicked item (or this Column if multiple {@link #cfg-items} were not configured).
-     * @cfg {Ext.data.Model} items.isDisabled.record The Record underlying the row.
-     *
-     * @cfg {Function} items.getTip A function which returns the tooltip string for any row.
-     * @cfg {Object} items.getTip.v The value of the column's configured field (if any).
-     * @cfg {Object} items.getTip.metadata An object in which you may set the following attributes:
-     * @cfg {String} items.getTip.metadata.css A CSS class name to add to the cell's TD element.
-     * @cfg {String} items.getTip.metadata.attr An HTML attribute definition string to apply to the data
-     * container element _within_ the table cell (e.g. 'style=&quot;color:red;&quot;').
-     * @cfg {Ext.data.Model} items.getTip.r The Record providing the data.
-     * @cfg {Number} items.getTip.rowIndex The row index.
-     * @cfg {Number} items.getTip.colIndex The column index.
-     * @cfg {Ext.data.Store} items.getTip.store The Store which is providing the data Model.
-     *
-     * @cfg {Object} items.scope The scope (`this` reference) in which the `handler`, `getClass`, `isDisabled` and `getTip` functions
-     * are executed. Fallback defaults are this Column's configured scope, then this Column.
-     *
-     * @cfg {String} items.tooltip A tooltip message to be displayed on hover.
-     * {@link Ext.tip.QuickTipManager#init Ext.tip.QuickTipManager} must have been initialized.
-     * 
-     * The tooltip may also be determined on a row by row basis by configuring a `getTip` method.
-     *
-     * @cfg {Boolean} items.disabled If true, the action will not respond to click events, and will be displayed semi-opaque.
-     * 
-     * This item may also be disabled on a row by row basis by configuring an `isDisabled` method.
-     */
-<span id='Ext-grid-column-Action-property-items'>    /**
-</span>     * @property {Array} items
-     * An array of action items copied from the configured {@link #cfg-items items} configuration. Each will have
-     * an `enable` and `disable` method added which will enable and disable the associated action, and
-     * update the displayed icon accordingly.
+     * The scope (this reference) in which the {@link #handler} is executed.
+     * Defaults to the browser window.
      */
 
-    actionIdRe: new RegExp(Ext.baseCSSPrefix + 'action-col-(\\d+)'),
-
-<span id='Ext-grid-column-Action-cfg-altText'>    /**
-</span>     * @cfg {String} altText
-     * The alt text to use for the image element.
+<span id='Ext-Action-method-constructor'>    /**
+</span>     * Creates new Action.
+     * @param {Object} config Config object.
      */
-    altText: '',
-
-<span id='Ext-grid-column-Action-cfg-menuText'>    /**
-</span>     * @cfg {String} [menuText=&lt;i&gt;Actions&lt;/i&gt;]
-     * Text to display in this column's menu item if no {@link #text} was specified as a header.
-     */
-    menuText: '&lt;i&gt;Actions&lt;/i&gt;',
-
-<span id='Ext-grid-column-Action-cfg-sortable'>    sortable: false,
-</span>
-<span id='Ext-grid-column-Action-property-innerCls'>    innerCls: Ext.baseCSSPrefix + 'grid-cell-inner-action-col',
-</span>
-<span id='Ext-grid-column-Action-method-constructor'>    constructor: function(config) {
-</span>        var me = this,
-            cfg = Ext.apply({}, config),
-            // Items may be defined on the prototype
-            items = cfg.items || me.items || [me],
-            hasGetClass,
-            i,
-            len;
-
-
-        me.origRenderer = cfg.renderer || me.renderer;
-        me.origScope = cfg.scope || me.scope;
-        
-        me.renderer = me.scope = cfg.renderer = cfg.scope = null;
-        
-        // This is a Container. Delete the items config to be reinstated after construction.
-        cfg.items = null;
-        me.callParent([cfg]);
-
-        // Items is an array property of ActionColumns
-        me.items = items;
-        
-        for (i = 0, len = items.length; i &lt; len; ++i) {
-            if (items[i].getClass) {
-                hasGetClass = true;
-                break;
-            }
-        }
-        
-        // Also need to check for getClass, since it changes how the cell renders
-        if (me.origRenderer || hasGetClass) {
-            me.hasCustomRenderer = true;
-        }
+    constructor : function(config){
+        this.initialConfig = config;
+        this.itemId = config.itemId = (config.itemId || config.id || Ext.id());
+        this.items = [];
     },
-    
-<span id='Ext-grid-column-Action-method-defaultRenderer'>    // Renderer closure iterates through items creating an &lt;img&gt; element for each and tagging with an identifying
-</span>    // class name x-action-col-{n}
-    defaultRenderer: function(v, meta, record, rowIdx, colIdx, store, view){
-        var me = this,
-            prefix = Ext.baseCSSPrefix,
-            scope = me.origScope || me,
-            items = me.items,
-            len = items.length,
+
+<span id='Ext-Action-property-isAction'>    /*
+</span>     * @property {Boolean} isAction
+     * `true` in this class to identify an object as an instantiated Action, or subclass thereof.
+     */
+    isAction : true,
+
+<span id='Ext-Action-method-setText'>    /**
+</span>     * Sets the text to be displayed by all components configured by this Action.
+     * @param {String} text The text to display
+     */
+    setText : function(text){
+        this.initialConfig.text = text;
+        this.callEach('setText', [text]);
+    },
+
+<span id='Ext-Action-method-getText'>    /**
+</span>     * Gets the text currently displayed by all components configured by this Action.
+     */
+    getText : function(){
+        return this.initialConfig.text;
+    },
+
+<span id='Ext-Action-method-setIconCls'>    /**
+</span>     * Sets the icon CSS class for all components configured by this Action.  The class should supply
+     * a background image that will be used as the icon image.
+     * @param {String} cls The CSS class supplying the icon image
+     */
+    setIconCls : function(cls){
+        this.initialConfig.iconCls = cls;
+        this.callEach('setIconCls', [cls]);
+    },
+
+<span id='Ext-Action-method-getIconCls'>    /**
+</span>     * Gets the icon CSS class currently used by all components configured by this Action.
+     */
+    getIconCls : function(){
+        return this.initialConfig.iconCls;
+    },
+
+<span id='Ext-Action-method-setDisabled'>    /**
+</span>     * Sets the disabled state of all components configured by this Action.  Shortcut method
+     * for {@link #enable} and {@link #disable}.
+     * @param {Boolean} disabled True to disable the component, false to enable it
+     */
+    setDisabled : function(v){
+        this.initialConfig.disabled = v;
+        this.callEach('setDisabled', [v]);
+    },
+
+<span id='Ext-Action-method-enable'>    /**
+</span>     * Enables all components configured by this Action.
+     */
+    enable : function(){
+        this.setDisabled(false);
+    },
+
+<span id='Ext-Action-method-disable'>    /**
+</span>     * Disables all components configured by this Action.
+     */
+    disable : function(){
+        this.setDisabled(true);
+    },
+
+<span id='Ext-Action-method-isDisabled'>    /**
+</span>     * Returns true if the components using this Action are currently disabled, else returns false.
+     */
+    isDisabled : function(){
+        return this.initialConfig.disabled;
+    },
+
+<span id='Ext-Action-method-setHidden'>    /**
+</span>     * Sets the hidden state of all components configured by this Action.  Shortcut method
+     * for `{@link #hide}` and `{@link #show}`.
+     * @param {Boolean} hidden True to hide the component, false to show it.
+     */
+    setHidden : function(v){
+        this.initialConfig.hidden = v;
+        this.callEach('setVisible', [!v]);
+    },
+
+<span id='Ext-Action-method-show'>    /**
+</span>     * Shows all components configured by this Action.
+     */
+    show : function(){
+        this.setHidden(false);
+    },
+
+<span id='Ext-Action-method-hide'>    /**
+</span>     * Hides all components configured by this Action.
+     */
+    hide : function(){
+        this.setHidden(true);
+    },
+
+<span id='Ext-Action-method-isHidden'>    /**
+</span>     * Returns true if the components configured by this Action are currently hidden, else returns false.
+     */
+    isHidden : function(){
+        return this.initialConfig.hidden;
+    },
+
+<span id='Ext-Action-method-setHandler'>    /**
+</span>     * Sets the function that will be called by each Component using this action when its primary event is triggered.
+     * @param {Function} fn The function that will be invoked by the action's components.  The function
+     * will be called with no arguments.
+     * @param {Object} scope The scope (this reference) in which the function is executed. Defaults to the Component
+     * firing the event.
+     */
+    setHandler : function(fn, scope){
+        this.initialConfig.handler = fn;
+        this.initialConfig.scope = scope;
+        this.callEach('setHandler', [fn, scope]);
+    },
+
+<span id='Ext-Action-method-each'>    /**
+</span>     * Executes the specified function once for each Component currently tied to this Action.  The function passed
+     * in should accept a single argument that will be an object that supports the basic Action config/method interface.
+     * @param {Function} fn The function to execute for each component
+     * @param {Object} scope The scope (this reference) in which the function is executed.
+     * Defaults to the Component.
+     */
+    each : function(fn, scope){
+        Ext.each(this.items, fn, scope);
+    },
+
+<span id='Ext-Action-method-callEach'>    // @private
+</span>    callEach : function(fnName, args){
+        var items = this.items,
             i = 0,
-            item, ret, disabled, tooltip;
- 
-        // Allow a configured renderer to create initial value (And set the other values in the &quot;metadata&quot; argument!)
-        // Assign a new variable here, since if we modify &quot;v&quot; it will also modify the arguments collection, meaning
-        // we will pass an incorrect value to getClass/getTip
-        ret = Ext.isFunction(me.origRenderer) ? me.origRenderer.apply(scope, arguments) || '' : '';
+            len = items.length,
+            item;
 
-        meta.tdCls += ' ' + Ext.baseCSSPrefix + 'action-col-cell';
-        for (; i &lt; len; i++) {
+        Ext.suspendLayouts();
+        for(; i &lt; len; i++){
             item = items[i];
-
-            disabled = item.disabled || (item.isDisabled ? item.isDisabled.call(item.scope || scope, view, rowIdx, colIdx, item, record) : false);
-            tooltip = disabled ? null : (item.tooltip || (item.getTip ? item.getTip.apply(item.scope || scope, arguments) : null));
-
-            // Only process the item action setup once.
-            if (!item.hasActionConfiguration) {
-
-                // Apply our documented default to all items
-                item.stopSelection = me.stopSelection;
-                item.disable = Ext.Function.bind(me.disableAction, me, [i], 0);
-                item.enable = Ext.Function.bind(me.enableAction, me, [i], 0);
-                item.hasActionConfiguration = true;
-            }
-
-            ret += '&lt;img role=&quot;button&quot; alt=&quot;' + (item.altText || me.altText) + '&quot; src=&quot;' + (item.icon || Ext.BLANK_IMAGE_URL) +
-                '&quot; class=&quot;' + prefix + 'action-col-icon ' + prefix + 'action-col-' + String(i) + ' ' + (disabled ? prefix + 'item-disabled' : ' ') +
-                ' ' + (Ext.isFunction(item.getClass) ? item.getClass.apply(item.scope || scope, arguments) : (item.iconCls || me.iconCls || '')) + '&quot;' +
-                (tooltip ? ' data-qtip=&quot;' + tooltip + '&quot;' : '') + ' /&gt;';
+            item[fnName].apply(item, args);
         }
-        return ret;    
+        Ext.resumeLayouts(true);
     },
 
-<span id='Ext-grid-column-Action-method-enableAction'>    /**
-</span>     * Enables this ActionColumn's action at the specified index.
-     * @param {Number/Ext.grid.column.Action} index
-     * @param {Boolean} [silent=false]
+<span id='Ext-Action-method-addComponent'>    // @private
+</span>    addComponent : function(comp){
+        this.items.push(comp);
+        comp.on('destroy', this.removeComponent, this);
+    },
+
+<span id='Ext-Action-method-removeComponent'>    // @private
+</span>    removeComponent : function(comp){
+        Ext.Array.remove(this.items, comp);
+    },
+
+<span id='Ext-Action-method-execute'>    /**
+</span>     * Executes this Action manually using the handler function specified in the original config object
+     * or the handler function set with {@link #setHandler}.  Any arguments passed to this
+     * function will be passed on to the handler function.
+     * @param {Object...} args Variable number of arguments passed to the handler function
      */
-    enableAction: function(index, silent) {
-        var me = this;
-
-        if (!index) {
-            index = 0;
-        } else if (!Ext.isNumber(index)) {
-            index = Ext.Array.indexOf(me.items, index);
-        }
-        me.items[index].disabled = false;
-        me.up('tablepanel').el.select('.' + Ext.baseCSSPrefix + 'action-col-' + index).removeCls(me.disabledCls);
-        if (!silent) {
-            me.fireEvent('enable', me);
-        }
-    },
-
-<span id='Ext-grid-column-Action-method-disableAction'>    /**
-</span>     * Disables this ActionColumn's action at the specified index.
-     * @param {Number/Ext.grid.column.Action} index
-     * @param {Boolean} [silent=false]
-     */
-    disableAction: function(index, silent) {
-        var me = this;
-
-        if (!index) {
-            index = 0;
-        } else if (!Ext.isNumber(index)) {
-            index = Ext.Array.indexOf(me.items, index);
-        }
-        me.items[index].disabled = true;
-        me.up('tablepanel').el.select('.' + Ext.baseCSSPrefix + 'action-col-' + index).addCls(me.disabledCls);
-        if (!silent) {
-            me.fireEvent('disable', me);
-        }
-    },
-
-<span id='Ext-grid-column-Action-method-destroy'>    destroy: function() {
-</span>        delete this.items;
-        delete this.renderer;
-        return this.callParent(arguments);
-    },
-
-<span id='Ext-grid-column-Action-method-processEvent'>    /**
-</span>     * @private
-     * Process and refire events routed from the GridView's processEvent method.
-     * Also fires any configured click handlers. By default, cancels the mousedown event to prevent selection.
-     * Returns the event handler's status to allow canceling of GridView's bubbling process.
-     */
-    processEvent : function(type, view, cell, recordIndex, cellIndex, e, record, row){
-        var me = this,
-            target = e.getTarget(),
-            match,
-            item, fn,
-            key = type == 'keydown' &amp;&amp; e.getKey(),
-            disabled;
-
-        // If the target was not within a cell (ie it's a keydown event from the View), then
-        // rely on the selection data injected by View.processUIEvent to grab the
-        // first action icon from the selected cell.
-        if (key &amp;&amp; !Ext.fly(target).findParent(view.getCellSelector())) {
-            target = Ext.fly(cell).down('.' + Ext.baseCSSPrefix + 'action-col-icon', true);
-        }
-
-        // NOTE: The statement below tests the truthiness of an assignment.
-        if (target &amp;&amp; (match = target.className.match(me.actionIdRe))) {
-            item = me.items[parseInt(match[1], 10)];
-            disabled = item.disabled || (item.isDisabled ? item.isDisabled.call(item.scope || me.origScope || me, view, recordIndex, cellIndex, item, record) : false);
-            if (item &amp;&amp; !disabled) {
-                if (type == 'click' || (key == e.ENTER || key == e.SPACE)) {
-                    fn = item.handler || me.handler;
-                    if (fn) {
-                        fn.call(item.scope || me.origScope || me, view, recordIndex, cellIndex, item, e, record, row);
-                    }
-                } else if (type == 'mousedown' &amp;&amp; item.stopSelection !== false) {
-                    return false;
-                }
-            }
-        }
-        return me.callParent(arguments);
-    },
-
-<span id='Ext-grid-column-Action-method-cascade'>    cascade: function(fn, scope) {
-</span>        fn.call(scope||this, this);
-    },
-
-<span id='Ext-grid-column-Action-method-getRefItems'>    // Private override because this cannot function as a Container, and it has an items property which is an Array, NOT a MixedCollection.
-</span>    getRefItems: function() {
-        return [];
+    execute : function(){
+        this.initialConfig.handler.apply(this.initialConfig.scope || Ext.global, arguments);
     }
 });
 </pre>

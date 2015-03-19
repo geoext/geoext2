@@ -137,6 +137,18 @@ Ext.define('GeoExt.panel.Map', {
 
 <span id='GeoExt-panel-Map-cfg-map'>    /**
 </span>     * A configured map or a configuration object for the map constructor.
+     *
+     * In most cases you will want your map to be configured with
+     * `fallThrough: true`, as other settings affect the dragging behaviour of
+     * overlayed `Ext.window.Window` instances in negative way. Such windows
+     * cannot be smoothly dragged over the the map panel. If you do not provide
+     * a map or map configuration object, the auto-created map will be
+     * configured with `fallThrough` being `true`.
+     *
+     * Having `fallThrough` being `false` is a misconfiguration most of the
+     * time, which is why we will issue a warning to the developer console if we
+     * detect this setting.
+     *
      * A configured map will be available after construction through the
      * {@link GeoExt.panel.Map#property-map} property.
      *
@@ -207,6 +219,15 @@ Ext.define('GeoExt.panel.Map', {
      * none was provided in the config options passed to the
      * constructor.
      *
+     * Such an auto-created map will be configured with
+     *
+     *     {
+     *         allOverlays: true,
+     *         fallThrough: true
+     *     }
+     *
+     * See {@link GeoExt.panel.Map#cfg-map} for an explanation why we do this.
+     *
      * @private
      */
     initComponent: function(){
@@ -217,6 +238,10 @@ Ext.define('GeoExt.panel.Map', {
                     fallThrough: true
                 })
             );
+        }
+
+        if (this.map.fallThrough !== true) {
+            this.warnMapFallThrough();
         }
 
         var layers  = this.layers;
@@ -302,6 +327,23 @@ Ext.define('GeoExt.panel.Map', {
         });
     },
 
+<span id='GeoExt-panel-Map-method-warnMapFallThrough'>    /**
+</span>     * Logs a warning to the console (if one is present) that tells the user to
+     * set the `fallThrough` property of an OpenLayers.Map to true when this map
+     * is being used inside of a GeoExt.panel.Map.
+     *
+     * @private
+     */
+    warnMapFallThrough: function(){
+        Ext.log({
+            level: 'warn',
+            msg: 'It is recommended to construct a GeoExt.panel.Map with' +
+                ' OpenLayers.Map#fallThrough == true. This way dragging' +
+                ' interactions with floating components (e.g.' +
+                ' Ext.window.Window) on top of the map are smoother.'
+        });
+    },
+
 <span id='GeoExt-panel-Map-method-onMoveend'>    /**
 </span>     * The &quot;moveend&quot; listener bound to the
      * {@link GeoExt.panel.Map#property-map}.
@@ -327,8 +369,8 @@ Ext.define('GeoExt.panel.Map', {
                 this.fireEvent(&quot;afterlayervisibilitychange&quot;, this, map, e);
             } else if (e.property === &quot;order&quot;) {
                 this.fireEvent(&quot;afterlayerorderchange&quot;, this, map, e);
-            } else if (e.property === &quot;nathis&quot;) {
-                this.fireEvent(&quot;afterlayernathischange&quot;, this, map, e);
+            } else if (e.property === &quot;name&quot;) {
+                this.fireEvent(&quot;afterlayernamechange&quot;, this, map, e);
             } else if (e.property === &quot;opacity&quot;) {
                 this.fireEvent(&quot;afterlayeropacitychange&quot;, this, map, e);
             }
@@ -476,12 +518,10 @@ Ext.define('GeoExt.panel.Map', {
         me.center = new OpenLayers.LonLat(state.x, state.y);
         me.zoom = state.zoom;
 
-        // TODO refactor with me.layers.each
         // set layer visibility and opacity
-        var i, l, layer, layerId, visibility, opacity;
-        var layers = map.layers;
-        for(i=0, l=layers.length; i&lt;l; i++) {
-            layer = layers[i];
+        var layer, layerId, visibility, opacity;
+        me.layers.each(function(layerRec) {
+            layer = layerRec.getLayer();
             layerId = me.prettyStateKeys ? layer.name : layer.id;
             visibility = state[&quot;visibility_&quot; + layerId];
             if(visibility !== undefined) {
@@ -499,7 +539,7 @@ Ext.define('GeoExt.panel.Map', {
             if(opacity !== undefined) {
                 layer.setOpacity(opacity);
             }
-        }
+        });
     },
 
 <span id='GeoExt-panel-Map-method-onBeforeAdd'>    /**
