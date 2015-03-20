@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -42,6 +42,13 @@ Ext.define('GeoExt.tree.View', {
         me.on('createchild', this.createChild, this);
 
         return me.callParent(arguments);
+    },
+
+    /**
+     * @inheritdoc
+     */
+    getRowClass: function(record, rowIndex, rowParams, store) {
+        return record.get('disabled') ? 'gx-tree-row-disabled' : '';
     },
 
     /**

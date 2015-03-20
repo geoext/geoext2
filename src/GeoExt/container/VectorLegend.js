@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -215,10 +215,10 @@ Ext.define('GeoExt.container.VectorLegend', {
 
         if (this.layerRecord) {
             this.layer = this.layerRecord.getLayer();
-            if (this.layer.map) {
+            if (this.layer && this.layer.map) {
                 this.map = this.layer.map;
-                this.currentScaleDenominator = this.layer.map.getScale();
-                this.layer.map.events.on({
+                this.currentScaleDenominator = this.map.getScale();
+                this.map.events.on({
                     "zoomend": this.onMapZoom,
                     scope: this
                 });
@@ -266,7 +266,7 @@ Ext.define('GeoExt.container.VectorLegend', {
     */
     onMapZoom: function() {
         this.setCurrentScaleDenominator(
-            this.layer.map.getScale()
+            this.map.getScale()
         );
     },
 
@@ -688,8 +688,8 @@ Ext.define('GeoExt.container.VectorLegend', {
                     scope: this
                 });
             }
-            if (this.layer.map && this.layer.map.events) {
-                this.layer.map.events.un({
+            if (this.map && this.map.events) {
+                this.map.events.un({
                     "zoomend": this.onMapZoom,
                     scope: this
                 });
@@ -745,8 +745,8 @@ Ext.define('GeoExt.container.VectorLegend', {
         for (var i=0, len=records.length; i<len; i++) {
             var record = records[i];
             if (record.getLayer() === this.layer) {
-                if (this.layer.map && this.layer.map.events) {
-                    this.layer.map.events.on({
+                if (this.map && this.map.events) {
+                    this.map.events.on({
                         "zoomend": this.onMapZoom,
                         scope: this
                     });

@@ -148,7 +148,7 @@
         }
 
         function test_addremove(t) {
-            t.plan(4);
+            t.plan(8);
             var mapPanel = loadMapPanel();
             var lp  = Ext.create("GeoExt.panel.Legend", {
                 renderTo: 'legendpanel'});
@@ -170,12 +170,36 @@
             mapPanel.map.removeLayer(mapPanel.map.layers[0]);
             t.eq(lp.items.length, 2, "Removing the layer really removes the legend from the panel");
 
+            trouble = false;
+            try {
+                mapPanel.map.zoomIn();
+            } catch (err) {
+                trouble = true;
+            }
+            t.ok(!trouble, "Removed WMS layer did not leak event bindings");
+
+            layer = new OpenLayers.Layer.Vector('test4');
+            mapPanel.map.addLayer(layer);
+
+            t.eq(lp.items.length, 3, "A vector layer will be added");
+
+            mapPanel.map.removeLayer(layer);
+            t.eq(lp.items.length, 2, "Removing the vector layer really removes the legend from the panel");
+
+            trouble = false;
+            try {
+                mapPanel.map.zoomIn();
+            } catch (err) {
+                trouble = true;
+            }
+            t.ok(!trouble, "Removed vector layer did not leak event bindings");
+
             lp.destroy();
             mapPanel.destroy();
         }
-        
+
         function test_unsupported(t) {
-            
+
             t.plan(1);
             var mapPanel = Ext.create('GeoExt.panel.Map', {
                 title: "GeoExt MapPanel",
@@ -189,11 +213,11 @@
                 center: new OpenLayers.LonLat(5, 45),
                 zoom: 4
             });
-            
+
             var legendPanel = Ext.create("GeoExt.panel.Legend", {
                 renderTo: "legendpanel"
             });
-            
+
             var map = mapPanel.map;
             var layer = map.layers[1];
             var trouble;
@@ -203,10 +227,10 @@
                 trouble = true;
             }
             t.ok(!trouble, "removed layer without issues");
-            
+
             legendPanel.destroy();
             mapPanel.destroy();
-            
+
         }
 
         function test_clear(t) {

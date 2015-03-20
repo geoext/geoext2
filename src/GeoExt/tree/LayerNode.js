@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -20,6 +20,24 @@
  *         layer: myLayer
  *     }
  *
+ * When the layer associated with this GeoExt.tree.LayerNode is no longer in
+ * range (invisible due to resolution constraints), the layer will be visually
+ * marked as disabled.
+ *
+ * If you do not want this behaviour, include the following CSS code:
+ *
+ *     .gx-tree-row-disabled span.x-tree-node-text {
+ *         opacity: inherit;
+ *         font-style: inherit;
+ *     }
+ *
+ * If additionally you want to make the nodes checkbox unusable when the node is
+ * disabled, you could use the following CSS-snippet:
+ *
+ *     .gx-tree-row-disabled input {
+ *         visibility: hidden;
+ *     }
+ *
  * See GeoExt.data.LayerTreeModel for more details on GeoExt extensions to the
  * node configuration.
  *
@@ -35,7 +53,7 @@ Ext.define('GeoExt.tree.LayerNode', {
     /**
      * The init method is invoked after initComponent method has been run for
      * the client Component. It performs plugin initialization.
-     * 
+     *
      * @param {Ext.Component} target The client Component which owns this
      *     plugin.
      * @private
@@ -57,10 +75,16 @@ Ext.define('GeoExt.tree.LayerNode', {
         }
 
         target.on('afteredit', this.onAfterEdit, this);
+
         layer.events.on({
-            "visibilitychanged": this.onLayerVisibilityChanged,
+            'visibilitychanged': this.onLayerVisibilityChanged,
             scope: this
         });
+
+        if (!layer.alwaysInRange && layer.map) {
+            layer.map.events.register('moveend', this, this.onMapMoveend);
+        }
+
         GeoExt.tree.Util.enforceOneLayerVisible(this.target);
     },
 
@@ -88,6 +112,43 @@ Ext.define('GeoExt.tree.LayerNode', {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
         }
+    },
+
+    /**
+     *  handler for map moveend events to determine if node should be
+     *  disabled or enabled
+     *
+     * @private
+     */
+    onMapMoveend: function(e) {
+        this.target.set('disabled', !this.target.get('layer').inRange);
+    },
+
+    /**
+     * Updates the visibility of the layer that is connected to the target
+     * node.
+     *
+     * @private
+     */
+    onCheckChange: function() {
+        var node = this.target,
+            checked = this.target.get('checked');
+
+        if(checked != node.get('layer').getVisibility()) {
+            node._visibilityChanging = true;
+            var layer = node.get('layer');
+            if(checked && layer.isBaseLayer && layer.map) {
+                layer.map.setBaseLayer(layer);
+            } else if(!checked && layer.isBaseLayer && layer.map &&
+                      layer.map.baseLayer && layer.id == layer.map.baseLayer.id) {
+                // Must prevent the unchecking of radio buttons
+                node.set('checked', layer.getVisibility());
+            } else {
+                layer.setVisibility(checked);
+            }
+            delete node._visibilityChanging;
+        }
+        GeoExt.tree.Util.enforceOneLayerVisible(node);
     }
 
 });
