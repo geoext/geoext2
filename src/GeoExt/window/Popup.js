@@ -346,7 +346,7 @@ Ext.define('GeoExt.window.Popup', {
                 // position the anchor
                 var popupHeight = this.getHeight();
                 if (isNaN(popupHeight) === false) {
-                    this.anc.setTop((popupHeight-1) + "px");
+                    this.anc.setTop((popupHeight-1-this.getBorderPadding().afterX) + "px");
                 }
 
                 top -= elSize.height + ancSize.height;
@@ -355,7 +355,7 @@ Ext.define('GeoExt.window.Popup', {
                 // top
                 this.anc.addCls("top");
                 // remove eventually set top property (bottom-case)
-                this.anc.setTop("");
+                this.anc.setTop((-ancSize.height-1-this.getBorderPadding().beforeX) + "px");
                 top += ancSize.height; // ok
             }
 
