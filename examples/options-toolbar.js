@@ -113,7 +113,7 @@
         }
 
         setTimeout(function() {
-            var v = getQueryParam('extjs') ? getQueryParam('extjs') : '5.0.1',
+            var v = getQueryParam('extjs') ? getQueryParam('extjs') : '5.1.0',
                 extJs5Themes = [
                     { value: 'neptune', name: 'Neptune' },
                     { value: 'neptune-touch', name: 'Neptune Touch' },
