@@ -72,7 +72,7 @@ Ext.define('GeoExt.data.reader.Feature', {
 
             // newly inserted features need to be made into phantom records
             var id = (feature.state === OpenLayers.State.INSERT) ? undefined : feature.id;
-            convertedValues['id'] = id;
+            record.internalId = id;
         }
     }
 });
