@@ -89,7 +89,7 @@ Ext.define('GeoExt.container.WmsLegend', {
                 itemId = prefix + layername.replace(illegalItemIdRe, replace);
             }
             return itemId
-        },
+        }
     },
 
     /**
