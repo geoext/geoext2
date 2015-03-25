@@ -1,6 +1,4 @@
 language: node_js
-node_js: 0.10
-# installs dependencies for testing
-install: npm install -g casperjs@1.1.0-beta3
-# command to run tests
-script: casperjs test tests/headless/run-testsuite.js
+node_js:
+  - node
+  - iojs
