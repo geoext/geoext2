@@ -48,7 +48,6 @@ already includes ExtJS and OpenLayers:
           src="http://cdn.sencha.com/ext/gpl/4.2.1/ext-debug.js"></script>
         <!-- Load OpenLayers, custom builds may even be better -->
         <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-        <script type="text/javascript" src="../loader.js"></script>
     </head>
     <body></body>
 </html>
