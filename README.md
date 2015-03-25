@@ -139,11 +139,11 @@ prior to submitting your changes. Thanks.
 You can also run the above tests headlessly through casperjs.
 
 ```bash
-# Install casperjs via npm in the GeoExt 2 clone dir (only first time)
-npm install casperjs@1.1.0-beta3
+# Install dependencies via npm in the GeoExt 2 clone dir (only first time)
+npm install
 
 # Run the suite in the root of the repository
-./node_modules/casperjs/bin/casperjs test tests/headless/run-testsuite.js
+npm test
 ```
 
 These tests are also run though [travis](https://travis-ci.org/geoext/geoext2).
