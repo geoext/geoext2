@@ -139,18 +139,25 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * @private
      */
     bindComponent: function() {
-        this.callParent(arguments);
-        if (this.layerFromStore) {
-            var view = this.view || this.views[0],
-                layer = view.getStore() && view.getStore().layer;
-            if (layer && !(this.selectControl instanceof
-                    OpenLayers.Control.SelectFeature)) {
-                this.selectControl = this.createSelectControl(
-                        layer, this.selectControl);
+        var me = this;
+        me.callParent(arguments);
+        if (me.layerFromStore) {
+            var view = me.view || me.views[0],
+                viewStore = view.getStore(),
+                ctrl = me.selectControl,
+                isSelCtrl = (ctrl instanceof OpenLayers.Control.SelectFeature),
+                layer;
+
+            if (viewStore) {
+                layer = viewStore.layer;
+            }
+
+            if (layer && !isSelCtrl) {
+                me.selectControl = me.createSelectControl(layer, ctrl);
             }
         }
-        if (this.selectControl) {
-            this.bindLayer(this.selectControl);
+        if (me.selectControl) {
+            me.bindLayer(me.selectControl);
         }
     },
 
