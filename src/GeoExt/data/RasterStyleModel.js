@@ -50,8 +50,9 @@ Ext.define('GeoExt.data.RasterStyleModel',{
     }],
     proxy: {
         type : 'memory',
-        // TODO GeoExt ist not defined on construction so we're checking the ExtJS-Version without
-        // GeoExt.isExt4. Maybe this can be improved/beautified
+        // TODO GeoExt is not defined on construction so we're checking the
+        //      ExtJS-Version without GeoExt.isExt4. Maybe this can be
+        //      improved/beautified
         reader: (function(){
             if (Ext.versions.extjs.major > 4) {
                 return {
@@ -67,7 +68,8 @@ Ext.define('GeoExt.data.RasterStyleModel',{
         })()
     },
     listeners:{
-        // TODO cleanup when ExtJS4-Support is no longer needed Removed in ExtJS5
+        // TODO cleanup when ExtJS4-Support is no longer needed
+        //      removed in ExtJS5
         idchanged:function(rec){
             for(var i=0;i<rec.stores.length;i++){
                 var store = rec.stores[i];
