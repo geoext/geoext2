@@ -4,7 +4,8 @@ Ext.define('GeoExt.tree.Util', {
          * Updates the visibility of the layer that is connected to given
          * node.
          *
-         * @private
+         * @param {Ext.data.NodeInterface} node The node.
+         * @param {boolean} checked the new checked state.
          */
         updateLayerVisibilityByNode: function(node, checked) {
             if(checked != node.get('layer').getVisibility()) {
@@ -25,7 +26,9 @@ Ext.define('GeoExt.tree.Util', {
         },
 
         /**
+         * Enforces that one layer of the node is visible.
          *
+         * @param {Ext.data.NodeInterface} node The node.
          */
         enforceOneLayerVisible: function(node) {
             var attributes = node.data;
