@@ -1,5 +1,9 @@
 /**
- * Modified from ext-5.0.0/shared/include-ext.js
+ * Modified from ext-5.0.0/shared/include-ext.js:
+ *
+ *   * support query parameter 'extjs'
+ *   * default to 'neptune' theme, as this one exists in both v4 and v5
+ *   * load the debug-variants of the resources
  *
  * This file includes the required ext-all js and css files based upon "theme" and "rtl"
  * url parameters.  It first searches for these parameters on the page url, and if they
