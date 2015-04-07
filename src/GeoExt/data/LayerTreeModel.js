@@ -72,7 +72,7 @@ Ext.define('GeoExt.data.LayerTreeModel',{
     },
 
     // TODO This is also been used in WmsLegend, refactor so this can be reused
-    // or shared
+    //      or shared
     /**
      * A regular expression to validate whether a given string is a valid id
      * ready to be used either as `id` or `itemId` property. In Ext 5 we can
@@ -123,7 +123,7 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         } else {
             itemId = prefix + layername.replace(illegalItemIdRe, replace);
         }
-        return itemId
+        return itemId;
     },
 
     /**

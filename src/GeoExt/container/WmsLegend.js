@@ -39,6 +39,8 @@ Ext.define('GeoExt.container.WmsLegend', {
             return layerRecord.getLayer() instanceof OpenLayers.Layer.WMS ? 1 : 0;
         },
 
+        // TODO This is also been used in data/LayerTreeModel, refactor so this
+        //      can be reused or shared
         /**
          * A regular expression to validate whether a given string is a valid id
          * ready to be used either as `id` or `itemId` property. In Ext 5 we can
@@ -88,7 +90,7 @@ Ext.define('GeoExt.container.WmsLegend', {
             } else {
                 itemId = prefix + layername.replace(illegalItemIdRe, replace);
             }
-            return itemId
+            return itemId;
         }
     },
 
