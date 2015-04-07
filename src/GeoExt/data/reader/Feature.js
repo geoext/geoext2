@@ -57,6 +57,7 @@ Ext.define('GeoExt.data.reader.Feature', {
             record;
 
         // call the parent which actually also modifies the given feature in
+        // ExtJS 5
         record = this.callParent(arguments);
 
         record.state = featureState;
