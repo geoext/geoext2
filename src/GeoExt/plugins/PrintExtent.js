@@ -42,9 +42,6 @@
  * @class GeoExt.plugins.PrintExtent
  */
 Ext.define('GeoExt.plugins.PrintExtent', {
-    mixins: {
-        observable: 'Ext.util.Observable'
-    },
     requires: ['GeoExt.data.PrintPage'],
     alias : 'widget.gx_printextent',
     alternateClassName : 'GeoExt.PrintExtent',
@@ -138,6 +135,13 @@ Ext.define('GeoExt.plugins.PrintExtent', {
     constructor: function(config) {
         config = config || {};
 
+        if(GeoExt.isExt4){
+            this.self.mixin('observable', Ext.util.Observable);
+        } else {
+            this.self.mixin('observable', Ext.mixin.Observable);
+            this.mixins.observable.constructor.call(this, config);
+        }
+
         Ext.apply(this, config);
         this.initialConfig = config;
 
@@ -182,7 +186,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      */
     init: function(mapPanel) {
         this.map = mapPanel.map;
-        mapPanel.on("destroy", this.onMapPanelDestroy, this);
+        mapPanel.on("beforedestroy", this.beforeMapPanelDestroy, this);
 
         if (!this.layer) {
             this.layer = new OpenLayers.Layer.Vector(null, {
@@ -299,8 +303,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      *
      * @private
      */
-    onMapPanelDestroy: function() {
-
+    beforeMapPanelDestroy: function() {
         var map = this.map;
 
         for(var len = this.pages.length - 1, i = len; i>=0; i--) {

@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html debug="true">
+<html>
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../examples/include-ext.js"></script>
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
@@ -77,10 +81,12 @@
             t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
             t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
 
-            t.ok(store.getAt(0).raw instanceof OpenLayers.Feature.Vector,
-                 "feature[0].raw is a OpenLayers.Feature.Vector");
-            t.ok(store.getAt(1).raw instanceof OpenLayers.Feature.Vector,
-                 "feature[1].raw is a OpenLayers.Feature.Vector");
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
+
+            t.ok(store.getAt(0)[featureKey] instanceof OpenLayers.Feature.Vector,
+                 "feature[0]["+featureKey+"] is a OpenLayers.Feature.Vector");
+            t.ok(store.getAt(1)[featureKey] instanceof OpenLayers.Feature.Vector,
+                 "feature[1]["+featureKey+"] is a OpenLayers.Feature.Vector");
         }
 
         function test_constructor_features(t) {
@@ -186,6 +192,7 @@
             store.bind(layer, {initDir: GeoExt.data.FeatureStore.LAYER_TO_STORE});
             t.eq(layer.features.length, 2, "initial records are not synchronized to layer");
             t.eq(store.getCount(), 4, "initial features are synchronized to store");
+
             store.removeFeatures(records[0]);
             t.eq(store.getCount(), 3, "removing record not present in layer has been well removed");
             t.eq(layer.features.length, 2, "nothing to remove in layer when removing record not present in layer");
@@ -408,7 +415,9 @@
                 model: 'My.FooBar.Model',
                 layer: layer
             });
+
             store.addFeatures([feature1, feature2, feature3]);
+
             var record1 = store.getByFeature(feature1);
             var record2 = store.getByFeature(feature2);
             var record3 = store.getByFeature(feature3);
@@ -417,7 +426,7 @@
                  "record gets correct initial value for property \"foo\"");
             t.eq(record1.get("bar"), "bar",
                  "record gets correct initial value for property \"bar\"");
-            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(record1.dirty, true, "record is dirty");
             t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
             t.eq(record2.dirty, false, "record is not dirty");
             t.eq(record3.dirty, false, "record is not dirty");
@@ -429,13 +438,13 @@
             // featuremodified
             feature2.attributes.foo = "foo2";
             feature2.attributes.bar = "bar2";
-            layer.events.triggerEvent("featuremodified", {feature: feature2});
 
+            layer.events.triggerEvent("featuremodified", {feature: feature2});
             t.eq(record2.get("foo"), "foo2",
                  "featuremodified event causes update of record property \"foo\"");
             t.eq(record2.get("bar"), "bar2",
                  "featuremodified event causes update of record property \"bar\"");
-            t.eq(record1.dirty, true, "record is not dirty");
+            t.eq(record1.dirty, true, "record is dirty");
             t.eq(feature1.state, OpenLayers.State.INSERT, "feature is insert");
             t.eq(record2.dirty, true, "record is dirty");
             t.eq(feature2.state, OpenLayers.State.UPDATE, "feature is update");
@@ -618,10 +627,12 @@
             t.eq(store.getAt(1).get('foo'), '42', "feature[1].foo == '42'");
             t.eq(store.getAt(1).get('ele'), -100, "feature[1].ele == -100");
 
-            t.ok(store.getAt(0).raw instanceof OpenLayers.Feature.Vector,
-                 "feature[0].raw is a OpenLayers.Feature.Vector");
-            t.ok(store.getAt(1).raw instanceof OpenLayers.Feature.Vector,
-                 "feature[1].raw is a OpenLayers.Feature.Vector");
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
+
+            t.ok(store.getAt(0)[featureKey] instanceof OpenLayers.Feature.Vector,
+                 "feature[0]["+featureKey+"] is a OpenLayers.Feature.Vector");
+            t.ok(store.getAt(1)[featureKey] instanceof OpenLayers.Feature.Vector,
+                 "feature[1]["+featureKey+"] is a OpenLayers.Feature.Vector");
         }
 
         function test_destroy(t) {

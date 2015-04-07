@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../examples/include-ext.js"></script>
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-
     <script type="text/javascript">
         Ext.Loader.setConfig({
             disableCaching: false,
@@ -181,7 +184,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) > -1,
                  "click on row 0 selects feature 0");
@@ -193,13 +196,13 @@
                 shiftKey: false,
                 ctrlKey: true
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) > -1, // with extjs 4 the line still be selected
                  "click on row 0 deselects feature 0");
 
             // simulate a mousedown on the second row
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            sm.selectWithEvent(store.getAt(1), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[1]) > -1,
                  "click on row 1 selects feature 1");
@@ -299,7 +302,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) < 0,
                  "click on row 0 does not select feature 0");
@@ -313,7 +316,7 @@
             selectControl.unselect(features[0]);
 
             // bind the select control to the selection model
-            sm.bind(selectControl);
+            sm.bindLayer(selectControl);
 
             // simulate a mousedown on the second row
             // test that the second feature is selected in the layer
@@ -322,7 +325,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            sm.selectWithEvent(store.getAt(1), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[1]) > -1,
                  "click on row 1 selects feature 1");
@@ -337,7 +340,7 @@
             sm.clearSelections();
 
             // unbind row and feature selection
-            sm.unbind();
+            sm.unbindLayer();
             // (side effect: selectControl is deactivated)
 
             // simulate a mousedown on the first row
@@ -347,7 +350,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[0]) < 0,
                  "click on row 0 does not select feature 0");
@@ -361,7 +364,7 @@
             selectControl.unselect(features[0]);
 
             // bind selection of features on a layer to rows
-            sm.bind(layer, {controlConfig: {hover: true}});
+            sm.bindLayer(layer, {controlConfig: {hover: true}});
 
             // verify that controlConfig has been applied
             t.eq(sm.selectControl.hover, true,
@@ -374,7 +377,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+            sm.selectWithEvent(store.getAt(1), e);
             t.ok(OpenLayers.Util.indexOf(layer.selectedFeatures,
                                          features[1]) > -1,
                  "click on row 1 selects feature 1");
@@ -457,7 +460,7 @@
                 shiftKey: false,
                 ctrlKey: false
             };
-            sm.onRowMouseDown(grid, store.getAt(0), null, 0, e);
+            sm.selectWithEvent(store.getAt(0), e);
 
             t.eq(map.getCenter().toString(), "lon=10,lat=10", "Map recentered to lon=10,lat=10 on selection of one feature");
             t.eq(map.getZoom(), 0, "Map' s zoom has not changed because feature is visible on this zoom level");
@@ -476,7 +479,7 @@
                     shiftKey: false,
                     ctrlKey: true
                 };
-                sm.onRowMouseDown(grid, store.getAt(1), null, 1, e);
+                sm.selectWithEvent(store.getAt(1), e);
 
                 t.eq(map.getCenter().toString(), "lon=6,lat=6", "Map recentered to lon=6,lat=6 to make multiple selected features visible");
                 t.eq(map.getZoom(), 4, "Map' s zoom has changed in order to make multiple selected features visible");

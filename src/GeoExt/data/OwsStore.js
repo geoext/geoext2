@@ -90,7 +90,12 @@ Ext.define('GeoExt.data.OwsStore', {
         if (newParams && Ext.isObject(newParams)) {
             var proxy = this.getProxy();
             if(proxy) {
-                proxy.extraParams = newParams;
+                if (proxy.setExtraParams) {
+                    // ExtJS 5 needs the setter
+                    proxy.setExtraParams(newParams);
+                } else {
+                    proxy.extraParams = newParams;
+                }
             }
         }
     },
@@ -102,7 +107,12 @@ Ext.define('GeoExt.data.OwsStore', {
         if(newValue && Ext.isString(newValue)) {
             var proxy = this.getProxy();
             if(proxy) {
-                proxy.url = newValue;
+                if (proxy.setUrl){
+                    // ExtJS 5 needs the setter
+                    proxy.setUrl(newValue);
+                } else {
+                    proxy.url = newValue;
+                }
             }
         }
     },
@@ -114,7 +124,12 @@ Ext.define('GeoExt.data.OwsStore', {
         var proxy = this.getProxy();
         var reader = (proxy) ? proxy.getReader() : null;
         if(reader) {
-            reader.format = newFormat;
+            if (reader.setFormat) {
+                // ExtJS 5 needs the setter
+                reader.setFormat(newFormat);
+            } else {
+                reader.format = newFormat;
+            }
         }
     }
 });

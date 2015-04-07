@@ -22,27 +22,69 @@ Ext.define('GeoExt.data.proxy.Protocol', {
     ],
     alias: 'proxy.gx_protocol',
 
-    /**
-     * The protocol used to fetch features.
-     *
-     * @cfg {OpenLayers.Protocol}
-     */
-    protocol: null,
+    config:  {
+
+        /**
+         * The protocol used to fetch features.
+         *
+         * @cfg {OpenLayers.Protocol}
+         */
+        protocol: null,
+
+        /**
+         * Abort any previous request before issuing another.
+         *
+         * @cfg {Boolean}
+         */
+        abortPrevious: true,
+
+        /**
+         * Should options.params be set directly on options before passing it
+         * into the protocol's read method?
+         *
+         * @cfg {Boolean}
+         */
+        setParamsAsOptions: false,
+
+        /**
+         * The reader to use.
+         *
+         * @cfg {Ext.data.reader.Reader}
+         */
+        reader: {}
+
+    },
 
     /**
-     * Abort any previous request before issuing another.
+     * We need to override this as the OpenLayers classes passed as configs
+     * loose their class-nature and seem to be copied by ExtJS somewhere.
      *
-     * @cfg {Boolean}
+     * We deal with this elsewhere in a different manner and should see if
+     * we can either share code or get rid of this special handling all
+     * together. The problem isn't reproducible for other 'classes' with a
+     * similar inheritance strategy as OpenLayers 2 has.
+     *
+     * TODO Find a way to have this functionality shared or get rid of it.
+     *
+     * @param {Object} config the configuration as passed by the user.
      */
-    abortPrevious: true,
+    initConfig: function(config){
+        var me = this,
+            cfg = config || {},
+            prefix = me.$configPrefixed ? '_' : '',
+            olConfigs = [
+                'protocol'
+            ];
+        Ext.each(olConfigs, function(olConfig){
+            if (cfg[olConfig]) {
+                me[prefix + olConfig] = cfg[olConfig];
+                delete cfg[olConfig];
+            }
+        });
+        me.callParent([cfg]);
+    },
 
-    /**
-     * Should options.params be set directly on options before passing it into
-     * the protocol's read method?
-     *
-     * @cfg {Boolean}
-     */
-    setParamsAsOptions: false,
+    model: 'Ext.data.Model',
 
     /**
      * The response returned by the read call on the protocol.
@@ -63,37 +105,53 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      */
     doRequest: function(operation, callback, scope) {
         var me = this,
-            params = Ext.applyIf(operation.params || {}, me.extraParams || {}),
-            request;
+            operationParams,
+            params,
+            request,
+            o,
+            cb,
+            options;
 
-        //copy any sorters, filters etc into the params so they can be sent over the wire
+        if(GeoExt.isExt5){
+            callback = callback || operation.getCallback();
+            scope = scope || operation.getScope();
+            operationParams = operation.getParams() || {};
+        } else {
+            operationParams = operation.params || {};
+        }
+
+        params = Ext.applyIf(operationParams, me.extraParams || {});
+
+        //copy any sorters, filters etc into the params so they can be sent over
+        //the wire
         params = Ext.applyIf(params, me.getParams(operation));
 
-        var o = {
+        o = {
             params: params || {},
             operation: operation,
             request: {
                 callback: callback,
                 scope: scope,
-                arg: operation.arg
+                arg: operation.arg || operation.config.arg
             },
-            reader: this.getReader()
+            reader: me.getReader()
         };
-        var cb = OpenLayers.Function.bind(this.loadResponse, this, o);
-        if (this.abortPrevious) {
-            this.abortRequest();
+        cb = OpenLayers.Function.bind(me.loadResponse, me, o);
+        if (me.getAbortPrevious()) {
+            me.abortRequest();
         }
-        var options = {
+        options = {
             params: params,
             callback: cb,
-            scope: this
+            scope: me
         };
-        Ext.applyIf(options, operation.arg);
-        if (this.setParamsAsOptions === true) {
+        Ext.applyIf(options, operation.arg || operation.config.arg);
+        if (me.getSetParamsAsOptions() === true) {
             Ext.applyIf(options, options.params);
             delete options.params;
         }
-        this.response = this.protocol.read(options);
+
+        me.response = me.getProtocol().read(options);
     },
 
     /**
@@ -102,9 +160,10 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      * @private
      */
     abortRequest: function() {
-        if (this.response) {
-            this.protocol.abort(this.response);
-            this.response = null;
+        var me = this;
+        if (me.response) {
+            me.getProtocol().abort(me.response);
+            me.response = null;
         }
     },
 
@@ -116,18 +175,23 @@ Ext.define('GeoExt.data.proxy.Protocol', {
      * @private
      */
     loadResponse: function(o, response) {
-        var me = this;
-        var operation = o.operation;
-        var scope = o.request.scope;
-        var callback = o.request.callback;
+        var me = this,
+            operation = o.operation,
+            scope = o.request.scope,
+            callback = o.request.callback,
+            result;
         if (response.success()) {
-            var result = o.reader.read(response.features || response);
+            result = o.reader.read(response.features || response);
             Ext.apply(operation, {
                 response: response,
                 resultSet: result
             });
 
-            operation.commitRecords(result.records);
+            if (GeoExt.isExt4) {
+                operation.commitRecords(result.records);
+            } else {
+                operation.setRecords(result.records);
+            }
             operation.setCompleted();
             operation.setSuccessful();
         } else {

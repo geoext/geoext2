@@ -13,10 +13,16 @@
  */
 
 Ext.require([
-    'Ext.Window', // useless in fact, since we're using ext-all.js in the example
+    'Ext.Window',
     'GeoExt.panel.Map',
     'GeoExt.window.Popup'
 ]);
+
+if(!Ext.isDefined(Ext.DomQuery)) {
+    // Ext.DomQuery is replaced by Ext.dom.Query when using ExtJS5
+    Ext.require('Ext.dom.Query');
+}
+
 
 var mapPanel, popup;
 
@@ -40,7 +46,8 @@ Ext.onReady(function() {
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
     
     function createPopup(feature) {
-        var checkConstrOpt = Ext.DomQuery.select('input[name="constrainOpt"]:checked')[0].value,
+        var DomQuery = GeoExt.isExt4 ? Ext.DomQuery : Ext.dom.Query,
+            checkConstrOpt = DomQuery.select('input[name="constrainOpt"]:checked')[0].value,
             undef,
             constrainOpts = {
                 constrain: (checkConstrOpt === 'constrain-full') ? true : undef,

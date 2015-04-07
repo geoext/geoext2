@@ -29,7 +29,7 @@ Ext.application({
         store = Ext.create("GeoExt.data.WfsCapabilitiesStore", {
             url: "../data/wfscap_tiny_100.xml",
             autoLoad: true,
-            // set as a function that returns a hash of layer options.  This allows
+            // set as a function that returns a hash of layer options. This allows
             // to have new objects created upon each new OpenLayers.Layer.Vector
             // object creations.
             layerOptions: function() {
@@ -54,6 +54,5 @@ Ext.application({
             height: 300,
             width: 650
         });
-
     }
 });

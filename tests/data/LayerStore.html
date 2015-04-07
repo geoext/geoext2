@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html debug="true">
+<html>
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
 
@@ -27,7 +32,6 @@
         function loadMapPanel() {
             return Ext.create('GeoExt.panel.Map', {
                 // panel options
-                id: "map-panel",
                 title: "GeoExt MapPanel",
                 renderTo: "mappanel",
                 height: 400,
@@ -54,9 +58,10 @@
                  "ctor sets the passed map in the instance");
             store.destroy();
 
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
             var layer = new OpenLayers.Layer.Vector("Foo Layer", {isBaseLayer: true});
             store = Ext.create('GeoExt.data.LayerStore', {data: [layer]});
-            t.ok(store.getAt(0).raw == layer,
+            t.ok(store.getAt(0)[featureKey] == layer,
                  "ctor sets the passed layer in the instance");
 
             map.destroy();
@@ -159,7 +164,7 @@
 
             var reinit_test_data = function () {
                 // unbind store
-                store.unbind();
+                store.unbindMap();
 
                 // remove all existing records and layers
                 store.removeAll();
@@ -182,7 +187,7 @@
                 // test if the bind event works
                 t.eq(m.id, map.id, "bind event triggered with the correct map.");
             }, null, {single: true});
-            store.bind(map, {initDir: GeoExt.data.LayerStore.STORE_TO_MAP});
+            store.bindMap(map, {initDir: GeoExt.data.LayerStore.STORE_TO_MAP});
             t.eq(map.layers.length, 4, "initial records are synchronized to map");
             t.eq(store.getCount(), 2, "initial layers are not synchronized to store");
             map.removeLayer(layers[0]);
@@ -191,7 +196,7 @@
 
             // test map to store synchronization
             reinit_test_data();
-            store.bind(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE});
+            store.bindMap(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE});
             t.eq(map.layers.length, 2, "initial records are not synchronized to map");
             t.eq(store.getCount(), 4, "initial layers are synchronized to store");
             store.remove(store.getAt(0));
@@ -200,14 +205,14 @@
 
             // test both synchronization
             reinit_test_data();
-            store.bind(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE |
+            store.bindMap(map, {initDir: GeoExt.data.LayerStore.MAP_TO_STORE |
                                       GeoExt.data.LayerStore.STORE_TO_MAP});
             t.eq(map.layers.length, 4, "initial records are synchronized to map");
             t.eq(store.getCount(), 4, "initial layers are synchronized to store");
 
             // test no synchronization
             reinit_test_data();
-            store.bind(map, {initDir: 0});
+            store.bindMap(map, {initDir: 0});
             t.eq(map.layers.length, 2, "initial records are not synchronized to map");
             t.eq(store.getCount(), 2, "initial layers are not synchronized to store");
         }
@@ -377,7 +382,7 @@
         
         function test_events(t) {
             t.plan(21);
-            
+
             var map = new OpenLayers.Map({div: "mappanel", allOverlays: true});
             var a = new OpenLayers.Layer("a");
             var b = new OpenLayers.Layer("b");
@@ -419,7 +424,11 @@
             t.eq(events.length, 1, "[" + batch + "] one event");
             event = events[0];
             t.eq(event.type, "remove", "[" + batch + "] 'remove' event");
-            t.ok(event.args[1].getLayer() === d, "[" + batch + "] correct layer on record");
+
+            // depending on the Ext version the remove event will either contain
+            // an array or a single record
+            var removeRec1 = (Ext.isArray(event.args[1])) ? event.args[1][0] : event.args[1];
+            t.ok(removeRec1.getLayer() === d, "[" + batch + "] correct layer on record");
 
             // confirm that we get an "add" and "remove" on map.setLayerIndex
             events = [];
@@ -428,7 +437,11 @@
             t.eq(events.length, 2, "[" + batch + "] two events");
             event = events[0];
             t.eq(event.type, "remove", "[" + batch + "] 'remove' event first");
-            t.ok(event.args[1].getLayer() === b, "[" + batch + "] correct layer on record");
+
+            // depending on the Ext version the remove event will either contain
+            // an array or a single record
+            var removeRec2 = (Ext.isArray(event.args[1])) ? event.args[1][0] : event.args[1];
+            t.ok(removeRec2.getLayer() === b, "[" + batch + "] correct layer on record");
             event = events[1];
             t.eq(event.type, "add", "[" + batch + "] 'add' event second");
             t.eq(event.args[1].length, 1, "[" + batch + "] correct number of records");
@@ -444,7 +457,7 @@
             t.eq(event.type, "update", "[" + batch + "] 'update' event");
             t.ok(event.args[1].getLayer() === c, "[" + batch + "] correct layer on record");
             t.eq(event.args[2], Ext.data.Record.EDIT, "[" + batch + "] correct operation");
-            
+
             // confirm that we get an "update" on layer.setVisibility
             events = [];
             batch = "layer.setVisibility";

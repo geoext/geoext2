@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html debug="true">
+<html>
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../examples/include-ext.js"></script>
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
@@ -20,9 +24,12 @@
             'GeoExt.container.UrlLegend'
         ]);
 
+        // Will be used in the tests, its value is being set at the bottom of
+        // the page
+        var LOGO_URL;
+
         function test_initialize(t) {
             t.plan(1);
-
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
                     new OpenLayers.Layer("foo")
@@ -35,12 +42,12 @@
             t.ok(legend instanceof GeoExt.LayerLegend, "Instance created correctly.");
             legend.destroy();
         }
-        
+
         function test_render(t) {
             t.plan(2);
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: LOGO_URL + "?foo"}})
                 ]
             });
             var legend = Ext.create("GeoExt.UrlLegend", {
@@ -48,7 +55,7 @@
                 renderTo: "legend"
             });
             t.ok(legend.items.get(1) instanceof GeoExt.LegendImage, "Legend has a LegendImage.");
-            t.eq(legend.items.get(1).url, Ext.BLANK_IMAGE_URL+"?foo", "Legend image rendered correctly.");
+            t.eq(legend.items.get(1).url, LOGO_URL + "?foo", "Legend image rendered correctly.");
             legend.destroy();
         }
 
@@ -56,7 +63,7 @@
             t.plan(1);
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer("foo", {metadata: {legendURL: "http://path/to/foo"}})
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: LOGO_URL + "?humpty=dumpty"}})
                 ]
             });
             var rec = store.getAt(0);
@@ -64,8 +71,8 @@
                 layerRecord: rec,
                 renderTo: "legend"
             });
-            rec.set("legendURL", Ext.BLANK_IMAGE_URL+"?foo");
-            t.eq(legend.items.get(1).url, Ext.BLANK_IMAGE_URL+"?foo", "Legend content updated correctly");
+            rec.set("legendURL", LOGO_URL + "?foo");
+            t.eq(legend.items.get(1).url, LOGO_URL + "?foo", "Legend content updated correctly");
             legend.destroy();
         }
 
@@ -82,12 +89,12 @@
             t.ok(GeoExt.container.UrlLegend.supports(store.getAt(0)) > 0, "layer record with a legendURL property is supported.");
             t.eq(GeoExt.container.UrlLegend.supports(store.getAt(1)), 0, "layer record without a legendURL property is not supported.");
         }
-        
+
         function test_legendurlimageloaded(t) {
             t.plan(1);
             var store = Ext.create('GeoExt.data.LayerStore', {
                 data : [
-                    new OpenLayers.Layer("foo", {metadata: {legendURL: Ext.BLANK_IMAGE_URL+"?foo"}})
+                    new OpenLayers.Layer("foo", {metadata: {legendURL: LOGO_URL + "?foo"}})
                 ]
             });
             var legend = Ext.create("GeoExt.UrlLegend", {
@@ -106,5 +113,17 @@
   </head>
   <body>
     <div id="legend"></div>
+    <script>
+    LOGO_URL = (function(doc){
+        var img = doc.createElement('img'),
+            url;
+        img.src = '../GeoExt.png';
+        doc.body.appendChild(img);
+        url = img.src;
+        img.parentNode.removeChild(img);
+        img = null;
+        return url;
+    })(document);
+    </script>
   </body>
 </html>

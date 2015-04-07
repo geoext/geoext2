@@ -25,7 +25,7 @@ Ext.define('CF.view.Map', {
             items = [],
             ctrl;
 
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
 
         // ZoomToMaxExtent control, a "button" control
         items.push(Ext.create('Ext.button.Button', Ext.create('GeoExt.Action', {

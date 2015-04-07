@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html debug="true">
+<html>
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+
     <script type="text/javascript">
         Ext.Loader.setConfig({
             enabled:true,
             disableCaching: false,
             paths: {
-                //Ext: "<PATH_TO_EXT_JS>/src",
                 GeoExt: "../../src/GeoExt"
             }
         });
@@ -42,8 +47,22 @@
                 fields: [{name: 'foo', type: 'string'}]
             });
 
-            t.ok(Model.prototype.fields.get('foo') !== undefined,
-                 'fields are added when subclassing');
+            var fields = Model.prototype.fields;
+            if (Ext.isArray(fields)) {
+                var contained = false;
+                Ext.each(fields, function(field){
+                    if (field.name && field.name === 'foo') {
+                        contained = true;
+                        // break iteration
+                        return false;
+                    }
+                });
+                t.ok(contained,
+                        'fields are added when subclassing');
+            } else {
+	            t.ok(fields.get('foo') !== undefined,
+	                    'fields are added when subclassing');
+            }
         }
     </script>
   </head>

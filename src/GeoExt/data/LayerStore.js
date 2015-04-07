@@ -103,7 +103,7 @@ Ext.define('GeoExt.data.LayerStore', {
         me.callParent([config]);
 
         if(map) {
-            this.bind(map, options);
+            this.bindMap(map, options);
         }
     },
 
@@ -114,7 +114,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * @param {OpenLayers.Map} map The map instance.
      * @param {Object} options
      */
-    bind: function(map, options) {
+    bindMap: function(map, options) {
         var me = this;
 
         if(me.map) {
@@ -166,7 +166,7 @@ Ext.define('GeoExt.data.LayerStore', {
     /**
      * Unbind this store from the map it is currently bound.
      */
-    unbind: function() {
+    unbindMap: function() {
         var me = this;
 
         if(me.map) {
@@ -189,7 +189,7 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for layer changes.  When layer order changes, this moves the
+     * Handler for layer changes. When layer order changes, this moves the
      * appropriate record within the store.
      *
      * @param {Object} evt
@@ -246,7 +246,7 @@ Ext.define('GeoExt.data.LayerStore', {
      */
     onRemoveLayer: function(evt){
         //TODO replace the check for undloadDestroy with a listener for the
-        // map's beforedestroy event, doing unbind(). This can be done as soon
+        // map's beforedestroy event, doing unbindMap(). This can be done as soon
         // as http://trac.openlayers.org/ticket/2136 is fixed.
         if(this.map.unloadDestroy) {
             if(!this._removing) {
@@ -259,7 +259,7 @@ Ext.define('GeoExt.data.LayerStore', {
                 }
             }
         } else {
-            this.unbind();
+            this.unbindMap();
         }
     },
 
@@ -335,21 +335,29 @@ Ext.define('GeoExt.data.LayerStore', {
     },
 
     /**
-     * Handler for a store's remove event.
+     * Handler for a store's remove event. Depending on the ExtJS version this
+     * method will either receive a single record or an array of records.
      *
-     * @param {Ext.data.Store} store
-     * @param {Ext.data.Model} record
-     * @param {Number} index
+     * @param {Ext.data.Store} store The layerStore.
+     * @param {Ext.data.Model/Ext.data.Model[]} records A single record in
+     *     ExtJS 4 and an array of records in ExtJS 5.
+     * @param {Number} index The index at which the record(s) were removed.
      * @private
      */
-    onRemove: function(store, record, index){
-        if(!this._removing) {
-            var layer = record.getLayer();
-            if (this.map.getLayer(layer.id) != null) {
-                this._removing = true;
-                this.removeMapLayer(record);
-                delete this._removing;
-            }
+    onRemove: function(store, records, index){
+        var me = this;
+        if (!Ext.isArray(records)) {
+            records = [records];
+        }
+        if(!me._removing) {
+            Ext.each(records, function(record){
+                var layer = record.getLayer();
+                if (me.map.getLayer(layer.id) != null) {
+                    me._removing = true;
+                    me.removeMapLayer(record);
+                    delete me._removing;
+                }
+            });
         }
     },
 
@@ -417,7 +425,7 @@ Ext.define('GeoExt.data.LayerStore', {
      * @private
      */
     destroy: function() {
-        this.unbind();
+        this.unbindMap();
         this.callParent();
     },
 
@@ -476,16 +484,40 @@ Ext.define('GeoExt.data.LayerStore', {
      * com/extjs/4.1.3/source/Store.html#Ext-data-Store-method-loadRawData) and
      * of [version 4.2.1](http://docs-origin.sencha.com/extjs/4.2.1/source/
      * Store.html#Ext-data-Store-method-loadRawData).
+     *
+     * Since version 5.0.0 the method has changed at even more places so that
+     * we check GeoExt.isExt4 to decide which method we should patch. TODO: We
+     * should remove the dependency on the load event as this patching really
+     * gets nasty.
      */
     loadRawData : function(data, append) {
-        var me      = this,
-            result  = me.proxy.reader.read(data),
-            records = result.records;
+        // The contents of the respective branches match their base library
+        // counterpart. The only difference is `me.fireEvent` in case of success
+        if (GeoExt.isExt4) {
+            var me      = this,
+                result  = me.proxy.reader.read(data),
+                records = result.records;
 
-        if (result.success) {
-            me.totalCount = result.total;
-            me.loadRecords(records, append ? me.addRecordsOptions : undefined);
-            me.fireEvent('load', me, records, true);
+            if (result.success) {
+                me.totalCount = result.total;
+                me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+                me.fireEvent('load', me, records, true);
+            }
+        } else {
+            var me      = this,
+                session = me.getSession(),
+                result  = me.getProxy().getReader().read(data, session ? {
+                    recordCreator: session.recordCreator
+                } : undefined),
+                records = result.getRecords(),
+                success = result.getSuccess();
+
+            if (success) {
+                me.totalCount = result.getTotal();
+                me.loadRecords(records, append ? me.addRecordsOptions : undefined);
+                me.fireEvent('load', me, records, true);
+            }
+            return success;
         }
     }
 });

@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../../examples/include-ext.js"></script>
     <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
     <script src="Attribute.js"></script>
 
@@ -21,13 +26,14 @@
         'Ext.data.Model',
         'Ext.data.proxy.Ajax',
         'Ext.data.writer.Json',
+        'GeoExt.data.AttributeModel',
         'GeoExt.data.reader.Attribute'
     ]);
 
     function test_ctor(t) {
         t.plan(3);
 
-        var Model = Ext.Class({
+        Ext.define('test_ctorModel', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -36,31 +42,31 @@
                 {name: "nillable", type: "boolean"}
             ]
         });
-        
-        var format = new OpenLayers.Format(), 
+
+        var format = new OpenLayers.Format(),
             feature = new OpenLayers.Feature.Vector();
 
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model,
+            model: 'test_ctorModel',
             ignore: {type: "xsd:string"},
             feature: feature,
             format: format
         });
-        
-        t.eq(reader.ignore, {type: "xsd:string"},
+
+        t.eq(reader.getIgnore(), {type: "xsd:string"},
             "ctor sets the ignore object in the instance");
 
-        t.ok(reader.feature === feature, 
+        t.ok(reader.getFeature() === feature,
             "ctor sets the feature in the instance");
 
-        t.ok(reader.format === format, 
+        t.ok(reader.getFormat() === format,
             "ctor sets the format in the instance");
     }
-    
+
     function test_setFeature(t) {
         t.plan(2);
 
-        var Model = Ext.Class({
+        Ext.define('test_setFeatureModel', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -71,22 +77,37 @@
         });
 
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model
+            model: 'test_setFeatureModel'
         });
+
         var feature = new OpenLayers.Feature.Vector();
         reader.setFeature(feature);
-        
-        t.ok(reader.feature === feature, 
+
+        t.ok(reader.getFeature() === feature,
             "setFeature sets the feature in the instance");
-            
-        t.ok(Model.prototype.fields.get("value") !== undefined, 
-            "setFeature adds the value field to the model");
+
+        var ModelClass = Ext.ClassManager.get('test_setFeatureModel');
+
+        if(GeoExt.isExt4){
+            t.ok(ModelClass.prototype.fields.get("value") !== undefined,
+                "setFeature adds the value field to the model");
+        } else {
+            var valueExisting = false;
+            Ext.each(ModelClass.prototype.fields, function(field){
+                if (field.getName() == 'value'){
+                    valueExisting = true;
+                    return false // to stop the Ext.each iteration
+                }
+            })
+            t.ok(valueExisting,
+                "setFeature adds the value field to the model");
+        }
     }
 
     function test_read(t) {
         t.plan(6);
 
-        var Model = Ext.Class({
+        Ext.define('test_readModel', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -98,15 +119,24 @@
 
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
             keepRaw: true,
-            model: Model
+            model: 'test_readModel'
         });
 
         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
-        t.ok(reader.raw, "raw property populated when keepRaw is true");
+        if(GeoExt.isExt4){
+            t.ok(reader.raw, "raw property populated when keepRaw is true");
+        } else {
+            t.ok(reader.rawData,
+                "rawData (equivalent to raw) is always populated in ExtJS5");
+        }
 
         //1 test
-        t.eq(records.totalRecords, 23, 'readRecords returns correct number of records');
+        if(GeoExt.isExt4){
+            t.eq(records.totalRecords, 23, 'readRecords returns correct number of records');
+        } else {
+            t.eq(records.getTotal(), 23, 'readRecords returns correct number of records');
+        }
 
         var record = records.records[2];
 
@@ -130,7 +160,7 @@
 
         // test
 
-        Model = Ext.Class({
+        Ext.define('test_read_featureModel1', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -138,7 +168,7 @@
             ]
         });
         reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model,
+            model: 'test_read_featureModel1',
             feature: feature
         });
         records = reader.read({responseXML: doc, responseText: 'foo'});
@@ -149,26 +179,27 @@
 
         // test with a reader whose record type doesn't include
         // a field named "name"
-        Model = Ext.Class({
+        Ext.define('test_read_featureModel2', {
             extend: 'Ext.data.Model',
             fields: [
                 'type'
             ]
         });
         reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model,
+            model: 'test_read_featureModel2',
             feature: feature
 
         });
         records = reader.read({responseXML : doc, responseText: 'foo'});
         record = records.records[2];
+
         t.eq(record.get("value"), undefined, "[3] correct attribute value");
     }
 
     function test_ignoreString(t) {
         t.plan(1);
 
-        var Model = Ext.Class({
+        Ext.define('test_ignoreStringModel', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -176,20 +207,26 @@
             ]
         });
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model,
+            model: 'test_ignoreStringModel',
             ignore: {type: "xsd:string"}
         });
 
         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
-        t.eq(records.totalRecords, 19, 'right number of records are ignored (ignores String)');
+        if(GeoExt.isExt4){
+            t.eq(records.totalRecords, 19,
+                'right number of records are ignored (ignores String)');
+        } else {
+            t.eq(records.getTotal(), 19,
+            'right number of records are ignored (ignores String)');
+        }
     }
 
     function test_ignoreArray(t) {
         t.plan(1);
 
-        var Model = Ext.Class({
+        Ext.define('test_ignoreArrayModel', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -197,20 +234,26 @@
             ]
         });
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model,
+            model: 'test_ignoreArrayModel',
             ignore: {type: ["xsd:double", "gml:MultiSurfacePropertyType"]}
         });
 
          var records = reader.read({responseXML : doc, responseText: 'foo'});
 
          //1 test
-         t.eq(records.totalRecords, 4, 'right number of records are ignored (ignores Array)');
+         if(GeoExt.isExt4){
+             t.eq(records.totalRecords, 4,
+                 'right number of records are ignored (ignores Array)');
+         } else {
+             t.eq(records.getTotal(), 4,
+                     'right number of records are ignored (ignores Array)');
+         }
     }
 
     function test_ignoreRegexp(t) {
         t.plan(1);
 
-        var Model = Ext.Class({
+        Ext.define('test_ignoreRegexpModel', {
             extend: 'Ext.data.Model',
             fields: [
                 'name',
@@ -218,14 +261,20 @@
             ]
         });
         var reader = Ext.create('GeoExt.data.reader.Attribute', {
-            model: Model,
+            model: 'test_ignoreRegexpModel',
             ignore: {name: new RegExp('^S')}
         });
 
         var records = reader.read({responseXML : doc, responseText: 'foo'});
 
         //1 test
-        t.eq(records.totalRecords, 17, 'right number of records are ignored (ignores RegExp)');
+        if(GeoExt.isExt4){
+            t.eq(records.totalRecords, 17,
+                'right number of records are ignored (ignores RegExp)');
+        } else {
+            t.eq(records.getTotal(), 17,
+                'right number of records are ignored (ignores RegExp)');
+        }
     }
 
     </script>

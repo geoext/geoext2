@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
     <script type="text/javascript" src="WmsDescribeLayer.js"></script>
     <script type="text/javascript">
 
@@ -35,8 +40,9 @@
             var records = reader.read({responseXML : doc, responseText: true});
             t.ok(reader.raw, "When keepRaw is true, the raw property is populated");
 
+            var total = GeoExt.isExt4 ? records.total : records.getTotal();
             //1 test
-            t.eq(records.totalRecords, 2, 'readRecords returns correct number of records');
+            t.eq(total, 2, 'readRecords returns correct number of records');
             
             var record = records.records[0];
 

@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
  */
 
 Ext.require([
+    'Ext.layout.container.Fit',
     'GeoExt.panel.Map',
     'GeoExt.data.MapfishPrintProvider',
     'GeoExt.plugins.PrintExtent'
@@ -16,23 +17,23 @@ var mapPanel, printProvider;
 
 Ext.application({
     name: 'PrintExtentGeoExt2',
-    
     launch: function() {
-            
+
         // The printProvider that connects us to the print service
         printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
             method: "GET", // "POST" recommended for production use
-            capabilities: printCapabilities, // from the info.json script in the html
+            // from the info.json script in the html
+            capabilities: printCapabilities,
             customParams: {
                 mapTitle: "Printing Demo",
                 comment: "This is a map printed from GeoExt."
             }
         });
-    
+
         var printExtent = Ext.create('GeoExt.plugins.PrintExtent', {
             printProvider: printProvider
         });
-    
+
         // The map we want to print, with the PrintExtent added as item.
         mapPanel = Ext.create('GeoExt.panel.Map', {
             renderTo: "content",

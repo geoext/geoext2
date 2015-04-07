@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-   <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
 
     <script type="text/javascript">
 
@@ -27,10 +32,11 @@
             protocol = new OpenLayers.Protocol();
             // test
             proxy = Ext.create("GeoExt.data.proxy.Protocol", {
-                protocol: protocol        
+                protocol: protocol
             });
-            t.ok(proxy.protocol == protocol,
-                 "ctor sets protocol in protocol property");
+
+            t.ok(proxy.getProtocol() == protocol,
+                    "ctor sets protocol in protocol property");
         }
 
         function test_load(t) {
@@ -55,12 +61,11 @@
                 }
             });
             result = "fake result";
-            reader = {
-                read: function(r) {
-                    t.ok(r == response,
-                         "reader is passed expected response obj");
-                    return result;
-                }
+            reader = Ext.create('Ext.data.reader.Json');
+            reader.read = function(r) {
+                t.ok(r == response,
+                     "reader is passed expected response obj");
+                return result;
             };
             proxy = Ext.create("GeoExt.data.proxy.Protocol", {
                 protocol: protocol,
@@ -78,19 +83,24 @@
                 t.eq(o.success, true,
                      "callback called with expected success boolean");
             };
+
             // 8 tests
-            proxy.doRequest(Ext.create("Ext.data.Operation", {params: params, arg: arg}), callback, scope);
+            proxy.doRequest(Ext.create("Ext.data.Operation",
+                    {params: params, arg: arg}), callback, scope);
+
         }
 
         function test_readFeatures(t) {
             t.plan(1);
             var response = new OpenLayers.Protocol.Response({
                 code: OpenLayers.Protocol.Response.SUCCESS,
-                features: [new OpenLayers.Feature.Vector(null, {'foo': 'bar'})]
+                features: [
+                    new OpenLayers.Feature.Vector(null, {'foo': 'bar'})
+                ]
             });
             var protocol = new OpenLayers.Protocol({
                 read: function(o) {
-                    o.callback.call(o.scope, response); 
+                    o.callback.call(o.scope, response);
                 }
             });
             Ext.define('My.Model', {
@@ -106,11 +116,12 @@
                 reader: reader
             });
             var callback = function(o) {
-                t.eq(o.resultSet.records[0].get('foo'), "bar", "feature read correctly");
+                t.eq(o.resultSet.records[0].get('foo'), "bar",
+                        "feature read correctly");
             };
             proxy.doRequest(Ext.create("Ext.data.Operation"), callback);
         }
-        
+
         function test_abort(t) {
             t.plan(1);
 
@@ -119,17 +130,22 @@
                     return new OpenLayers.Protocol.Response();
                 },
                 abort: function(response) {
-                    t.ok("protocol.abort called");
+                    t.ok(true, "protocol.abort called");
                 }
             });
             var proxy = Ext.create("GeoExt.data.proxy.Protocol", {
                 protocol: protocol
             });
 
-            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort not called because proxy.response is null
-            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort called
-            proxy.abortPrevious = false;
-            proxy.doRequest(Ext.create("Ext.data.Operation")); // abort not called because proxy.abortPrevious is false
+            // abort not called because proxy.response is null
+            proxy.doRequest(Ext.create("Ext.data.Operation"));
+
+            // abort called
+            proxy.doRequest(Ext.create("Ext.data.Operation"));
+            proxy.setAbortPrevious(false);
+
+            // abort not called because proxy.abortPrevious is false
+            proxy.doRequest(Ext.create("Ext.data.Operation"));
         }
 
         function test_setParamsAsOptions(t) {
@@ -146,7 +162,8 @@
                 setParamsAsOptions: true,
                 protocol: protocol
             });
-            proxy.doRequest({params: params});
+
+            proxy.doRequest(Ext.create("Ext.data.Operation", {params: params}));
         }
 
     </script>

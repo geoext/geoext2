@@ -116,7 +116,7 @@ Ext.define('GeoExt.slider.Zoom', {
             if(this.map instanceof GeoExt.MapPanel) {
                 this.map = this.map.map;
             }
-            this.bind(this.map);
+            this.bindMap(this.map);
         }
 
         if (this.aggressive === true) {
@@ -124,7 +124,7 @@ Ext.define('GeoExt.slider.Zoom', {
         } else {
             this.on('changecomplete', this.changeHandler, this);
         }
-        this.on("beforedestroy", this.unbind, this);
+        this.on("beforedestroy", this.unbindMap, this);
     },
 
     /**
@@ -164,7 +164,7 @@ Ext.define('GeoExt.slider.Zoom', {
              */
             afterrender: function(){
                 // bind the map to the slider
-                me.bind(panel.map);
+                me.bindMap(panel.map);
             }
         });
     },
@@ -175,7 +175,7 @@ Ext.define('GeoExt.slider.Zoom', {
      * @param {OpenLayers.Map} map
      * @private
      */
-    bind: function(map) {
+    bindMap: function(map) {
         this.map = map;
         this.map.events.on({
             zoomend: this.update,
@@ -196,7 +196,7 @@ Ext.define('GeoExt.slider.Zoom', {
      *
      * @private
      */
-    unbind: function() {
+    unbindMap: function() {
         if(this.map && this.map.events) {
             this.map.events.un({
                 zoomend: this.update,
@@ -266,7 +266,7 @@ Ext.define('GeoExt.slider.Zoom', {
     },
 
     /**
-     * Registered as a listener for map zoomend.Updates the value of the slider.
+     * Registered as a listener for map zoomend. Updates the value of the slider.
      *
      * @private
      */

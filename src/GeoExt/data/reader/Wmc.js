@@ -24,6 +24,10 @@ Ext.define('GeoExt.data.reader.Wmc', {
         'GeoExt.Version'
     ],
 
+    config: {
+        preserveRawData: true
+    },
+
     /**
      * Creates new Reader.
      *
@@ -31,7 +35,7 @@ Ext.define('GeoExt.data.reader.Wmc', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WmcLayerModel';
+            this.setModel('GeoExt.data.WmcLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {
@@ -68,6 +72,12 @@ Ext.define('GeoExt.data.reader.Wmc', {
      * @private
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
         if(typeof data === "string" || data.nodeType) {
             data = this.format.read(data);
         }

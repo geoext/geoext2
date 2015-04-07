@@ -79,11 +79,16 @@ Ext.define('GeoExt.container.UrlLegend', {
     baseParams: null,
 
     /**
+     * Fires after url legend image has loaded.
+     *
+     * @event legendimageloaded
+     */
+
+    /**
      * Initializes this UrlLegend.
      */
     initComponent: function(){
         var me = this;
-        me.addEvents('legendimageloaded');
         me.callParent(arguments);
         this.add(Ext.create('GeoExt.LegendImage', {
             url: this.layerRecord.get("legendURL"),

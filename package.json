@@ -1,0 +1,33 @@
+{
+  "name": "geoext2",
+  "version": "2.0.4-dev",
+  "description": "A JavaScript Toolkit for Rich Web Mapping Applications based on OpenLayers and ExtJS.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "./node_modules/casperjs/bin/casperjs test tests/headless/run-testsuite.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geoext/geoext2.git"
+  },
+  "keywords": [
+    "GIS",
+    "mapping",
+    "ExtJS",
+    "OpenLayers"
+  ],
+  "author": "The GeoExt community, © 2008-2015 The Open Source Geospatial Foundation",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/geoext/geoext2/issues"
+  },
+  "homepage": "http://geoext.github.io/geoext2/",
+  "dependencies": {
+    "casperjs": "^1.1.0-beta3",
+    "phantomjs": "^1.9.16"
+  }
+}

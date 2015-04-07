@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html debug="true">
+<html>
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
+
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+
     <script type="text/javascript">
         Ext.Loader.setConfig({
             enabled:true,
             disableCaching: false,
             paths: {
-                //Ext: "<YOUR_EXTJS_PATH>/src",
                 GeoExt: "../../src/GeoExt"
             }
         });
@@ -19,7 +24,7 @@
             'GeoExt.data.AttributeModel',
             'GeoExt.data.AttributeStore'
         ]);
-        
+
         var store;
 
         function test_constructor(t) {
@@ -44,16 +49,16 @@
             t.eq(store.getProxy().getReader().getIgnore(), {type: "xsd:string"},
                 "ctor sets the correct ignore property in the reader");
 
-            t.ok(store.getProxy().getReader().getFormat() === format, 
+            t.ok(store.getProxy().getReader().getFormat() === format,
                 "ctor sets the format in the reader");
 
             store.setFormat(null);
             store.setIgnore(null);
             store.setUrl(null);
             store.destroy();
-            
+
         }
-        
+
         function test_feature(t){
             var store, feature, layer;
             t.plan(6);
@@ -65,7 +70,7 @@
                 "foo4": null,
                 "foo5": undefined
             });
-            
+
             layer = new OpenLayers.Layer.Vector('test');
 
             layer.addFeatures([feature]);
@@ -76,30 +81,28 @@
                 data: [
                     {id: 1, name: 'foo0'}, {id: 2, name: 'foo2'}
                 ],
-                proxy:{
+                proxy: {
                     type: 'memory',
                     reader: {
                         type: 'gx_attribute'
                     }
-                } 
+                }
             });
-            
-            t.eq(store.getProxy().getReader().feature.id, feature.id, 'feature set in reader');
+            t.eq(store.getProxy().getReader().getFeature().id, feature.id, 'feature set in reader');
             t.eq(store.getAt(0).get('name'), 'foo0', 'name is correct');
             t.eq(store.getAt(0).get('value'), 'bar0', 'value is correct');
-            
+
             store.setFeature(null);
             store.destroy();
-            
+
             layer.destroyFeatures();
-            
+
             feature = new OpenLayers.Feature.Vector(null, {
                 "STATE_NAME": "New York",
                 "STATE_FIPS": "NY",
                 "STATE_ABBR": "NY"
             });
-            
-            
+
             //test autoload deep copy protection
             store = Ext.create('GeoExt.data.AttributeStore',{
                 feature: feature,
@@ -107,15 +110,14 @@
                 url: '../../examples/data/wfs_desc_ftype.xml',
                 autoLoad: true,
                 listeners: {
-                    'load': {
-                        fn: function(store){
-                            t.eq(store.getProxy().getReader().feature.id, store.feature.id, 'feature set in reader');
-                            t.eq(store.getAt(2).get('name'), 'STATE_FIPS', 'name is correct');
-                            t.eq(store.getAt(2).get('value'), 'NY', 'value is correct');
-                        }
+                    load: function(store){
+                        t.eq(store.getProxy().getReader().getFeature().id, store.getFeature().id, 'feature set in reader');
+                        t.eq(store.getAt(2).get('name'), 'STATE_FIPS', 'name is correct');
+                        t.eq(store.getAt(2).get('value'), 'NY', 'value is correct');
                     }
                 }
             });
+
             t.wait_result(1);
         }
     </script>

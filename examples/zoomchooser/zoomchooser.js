@@ -25,7 +25,7 @@ Ext.require([
 Ext.application({
     name: 'ScaleStore GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var layer = new OpenLayers.Layer.WMS(
             "Global Imagery",
             "http://maps.opengeo.org/geowebcache/service/wms",
@@ -56,7 +56,7 @@ Ext.application({
 
         map.events.register('zoomend', this, function() {
             var scale = scaleStore.queryBy(function(record){
-                return this.map.getZoom() == record.data.level;
+                return map.getZoom() == record.data.level;
             });
 
             if (scale.length > 0) {

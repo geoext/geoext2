@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css">
-    <script type="text/javascript" src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
-    <script type="text/javascript" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
     <script type="text/javascript">
 
         Ext.Loader.setConfig({
@@ -50,22 +54,35 @@
 
             var meta = {},
                 value = {fillColor: "red", stroke: false},
-                column = Ext.create('GeoExt.grid.column.Symbolizer'),
-                markup1 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.Curve()}}),
-                el1 = document.createElement("div"),
-                markup2 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.LinearRing()}}),
+                column = Ext.create('GeoExt.grid.column.Symbolizer');
+
+            if(GeoExt.isExt4){
+                var markup1 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.Curve()}}),
+                    markup2 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.LinearRing()}}),
+                    markup3 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.LineString()}}),
+                    markup4 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.MultiLineString()}}),
+                    markup5 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.MultiPoint()}}),
+                    markup6 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.MultiPolygon()}}),
+                    markup7 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.Point()}}),
+                    markup8 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.Polygon()}});
+            } else {
+                var markup1 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.Curve()}}),
+                    markup2 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.LinearRing()}}),
+                    markup3 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.LineString()}}),
+                    markup4 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.MultiLineString()}}),
+                    markup5 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.MultiPoint()}}),
+                    markup6 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.MultiPolygon()}}),
+                    markup7 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.Point()}}),
+                    markup8 = column.renderer(value, meta, {data: {geometry: new OpenLayers.Geometry.Polygon()}});
+            }
+
+            var el1 = document.createElement("div"),
                 el2 = document.createElement("div"),
-                markup3 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.LineString()}}),
                 el3 = document.createElement("div"),
-                markup4 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.MultiLineString()}}),
                 el4 = document.createElement("div"),
-                markup5 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.MultiPoint()}}),
                 el5 = document.createElement("div"),
-                markup6 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.MultiPolygon()}}),
                 el6 = document.createElement("div"),
-                markup7 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.Point()}}),
                 el7 = document.createElement("div"),
-                markup8 = column.renderer(value, meta, {raw: {geometry: new OpenLayers.Geometry.Polygon()}}),
                 el8 = document.createElement("div");
 
             document.body.appendChild(el1);

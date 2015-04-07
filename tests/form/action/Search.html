@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html debug="true">
   <head>
-    <link rel="stylesheet" type="text/css" href="http://cdn.sencha.io/ext/gpl/4.2.1/resources/css/ext-all.css" />
-    <script type="text/javascript" charset="utf-8" src="http://cdn.sencha.io/ext/gpl/4.2.1/ext-all-debug.js" ></script>
-    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+    <!--
+        Loads the resources of ExtJS and OpenLayers.
 
+        Use the URL-parameter `extjs` to require a specific
+        version of Ext, e.g. `Action.html?extjs=5.0.1`
+    -->
+    <script src="../../../examples/include-ext.js"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
     <script type="text/javascript">
 
     Ext.Loader.setConfig({
@@ -28,20 +32,24 @@
         /*
          * Set up
          */
-
-        var form, action, protocol;
-
-        form = Ext.create('Ext.form.Basic', Ext.get("form"));
-        protocol = new OpenLayers.Protocol();
-        action = Ext.create('GeoExt.form.action.Search',
-                            {form: form, protocol: protocol});
+        var formPanel = Ext.create('Ext.form.Panel', {
+                renderTo:'form'
+            }),
+            form = formPanel.getForm(),
+            protocol = new OpenLayers.Protocol(),
+            action = Ext.create('GeoExt.form.action.Search', {
+                form: form,
+                protocol: protocol
+            });
 
         /*
          * Test
          */
-
         t.ok(action.protocol == protocol,
              "Search Action constructor properly sets protocol in instance");
+
+        // cleanup
+        form.destroy();
     }
 
     function test_run(t) {

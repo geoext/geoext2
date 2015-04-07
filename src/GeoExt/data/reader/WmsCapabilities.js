@@ -29,6 +29,11 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
     requires: [
         'GeoExt.Version'
     ],
+
+    config: {
+        preserveRawData: true
+    },
+
     /**
      * Creates new Reader.
      *
@@ -36,7 +41,7 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WmsCapabilitiesLayerModel';
+            this.setModel('GeoExt.data.WmsCapabilitiesLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {
@@ -46,7 +51,9 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
 
     /**
      * Should we keep the raw parsed result? If true, the result will be stored
-     * under the #raw property. Default is false.
+     * under the #raw property. Default is false. When using ExtJS5 a reference
+     * to the raw data is always available via the property #data.
+     *
      * @cfg {Boolean}
      */
     keepRaw: false,
@@ -154,6 +161,13 @@ Ext.define('GeoExt.data.reader.WmsCapabilities', {
      * @private
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
+
         if (Ext.isArray(data)) {
             return this.callParent(data);
         }

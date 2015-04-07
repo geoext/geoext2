@@ -37,12 +37,24 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WfsCapabilitiesLayerModel';
+            this.setModel('GeoExt.data.WfsCapabilitiesLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {
             this.format = new OpenLayers.Format.WFSCapabilities();
         }
+    },
+
+    config: {
+        /**
+         *
+         */
+        layerOptions: null,
+
+        /**
+         *
+         */
+        protocolOptions: null
     },
 
     /**
@@ -65,7 +77,7 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
      * Create a data block containing Ext.data.Records from an XML document.
      *
      * @param {DOMElement/String/Object} data A document element or XHR
-     *     response string.  As an alternative to fetching capabilities data
+     *     response string. As an alternative to fetching capabilities data
      *     from a remote source, an object representing the capabilities can
      *     be provided given that the structure mirrors that returned from the
      *     capabilities parser.
@@ -74,6 +86,13 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
      * @private
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
+
         if(typeof data === "string" || data.nodeType) {
             data = this.format.read(data);
         }
@@ -132,7 +151,7 @@ Ext.define('GeoExt.data.reader.WfsCapabilities', {
                     strategies: [new OpenLayers.Strategy.Fixed()],
                     projection: featureType.srs
                 };
-                var metaLayerOptions = this.layerOptions;
+                var metaLayerOptions = this.getLayerOptions();
                 if (metaLayerOptions) {
                     Ext.apply(layerOptions, Ext.isFunction(metaLayerOptions) ?
                         metaLayerOptions() : metaLayerOptions);

@@ -52,9 +52,17 @@ Ext.define('GeoExt.LegendImage', {
      */
     noImgCls: "gx-legend-noimage",
 
+    /**
+     * Fires after legend image has loaded.
+     *
+     * @event legendimageloaded
+     */
+
+    /**
+     * Initializes this component.
+     */
     initComponent: function(){
         var me = this;
-        me.addEvents('legendimageloaded');
         me.callParent(arguments);
         if(this.defaultImgSrc === null) {
             this.defaultImgSrc = Ext.BLANK_IMAGE_URL;

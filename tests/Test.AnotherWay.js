@@ -128,6 +128,11 @@ Test.AnotherWay._show_error = function(msg){
     error_div.style.display = "block";
 };
 
+Test.AnotherWay._testpage_variants_url_params = [
+    'extjs=4.2.1',
+    'extjs=5.1.0'
+];
+
 // read urls from the list in the html file inside the list_iframe
 // fill on-screen list with urls and "run" buttons, and fill the g_test_page_urls object.
 Test.AnotherWay._list_iframe_onload = function(){
@@ -142,7 +147,16 @@ Test.AnotherWay._list_iframe_onload = function(){
                     if (Test.AnotherWay._get_css_class(item) == "jsan") {
                         convention = "jsan";
                     }
-                    Test.AnotherWay._add_test_page_url(item.innerHTML, convention);
+
+                    var variants = Test.AnotherWay._testpage_variants_url_params,
+                        variantsLen = variants.length,
+                        variantIdx = 0;
+                    for (; variantIdx < variantsLen; ++variantIdx){
+                        var variantParams = variants[variantIdx],
+                            url = item.innerHTML;
+                            url += (variantParams ? "?" + variantParams : '');
+                        Test.AnotherWay._add_test_page_url(url, convention);
+                    }
                 }
             }
             if (Test.AnotherWay._g_run_on_list_load) {
@@ -961,7 +975,6 @@ Test.AnotherWay._test_page_onload = function(){
     }
     
     test_page.wait_msg = Test.AnotherWay._print_result(test_page.url, "running tests..<span class=\"counter\">" + test_page.test_objects.length + "</span>", "running", null);
-    
     test_page.test_object_i = 0;
     Test.AnotherWay._run_more_tests();
 };
@@ -2316,7 +2329,6 @@ onload = function(){
     var span = document.createElement("SPAN");
     span.innerHTML = "<!--[if IE]><br /><![endif]-" + "->";
     var is_ie = span.getElementsByTagName("BR").length > 0;
-    
     Test.AnotherWay._g_test_iframe = window.frames.test_iframe;
     
     var query_str = window.location.search;
@@ -2351,7 +2363,7 @@ onload = function(){
                     if (param[0] == "jsantestpage") {
                         Test.AnotherWay._add_test_page_url(decodeURIComponent(param[1]), "jsan");
                     }
-                    else 
+                    else
                         if (param[0] == "testlist") {
                             testlist_page = decodeURIComponent(param[1]);
                         }

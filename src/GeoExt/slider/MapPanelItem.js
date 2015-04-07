@@ -20,7 +20,7 @@
  * the method #removeFromMapPanel, which take care of the dimensions of the
  * sliders DOM-elements and register/unregister appropriate eventlisteners.
  *
- * Subclasses may implement #unbind, which will be called when a slider is
+ * Subclasses may implement #unbindMap, which will be called when a slider is
  * being removed from the map panel.
  *
  * @class GeoExt.slider.MapPanelItem
@@ -103,13 +103,16 @@ Ext.define('GeoExt.slider.MapPanelItem', {
                 // This method takes some of the gathered values from above and
                 // ensures that we have an expected look.
                 resizeFunction = function(){
+                    var zIndex = (panel && panel.map) ?
+                            panel.map.Z_INDEX_BASE.Control :
+                            undefined;
                     el.setStyle({
                         top: dim.top,
                         left: dim.left,
                         width: "" + dim.width + "px",
                         position: "absolute",
                         height: "" + dim.height + "px",
-                        zIndex: panel.map.Z_INDEX_BASE.Control
+                        zIndex: zIndex
                     });
                     // This is tricky...
                     if (me.vertical) {
@@ -151,7 +154,7 @@ Ext.define('GeoExt.slider.MapPanelItem', {
             click: me.stopMouseEvents,
             scope: me
         });
-        me.unbind();
+        me.unbindMap();
     },
 
     /**
@@ -160,7 +163,7 @@ Ext.define('GeoExt.slider.MapPanelItem', {
      *
      * @protected
      */
-    unbind: Ext.emptyFn,
+    unbindMap: Ext.emptyFn,
 
     /**
      * Stops the event from propagating.
