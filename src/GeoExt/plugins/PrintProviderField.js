@@ -5,7 +5,7 @@
  * See https://github.com/geoext/geoext2/blob/master/license.txttxt for the full
  * text of the license.
  */
- 
+
 /*
  * @requires GeoExt/data/MapfishPrintProvider.js
  */
@@ -135,6 +135,12 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
                 "dpichange": this.onProviderChange,
                 scope: this
             });
+        } else if(field.store === printProvider.outputFormats) {
+            field.setValue(printProvider.outputFormat.get(field.displayField));
+            printProvider.on({
+                "outputformatchange": this.onProviderChange,
+                scope: this
+            });
         } else if(field.initialConfig.value === undefined) {
             field.setValue(printProvider.customParams[field.name]);
         }
@@ -165,6 +171,10 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
                 case printProvider.dpis:
                     printProvider.setDpi(record);
                     break;
+                case printProvider.outputFormats:
+                    printProvider.setOutputFormat(record);
+                default:
+                // no op
             }
         } else {
             printProvider.customParams[field.name] = value;
@@ -198,6 +208,7 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         target.un("valid", this.onFieldChange, this);
         var printProvider = this.printProvider || target.ownerCt.printProvider;
         printProvider.un("layoutchange", this.onProviderChange, this);
+        printProvider.un("outputformatchange", this.onProviderChange, this);
         printProvider.un("dpichange", this.onProviderChange, this);
     }
 

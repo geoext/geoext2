@@ -178,6 +178,17 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     dpis: null,
 
     /**
+     * Read-only. A store representing the output formats available.
+     *
+     * Fields of records in this store:
+     *
+     * * name - `String` the name of the output format
+     *
+     * @property {Ext.data.JsonStore} outputFormats
+     */
+    outputFormats: null,
+
+    /**
      * Read-only. A store representing the layouts available.
      *
      * Fields of records in this store:
@@ -199,6 +210,14 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     dpi: null,
 
     /**
+     * The record of the currently used output format. Read-only, use
+     * `#setOutputFormat` to set the value.
+     *
+     * @property {Ext.data.Record} outputFormat
+     */
+    outputFormat: null,
+
+    /**
      * The record of the currently used layout. Read-only, use `#setLayout` to
      * set the value.
      *
@@ -217,6 +236,18 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
      * * capabilities - `Object` the capabilities.
      *
      * @event loadcapabilities
+     */
+
+    /**
+     * Triggered when the output format is changed.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * outputFormat - {@link Ext.data.Record} the new outputFormat.
+     *
+     * @event outputformatchange
      */
 
     /**
@@ -385,6 +416,11 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
             ]
         });
 
+        me.outputFormats = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('outputFormats'),
+            fields: [{name: "name", defaultValue: "pdf"}]
+        });
+
         me.layouts = Ext.create('Ext.data.JsonStore', {
             proxy: me.getProxyConfiguration('layouts'),
             fields: [
@@ -454,6 +490,17 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     },
 
     /**
+     * Sets the output format for this printProvider.
+     *
+     * @param {Ext.data.Record} outputFormat The record of the output format.
+     */
+    setOutputFormat: function(outputFormat) {
+        console.log(outputFormat);
+        this.outputFormat = outputFormat;
+        this.fireEvent("outputformatchange", this, outputFormat);
+    },
+
+    /**
      * Sets the layout for this printProvider.
      *
      * @param {Ext.data.Record} layout The record of the layout.
@@ -518,6 +565,7 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
             units: map.getUnits(),
             srs: map.baseLayer.projection.getCode(),
             layout: this.layout.get("name"),
+            outputFormat: this.outputFormat.get("name"),
             dpi: this.dpi.get("value")
         }, this.customParams);
 
@@ -659,9 +707,11 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
 
        this.scales.loadRawData(this.capabilities);
        this.dpis.loadRawData(this.capabilities);
+       this.outputFormats.loadRawData(this.capabilities);
        this.layouts.loadRawData(this.capabilities);
 
        this.setLayout(this.layouts.getAt(0));
+       this.setOutputFormat(this.outputFormats.findRecord("name", "pdf"));
        this.setDpi(this.dpis.getAt(0));
        this.fireEvent("loadcapabilities", this, this.capabilities);
    },
