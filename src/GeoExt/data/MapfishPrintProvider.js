@@ -495,7 +495,6 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
      * @param {Ext.data.Record} outputFormat The record of the output format.
      */
     setOutputFormat: function(outputFormat) {
-        console.log(outputFormat);
         this.outputFormat = outputFormat;
         this.fireEvent("outputformatchange", this, outputFormat);
     },

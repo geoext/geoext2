@@ -101,6 +101,17 @@ Ext.application({
                 plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
                     printProvider: printProvider
                 })
+            },{
+                xtype: "combo",
+                store: printProvider.outputFormats,
+                displayField: "name",
+                fieldLabel: "Format",
+                typeAhead: true,
+                queryMode: "local",
+                triggerAction: "all",
+                plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+                    printProvider: printProvider
+                })
             }, {
                 xtype: "combo",
                 store: printProvider.dpis,
