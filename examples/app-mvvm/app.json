@@ -308,12 +308,7 @@
      * Additional resources used during theme slicing operations
      */
     "slicer": {
-        "js": [
-            {
-                "path": "${app.dir}/sass/example/custom.js",
-                "isWidgetManifest": true
-            }
-        ]
+        "js": []
     },
 
     /**

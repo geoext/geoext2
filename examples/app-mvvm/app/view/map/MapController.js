@@ -14,12 +14,6 @@ Ext.define('CF.view.map.MapController', {
     init: function() {
         var me = this;
 
-        var summitStore =  Ext.data.StoreManager.lookup('summitStore');
-        summitStore.on({
-            scope: me,
-            load : me.onSummitsStoreLoad
-        });
-
         this.control({
             'cf_mappanel': {
                 'beforerender': this.onMapPanelBeforeRender,
@@ -104,27 +98,6 @@ Ext.define('CF.view.map.MapController', {
         // bind selection model to layer
         var summitGrid = Ext.ComponentQuery.query('cf_summitgrid')[0];
         var selectCtrl = summitGrid.getSelectionModel().bindLayer(vecLayer);
-    },
-
-    /**
-     * @private
-     */
-    onLaunch: function() {
-        var me = this;
-
-        // for dev purpose
-        ctrl = this;
-    },
-
-    /**
-     * @private
-     */
-    onSummitsStoreLoad: function(store, records) {
-        // do custom stuff on summits load if you want, for example here we
-        // zoom to summits extent
-        var dataExtent = store.layer.getDataExtent();
-        if (dataExtent) {
-            store.layer.map.zoomToExtent(dataExtent);
-        }
     }
+
 });

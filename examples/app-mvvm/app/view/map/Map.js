@@ -17,7 +17,6 @@ Ext.define('CF.view.map.Map', {
     controller: 'map',
 
     border: 'false',
-    layout: 'fit',
     region: 'west',
     width: 600,
     // GeoExt.panel.Map-specific options :
