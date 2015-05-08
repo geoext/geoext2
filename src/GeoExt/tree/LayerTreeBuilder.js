@@ -124,7 +124,15 @@ Ext.define('GeoExt.tree.LayerTreeBuilder', {
         for(var i=0; i<node.childNodes.length; i++) {
             if(!node.childNodes[i].data.checked) allChecked = false;
         }
-        node.set('checked',allChecked);
+        // check according to checkableContainerGroupNodes and checkableLeafGroupNodes properties
+        if (node.plugins && node.plugins[0] && node.plugins[0].pype == "gx_layergroupcontainer") {
+            checkableNode = this.checkableLeafGroupNodes;
+        } else {
+            checkableNode = this.checkableContainerGroupNodes && this.checkableLeafGroupNodes;
+        }
+        if (checkableNode) {
+            node.set('checked',allChecked);
+        }
         this.updateCheckboxes(node.parentNode);
     },
 
