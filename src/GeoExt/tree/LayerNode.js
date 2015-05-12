@@ -85,10 +85,18 @@ Ext.define('GeoExt.tree.LayerNode', {
 
         target.on('afteredit', this.onAfterEdit, this);
 
-        layer.events.on({
+        var layerEvents = {
             'visibilitychanged': this.onLayerVisibilityChanged,
             scope: this
-        });
+        };
+
+        if (!target.get('hideSpinnerInLayerTree')) {
+            Ext.merge(layerEvents, {
+                'loadstart': this.onLayerLoadstart,
+                'loadend': this.onLayerLoadend,
+            });
+        }
+        layer.events.on(layerEvents);
 
         if (layer.map) {
             this.map = layer.map;
@@ -129,6 +137,14 @@ Ext.define('GeoExt.tree.LayerNode', {
         }
     },
 
+    onLayerLoadstart: function() {
+        this.target.set('loading', true);
+    },
+
+    onLayerLoadend: function() {
+        this.target.set('loading', false);
+    },
+
     /**
      * Handler for visibilitychanged events on the layer.
      *
@@ -157,6 +173,8 @@ Ext.define('GeoExt.tree.LayerNode', {
         target.un('afteredit', this.onAfterEdit, this);
 
         layer.events.un({
+            'loadstart': this.onLayerLoadstart,
+            'loadend': this.onLayerLoadend,
             'visibilitychanged': this.onLayerVisibilityChanged,
             scope: this
         });

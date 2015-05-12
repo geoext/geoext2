@@ -26,6 +26,9 @@
  *   if any.
  * * **disabled** Boolean: Used to reflect whether the associated layer is
  *   in range (visible in the current map scale).
+ *   **hideSpinnerInLayerTree** Boolean: Maps to the layers
+ *   metadata.hideSpinnerInLayerTree property to hide the load spinner in the
+ *   tree component.
  *
  * A typical configuration that makes use of some of these extended sttings
  * could look like this:
@@ -65,7 +68,16 @@ Ext.define('GeoExt.data.LayerTreeModel',{
         {name: 'checkedGroup', type: 'string'},
         {name: 'fixedText', type: 'bool'},
         {name: 'component'},
-        {name: 'disabled', type: 'bool', defaultValue: 'false'}
+        {name: 'disabled', type: 'bool', defaultValue: false},
+        {
+            name: 'hideSpinnerInLayerTree',
+            type: 'bool',
+            convert: function(v, record) {
+                var layer = record.data.layer,
+                    metadata = (layer ? layer.metadata : false);
+                return (metadata ? metadata.hideSpinnerInLayerTree : false);
+            }
+        }
     ],
     proxy: {
         type: "memory"
