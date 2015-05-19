@@ -3,7 +3,7 @@
      * The application's namespace.
      */
     "name": "CF",
-    
+
     /**
      * The version of the application.
      */
@@ -32,9 +32,9 @@
     /**
      * The name of the theme for this application.
      */
-    
+
     "theme": "ext-theme-crisp",
-    
+
     /**
      * The list of required packages (with optional versions; default is "latest").
      *
@@ -107,7 +107,7 @@
      */
     "js": [
         {
-            "path": "http://cdn.sencha.com/ext/gpl/5.1.0/build/ext-all-rtl-debug.js"
+            "path": "http://cdn.sencha.com/ext/gpl/5.1.0/build/ext.js"
         },
         {
             "path": "http://openlayers.org/api/2.13.1/OpenLayers.js"
@@ -180,15 +180,15 @@
 
 
     /**
-     * override objects for setting build environment specific 
+     * override objects for setting build environment specific
      * settings.
      */
     "production": {
     },
-    
+
     "testing": {
     },
-    
+
     "development": {
     },
 
@@ -259,9 +259,7 @@
      *      }
      *
      */
-    "output": {
-        "base": "${workspace.build.dir}/${build.environment}/${app.name}"
-    },
+    "output": "../../build/${build.environment}/${app.name}",
 
     /**
      * Used to automatically generate cache.manifest (HTML 5 application cache manifest) file when you build
