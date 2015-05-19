@@ -72,7 +72,7 @@ Ext.define('CF.view.map.MapController', {
                 'default': style
             }),
             protocol: new OpenLayers.Protocol.HTTP({
-                url: "../../data/summits.json",
+                url: "resources/data/summits.json",
                 format: new OpenLayers.Format.GeoJSON()
             }),
             strategies: [new OpenLayers.Strategy.Fixed()]
