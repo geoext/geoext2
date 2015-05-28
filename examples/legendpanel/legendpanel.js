@@ -33,7 +33,7 @@ Ext.application({
         map.addLayers([
             new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",
-                "http://ows.terrestris.de/osm/service?",
+                "https://ows.terrestris.de/osm/service?",
                 {layers: 'OSM-WMS'},
                 {
                     attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -44,7 +44,7 @@ Ext.application({
             ),            
             new OpenLayers.Layer.WMS(
                 "Subway Stops",
-                "http://ows.terrestris.de/osm-haltestellen?",
+                "https://ows.terrestris.de/osm-haltestellen?",
                 {
                     layers: 'OSM-Strassenbahnhaltestellen', 
                     format: 'image/png', 
@@ -84,7 +84,7 @@ Ext.application({
         // give the record of the 1st layer a legendURL, which will cause
         // UrlLegend instead of WMSLegend to be used
         var layerRec0 = mapPanel.layers.getAt(0);
-        layerRec0.set("legendURL", "http://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
+        layerRec0.set("legendURL", "https://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
         
         legendPanel = Ext.create('GeoExt.panel.Legend', {
             defaults: {
@@ -130,7 +130,7 @@ Ext.application({
         var otherUrl = "http://www.geoext.org/trac/geoext/chrome/site/img/GeoExt.png";
         // create another layer for the add/remove button action
         var busstops = new OpenLayers.Layer.WMS("Bus Stops",
-            "http://ows.terrestris.de/osm-haltestellen?",
+            "https://ows.terrestris.de/osm-haltestellen?",
             {layers: 'OSM-Bushaltestellen', format: 'image/png', transparent: true},
             {singleTile: true});
 

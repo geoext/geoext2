@@ -30,7 +30,7 @@ Ext.application({
         var map = new OpenLayers.Map({projection: 'EPSG:900913'});
         var wmsLayer = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "http://ows.terrestris.de/osm-gray/service?",
+            "https://ows.terrestris.de/osm-gray/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +
