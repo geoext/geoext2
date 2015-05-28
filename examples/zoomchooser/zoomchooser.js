@@ -27,9 +27,9 @@ Ext.application({
     launch: function() {
         var map = new OpenLayers.Map();
         var layer = new OpenLayers.Layer.WMS(
-            "Global Imagery",
-            "http://maps.opengeo.org/geowebcache/service/wms",
-            {layers: "bluemarble"}
+            "Blue Marble",
+            "http://demo.opengeo.org/geoserver/ows?",
+            {layers: "nasa:bluemarble"}
         );
         map.addLayer(layer);
 

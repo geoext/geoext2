@@ -28,9 +28,9 @@ Ext.onReady(function() {
             zoomMethod: null
         },
         layers: [new OpenLayers.Layer.WMS(
-            "Global Imagery",
-            "http://maps.opengeo.org/geowebcache/service/wms",
-            {layers: "bluemarble"}
+            "Blue Marble",
+            "http://demo.opengeo.org/geoserver/ows?",
+            {layers: "nasa:bluemarble"}
         )],
         extent: [-5, 35, 15, 55],
         items: [{

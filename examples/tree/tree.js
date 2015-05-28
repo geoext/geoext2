@@ -34,9 +34,9 @@ Ext.application({
             center: [14, 37.5],
             zoom: 7,
             layers: [
-                new OpenLayers.Layer.WMS("Global Imagery",
-                    "http://maps.opengeo.org/geowebcache/service/wms", {
-                        layers: "bluemarble",
+                new OpenLayers.Layer.WMS("Blue Marble",
+                    "http://demo.opengeo.org/geoserver/ows?", {
+                        layers: "nasa:bluemarble",
                         format: "image/png8"
                     }, {
                         buffer: 0,
