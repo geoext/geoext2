@@ -57,7 +57,8 @@ Ext.application({
             },
             layers: [
                 new OpenLayers.Layer.WMS("OpenStreetMap WMS",
-                    "https://ows.terrestris.de/osm/service?",
+                    // using http here because the print-servlet cant handle https
+                    "http://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
