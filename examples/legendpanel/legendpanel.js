@@ -127,7 +127,7 @@ Ext.application({
         // store the layer that we will modify in toggleVis()
         var layerRec1 = mapPanel.layers.getAt(1);
         // stores another legendURL for the legendurl button action
-        var otherUrl = "http://www.geoext.org/trac/geoext/chrome/site/img/GeoExt.png";
+        var otherUrl = "../../website-resources/img/GeoExt-logo.png";
         // create another layer for the add/remove button action
         var busstops = new OpenLayers.Layer.WMS("Bus Stops",
             "https://ows.terrestris.de/osm-haltestellen?",

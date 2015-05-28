@@ -24,7 +24,7 @@ Ext.application({
     launch: function() {
         var locationLayer = new OpenLayers.Layer.Vector("Location", {
             styleMap: new OpenLayers.Style({
-                externalGraphic: "http://openlayers.org/api/img/marker.png",
+                externalGraphic: "../../resources/images/default/anchor-access.png",
                 graphicYOffset: -25,
                 graphicHeight: 25,
                 graphicTitle: "${name}"
