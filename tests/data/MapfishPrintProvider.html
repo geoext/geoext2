@@ -44,7 +44,7 @@
     <script type="text/javascript">
 
         function test_constructor(t) {
-            t.plan(9);
+            t.plan(11);
             var log = {};
 
             var origRequest = Ext.Ajax.request;
@@ -67,6 +67,8 @@
             t.eq(printProvider.capabilities.createURL, "http://ows.terrestris.de/print/pdf/create.json", "capabilities available and createURL correct after loadcapabilities event");
             t.ok(printProvider.layout == printProvider.layouts.getAt(0), "layout set to first available layout record.");
             t.ok(printProvider.dpi == printProvider.dpis.getAt(0), "dpi set to first available dpi record.");
+            t.eq(printProvider.outputFormats.getCount(), 7, "7 formats read in properly.");
+            t.ok(printProvider.outputFormat == printProvider.outputFormats.getAt(4), "outputFormat set to pdf");
             t.eq(printProvider.scales.getCount(), 8, "8 scales read in properly.");
 
             log = {};
@@ -101,6 +103,25 @@
             t.ok(printProvider.layout == layout, "layout set correctly.");
             t.ok(log.layoutchange[0] == printProvider, "printProvider passed as 1st argment of the layoutchange listener.");
             t.ok(log.layoutchange[1] == layout, "layout passed as 2nd argment of the layoutchange listener.");
+        }
+
+        function test_setOutputFormat(t) {
+            t.plan(4);
+            var log = {};
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
+                capabilities: printCapabilities,
+                listeners: {
+                    "outputformatchange": function() {
+                        log.outputformatchange = arguments;
+                    }
+                }
+            });
+            t.ok(printProvider.outputFormat.get("name") === "pdf", "pdf is default");
+            var format = printProvider.outputFormats.getAt(0);
+            printProvider.setOutputFormat(format);
+            t.ok(printProvider.outputFormat == format, "outputFormat set correctly.");
+            t.ok(log.outputformatchange[0] == printProvider, "printProvider passed as 1st argment of the outputformatchange listener.");
+            t.ok(log.outputformatchange[1] == format, "layout passed as 2nd argment of the outputformatchange listener.");
         }
 
         function test_setDpi(t) {
@@ -270,7 +291,7 @@
             };
             printProvider.print(map, [printPage], {overview: overview, legend: legend});
 
-            var expect = {"units":"degrees","srs":"EPSG:4326","layout":"A4 portrait","dpi":75,"layers":[{"baseURL":"http://demo.opengeo.org/geoserver/wms","opacity":1,"singleTile":false,"type":"WMS","layers":["topp:tasmania_state_boundaries","topp:tasmania_water_bodies"],"format":"image/gif","styles":[""],"customParams":{"VENDORFOO":"bar", "map_resolution": 150}},{"baseURL":"http://a.tile.openstreetmap.org/","type":"OSM","opacity":1,"singleTile":false,"maxExtent":map.layers[1].maxExtent.toArray(),"tileSize":[256,256],"resolutions":map.layers[1].resolutions,"extension":"png",layer:undefined},{"baseURL":"http://c0.labs.metacarta.com/wms-c/cache/","opacity":1,"singleTile":false,"type":"TileCache","layer":"basic","maxExtent":[-180,-90,180,90],"tileSize":[256,256],"extension":"png","resolutions":[0.703125,0.3515625,0.17578125,0.087890625,0.0439453125,0.02197265625,0.010986328125,0.0054931640625,0.00274658203125,0.001373291015625,0.0006866455078125,0.00034332275390625,0.000171661376953125,0.0000858306884765625,0.00004291534423828125,0.000021457672119140625]},{"baseURL":"http://tilecache.osgeo.org/wms-c/Basic.py/","type":"TMS","opacity":1,"singleTile":false,"extension":undefined,layer:"basic","maxExtent":[-180,-90,180,90],"tileSize":[256,256],"resolutions":[1.40625,0.703125,0.3515625,0.17578125,0.087890625,0.0439453125,0.02197265625,0.010986328125,0.0054931640625,0.00274658203125,0.001373291015625,0.0006866455078125,0.00034332275390625,0.000171661376953125,0.0000858306884765625,0.00004291534423828125],format:"png"},{"type":"Image","baseURL":"http://eoimages.gsfc.nasa.gov/images/imagerecords/55000/55167/earth_lights.jpg","opacity":1,"extent":[-180,-88.759,180,88.759],"pixelSize":[580,288],"name":"image"},{"type":"Vector","minScaleDenominator":50000,"maxScaleDenominator":1000000,"styles":{"1":{"fontColor": "#000000", "labelAlign": "cm", "labelOutlineColor": "white", "labelOutlineWidth": 3, "fillColor":"#ee9900","fillOpacity":0.4,"hoverFillColor":"white","hoverFillOpacity":0.8,"strokeColor":"#ee9900","strokeOpacity":1,"strokeWidth":1,"strokeLinecap":"round","strokeDashstyle":"solid","hoverStrokeColor":"red","hoverStrokeOpacity":1,"hoverStrokeWidth":0.2,"pointRadius":6,"hoverPointRadius":1,"hoverPointUnit":"%","pointerEvents":"visiblePainted","cursor":"inherit"}},"styleProperty":"_gx_style","geoJson":{"type":"FeatureCollection","features":[{"type":"Feature","id":"f1","properties":{"_gx_style":1},"geometry":{"type":"Point","coordinates":[1,2]}}]},"name":"vector","opacity":1},{"type":"Vector","styles":{"1":{"externalGraphic":"http://trac.geoext.org/chrome/site/img/GeoExt.png","graphicWidth":10,"graphicHeight":17,"graphicXOffset":-5,"graphicYOffset":-17}},"styleProperty":"_gx_style","geoJson":{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"_gx_style":1},"geometry":{"type":"Point","coordinates":[25,50]}}]},"name":"markers","opacity":1},{baseURL:"http://wmts0.geo.admin.ch/", opacity:1, singleTile:false, type:"WMTS", layer:"ch.swisstopo.pixelkarte-farbe", version:"1.0.0", requestEncoding:"REST", tileOrigin:[420000, 350000], tileSize:[256, 256], style:"default", formatSuffix:"jpeg", dimensions:["TIME"], params:{TIME:"20110314"}, maxExtent:[420000, 30000, 900000, 350000], matrixSet:"21781", zoomOffset:14, resolutions:[4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250, 1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5]}],"pages":[{"mapTitle":"foo","comment":"bar","center":[1,2],"scale":4000000,"rotation":0}],"customParam":"foo","legends":[{"name":"tilecache","classes":[{"name":"","icon":"http://trac.geoext.org/chrome/site/img/GeoExt.png"}]},{"name":"wms","classes":[{"name":"","icons":["http://demo.opengeo.org/geoserver/wms?VENDORFOO=bar&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_state_boundaries&FORMAT=image%2Fgif&SCALE=4000000","http://demo.opengeo.org/geoserver/wms?VENDORFOO=bar&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_water_bodies&FORMAT=image%2Fgif&SCALE=4000000"]}]}],"overviewLayers":[{"baseURL":"http://trac.geoext.org/chrome/site/img/GeoExt.png","format":"image/jpeg",layers:["mylayer"],"opacity":1,"singleTile":false,styles:[""],type:"WMS", "customParams": {"map_resolution": 150}}]};
+            var expect = {"units":"degrees","srs":"EPSG:4326","layout":"A4 portrait","dpi":75,"outputFormat":"pdf","layers":[{"baseURL":"http://demo.opengeo.org/geoserver/wms","opacity":1,"singleTile":false,"type":"WMS","layers":["topp:tasmania_state_boundaries","topp:tasmania_water_bodies"],"format":"image/gif","styles":[""],"customParams":{"VENDORFOO":"bar", "map_resolution": 150}},{"baseURL":"http://a.tile.openstreetmap.org/","type":"OSM","opacity":1,"singleTile":false,"maxExtent":map.layers[1].maxExtent.toArray(),"tileSize":[256,256],"resolutions":map.layers[1].resolutions,"extension":"png",layer:undefined},{"baseURL":"http://c0.labs.metacarta.com/wms-c/cache/","opacity":1,"singleTile":false,"type":"TileCache","layer":"basic","maxExtent":[-180,-90,180,90],"tileSize":[256,256],"extension":"png","resolutions":[0.703125,0.3515625,0.17578125,0.087890625,0.0439453125,0.02197265625,0.010986328125,0.0054931640625,0.00274658203125,0.001373291015625,0.0006866455078125,0.00034332275390625,0.000171661376953125,0.0000858306884765625,0.00004291534423828125,0.000021457672119140625]},{"baseURL":"http://tilecache.osgeo.org/wms-c/Basic.py/","type":"TMS","opacity":1,"singleTile":false,"extension":undefined,layer:"basic","maxExtent":[-180,-90,180,90],"tileSize":[256,256],"resolutions":[1.40625,0.703125,0.3515625,0.17578125,0.087890625,0.0439453125,0.02197265625,0.010986328125,0.0054931640625,0.00274658203125,0.001373291015625,0.0006866455078125,0.00034332275390625,0.000171661376953125,0.0000858306884765625,0.00004291534423828125],format:"png"},{"type":"Image","baseURL":"http://eoimages.gsfc.nasa.gov/images/imagerecords/55000/55167/earth_lights.jpg","opacity":1,"extent":[-180,-88.759,180,88.759],"pixelSize":[580,288],"name":"image"},{"type":"Vector","minScaleDenominator":50000,"maxScaleDenominator":1000000,"styles":{"1":{"fontColor": "#000000", "labelAlign": "cm", "labelOutlineColor": "white", "labelOutlineWidth": 3, "fillColor":"#ee9900","fillOpacity":0.4,"hoverFillColor":"white","hoverFillOpacity":0.8,"strokeColor":"#ee9900","strokeOpacity":1,"strokeWidth":1,"strokeLinecap":"round","strokeDashstyle":"solid","hoverStrokeColor":"red","hoverStrokeOpacity":1,"hoverStrokeWidth":0.2,"pointRadius":6,"hoverPointRadius":1,"hoverPointUnit":"%","pointerEvents":"visiblePainted","cursor":"inherit"}},"styleProperty":"_gx_style","geoJson":{"type":"FeatureCollection","features":[{"type":"Feature","id":"f1","properties":{"_gx_style":1},"geometry":{"type":"Point","coordinates":[1,2]}}]},"name":"vector","opacity":1},{"type":"Vector","styles":{"1":{"externalGraphic":"http://trac.geoext.org/chrome/site/img/GeoExt.png","graphicWidth":10,"graphicHeight":17,"graphicXOffset":-5,"graphicYOffset":-17}},"styleProperty":"_gx_style","geoJson":{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"_gx_style":1},"geometry":{"type":"Point","coordinates":[25,50]}}]},"name":"markers","opacity":1},{baseURL:"http://wmts0.geo.admin.ch/", opacity:1, singleTile:false, type:"WMTS", layer:"ch.swisstopo.pixelkarte-farbe", version:"1.0.0", requestEncoding:"REST", tileOrigin:[420000, 350000], tileSize:[256, 256], style:"default", formatSuffix:"jpeg", dimensions:["TIME"], params:{TIME:"20110314"}, maxExtent:[420000, 30000, 900000, 350000], matrixSet:"21781", zoomOffset:14, resolutions:[4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250, 1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5]}],"pages":[{"mapTitle":"foo","comment":"bar","center":[1,2],"scale":4000000,"rotation":0}],"customParam":"foo","legends":[{"name":"tilecache","classes":[{"name":"","icon":"http://trac.geoext.org/chrome/site/img/GeoExt.png"}]},{"name":"wms","classes":[{"name":"","icons":["http://demo.opengeo.org/geoserver/wms?VENDORFOO=bar&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_state_boundaries&FORMAT=image%2Fgif&SCALE=4000000","http://demo.opengeo.org/geoserver/wms?VENDORFOO=bar&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=topp%3Atasmania_water_bodies&FORMAT=image%2Fgif&SCALE=4000000"]}]}],"overviewLayers":[{"baseURL":"http://trac.geoext.org/chrome/site/img/GeoExt.png","format":"image/jpeg",layers:["mylayer"],"opacity":1,"singleTile":false,styles:[""],type:"WMS", "customParams": {"map_resolution": 150}}]};
 
             t.eq(log.request.jsonData, expect, "Request with encoded layers and legend is correct.");
 
@@ -329,6 +350,7 @@
                 "srs": "EPSG:4326",
                 "layout": "A4 portrait",
                 "dpi": 75,
+                "outputFormat": "pdf",
                 "layers": [{
                     "baseURL": "http://demo.opengeo.org/geoserver/wms",
                     "opacity": 1,
