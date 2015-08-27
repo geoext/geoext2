@@ -1,2 +1,6 @@
+build
 docs
 node_modules
+
+examples/*/build
+examples/*/bootstrap.*
