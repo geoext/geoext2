@@ -14,8 +14,13 @@ the web. It is a JavaScript framework that combines the GIS functionality of
 [Sencha](http://www.sencha.com/).
 
 Version 2 of GeoExt is the successor to the
-[GeoExt 1.x-series](http://geoext.org) and is built atop the newest official
-installments of its base libraries; OpenLayers 2.13.1 and ExtJS 4.2.1.
+[GeoExt 1.x-series](http://geoext.org).
+
+GeoExt 2.1.x is built atop OpenLayers 2.13.1 and ExtJS 5.1.0 and provides full backward compatibility to ExtJS 4.2.1.
+So GeoExt 2.1 is usable either with ExtJS 5.1 or Ext 4.2.1.
+
+
+GeoExt 2.0.x is based on OpenLayers 2.13.1 and ExtJS 4.2.1 and is maintained in the [v2.0.x-maintenance Branch](https://github.com/geoext/geoext2/tree/v2.0.x-maintenance).
 
 
 ## More information on GeoExt 2
@@ -39,7 +44,25 @@ already includes ExtJS and OpenLayers:
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Trying out GeoExt2</title>
+        <title>Trying out GeoExt2 w/ ExtJS 5.1.0</title>
+        <!-- Load the ExtJS stylesheet -->
+        <link rel="stylesheet" type="text/css"
+          href="http://cdn.sencha.com/ext/gpl/5.1.0/build/packages/ext-theme-neptune/build/resources/ext-theme-neptune-all-debug.css">
+        <!-- Load ExtJS from their CDN, local versions work also -->
+        <script type="text/javascript"
+          src="http://cdn.sencha.com/ext/gpl/5.1.0/build/ext-all-debug.js"></script>
+        <!-- Load OpenLayers, custom builds may even be better -->
+        <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+    </head>
+    <body></body>
+</html>
+```
+Or if you are stuck to ExtJS 4.2.x you can use the following code:
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Trying out GeoExt2 w/ ExtJS 4.2.1</title>
         <!-- Load the ExtJS stylesheet -->
         <link rel="stylesheet" type="text/css"
           href="http://cdn.sencha.com/ext/gpl/4.2.1/resources/css/ext-all.css">
@@ -55,7 +78,19 @@ already includes ExtJS and OpenLayers:
 
 Next, we simply add a `<script>`-tag in which we tell ExtJS about GeoExt (and
 also where to find the ExtJS source files):
-
+```html
+<script type="text/javascript">
+Ext.Loader.setConfig({
+    enabled: true,
+    disableCaching: false,
+    paths: {
+        GeoExt: "path/to/src/GeoExt",
+        Ext: "http://cdn.sencha.com/ext/gpl/5.1.0/src"
+    }
+});
+</script>
+```
+Or reference the ExtJS 4.2.1 sources if you have to use them:
 ```html
 <script type="text/javascript">
 Ext.Loader.setConfig({
@@ -146,5 +181,3 @@ npm test
 ```
 
 These tests are also run though [travis](https://travis-ci.org/geoext/geoext2).
-
-
