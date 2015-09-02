@@ -50,6 +50,15 @@ Ext.define('GeoExt.tree.LayerNode', {
         'GeoExt.Version',
         'GeoExt.tree.Util'
     ],
+
+    /**
+     * Cached map this layer node's layer is associated with.
+     * @type {OpenLayers.Map}
+     *
+     * @private
+     */
+    map: null,
+
     /**
      * The init method is invoked after initComponent method has been run for
      * the client Component. It performs plugin initialization.
@@ -81,8 +90,25 @@ Ext.define('GeoExt.tree.LayerNode', {
             scope: this
         });
 
-        if (!layer.alwaysInRange && layer.map) {
-            layer.map.events.register('moveend', this, this.onMapMoveend);
+        if (layer.map) {
+            this.map = layer.map;
+
+            // Triggers disposal of event listeners if the removed layer maps
+            // to this plugins layer node.
+            // TODO: Find a better way to link into lifecycle of the layer node
+            //       to dispose event listeners. See:
+            //       https://github.com/geoext/geoext2/pull/357
+            this.map.events.on({
+                'removelayer': this.onMapRemovelayer,
+                scope: this
+            });
+        }
+
+        if (!layer.alwaysInRange && this.map) {
+            this.map.events.on({
+                'moveend': this.onMapMoveend,
+                scope: this
+            });
         }
 
         GeoExt.tree.Util.enforceOneLayerVisible(this.target);
@@ -112,6 +138,38 @@ Ext.define('GeoExt.tree.LayerNode', {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
         }
+    },
+
+    /**
+     * Disposes event handlers that have been added during initialization of plugin.
+     * TODO: Add tests to make sure this works as expected.
+     *
+     * @private
+     */
+    onMapRemovelayer: function(evt) {
+        var target = this.target,
+            layer = target.get('layer');
+
+        if (evt.layer !== layer) {
+            return;
+        }
+
+        target.un('afteredit', this.onAfterEdit, this);
+
+        layer.events.un({
+            'visibilitychanged': this.onLayerVisibilityChanged,
+            scope: this
+        });
+
+        this.map.events.un({
+            'removelayer': this.onMapRemovelayer,
+            'moveend': this.onMapMoveend,
+            scope: this
+        });
+
+        this.map = null;
+
+        return true;
     },
 
     /**
