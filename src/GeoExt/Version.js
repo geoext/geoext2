@@ -7,8 +7,8 @@
  */
 (function() {
     var major = 2,
-        minor = 0,
-        patch = 4,
+        minor = 1,
+        patch = 0,
         label = 'dev',
         environment = [],
         extVersions = Ext.versions.extjs,
