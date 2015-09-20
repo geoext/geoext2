@@ -155,11 +155,14 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
      */
     onFieldChange: function(field, records) {
         var record;
-        if (Ext.isArray(records)) {
-            record = records[0];
-        } else {
-            record = records;
-        }
+        // textfields records parameter is a string, comboboxes are records
+        if(Ext.isString(records) === false){       
+            if (Ext.isArray(records)) {
+                record = records[0];
+            } else {
+                record = records;
+            }
+        }        
         var printProvider = this.printProvider || field.ownerCt.printProvider;
         var value = field.getValue();
         this._updating = true;

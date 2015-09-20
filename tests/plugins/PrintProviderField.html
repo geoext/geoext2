@@ -190,6 +190,30 @@
             t.eq(printProvider.layout.get("name"), printProvider.layouts.getAt(1).get("name"), "Layout value updated in printProvider.");
         }
         
+        function test_textfield_onFieldChange(t) {
+            t.plan(1);
+
+            var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
+                capabilities: printCapabilities,
+                customParams: {foo: "bar"}
+            });
+            var plugin = Ext.create('GeoExt.plugins.PrintProviderField', {
+                printProvider: printProvider
+            });
+            var field = Ext.create('Ext.form.field.Text', {
+                name: "foo",
+                plugins: plugin,           
+                listeners: {
+                    dirtychange: function(){
+                        // this fires after the change event
+                        t.eq(printProvider.customParams.foo, "foobar", "Custom text field value updated in printProvider.");
+                    }
+                }
+            });
+            
+            field.setValue("foobar");
+        }
+        
         function test_onProviderChange(t) {
             t.plan(3);
             
