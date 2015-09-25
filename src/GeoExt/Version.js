@@ -9,7 +9,7 @@
     var major = 2,
         minor = 1,
         patch = 0,
-        label = 'dev',
+        label = 'beta.2',
         environment = [],
         extVersions = Ext.versions.extjs,
         isExt5 = false,
