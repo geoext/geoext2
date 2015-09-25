@@ -1,8 +1,8 @@
 {
   "name": "GeoExt",
   "type": "code",
-  "version": "2.1.0-beta.2",
-  "compatVersion": "2.1.0-beta.2",
+  "version": "2.1.0-dev",
+  "compatVersion": "2.1.0-dev",
   "description": "A JavaScript Toolkit for Rich Web Mapping Applications based on OpenLayers and ExtJS.",
   "main": "index.js",
   "directories": {
