@@ -158,7 +158,11 @@ Ext.define('GeoExt.tree.LayerNode', {
         // enforcing visibility.
         if(group && group !== "gx_baselayer") {
             var layer = this.target.get('layer');
-            var checkedNodes = this.target.getOwnerTree().getChecked();
+            var ownerTree = this.target.getOwnerTree();
+            if (ownerTree === undefined) {
+                return;
+            }
+            var checkedNodes = ownerTree.getChecked();
             var checkedCount = 0;
             // enforce "not more than one visible"
             Ext.each(checkedNodes, function(n){
