@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -24,7 +24,7 @@ Ext.application({
     launch: function() {
         var locationLayer = new OpenLayers.Layer.Vector("Location", {
             styleMap: new OpenLayers.Style({
-                externalGraphic: "http://openlayers.org/api/img/marker.png",
+                externalGraphic: "../../resources/images/default/anchor-access.png",
                 graphicYOffset: -25,
                 graphicHeight: 25,
                 graphicTitle: "${name}"

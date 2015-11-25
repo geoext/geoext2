@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -50,6 +50,7 @@ Ext.application({
         layers: [
             new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",
+                // using http here because the print-servlet cant handle https
                 "http://ows.terrestris.de/osm/service?",
                 {layers: 'OSM-WMS'},
                 {
@@ -70,9 +71,9 @@ Ext.application({
         bodyStyle: "padding:5px",
         layerStore: mapPanel.layers
     });
-    
+
     var includeLegend; // controlled by the "Include legend?" checkbox
-     
+
     // The main panel
     Ext.create('Ext.Panel', {
         renderTo: "content",
@@ -98,4 +99,3 @@ Ext.application({
     });
     }
 });
-

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -21,7 +21,7 @@ Ext.application({
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         var wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "http://ows.terrestris.de/osm/service?",
+            "https://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -33,9 +33,9 @@ Ext.application({
 
         var vector = new OpenLayers.Layer.Vector("vector");
         map.addLayers([wms, vector]);
-        
+
         var ctrl, toolbarItems = [], action, actions = {};
-        
+
         // ZoomToMaxExtent control, a "button" control
         action = Ext.create('GeoExt.Action', {
             control: new OpenLayers.Control.ZoomToMaxExtent(),
@@ -46,7 +46,7 @@ Ext.application({
         actions["max_extent"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
-        
+
         // Navigation control and DrawFeature controls
         // in the same toggle group
         action = Ext.create('GeoExt.Action', {
@@ -64,7 +64,7 @@ Ext.application({
         });
         actions["nav"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
-        
+
         action = Ext.create('GeoExt.Action', {
             text: "draw poly",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Polygon),
@@ -78,7 +78,7 @@ Ext.application({
         });
         actions["draw_poly"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
-        
+
         action = Ext.create('GeoExt.Action', {
             text: "draw line",
             control: new OpenLayers.Control.DrawFeature(vector, OpenLayers.Handler.Path),
@@ -93,7 +93,7 @@ Ext.application({
         actions["draw_line"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
-        
+
         // SelectFeature control, a "toggle" control
         action = Ext.create('GeoExt.Action', {
             text: "select",
@@ -109,11 +109,11 @@ Ext.application({
         actions["select"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("-");
-        
+
         // Navigation history - two "button" controls
         ctrl = new OpenLayers.Control.NavigationHistory();
         map.addControl(ctrl);
-        
+
         action = Ext.create('GeoExt.Action', {
             text: "previous",
             control: ctrl.previous,
@@ -122,7 +122,7 @@ Ext.application({
         });
         actions["previous"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
-        
+
         action = Ext.create('GeoExt.Action', {
             text: "next",
             control: ctrl.next,
@@ -132,7 +132,7 @@ Ext.application({
         actions["next"] = action;
         toolbarItems.push(Ext.create('Ext.button.Button', action));
         toolbarItems.push("->");
-        
+
         // Reuse the GeoExt.Action objects created above
         // as menu items
         toolbarItems.push({
@@ -150,12 +150,12 @@ Ext.application({
                     // Select control
                     Ext.create('Ext.menu.CheckItem', actions["select"]),
                     // Navigation history control
-                    Ext.create('Ext.button.Button', actions["previous"]), 
+                    Ext.create('Ext.button.Button', actions["previous"]),
                     Ext.create('Ext.button.Button', actions["next"])
                 ]
             })
         });
-        
+
         var mappanel = Ext.create('GeoExt.panel.Map', {
             title: 'Using GeoExt.Action instances in various places',
             map: map,
@@ -166,8 +166,8 @@ Ext.application({
                 items: toolbarItems
             }]
         });
-        
-        
+
+
         Ext.create('Ext.container.Viewport', {
             layout: 'fit',
             items: [mappanel]

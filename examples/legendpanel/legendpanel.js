@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -17,7 +17,7 @@ var mapPanel, legendPanel;
 Ext.require([
     'Ext.container.Viewport',
     'Ext.layout.container.Border',
-    'GeoExt.panel.Map', 
+    'GeoExt.panel.Map',
     'GeoExt.container.WmsLegend',
     'GeoExt.container.UrlLegend',
     'GeoExt.container.VectorLegend',
@@ -31,7 +31,7 @@ Ext.application({
         map.addLayers([
             new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",
-                "http://ows.terrestris.de/osm/service?",
+                "https://ows.terrestris.de/osm/service?",
                 {layers: 'OSM-WMS'},
                 {
                     attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -39,13 +39,13 @@ Ext.application({
                         '<a href="http://www.openstreetmap.org/copyright/en"' +
                         'target="_blank">contributors<a>'
                 }
-            ),            
+            ),
             new OpenLayers.Layer.WMS(
                 "Subway Stops",
-                "http://ows.terrestris.de/osm-haltestellen?",
+                "https://ows.terrestris.de/osm-haltestellen?",
                 {
-                    layers: 'OSM-Strassenbahnhaltestellen', 
-                    format: 'image/png', 
+                    layers: 'OSM-Strassenbahnhaltestellen',
+                    format: 'image/png',
                     transparent: true
                 },
                 {
@@ -82,8 +82,8 @@ Ext.application({
         // give the record of the 1st layer a legendURL, which will cause
         // UrlLegend instead of WMSLegend to be used
         var layerRec0 = mapPanel.layers.getAt(0);
-        layerRec0.set("legendURL", "http://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
-        
+        layerRec0.set("legendURL", "https://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
+
         legendPanel = Ext.create('GeoExt.panel.Legend', {
             defaults: {
                 labelCls: 'mylabel',
@@ -94,7 +94,7 @@ Ext.application({
             autoScroll: true,
             region: 'west'
         });
-        
+
         // functions for interacting with the map's layers to show how the
         // legend instantly reflects changes
         function addRemoveLayer() {
@@ -103,7 +103,7 @@ Ext.application({
             } else {
                 map.removeLayer(busstops);
             }
-        }        
+        }
         function moveLayer() {
             var layer = layerRec0.getLayer();
             var idx = Ext.Array.indexOf(map.layers, layer) === 0 ?
@@ -125,10 +125,10 @@ Ext.application({
         // store the layer that we will modify in toggleVis()
         var layerRec1 = mapPanel.layers.getAt(1);
         // stores another legendURL for the legendurl button action
-        var otherUrl = "http://www.geoext.org/trac/geoext/chrome/site/img/GeoExt.png";
+        var otherUrl = "../../website-resources/img/GeoExt-logo.png";
         // create another layer for the add/remove button action
         var busstops = new OpenLayers.Layer.WMS("Bus Stops",
-            "http://ows.terrestris.de/osm-haltestellen?",
+            "https://ows.terrestris.de/osm-haltestellen?",
             {layers: 'OSM-Bushaltestellen', format: 'image/png', transparent: true},
             {singleTile: true});
 
@@ -150,5 +150,3 @@ Ext.application({
         });
     }
 });
-
-

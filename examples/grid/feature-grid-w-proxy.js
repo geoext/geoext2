@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -30,7 +30,7 @@ Ext.application({
         var map = new OpenLayers.Map({projection: 'EPSG:900913'});
         var wmsLayer = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "http://ows.terrestris.de/osm-gray/service?",
+            "https://ows.terrestris.de/osm-gray/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -86,7 +86,7 @@ Ext.application({
             zoom: 4
         });
 
-        // create feature store, binding it to the vector layer 
+        // create feature store, binding it to the vector layer
         store = Ext.create('GeoExt.data.FeatureStore', {
             layer: vecLayer,
             fields: [
@@ -127,4 +127,3 @@ Ext.application({
         });
     }
 });
-

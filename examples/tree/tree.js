@@ -44,7 +44,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("OpenStreetMap WMS",
-                    "http://ows.terrestris.de/osm/service?",
+                    "https://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -54,7 +54,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Country Borders",
-                    "http://ows.terrestris.de/geoserver/osm/wms", {
+                    "https://ows.terrestris.de/geoserver/osm/wms", {
                         layers: "osm:osm-country-borders",
                         transparent: true,
                         format: "image/png"
@@ -75,7 +75,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Gas Stations",
-                    "http://ows.terrestris.de/geoserver/osm/wms", {
+                    "https://ows.terrestris.de/geoserver/osm/wms", {
                         layers: "osm:osm-fuel",
                         transparent: true,
                         format: "image/png"
@@ -85,7 +85,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Bus Stops",
-                    "http://ows.terrestris.de/osm-haltestellen?",
+                    "https://ows.terrestris.de/osm-haltestellen?",
                     {
                         layers: 'OSM-Bushaltestellen',
                         format: 'image/png',

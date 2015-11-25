@@ -24,7 +24,7 @@ Ext.application({
             zoom: 15,
             layers: [
                 new OpenLayers.Layer.WMS("OpenStreetMap WMS",
-                    "http://ows.terrestris.de/osm/service?",
+                    "https://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -37,10 +37,10 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Subway Stops",
-                    "http://ows.terrestris.de/osm-haltestellen?",
+                    "https://ows.terrestris.de/osm-haltestellen?",
                     {
-                        layers: 'OSM-Strassenbahnhaltestellen', 
-                        format: 'image/png', 
+                        layers: 'OSM-Strassenbahnhaltestellen',
+                        format: 'image/png',
                         transparent: true
                     },
                     {
@@ -48,10 +48,10 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Bus Stops",
-                    "http://ows.terrestris.de/osm-haltestellen?",
+                    "https://ows.terrestris.de/osm-haltestellen?",
                     {
-                        layers: 'OSM-Bushaltestellen', 
-                        format: 'image/png', 
+                        layers: 'OSM-Bushaltestellen',
+                        format: 'image/png',
                         transparent: true
                     },
                     {

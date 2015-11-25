@@ -45,7 +45,7 @@
 
     var scriptEls = document.getElementsByTagName('script'),
         v = getQueryParam('extjs') ? getQueryParam('extjs') : '5.1.0',
-        basePath = 'http://cdn.sencha.com/ext/gpl/'+ v,
+        basePath = 'https://cdn.sencha.com/ext/gpl/'+ v,
         path = (v[0] == 4) ? basePath : basePath + '/build',
         rtl = getQueryParam('rtl'),
         theme = getQueryParam('theme') || 'neptune',

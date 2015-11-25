@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -40,7 +40,7 @@ Ext.application({
         var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var ol_wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "http://ows.terrestris.de/osm/service?",
+            "https://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -49,9 +49,9 @@ Ext.application({
                     'target="_blank">contributors<a>'
             }
         );
-        
+
         map.addLayers([ol_wms]);
-        
+
         var mappanel = Ext.create('GeoExt.panel.Map', {
             renderTo: 'mappanel',
             width: 400,
@@ -74,7 +74,7 @@ Ext.application({
                 }]
             }]
         });
-        
+
         // update link when state changes
         var onStatechange = function(provider) {
             var l = provider.getLink();

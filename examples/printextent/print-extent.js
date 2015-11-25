@@ -41,6 +41,7 @@ Ext.application({
             height: 320,
             layers: [new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",
+                // using http here because the print-servlet cant handle https
                 "http://ows.terrestris.de/osm/service?",
                 {layers: 'OSM-WMS'},
                 {

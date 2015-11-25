@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -59,7 +59,7 @@ Ext.application({
         // create a separate slider bound to the map but displayed elsewhere
         slider = Ext.create('GeoExt.slider.LayerOpacity', {
             layer: wms,
-            aggressive: true, 
+            aggressive: true,
             width: 200,
             isFormField: true,
             inverse: true,
@@ -71,11 +71,11 @@ Ext.application({
                 }
             })
         });
-        
+
         var clone = wms.clone();
         var wms2 = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "http://ows.terrestris.de/osm/service?",
+            "https://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +
