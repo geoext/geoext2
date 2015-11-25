@@ -26,9 +26,9 @@ Ext.application({
     name: 'LayerOpacitySlider GeoExt2',
     launch: function() {
         wms = new OpenLayers.Layer.WMS(
-            "Global Imagery",
-            "http://maps.opengeo.org/geowebcache/service/wms",
-            {layers: "bluemarble"}
+            "Blue Marble",
+            "http://demo.opengeo.org/geoserver/ows?",
+            {layers: "nasa:bluemarble"}
         );
 
         // create a map panel with an embedded slider

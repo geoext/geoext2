@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -27,9 +27,9 @@ Ext.application({
     launch: function() {
         var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var layer = new OpenLayers.Layer.WMS(
-            "Global Imagery",
-            "http://maps.opengeo.org/geowebcache/service/wms",
-            {layers: "bluemarble"}
+            "Blue Marble",
+            "http://demo.opengeo.org/geoserver/ows?",
+            {layers: "nasa:bluemarble"}
         );
         map.addLayer(layer);
 
@@ -47,12 +47,12 @@ Ext.application({
             queryMode: 'local' // keep the combo box from forcing a lot of unneeded data refreshes
         });
 
-        zoomSelector.on('select', 
+        zoomSelector.on('select',
             function(combo, record, index) {
                 map.zoomTo(record[0].get("level"));
             },
             this
-        );     
+        );
 
         map.events.register('zoomend', this, function() {
             var scale = scaleStore.queryBy(function(record){
@@ -81,4 +81,3 @@ Ext.application({
 
     }
 });
-
