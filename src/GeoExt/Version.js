@@ -9,7 +9,7 @@
     var major = 2,
         minor = 1,
         patch = 0,
-        label = 'dev',
+        label = '',
         environment = [],
         extVersions = Ext.versions.extjs,
         isExt5 = false,
