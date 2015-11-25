@@ -8,8 +8,8 @@
 (function() {
     var major = 2,
         minor = 1,
-        patch = 0,
-        label = '',
+        patch = 1,
+        label = 'dev',
         environment = [],
         extVersions = Ext.versions.extjs,
         isExt5 = false,
