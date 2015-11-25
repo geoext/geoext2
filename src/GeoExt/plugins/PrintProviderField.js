@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txttxt for the full
  * text of the license.
  */
- 
+
 /*
  * @requires GeoExt/data/MapfishPrintProvider.js
  */
@@ -135,6 +135,12 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
                 "dpichange": this.onProviderChange,
                 scope: this
             });
+        } else if(field.store === printProvider.outputFormats) {
+            field.setValue(printProvider.outputFormat.get(field.displayField));
+            printProvider.on({
+                "outputformatchange": this.onProviderChange,
+                scope: this
+            });
         } else if(field.initialConfig.value === undefined) {
             field.setValue(printProvider.customParams[field.name]);
         }
@@ -149,11 +155,14 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
      */
     onFieldChange: function(field, records) {
         var record;
-        if (Ext.isArray(records)) {
-            record = records[0];
-        } else {
-            record = records;
-        }
+        // textfields records parameter is a string, comboboxes are records
+        if(Ext.isString(records) === false){       
+            if (Ext.isArray(records)) {
+                record = records[0];
+            } else {
+                record = records;
+            }
+        }        
         var printProvider = this.printProvider || field.ownerCt.printProvider;
         var value = field.getValue();
         this._updating = true;
@@ -165,6 +174,10 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
                 case printProvider.dpis:
                     printProvider.setDpi(record);
                     break;
+                case printProvider.outputFormats:
+                    printProvider.setOutputFormat(record);
+                default:
+                // no op
             }
         } else {
             printProvider.customParams[field.name] = value;
@@ -198,6 +211,7 @@ Ext.define('GeoExt.plugins.PrintProviderField', {
         target.un("valid", this.onFieldChange, this);
         var printProvider = this.printProvider || target.ownerCt.printProvider;
         printProvider.un("layoutchange", this.onProviderChange, this);
+        printProvider.un("outputformatchange", this.onProviderChange, this);
         printProvider.un("dpichange", this.onProviderChange, this);
     }
 

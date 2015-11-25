@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -27,10 +27,10 @@ Ext.application({
     name: 'Feature Grid - GeoExt2',
     launch: function() {
         // create map instance
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var wmsLayer = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "https://ows.terrestris.de/osm/service?",
+            "http://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -93,13 +93,14 @@ Ext.application({
                 {
                     name: 'symbolizer',
                     convert: function(v, r) {
-                        return r.raw.layer.styleMap.createSymbolizer(r.raw, 'default');
+                        var dataKey = GeoExt.isExt4 ? 'raw' : 'data',
+                            data = r[dataKey];
+                        return data.layer.styleMap.createSymbolizer(data, 'default');
                     }
                 },
                 {name: 'name', type: 'string'},
                 {name: 'elevation', type: 'float'}
-            ],
-            autoLoad: true
+            ]
         });
 
         // create grid panel configured with feature store
@@ -114,7 +115,7 @@ Ext.application({
                 width: 30,
                 xtype: 'gx_symbolizercolumn',
                 dataIndex: "symbolizer"
-            },{
+            }, {
                 header: "Name",
                 width: 200,
                 dataIndex: "name"

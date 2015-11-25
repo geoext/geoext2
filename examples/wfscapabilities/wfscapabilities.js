@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -29,7 +29,7 @@ Ext.application({
         store = Ext.create("GeoExt.data.WfsCapabilitiesStore", {
             url: "../data/wfscap_tiny_100.xml",
             autoLoad: true,
-            // set as a function that returns a hash of layer options.  This allows
+            // set as a function that returns a hash of layer options. This allows
             // to have new objects created upon each new OpenLayers.Layer.Vector
             // object creations.
             layerOptions: function() {
@@ -54,6 +54,5 @@ Ext.application({
             height: 300,
             width: 650
         });
-
     }
 });

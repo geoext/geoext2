@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -17,11 +17,11 @@ Ext.application({
     name: 'ActionExample',
     launch: function(){
 
-        var map = new OpenLayers.Map({});
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         var wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "https://ows.terrestris.de/osm/service?",
+            "http://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -141,17 +141,20 @@ Ext.define('GeoExt.tree.LayerLoader', {
     },
 
     /**
-     * Listener for the store's remove event.
+     * Called by the Listener for the store's remove event.
      *
-     * @param {Ext.data.Store} store
-     * @param {Ext.data.Record} record
-     * @param {Integer} index
+     * @param {Ext.data.Record[]/Ext.data.Record} layerRecords
      * @param {GeoExt.data.LayerTreeModel} node
      * @private
      */
-    onStoreRemove: function(layerRecord, node) {
+    onStoreRemove: function(layerRecords, node) {
+        var me = this;
         if (!this._reordering) {
-            this.removeLayerNode(node, layerRecord);
+            layerRecords = Ext.isArray(layerRecords) ?
+                layerRecords : [layerRecords];
+            Ext.each(layerRecords, function(layerRecord){
+                me.removeLayerNode(node, layerRecord);
+            });
         }
     },
 
@@ -293,8 +296,8 @@ Ext.define('GeoExt.tree.LayerLoader', {
                 "add": function(store, layerRecords, index) {
                     this.onStoreAdd(store, layerRecords, index, node);
                 },
-                "remove": function(parent, removedRecord) {
-                    this.onStoreRemove(removedRecord, node);
+                "remove": function(parent, removedRecords) {
+                    this.onStoreRemove(removedRecords, node);
                 }
             };
             for (var evt in this._storeHandlers) {

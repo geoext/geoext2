@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -28,9 +28,9 @@ Ext.onReady(function() {
             zoomMethod: null
         },
         layers: [new OpenLayers.Layer.WMS(
-            "Blue Marble",
-            "http://demo.opengeo.org/geoserver/ows?",
-            {layers: "nasa:bluemarble"}
+            "Global Imagery",
+            "http://maps.opengeo.org/geowebcache/service/wms",
+            {layers: "bluemarble"}
         )],
         extent: [-5, 35, 15, 55],
         items: [{

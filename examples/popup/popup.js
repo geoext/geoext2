@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -13,10 +13,16 @@
  */
 
 Ext.require([
-    'Ext.Window', // useless in fact, since we're using ext-all.js in the example
+    'Ext.Window',
     'GeoExt.panel.Map',
     'GeoExt.window.Popup'
 ]);
+
+if(!Ext.isDefined(Ext.DomQuery)) {
+    // Ext.DomQuery is replaced by Ext.dom.Query when using ExtJS5
+    Ext.require('Ext.dom.Query');
+}
+
 
 var mapPanel, popup;
 
@@ -40,7 +46,8 @@ Ext.onReady(function() {
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
     
     function createPopup(feature) {
-        var checkConstrOpt = Ext.DomQuery.select('input[name="constrainOpt"]:checked')[0].value,
+        var DomQuery = GeoExt.isExt4 ? Ext.DomQuery : Ext.dom.Query,
+            checkConstrOpt = DomQuery.select('input[name="constrainOpt"]:checked')[0].value,
             undef,
             constrainOpts = {
                 constrain: (checkConstrOpt === 'constrain-full') ? true : undef,
@@ -94,7 +101,7 @@ Ext.onReady(function() {
             layers: [
                 new OpenLayers.Layer.WMS( 
                     "OpenStreetMap WMS",
-                    "https://ows.terrestris.de/osm/service?",
+                    "http://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +

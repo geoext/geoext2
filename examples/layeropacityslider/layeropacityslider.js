@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -26,9 +26,9 @@ Ext.application({
     name: 'LayerOpacitySlider GeoExt2',
     launch: function() {
         wms = new OpenLayers.Layer.WMS(
-            "Blue Marble",
-            "http://demo.opengeo.org/geoserver/ows?",
-            {layers: "nasa:bluemarble"}
+            "Global Imagery",
+            "http://maps.opengeo.org/geowebcache/service/wms",
+            {layers: "bluemarble"}
         );
 
         // create a map panel with an embedded slider
@@ -75,7 +75,7 @@ Ext.application({
         var clone = wms.clone();
         var wms2 = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "https://ows.terrestris.de/osm/service?",
+            "http://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: '&copy; terrestris GmbH & Co. KG <br>' +

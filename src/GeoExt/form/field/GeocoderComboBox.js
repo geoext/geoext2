@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -168,11 +168,14 @@ Ext.define('GeoExt.form.field.GeocoderComboBox', {
                 fields: [
                     {name: "name", mapping: "display_name"},
                     {name: "bounds", convert: function(v, rec) {
-                        var bbox = rec.raw.boundingbox;
+                        var dataKey = GeoExt.isExt4 ? 'raw' : 'data',
+                            bbox = rec[dataKey].boundingbox;
                         return [bbox[2], bbox[0], bbox[3], bbox[1]];
                     }},
                     {name: "lonlat", convert: function(v, rec) {
-                        return [rec.raw.lon, rec.raw.lat];
+                        var dataKey = GeoExt.isExt4 ? 'raw' : 'data',
+                            data = rec[dataKey];
+                        return [data.lon, data.lat];
                     }}
                 ],
                 proxy: Ext.create("Ext.data.proxy.JsonP", {

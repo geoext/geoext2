@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -40,20 +40,18 @@ Ext.define('GeoExt.Lang', {
     dict: null,
 
     /**
+     * Fires when localized strings are set.  Listeners will receive a
+     * single `locale` event with the language tag.
+     *
+     * @event localize
+     */
+
+    /**
      * Construct the Lang singleton.
      *
      * @private
      */
     constructor: function() {
-        this.addEvents(
-            /**
-             * Fires when localized strings are set.  Listeners will receive a
-             * single `locale` event with the language tag.
-             *
-             * @event
-             */
-            "localize"
-        );
         this.dict = {};
         this.callParent();
     },

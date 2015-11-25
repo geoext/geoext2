@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -249,7 +249,7 @@ Ext.define('GeoExt.panel.PrintMap', {
      *
      * @private
      */
-    bind: function() {
+    setListeners: function() {
         // we have to call syncSize here because of changed
         // rendering order in ExtJS4
         this.syncSize();
@@ -258,7 +258,7 @@ Ext.define('GeoExt.panel.PrintMap', {
         this.printProvider.on("layoutchange", this.syncSize, this);
         this.map.events.register("moveend", this, this.updatePage);
         this.on("resize", function() {
-            this.doComponentLayout();
+            this.updateLayout();
             this.map.updateSize();
         }, this);
 
@@ -279,14 +279,14 @@ Ext.define('GeoExt.panel.PrintMap', {
         var me = this,
             listenerSpec = {
                 "afterlayout": {
-                    fn: me.bind,
+                    fn: me.setListeners,
                     scope: me,
                     single: true
                 }
             };
 
         me.callParent(arguments);
-        me.doComponentLayout();
+        me.updateLayout();
 
         // binding will happen when either we or our container are finished
         // doing the layout.
@@ -331,7 +331,7 @@ Ext.define('GeoExt.panel.PrintMap', {
             height = targetHeight;
         }
 
-        return {width: width, height: height};
+        return {width: Math.round(width), height: Math.round(height)};
     },
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txttxt for the full
@@ -53,7 +53,7 @@ Ext.define('GeoExt.data.StyleStore', {
                 }];
             } else {
                 config.model = 'GeoExt.data.VectorStyleModel';
-            }            
+            }
         }
         this.callParent([config]);
     }

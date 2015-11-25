@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -15,7 +15,6 @@ Ext.require([
 
 var mapPanel, printDialog, printProvider;
 
-
 Ext.application({
     name: 'PrintPreviewGeoExt2',
 
@@ -24,14 +23,15 @@ Ext.application({
         // The PrintProvider that connects us to the print service
         printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
             method: "GET", // "POST" recommended for production use
-            capabilities: printCapabilities, // provide url instead for lazy loading
+            // provide url instead for lazy loading
+            capabilities: printCapabilities,
             customParams: {
                 mapTitle: "GeoExt Printing Demo",
                 comment: "This demo shows how to use GeoExt.PrintMapPanel"
             }
         });
 
-    var style = {
+        var style = {
             strokeColor: '#000000',
             strokeWidth: 2,
             strokeOpacity: 1,
@@ -79,13 +79,12 @@ Ext.application({
             layers: [
                 new OpenLayers.Layer.WMS(
                     "OpenStreetMap WMS",
-                    // using http here because the print-servlet cant handle https
                     "http://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
-                            'Data &copy; OpenStreetMap ' +
-                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'Data &copy; OpenStreetMap <a ' +
+                            'href="http://www.openstreetmap.org/copyright/en"' +
                             'target="_blank">contributors<a>'
                     }
                 ),
@@ -111,7 +110,9 @@ Ext.application({
                         }],
                         bbar: [{
                             text: "Create PDF",
-                            handler: function(){ printDialog.items.get(0).print(); }
+                            handler: function(){
+                                printDialog.items.get(0).print();
+                            }
                         }]
                     });
                     printDialog.show();

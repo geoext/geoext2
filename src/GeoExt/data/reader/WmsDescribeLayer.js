@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -18,7 +18,9 @@
  * @class GeoExt.data.reader.WmsDescribeLayer
  */
 Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
-    alternateClassName: ['GeoExt.data.reader.WMSDescribeLayer', 'GeoExt.data.WMSCapabilitiesReader'],
+    alternateClassName: [
+        'GeoExt.data.reader.WMSDescribeLayer'
+    ],
     extend: 'Ext.data.reader.Json',
     alias: 'reader.gx_wmsdescribelayer',
     requires: [
@@ -26,7 +28,9 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
     ],
     /**
      * Should we keep the raw parsed result? If true, the result will be stored
-     * under the #raw property. Default is false.
+     * under the #raw property. Default is false. When using ExtJS5 a reference
+     * to the raw data is always available via the property #data.
+     *
      * @cfg {Boolean}
      */
     keepRaw: false,
@@ -42,7 +46,7 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WmsDescribeLayerModel';
+            this.setModel('GeoExt.data.WmsDescribeLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {
@@ -78,6 +82,13 @@ Ext.define('GeoExt.data.reader.WmsDescribeLayer', {
      *     as a cache of Ext.data.Model objects.
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
+
         if(typeof data === "string" || data.nodeType) {
             data = this.format.read(data);
         }

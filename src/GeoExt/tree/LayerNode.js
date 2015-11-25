@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -47,8 +47,18 @@ Ext.define('GeoExt.tree.LayerNode', {
     extend: 'Ext.AbstractPlugin',
     alias: 'plugin.gx_layer',
     requires: [
-        'GeoExt.Version'
+        'GeoExt.Version',
+        'GeoExt.tree.Util'
     ],
+
+    /**
+     * Cached map this layer node's layer is associated with.
+     * @type {OpenLayers.Map}
+     *
+     * @private
+     */
+    map: null,
+
     /**
      * The init method is invoked after initComponent method has been run for
      * the client Component. It performs plugin initialization.
@@ -58,7 +68,6 @@ Ext.define('GeoExt.tree.LayerNode', {
      * @private
      */
     init: function(target) {
-
         this.target = target;
         var layer = target.get('layer');
 
@@ -81,11 +90,28 @@ Ext.define('GeoExt.tree.LayerNode', {
             scope: this
         });
 
-        if (!layer.alwaysInRange && layer.map) {
-            layer.map.events.register('moveend', this, this.onMapMoveend);
+        if (layer.map) {
+            this.map = layer.map;
+
+            // Triggers disposal of event listeners if the removed layer maps
+            // to this plugins layer node.
+            // TODO: Find a better way to link into lifecycle of the layer node
+            //       to dispose event listeners. See:
+            //       https://github.com/geoext/geoext2/pull/357
+            this.map.events.on({
+                'removelayer': this.onMapRemovelayer,
+                scope: this
+            });
         }
 
-        this.enforceOneVisible();
+        if (!layer.alwaysInRange && this.map) {
+            this.map.events.on({
+                'moveend': this.onMapMoveend,
+                scope: this
+            });
+        }
+
+        GeoExt.tree.Util.enforceOneLayerVisible(this.target);
     },
 
     /**
@@ -99,7 +125,7 @@ Ext.define('GeoExt.tree.LayerNode', {
         var me = this;
 
         if(~Ext.Array.indexOf(modifiedFields, 'checked')) {
-            me.onCheckChange();
+            GeoExt.tree.Util.updateLayerVisibilityByNode(this.target, this.target.get('checked'));
         }
     },
 
@@ -112,6 +138,38 @@ Ext.define('GeoExt.tree.LayerNode', {
         if(!this._visibilityChanging) {
             this.target.set('checked', this.target.get('layer').getVisibility());
         }
+    },
+
+    /**
+     * Disposes event handlers that have been added during initialization of plugin.
+     * TODO: Add tests to make sure this works as expected.
+     *
+     * @private
+     */
+    onMapRemovelayer: function(evt) {
+        var target = this.target,
+            layer = target.get('layer');
+
+        if (evt.layer !== layer) {
+            return;
+        }
+
+        target.un('afteredit', this.onAfterEdit, this);
+
+        layer.events.un({
+            'visibilitychanged': this.onLayerVisibilityChanged,
+            scope: this
+        });
+
+        this.map.events.un({
+            'removelayer': this.onMapRemovelayer,
+            'moveend': this.onMapMoveend,
+            scope: this
+        });
+
+        this.map = null;
+
+        return true;
     },
 
     /**
@@ -148,33 +206,7 @@ Ext.define('GeoExt.tree.LayerNode', {
             }
             delete node._visibilityChanging;
         }
-        this.enforceOneVisible();
-    },
-
-    enforceOneVisible: function() {
-        var attributes = this.target.data;
-        var group = attributes.checkedGroup;
-        // If we are in the baselayer group, the map will take care of
-        // enforcing visibility.
-        if(group && group !== "gx_baselayer") {
-            var layer = this.target.get('layer');
-            var checkedNodes = this.target.getOwnerTree().getChecked();
-            var checkedCount = 0;
-            // enforce "not more than one visible"
-            Ext.each(checkedNodes, function(n){
-                var l = n.data.layer;
-                if(!n.data.hidden && n.data.checkedGroup === group) {
-                    checkedCount++;
-                    if(l != layer && attributes.checked) {
-                        l.setVisibility(false);
-                    }
-                }
-            });
-            // enforce "at least one visible"
-            if(checkedCount === 0 && attributes.checked == false) {
-                layer.setVisibility(true);
-            }
-        }
+        GeoExt.tree.Util.enforceOneLayerVisible(node);
     }
 
 });

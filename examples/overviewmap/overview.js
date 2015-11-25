@@ -15,7 +15,7 @@ Ext.application({
 
         var wms = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS",
-            "https://ows.terrestris.de/osm/service?",
+            "http://ows.terrestris.de/osm/service?",
             {layers: 'OSM-WMS'},
             {
                 attribution: attribution,
@@ -25,7 +25,7 @@ Ext.application({
 
         var wms_grey = new OpenLayers.Layer.WMS(
             "OpenStreetMap WMS (b/w)",
-            "https://ows.terrestris.de/osm-gray/service/?",
+            "http://ows.terrestris.de/osm-gray/service/?",
             {layers: 'OSM-WMS'},
             { attribution: attribution }
         );

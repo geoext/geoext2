@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -25,11 +25,11 @@ Ext.require([
 Ext.application({
     name: 'ScaleStore GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map();
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         var layer = new OpenLayers.Layer.WMS(
-            "Blue Marble",
-            "http://demo.opengeo.org/geoserver/ows?",
-            {layers: "nasa:bluemarble"}
+            "Global Imagery",
+            "http://maps.opengeo.org/geowebcache/service/wms",
+            {layers: "bluemarble"}
         );
         map.addLayer(layer);
 
@@ -56,7 +56,7 @@ Ext.application({
 
         map.events.register('zoomend', this, function() {
             var scale = scaleStore.queryBy(function(record){
-                return this.map.getZoom() == record.data.level;
+                return map.getZoom() == record.data.level;
             });
 
             if (scale.length > 0) {

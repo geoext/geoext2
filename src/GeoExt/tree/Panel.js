@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -25,7 +25,8 @@ Ext.define('GeoExt.tree.Panel', {
     alias: 'widget.gx_treepanel',
     requires: [
         'GeoExt.tree.Column',
-        'GeoExt.tree.View'
+        'GeoExt.tree.View',
+        'GeoExt.tree.Util'
     ],
     viewType: 'gx_treeview',
     
@@ -44,6 +45,8 @@ Ext.define('GeoExt.tree.Panel', {
                 dataIndex: me.displayField         
             }];
         }
+        // bind checkchange for tree nodes to steer visibility of the layers
+        me.on('checkchange', GeoExt.tree.Util.updateLayerVisibilityByNode);
 
         me.callParent();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  * 
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -27,13 +27,11 @@ Ext.require([
 Ext.application({
     name: 'LegendPanel GeoExt2',
     launch: function() {
-        var map = new OpenLayers.Map({
-            allOverlays: true
-        });
+        var map = new OpenLayers.Map({allOverlays: true, fallThrough: true});
         map.addLayers([
             new OpenLayers.Layer.WMS(
                 "OpenStreetMap WMS",
-                "https://ows.terrestris.de/osm/service?",
+                "http://ows.terrestris.de/osm/service?",
                 {layers: 'OSM-WMS'},
                 {
                     attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -44,7 +42,7 @@ Ext.application({
             ),            
             new OpenLayers.Layer.WMS(
                 "Subway Stops",
-                "https://ows.terrestris.de/osm-haltestellen?",
+                "http://ows.terrestris.de/osm-haltestellen?",
                 {
                     layers: 'OSM-Strassenbahnhaltestellen', 
                     format: 'image/png', 
@@ -84,7 +82,7 @@ Ext.application({
         // give the record of the 1st layer a legendURL, which will cause
         // UrlLegend instead of WMSLegend to be used
         var layerRec0 = mapPanel.layers.getAt(0);
-        layerRec0.set("legendURL", "https://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
+        layerRec0.set("legendURL", "http://ows.terrestris.de/osm/service?FORMAT=image%2Fgif&TRANSPARENT=true&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetLegendGraphic&EXCEPTIONS=application%2Fvnd.ogc.se_xml&LAYER=OSM-WMS");
         
         legendPanel = Ext.create('GeoExt.panel.Legend', {
             defaults: {
@@ -127,10 +125,10 @@ Ext.application({
         // store the layer that we will modify in toggleVis()
         var layerRec1 = mapPanel.layers.getAt(1);
         // stores another legendURL for the legendurl button action
-        var otherUrl = "../../website-resources/img/GeoExt-logo.png";
+        var otherUrl = "http://www.geoext.org/trac/geoext/chrome/site/img/GeoExt.png";
         // create another layer for the add/remove button action
         var busstops = new OpenLayers.Layer.WMS("Bus Stops",
-            "https://ows.terrestris.de/osm-haltestellen?",
+            "http://ows.terrestris.de/osm-haltestellen?",
             {layers: 'OSM-Bushaltestellen', format: 'image/png', transparent: true},
             {singleTile: true});
 

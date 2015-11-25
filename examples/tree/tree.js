@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -34,9 +34,9 @@ Ext.application({
             center: [14, 37.5],
             zoom: 7,
             layers: [
-                new OpenLayers.Layer.WMS("Blue Marble",
-                    "http://demo.opengeo.org/geoserver/ows?", {
-                        layers: "nasa:bluemarble",
+                new OpenLayers.Layer.WMS("Global Imagery",
+                    "http://maps.opengeo.org/geowebcache/service/wms", {
+                        layers: "bluemarble",
                         format: "image/png8"
                     }, {
                         buffer: 0,
@@ -44,7 +44,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("OpenStreetMap WMS",
-                    "https://ows.terrestris.de/osm/service?",
+                    "http://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
@@ -54,7 +54,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Country Borders",
-                    "https://ows.terrestris.de/geoserver/osm/wms", {
+                    "http://ows.terrestris.de/geoserver/osm/wms", {
                         layers: "osm:osm-country-borders",
                         transparent: true,
                         format: "image/png"
@@ -75,7 +75,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Gas Stations",
-                    "https://ows.terrestris.de/geoserver/osm/wms", {
+                    "http://ows.terrestris.de/geoserver/osm/wms", {
                         layers: "osm:osm-fuel",
                         transparent: true,
                         format: "image/png"
@@ -85,7 +85,7 @@ Ext.application({
                     }
                 ),
                 new OpenLayers.Layer.WMS("Bus Stops",
-                    "https://ows.terrestris.de/osm-haltestellen?",
+                    "http://ows.terrestris.de/osm-haltestellen?",
                     {
                         layers: 'OSM-Bushaltestellen',
                         format: 'image/png',

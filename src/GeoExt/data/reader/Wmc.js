@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -24,6 +24,10 @@ Ext.define('GeoExt.data.reader.Wmc', {
         'GeoExt.Version'
     ],
 
+    config: {
+        preserveRawData: true
+    },
+
     /**
      * Creates new Reader.
      *
@@ -31,7 +35,7 @@ Ext.define('GeoExt.data.reader.Wmc', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.WmcLayerModel';
+            this.setModel('GeoExt.data.WmcLayerModel');
         }
         this.callParent([config]);
         if (!this.format) {
@@ -68,6 +72,12 @@ Ext.define('GeoExt.data.reader.Wmc', {
      * @private
      */
     readRecords: function(data) {
+        if (data instanceof Ext.data.ResultSet) {
+            // we get into the readRecords method twice,
+            // called by Ext.data.reader.Reader#read:
+            // check if we already did our work in a previous run
+            return data;
+        }
         if(typeof data === "string" || data.nodeType) {
             data = this.format.read(data);
         }

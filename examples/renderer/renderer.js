@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
- * 
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -168,6 +168,7 @@ Ext.require([
     'GeoExt.FeatureRenderer'
 ]);
 
+
 Ext.application({
     name: 'FeatureRenderer GeoExt2',
     launch: function() {
@@ -196,7 +197,8 @@ function render() {
             throw "Must be an array literal";
         }
     } catch(err) {
-        document.getElementById("symbolizers").value = "Bad symbolizers: " + err + "\n\n" + value;
+        document.getElementById("symbolizers").value = "Bad symbolizers: " +
+            err + "\n\n" + value;
         symbolizers = null;
     }
     if(feature && symbolizers) {
@@ -222,4 +224,3 @@ function render() {
         win.show();
     }
 }
-

@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
- * 
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -32,7 +32,8 @@ Ext.application({
         // The printProvider that connects us to the print service
         var printProvider = Ext.create('GeoExt.data.MapfishPrintProvider', {
             method: "GET", // "POST" recommended for production use
-            capabilities: printCapabilities, // from the info.json script in the html
+            // from the info.json script in the html
+            capabilities: printCapabilities,
             customParams: {
                 mapTitle: "Printing Demo"
             }
@@ -45,25 +46,26 @@ Ext.application({
         // A layer to display the print page extent
         var pageLayer = new OpenLayers.Layer.Vector();
         pageLayer.addFeatures(printPage.feature);
-    
+
         // The map we want to print
         mapPanel = Ext.create('GeoExt.panel.Map', {
             region: "center",
             map: {
                 eventListeners: {
                     // recenter/resize page extent after pan/zoom
-                    "moveend": function(){ printPage.fit(this, {mode: "screen"}); }
+                    "moveend": function(){
+                        printPage.fit(this, {mode: "screen"});
+                    }
                 }
             },
             layers: [
                 new OpenLayers.Layer.WMS("OpenStreetMap WMS",
-                    // using http here because the print-servlet cant handle https
                     "http://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},
                     {
                         attribution: '&copy; terrestris GmbH & Co. KG <br>' +
-                            'Data &copy; OpenStreetMap ' +
-                            '<a href="http://www.openstreetmap.org/copyright/en"' +
+                            'Data &copy; OpenStreetMap <a ' +
+                            'href="http://www.openstreetmap.org/copyright/en"' +
                             'target="_blank">contributors<a>'
                     }
                 ),
@@ -99,13 +101,30 @@ Ext.application({
                 plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
                     printProvider: printProvider
                 })
+            },{
+                xtype: "combo",
+                store: printProvider.outputFormats,
+                displayField: "name",
+                fieldLabel: "Format",
+                typeAhead: true,
+                queryMode: "local",
+                triggerAction: "all",
+                plugins: Ext.create('GeoExt.plugins.PrintProviderField', {
+                    printProvider: printProvider
+                })
             }, {
                 xtype: "combo",
                 store: printProvider.dpis,
                 displayField: "name",
                 fieldLabel: "Resolution",
-                displayTpl: Ext.create('Ext.XTemplate', '<tpl for=".">{name} dpi</tpl>'),
-                tpl: '<tpl for="."><li role="option" class="x-boundlist-item">{name} dpi</li></tpl>',
+                displayTpl: Ext.create('Ext.XTemplate',
+                    '<tpl for=".">{name} dpi</tpl>'
+                ),
+                tpl: '<tpl for=".">' +
+                    '<li role="option" class="x-boundlist-item">' +
+                    '{name} dpi' +
+                    '</li>' +
+                    '</tpl>',
                 typeAhead: true,
                 queryMode: "local",
                 triggerAction: "all",

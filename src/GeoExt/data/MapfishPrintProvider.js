@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -178,6 +178,17 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     dpis: null,
 
     /**
+     * Read-only. A store representing the output formats available.
+     *
+     * Fields of records in this store:
+     *
+     * * name - `String` the name of the output format
+     *
+     * @property {Ext.data.JsonStore} outputFormats
+     */
+    outputFormats: null,
+
+    /**
      * Read-only. A store representing the layouts available.
      *
      * Fields of records in this store:
@@ -199,6 +210,14 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     dpi: null,
 
     /**
+     * The record of the currently used output format. Read-only, use
+     * `#setOutputFormat` to set the value.
+     *
+     * @property {Ext.data.Record} outputFormat
+     */
+    outputFormat: null,
+
+    /**
      * The record of the currently used layout. Read-only, use `#setLayout` to
      * set the value.
      *
@@ -207,172 +226,179 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
     layout: null,
 
     /**
+     * Triggered when the capabilities have finished loading. This
+     * event will only fire when `#capabilities` is not  configured.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * capabilities - `Object` the capabilities.
+     *
+     * @event loadcapabilities
+     */
+
+    /**
+     * Triggered when the output format is changed.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * outputFormat - {@link Ext.data.Record} the new outputFormat.
+     *
+     * @event outputformatchange
+     */
+
+    /**
+     * Triggered when the layout is changed.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * layout - {@link Ext.data.Record} the new layout.
+     *
+     * @event layoutchange
+     */
+
+    /**
+     * Triggered when the dpi value is changed.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * dpi - {@link Ext.data.Record} the new dpi record.
+     *
+     * @event dpichange
+     */
+
+    //  TODO: rename this event to beforeencode
+    /**
+     * Triggered when the print method is called.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * map - `OpenLayers.Map` the map being printed.
+     * * pages - Array of {@link GeoExt.data.PrintPage} the print
+     *   pages being printed.
+     * * options - `Object` the options to the print command.
+     *
+     * @event beforeprint
+     */
+
+    /**
+     * Triggered when the print document is opened.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * url - `String` the url of the print document.
+     *
+     *  @event print
+     */
+
+    /**
+     * Triggered when using the `POST` method, when the print backend
+     * returns an exception.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * response - `Object` the response object of the XHR.
+     *
+     * @event printexception
+     */
+
+    /**
+     * Triggered before a layer is encoded. This can be used to exclude
+     * layers from the printing, by having the listener return false.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * layer - `OpenLayers.Layer` the layer which is about to be
+     *   encoded.
+     *
+     * @event beforeencodelayer
+     */
+
+    /**
+     * Triggered when a layer is encoded. This can be used to modify
+     * the encoded low-level layer object that will be sent to the
+     * print service.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * layer - `OpenLayers.Layer` the layer which is about to be
+     *   encoded.
+     * * encodedLayer - `Object` the encoded layer that will be
+     *   sent to the print service.
+     *
+     * @event encodelayer
+     */
+
+    /**
+     *  Triggered before the PDF is downloaded. By returning false from
+     *  a listener, the default handling of the PDF can be cancelled
+     *  and applications can take control over downloading the PDF.
+     *  TODO: rename to beforeprint after the current beforeprint event
+     *  has been renamed to beforeencode.
+     *
+     *  Listener arguments:
+     *
+     *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *    PrintProvider.
+     *  * url - `String` the url of the print document.
+     *
+     * @event beforedownload
+     */
+
+    /**
+     * Triggered before the legend is encoded. If the listener
+     * returns false, the default encoding based on GeoExt.LegendPanel
+     * will not be executed. This provides an option for application
+     * to get legend info from a custom component other than
+     * GeoExt.LegendPanel.
+     *
+     * Listener arguments:
+     *
+     * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
+     *   PrintProvider.
+     * * jsonData - `Object` The data that will be sent to the print
+     *   server. Can be used to populate jsonData.legends.
+     * * legend - `Object` The legend supplied in the options which were
+     *   sent to the print function.
+     *
+     * @event beforeencodelegend
+     */
+
+    /**
      * Private constructor override.
      *
      * @private
      */
     constructor: function(config) {
-        this.initialConfig = config;
-        Ext.apply(this, config);
+        var me = this;
+        me.initialConfig = config;
+        Ext.apply(me, config);
 
-        if(!this.customParams) {
-            this.customParams = {};
+        if(!me.customParams) {
+            me.customParams = {};
         }
 
-        /**
-         * Triggered when the capabilities have finished loading. This
-         * event will only fire when `#capabilities` is not  configured.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * capabilities - `Object` the capabilities.
-         *
-         * @event loadcapabilities
-         */
+        me.callParent(arguments);
 
-        /**
-         * Triggered when the layout is changed.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * layout - {@link Ext.data.Record} the new layout.
-         *
-         * @event layoutchange
-         */
-
-        /**
-         * Triggered when the dpi value is changed.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * dpi - {@link Ext.data.Record} the new dpi record.
-         *
-         * @event dpichange
-         */
-
-        //  TODO: rename this event to beforeencode
-        /**
-         * Triggered when the print method is called.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * map - `OpenLayers.Map` the map being printed.
-         * * pages - Array of {@link GeoExt.data.PrintPage} the print
-         *   pages being printed.
-         * * options - `Object` the options to the print command.
-         *
-         * @event beforeprint
-         */
-
-        /**
-         * Triggered when the print document is opened.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * url - `String` the url of the print document.
-         *
-         *  @event print
-         */
-
-        /**
-         * Triggered when using the `POST` method, when the print backend
-         * returns an exception.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * response - `Object` the response object of the XHR.
-         *
-         * @event printexception
-         */
-
-        /**
-         * Triggered before a layer is encoded. This can be used to exclude
-         * layers from the printing, by having the listener return false.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * layer - `OpenLayers.Layer` the layer which is about to be
-         *   encoded.
-         *
-         * @event beforeencodelayer
-         */
-
-        /**
-         * Triggered when a layer is encoded. This can be used to modify
-         * the encoded low-level layer object that will be sent to the
-         * print service.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * layer - `OpenLayers.Layer` the layer which is about to be
-         *   encoded.
-         * * encodedLayer - `Object` the encoded layer that will be
-         *   sent to the print service.
-         *
-         * @event encodelayer
-         */
-
-        /**
-         *  Triggered before the PDF is downloaded. By returning false from
-         *  a listener, the default handling of the PDF can be cancelled
-         *  and applications can take control over downloading the PDF.
-         *  TODO: rename to beforeprint after the current beforeprint event
-         *  has been renamed to beforeencode.
-         *
-         *  Listener arguments:
-         *
-         *  * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *    PrintProvider.
-         *  * url - `String` the url of the print document.
-         *
-         * @event beforedownload
-         */
-
-        /**
-         * Triggered before the legend is encoded. If the listener
-         * returns false, the default encoding based on GeoExt.LegendPanel
-         * will not be executed. This provides an option for application
-         * to get legend info from a custom component other than
-         * GeoExt.LegendPanel.
-         *
-         * Listener arguments:
-         *
-         * * printProvider - {@link GeoExt.data.MapfishPrintProvider} this
-         *   PrintProvider.
-         * * jsonData - `Object` The data that will be sent to the print
-         *   server. Can be used to populate jsonData.legends.
-         * * legend - `Object` The legend supplied in the options which were
-         *   sent to the print function.
-         *
-         * @event beforeencodelegend
-         */
-
-        this.callParent(arguments);
-
-        this.scales = Ext.create('Ext.data.JsonStore', {
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "json",
-                    root: "scales"
-                }
-            },
+        me.scales = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('scales'),
             fields: [
                 "name",
                 {name: "value", type: "float"}
@@ -382,28 +408,21 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
 
         });
 
-        this.dpis = Ext.create('Ext.data.JsonStore', {
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "json",
-                    root: "dpis"
-                }
-            },
+        me.dpis = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('dpis'),
             fields: [
-                 "name",
-                 {name: "value", type: "float"}
+                "name",
+                {name: "value", type: "float"}
             ]
         });
 
-        this.layouts = Ext.create('Ext.data.JsonStore', {
-            proxy: {
-                type: "memory",
-                reader: {
-                    type: "json",
-                    root: "layouts"
-                }
-            },
+        me.outputFormats = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('outputFormats'),
+            fields: [{name: "name", defaultValue: "pdf"}]
+        });
+
+        me.layouts = Ext.create('Ext.data.JsonStore', {
+            proxy: me.getProxyConfiguration('layouts'),
             fields: [
                 "name",
                 {name: "size", mapping: "map"},
@@ -412,15 +431,72 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
         });
 
         if(config.capabilities) {
-            this.loadStores();
+            me.loadStores();
         } else {
-            if(this.url.split("/").pop()) {
-                this.url += "/";
+            if(me.url.split("/").pop()) {
+                me.url += "/";
             }
-            if (this.initialConfig.autoLoad) {
-                this.loadCapabilities();
+            if (me.initialConfig.autoLoad) {
+                me.loadCapabilities();
             }
         }
+    },
+
+    /**
+     * An internal method that creates a valid proxy configuration object for
+     * the passed rootPropertyname. This method is mostly existing because the
+     * name of the rootProperty key we need in the JSON reader is different
+     * between ExtJS 4 and 5 (`root` and `rootProperty` respectively).
+     *
+     * Will always return a memory proxy configuration with a JSON reader where
+     * the correct value for the root of the data is set to the value given.
+     *
+     *     this.getProxyConfiguration('dpis');
+     *     // results in ExtJS 4 in the following configuration...
+     *     {
+     *         type: "memory",
+     *         reader: {
+     *             type: "json",
+     *             root: "dpis"
+     *         }
+     *     }
+     *     // ...while the same call in ExtJS 5 evaluates to
+     *     {
+     *         type: "memory",
+     *         reader: {
+     *             type: "json",
+     *             rootProperty: "dpis"
+     *         }
+     *     }
+     *
+     * This method is only used in the #constructor to set up the stores for
+     * the available scales, DPIs and layouts.
+     *
+     * @private
+     */
+    getProxyConfiguration: function(rootPropertyName) {
+        var readerRootProperty = GeoExt.isExt4 ? 'root' : 'rootProperty',
+            readerCfg = {type: "json"},
+            proxyCfg;
+
+        readerCfg[readerRootProperty] = rootPropertyName;
+
+        proxyCfg = {
+            type: "memory",
+            reader: readerCfg
+        };
+
+        return proxyCfg;
+    },
+
+    /**
+     * Sets the output format for this printProvider.
+     *
+     * @param {Ext.data.Record} outputFormat The record of the output format.
+     */
+    setOutputFormat: function(outputFormat) {
+        this.outputFormat = outputFormat;
+        this.fireEvent("outputformatchange", this, outputFormat);
     },
 
     /**
@@ -488,6 +564,7 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
             units: map.getUnits(),
             srs: map.baseLayer.projection.getCode(),
             layout: this.layout.get("name"),
+            outputFormat: this.outputFormat.get("name"),
             dpi: this.dpi.get("value")
         }, this.customParams);
 
@@ -629,9 +706,11 @@ Ext.define('GeoExt.data.MapfishPrintProvider', {
 
        this.scales.loadRawData(this.capabilities);
        this.dpis.loadRawData(this.capabilities);
+       this.outputFormats.loadRawData(this.capabilities);
        this.layouts.loadRawData(this.capabilities);
 
        this.setLayout(this.layouts.getAt(0));
+       this.setOutputFormat(this.outputFormats.findRecord("name", "pdf"));
        this.setDpi(this.dpis.getAt(0));
        this.fireEvent("loadcapabilities", this, this.capabilities);
    },

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -52,9 +52,17 @@ Ext.define('GeoExt.LegendImage', {
      */
     noImgCls: "gx-legend-noimage",
 
+    /**
+     * Fires after legend image has loaded.
+     *
+     * @event legendimageloaded
+     */
+
+    /**
+     * Initializes this component.
+     */
     initComponent: function(){
         var me = this;
-        me.addEvents('legendimageloaded');
         me.callParent(arguments);
         if(this.defaultImgSrc === null) {
             this.defaultImgSrc = Ext.BLANK_IMAGE_URL;

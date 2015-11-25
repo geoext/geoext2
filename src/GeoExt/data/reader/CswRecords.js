@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -43,7 +43,7 @@ Ext.define('GeoExt.data.reader.CswRecords', {
      */
     constructor: function(config) {
         if (!this.model) {
-            this.model = 'GeoExt.data.CswRecordsModel';
+            this.setModel('GeoExt.data.CswRecordsModel');
         }
         this.callParent([config]);
         if (!this.format) {

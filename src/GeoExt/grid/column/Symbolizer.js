@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -12,7 +12,7 @@
 
 /**
  * An Ext.grid.column.Column pre-configured with a GeoExt.FeatureRenderer
- * 
+ *
  * @class GeoExt.grid.column.Symbolizer
  */
 Ext.define('GeoExt.grid.column.Symbolizer', {
@@ -29,8 +29,11 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
             var id = Ext.id();
             var symbolType = "Polygon";
             if (record) {
-                var symbolType = "Line";
-                var className = record.raw.geometry ? record.raw.geometry.CLASS_NAME : null;
+                var symbolType = "Line",
+                    featureKey = GeoExt.isExt4 ? 'raw' : 'data',
+                    featureGeom = record[featureKey].geometry,
+                    className = featureGeom ? featureGeom.CLASS_NAME : null;
+
                 if (className == "OpenLayers.Geometry.Point" ||
                         className == "OpenLayers.Geometry.MultiPoint") {
                     symbolType = "Point";
@@ -51,7 +54,9 @@ Ext.define('GeoExt.grid.column.Symbolizer', {
                     });
                 }
             }, 0);
-            meta.css = "gx-grid-symbolizercol";
+            if(!Ext.isEmpty(meta)){
+                meta.css = "gx-grid-symbolizercol";
+            }
             return Ext.String.format('<div id="{0}"></div>', id);
         }
     }

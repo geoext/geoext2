@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -151,13 +151,21 @@ Ext.define('GeoExt.panel.Legend', {
      *
      * @param {Ext.data.Store} store The store from which the record(s) was
      *     removed.
-     * @param {Ext.data.Record} record The record object(s) corresponding
-     *     to the removed layers.
-     * @param {Integer} index The index of the removed record.
+     * @param {Ext.data.Record/Ext.data.Record[]} records The record object
+     *     corresponding to the removed layer. When using ExtJS 5 this will be
+     *     an array of removed records.
+     * @param {Integer} index The index of the removed record(s).
      * @private
      */
-    onStoreRemove: function(store, record, index) {
-        this.removeLegend(record);
+    onStoreRemove: function(store, records, index) {
+        var me = this,
+            recArray = records;
+        if (!Ext.isArray(records)) {
+            recArray = [records];
+        }
+        Ext.each(recArray, function(record) {
+            me.removeLegend(record);
+        });
     },
 
     /**
