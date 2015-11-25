@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-view-MultiSelectorSearch'>/**
+</span> * This component provides a grid holding selected items from a second store of potential
+ * members. The `store` of this component represents the selected items. The `searchStore`
+ * represents the potentially selected items.
+ *
+ * The default view defined by this class is intended to be easily replaced by deriving a
+ * new class and overriding the appropriate methods. For example, the following is a very
+ * different view that uses a date range and a data view:
+ *
+ *      Ext.define('App.view.DateBoundSearch', {
+ *          extend: 'Ext.view.MultiSelectorSearch',
+ *
+ *          makeDockedItems: function () {
+ *              return {
+ *                  xtype: 'toolbar',
+ *                  items: [{
+ *                      xtype: 'datefield',
+ *                      emptyText: 'Start date...',
+ *                      flex: 1
+ *                  },{
+ *                      xtype: 'datefield',
+ *                      emptyText: 'End date...',
+ *                      flex: 1
+ *                  }]
+ *              };
+ *          },
+ *
+ *          makeItems: function () {
+ *              return [{
+ *                  xtype: 'dataview',
+ *                  itemSelector: '.search-item',
+ *                  selModel: 'rowselection',
+ *                  store: this.store,
+ *                  scrollable: true,
+ *                  tpl:
+ *                      '&lt;tpl for=&quot;.&quot;&gt;' +
+ *                          '&lt;div class=&quot;search-item&quot;&gt;' +
+ *                              '&lt;img src=&quot;{icon}&quot;&gt;' +
+ *                              '&lt;div&gt;{name}&lt;/div&gt;' +
+ *                          '&lt;/div&gt;' +
+ *                      '&lt;/tpl&gt;'
+ *              }];
+ *          },
+ *
+ *          getSearchStore: function () {
+ *              return this.items.getAt(0).getStore();
+ *          },
+ *
+ *          selectRecords: function (records) {
+ *              var view = this.items.getAt(0);
+ *              return view.getSelectionModel().select(records);
+ *          }
+ *      });
+ *
+ * **Important**: This class assumes there are two components with specific `reference`
+ * names assigned to them. These are `&quot;searchField&quot;` and `&quot;searchGrid&quot;`. These components
+ * are produced by the `makeDockedItems` and `makeItems` method, respectively. When
+ * overriding these it is important to remember to place these `reference` values on the
+ * appropriate components.
+ */
+Ext.define('Ext.view.MultiSelectorSearch', {
+    extend: 'Ext.panel.Panel',
+
+    xtype: 'multiselector-search',
+
+<span id='Ext-view-MultiSelectorSearch-cfg-layout'>    layout: 'fit',
+</span>
+<span id='Ext-view-MultiSelectorSearch-cfg-floating'>    floating: true,
+</span><span id='Ext-view-MultiSelectorSearch-cfg-resizable'>    resizable: true,
+</span><span id='Ext-view-MultiSelectorSearch-cfg-minWidth'>    minWidth: 200,
+</span><span id='Ext-view-MultiSelectorSearch-cfg-minHeight'>    minHeight: 200,
+</span><span id='Ext-view-MultiSelectorSearch-cfg-border'>    border: true,
+</span>
+<span id='Ext-view-MultiSelectorSearch-property-defaultListenerScope'>    defaultListenerScope: true,
+</span><span id='Ext-view-MultiSelectorSearch-cfg-referenceHolder'>    referenceHolder: true,
+</span>
+<span id='Ext-view-MultiSelectorSearch-cfg-searchText'>    /**
+</span>     * @cfg {String} searchText
+     * This text is displayed as the &quot;emptyText&quot; of the search `textfield`.
+     */
+    searchText: 'Search...',
+
+<span id='Ext-view-MultiSelectorSearch-method-initComponent'>    initComponent: function () {
+</span>        var me = this,
+            owner = me.owner,
+            items = me.makeItems(),
+            i, item, records, store;
+
+        me.dockedItems = me.makeDockedItems();
+        me.items = items;
+
+        store = Ext.data.StoreManager.lookup(me.store);
+
+        for (i = items.length; i--; ) {
+            if ((item = items[i]).xtype === 'grid') {
+                item.store = store;
+                item.isSearchGrid = true;
+                item.selModel = item.selModel || {
+                    type: 'checkboxmodel',
+                    pruneRemoved: false,
+                    listeners: {
+                        selectionchange: 'onSelectionChange'
+                    }
+                };
+
+                Ext.merge(item, me.grid);
+
+                if (!item.columns) {
+                    item.hideHeaders = true;
+                    item.columns = [{
+                        flex: 1,
+                        dataIndex: me.field
+                    }];
+                }
+
+                break;
+            }
+        }
+
+        me.callParent();
+
+        records = me.getOwnerStore().getRange();
+        if (!owner.convertSelectionRecord.$nullFn) {
+            for (i = records.length; i--; ) {
+                records[i] = owner.convertSelectionRecord(records[i]);
+            }
+        }
+
+        if (store.isLoading() || (store.loadCount === 0 &amp;&amp; !store.getCount())) {
+            store.on('load', function() {
+                if (!me.isDestroyed) {
+                    me.selectRecords(records);
+                }
+            }, null, {single: true});
+        } else {
+            me.selectRecords(records);
+        }
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-getOwnerStore'>    getOwnerStore: function() {
+</span>        return this.owner.getStore();
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-afterShow'>    afterShow: function () {
+</span>        var searchField = this.lookupReference('searchField');
+
+        this.callParent(arguments);
+
+        if (searchField) {
+            searchField.focus();
+        }
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-getSearchStore'>    /**
+</span>     * Returns the store that holds search results. By default this comes from the
+     * &quot;search grid&quot;. If this aspect of the view is changed sufficiently so that the
+     * search grid cannot be found, this method should be overridden to return the proper
+     * store.
+     * @return {Ext.data.Store}
+     */
+    getSearchStore: function () {
+        var searchGrid = this.lookupReference('searchGrid');
+        return searchGrid.getStore();
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-makeDockedItems'>    makeDockedItems: function () {
+</span>        return [{
+            xtype: 'textfield',
+            reference: 'searchField',
+            dock: 'top',
+            hideFieldLabel: true,
+            emptyText: this.searchText,
+            triggers: {
+                clear: {
+                    cls: Ext.baseCSSPrefix + 'form-clear-trigger',
+                    handler: 'onClearSearch',
+                    hidden: true
+                }
+            },
+            listeners: {
+                change: 'onSearchChange',
+                buffer: 300
+            }
+        }];
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-makeItems'>    makeItems: function () {
+</span>        return [{
+            xtype: 'grid',
+            reference: 'searchGrid',
+            trailingBufferZone: 2,
+            leadingBufferZone: 2,
+            viewConfig: {
+                deferEmptyText: false,
+                emptyText: 'No results.'
+            }
+        }];
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-selectRecords'>    selectRecords: function (records) {
+</span>        var searchGrid = this.lookupReference('searchGrid');
+        return searchGrid.getSelectionModel().select(records);
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-deselectRecords'>    deselectRecords: function(records) {
+</span>        var searchGrid = this.lookupReference('searchGrid');
+        return searchGrid.getSelectionModel().deselect(records);
+    },
+
+<span id='Ext-view-MultiSelectorSearch-method-search'>    search: function (text) {
+</span>        var me = this,
+            filter = me.searchFilter,
+            filters = me.getSearchStore().getFilters();
+
+        if (text) {
+            filters.beginUpdate();
+
+            if (filter) {
+                filter.setValue(text);
+            } else {
+                me.searchFilter = filter = new Ext.util.Filter({
+                    id: 'search',
+                    property: me.field,
+                    value: text
+                });
+            }
+
+            filters.add(filter);
+
+            filters.endUpdate();
+        } else if (filter) {
+            filters.remove(filter);
+        }
+    },
+
+<span id='Ext-view-MultiSelectorSearch-property-privates'>    privates: {
+</span>        onClearSearch: function () {
+            var searchField = this.lookupReference('searchField');
+            searchField.setValue(null);
+            searchField.focus();
+        },
+
+        onSearchChange: function (searchField) {
+            var value = searchField.getValue(),
+                trigger = searchField.getTrigger('clear');
+
+            trigger.setHidden(!value);
+            this.search(value);
+        },
+
+        onSelectionChange: function (selModel, selection) {
+            var owner = this.owner,
+                store = owner.getStore(),
+                data = store.data,
+                remove = 0,
+                map = {},
+                add, i, id, record;
+
+            for (i = selection.length; i--; ) {
+                record = selection[i];
+                id = record.id;
+                map[id] = record;
+
+                if (!data.containsKey(id)) {
+                    (add || (add = [])).push(owner.convertSearchRecord(record));
+                }
+            }
+
+            for (i = data.length; i--; ) {
+                record = data.getAt(i);
+                if (!map[record.id]) {
+                    (remove || (remove = [])).push(record);
+                }
+            }
+
+            if (add || remove) {
+                data.splice(data.length, remove, add);
+            }
+        }
+    }
+});
+</pre>
+</body>
+</html>

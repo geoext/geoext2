@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-form-trigger-Component'>/**
+</span> * A Text Field Trigger that contains a {@link Ext.Component Component} or {@link
+ * Ext.Widget Widget}.
+ * @private
+ */
+Ext.define('Ext.form.trigger.Component', {
+    extend: 'Ext.form.trigger.Trigger',
+    alias: 'trigger.component',
+
+<span id='Ext-form-trigger-Component-cfg-cls'>    cls: Ext.baseCSSPrefix + 'form-trigger-cmp',
+</span>
+<span id='Ext-form-trigger-Component-cfg-A'>    /**
+</span>     * @cfg {Object/Ext.Component/Ext.Widget} A config object for a Component or Widget,
+     * or an already instantiated Component or Widget.
+     */
+
+<span id='Ext-form-trigger-Component-property-component'>    /**
+</span>     * @property {Ext.Component/Ext.Widget} component The component or widget
+     * @readonly
+     */
+
+    onFieldRender: function() {
+        var me = this,
+            component = me.component;
+
+        this.callParent();
+
+        if (!component.isComponent &amp;&amp; !component.isWidget) {
+            component = Ext.widget(component);
+        }
+
+        me.component = component;
+
+        component.render(me.el);
+    },
+
+<span id='Ext-form-trigger-Component-method-destroy'>    destroy: function() {
+</span>        var component = this.component;
+
+        if (component.isComponent || component.isWidget) {
+            component.destroy();
+        }
+
+        this.callParent();
+    }
+});
+</pre>
+</body>
+</html>

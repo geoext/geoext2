@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -122,7 +122,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
 <span id='GeoExt-selection-FeatureModel-cfg-autoPanMapOnSelection'>    /**
 </span>     * If true the map will recenter on feature selection so that the selected
      * features are visible.
-     * 
+     *
      * @cfg {Boolean}
      */
     autoPanMapOnSelection: false,
@@ -152,21 +152,29 @@ Ext.define('GeoExt.selection.FeatureModel', {
 
 <span id='GeoExt-selection-FeatureModel-method-bindComponent'>    /**
 </span>     * Called after this.grid is defined.
-     * 
+     *
      * @private
      */
     bindComponent: function() {
-        this.callParent(arguments);
-        if (this.layerFromStore) {
-            var layer = this.view.getStore() &amp;&amp; this.view.getStore().layer;
-            if (layer &amp;&amp; !(this.selectControl instanceof
-                    OpenLayers.Control.SelectFeature)) {
-                this.selectControl = this.createSelectControl(
-                        layer, this.selectControl);
+        var me = this;
+        me.callParent(arguments);
+        if (me.layerFromStore) {
+            var view = me.view || me.views[0],
+                viewStore = view.getStore(),
+                ctrl = me.selectControl,
+                isSelCtrl = (ctrl instanceof OpenLayers.Control.SelectFeature),
+                layer;
+
+            if (viewStore) {
+                layer = viewStore.layer;
+            }
+
+            if (layer &amp;&amp; !isSelCtrl) {
+                me.selectControl = me.createSelectControl(layer, ctrl);
             }
         }
-        if (this.selectControl) {
-            this.bind(this.selectControl);
+        if (me.selectControl) {
+            me.bindLayer(me.selectControl);
         }
     },
 
@@ -192,7 +200,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
         return selectControl;
     },
 
-<span id='GeoExt-selection-FeatureModel-method-bind'>    /**
+<span id='GeoExt-selection-FeatureModel-method-bindLayer'>    /**
 </span>     * Bind the selection model to a layer or a SelectFeature control.
      *
      * @param {OpenLayers.Layer.Vector/OpenLayers.Control.SelectFeature} obj
@@ -204,7 +212,7 @@ Ext.define('GeoExt.selection.FeatureModel', {
      * @return {OpenLayers.Control.SelectFeature} The select feature control
      *     this selection model uses.
      */
-    bind: function(obj, options) {
+    bindLayer: function(obj, options) {
         if (!this.bound) {
             options = options || {};
             this.selectControl = obj;
@@ -229,13 +237,13 @@ Ext.define('GeoExt.selection.FeatureModel', {
         return this.selectControl;
     },
 
-<span id='GeoExt-selection-FeatureModel-method-unbind'>    /**
+<span id='GeoExt-selection-FeatureModel-method-unbindLayer'>    /**
 </span>     * Unbind the selection model from the layer or SelectFeature control.
      *
      * @return {OpenLayers.Control.SelectFeature} The select feature control
      *     this selection model used.
      */
-    unbind: function() {
+    unbindLayer: function() {
         var selectControl = this.selectControl;
         if (this.bound) {
             var layers = this.getLayers();
@@ -265,8 +273,9 @@ Ext.define('GeoExt.selection.FeatureModel', {
     featureSelected: function(evt) {
         if (!this._selecting) {
             var store = this.view.store;
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
             var row = store.findBy(function(record, id) {
-                return record.raw == evt.feature;
+                return record[featureKey] == evt.feature;
             });
             if (row != -1 &amp;&amp; !this.isSelected(row)) {
                 this._selecting = true;
@@ -288,8 +297,9 @@ Ext.define('GeoExt.selection.FeatureModel', {
     featureUnselected: function(evt) {
         if (!this._selecting) {
             var store = this.view.store;
+            var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
             var row = store.findBy(function(record, id) {
-                return record.raw == evt.feature;
+                return record[featureKey] == evt.feature;
             });
             if (row != -1 &amp;&amp; this.isSelected(row)) {
                 this._selecting = true;
@@ -310,7 +320,8 @@ Ext.define('GeoExt.selection.FeatureModel', {
     onSelectChange: function(record, isSelected) {
         this.callParent(arguments);
 
-        var feature = record.raw;
+        var featureKey = GeoExt.isExt4 ? 'raw' : 'data';
+        var feature = record[featureKey];
         if (this.selectControl &amp;&amp; !this._selecting &amp;&amp; feature) {
             var layers = this.getLayers();
             if (isSelected) {

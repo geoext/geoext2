@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-ProgressBarWidget'>/**
+</span> * An updateable progress bar widget.
+ *
+ * In manual mode, you are responsible for showing, updating (via {@link #setValue})
+ * and clearing the progress bar as needed from your own code. This method is most
+ * appropriate when you want to show progress throughout an operation that has predictable
+ * points of interest at which you can update the control.
+ */
+Ext.define('Ext.ProgressBarWidget', {
+    extend: 'Ext.Widget',
+    alias: 'widget.progressbarwidget',
+
+    // Required to pull in the styles
+    requires: [
+        'Ext.ProgressBar'
+    ],
+
+    config: {
+<span id='Ext-ProgressBarWidget-cfg-text'>        /**
+</span>         * @cfg {String} [text]
+         * The background text
+         */
+        text: null,
+
+<span id='Ext-ProgressBarWidget-cfg-value'>        /**
+</span>         * @cfg {Number} [value=0]
+         * A floating point value between 0 and 1 (e.g., .5)
+         */
+        value: 0,
+
+<span id='Ext-ProgressBarWidget-cfg-animate'>        /**
+</span>         * @cfg {Boolean} [animate=false]
+         * Specify as `true` to have this progress bar animate to new extent when updated.
+         */
+        animate: false,
+
+<span id='Ext-ProgressBarWidget-cfg-textTpl'>        /**
+</span>         * @cfg {String/Ext.XTemplate} [textTpl]
+         * A template used to create this ProgressBar's background text given two values:
+         *
+         *    `value  ' - The raw progress value between 0 and 1
+         *    'percent' - The value as a percentage between 0 and 100
+         */
+        textTpl: null
+    },
+
+    cachedConfig: {
+<span id='Ext-ProgressBarWidget-cfg-baseCls'>        /**
+</span>         * @cfg {String} [baseCls='x-progress']
+         * The base CSS class to apply to the progress bar's wrapper element.
+         */
+        baseCls: Ext.baseCSSPrefix + 'progress',
+
+<span id='Ext-ProgressBarWidget-cfg-textCls'>        textCls: Ext.baseCSSPrefix + 'progress-text',
+</span>
+<span id='Ext-ProgressBarWidget-cfg-ui'>        ui: 'default'
+</span>    },
+
+<span id='Ext-ProgressBarWidget-property-template'>    template: [{
+</span>        reference: 'backgroundEl'
+    }, {
+        reference: 'barEl',
+        children: [{
+            reference: 'textEl'
+        }]
+    }],
+
+<span id='Ext-ProgressBarWidget-property-defaultBindProperty'>    defaultBindProperty: 'value',
+</span>            
+<span id='Ext-ProgressBarWidget-method-updateUi'>    updateUi: function(ui, oldUi) {
+</span>
+        var baseCls = this.getBaseCls() + '-';
+
+        if (oldUi) {
+            this.element.removeCls(baseCls + oldUi);
+            this.barEl.removeCls(baseCls + 'bar-' + oldUi);
+        }
+
+        this.element.addCls(baseCls + ui);
+        this.barEl.addCls(baseCls + 'bar-' + ui);
+    },
+
+<span id='Ext-ProgressBarWidget-method-updateBaseCls'>    updateBaseCls: function(baseCls, oldBaseCls) {
+</span>        //&lt;debug&gt;
+        if (oldBaseCls) {
+            Ext.Error.raise('You cannot configure baseCls - use a subclass');
+        }
+        //&lt;/debug&gt;
+        this.element.addCls(baseCls);
+        this.barEl.addCls(baseCls + '-bar');
+    },
+
+<span id='Ext-ProgressBarWidget-method-updateTextCls'>    updateTextCls: function(textCls) {
+</span>        this.backgroundEl.addCls(textCls + ' ' + textCls + '-back');
+        this.textEl.addCls(textCls);
+    },
+
+<span id='Ext-ProgressBarWidget-method-updateValue'>    updateValue: function(value, oldValue) {
+</span>        var me = this,
+            textTpl = me.getTextTpl();
+
+        if (textTpl) {
+            me.setText(textTpl.apply({
+                value: value,
+                percent: value * 100
+            }));
+        }
+        if (me.getAnimate()) {
+            me.barEl.stopAnimation();
+            me.barEl.animate(Ext.apply({
+                from: {
+                    width: (oldValue * 100) + '%'
+                },
+                to: {
+                    width: (value * 100) + '%'
+                }
+            }, me.animate));
+        } else {
+            me.barEl.setStyle('width', (value * 100) + '%');
+        }
+    },
+
+<span id='Ext-ProgressBarWidget-method-updateText'>    updateText: function(text) {
+</span>        var me = this;
+
+        me.backgroundEl.setHtml(text);
+        me.textEl.setHtml(text);
+    },
+
+<span id='Ext-ProgressBarWidget-method-applyTextTpl'>    applyTextTpl: function(textTpl) {
+</span>        if (!textTpl.isTemplate) {
+            textTpl = new Ext.XTemplate(textTpl);
+        }
+        return textTpl;
+    }
+});</pre>
+</body>
+</html>

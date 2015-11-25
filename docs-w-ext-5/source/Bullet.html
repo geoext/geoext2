@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-sparkline-Bullet'>/**
+</span> * @class Ext.sparkline.Bullet
+ *
+ * Plots a bullet graph based upon the input {@link #values} array.
+ *
+ * See &lt;a href=&quot;http://en.wikipedia.org/wiki/Bullet_graph&quot;&gt;Bullet graphs Wikipedia Page&lt;/a&gt; for more information.
+ *
+ * See {@link Ext.sparkline.Base the base class} for a simple example.
+ */
+Ext.define('Ext.sparkline.Bullet', {
+    extend: 'Ext.sparkline.Base',
+
+    alias: 'widget.sparklinebullet',
+
+    config: {
+
+<span id='Ext-sparkline-Bullet-cfg-targetColor'>        /**
+</span>         * @cfg {String} [targetColor=#f33] The colour of the vertical target marker.
+         */
+        targetColor: '#f33',
+        
+<span id='Ext-sparkline-Bullet-cfg-targetWidth'>        /**
+</span>         * @cfg {Number} [targetWidth=3] Width of the target bar in pixels.
+         */
+        targetWidth: 3,
+        
+<span id='Ext-sparkline-Bullet-cfg-performanceColor'>        /**
+</span>         * @cfg {String} [performanceColor=#33f] The color of the performance measure horizontal bar.
+         */
+        performanceColor: '#33f',
+        
+<span id='Ext-sparkline-Bullet-cfg-rangeColors'>        /**
+</span>         * @cfg {String[]} [rangeColors] An array of colors to use for each qualitative range background color.
+         */
+        rangeColors: ['#d3dafe', '#a8b6ff', '#7f94ff'],
+        
+<span id='Ext-sparkline-Bullet-cfg-base'>        /**
+</span>         * @cfg {Number} [base] Set this to a number to change the base start number.
+         */
+        base: null,
+        
+<span id='Ext-sparkline-Bullet-cfg-tipTpl'>        tipTpl: new Ext.XTemplate('{fieldkey:this.fields} - {value}', {
+</span>            fields: function(v) {
+                if (v === 'r') {
+                    return 'Range';
+                }
+                if (v === 'p') {
+                    return 'Performance';
+                }
+                if (v === 't') {
+                    return 'Target';
+                }
+            }
+        })
+    },
+
+<span id='Ext-sparkline-Bullet-method-applyValues'>    // Ensure values is an array of normalized values
+</span>    applyValues: function(newValues) {
+        newValues = Ext.Array.map(Ext.Array.from(newValues), this.normalizeValue);
+        this.disabled = !(newValues &amp;&amp; newValues.length);
+        return newValues;
+    },
+
+<span id='Ext-sparkline-Bullet-method-onUpdate'>    onUpdate: function() {
+</span>        var me = this,
+            values = me.values,
+            min, max, vals,
+            base = me.getBase();
+
+        me.callParent(arguments);
+
+        // target or performance could be null
+        vals = values.slice();
+        vals[0] = vals[0] === null ? vals[2] : vals[0];
+        vals[1] = values[1] === null ? vals[2] : vals[1];
+        min = Math.min.apply(Math, values);
+        max = Math.max.apply(Math, values);
+        if (base == null) {
+            min = min &lt; 0 ? min : 0;
+        } else {
+            min = base;
+        }
+        me.min = min;
+        me.max = max;
+        me.range = max - min;
+        me.shapes = {};
+        me.valueShapes = {};
+        me.regiondata = {};
+        if (!values.length) {
+            me.disabled = true;
+        }
+    },
+
+<span id='Ext-sparkline-Bullet-method-getRegion'>    getRegion: function(x, y) {
+</span>        var shapeid = this.canvas.getShapeAt(x, y);
+        return (shapeid !== undefined &amp;&amp; this.shapes[shapeid] !== undefined) ? this.shapes[shapeid] : undefined;
+    },
+
+<span id='Ext-sparkline-Bullet-method-getRegionFields'>    getRegionFields: function(region) {
+</span>        return {
+            fieldkey: region.substr(0, 1),
+            value: this.values[region.substr(1)],
+            region: region
+        };
+    },
+
+<span id='Ext-sparkline-Bullet-method-renderHighlight'>    renderHighlight: function(region) {
+</span>        switch (region.substr(0, 1)) {
+            case 'r':
+                this.renderRange(region.substr(1), true).append();
+                break;
+            case 'p':
+                this.renderPerformance(true).append();
+                break;
+            case 't':
+                this.renderTarget(true).append();
+                break;
+        }
+    },
+
+<span id='Ext-sparkline-Bullet-method-renderRange'>    renderRange: function(region, highlight) {
+</span>        var rangeval = this.values[region],
+            rangewidth = Math.round(this.getWidth() * ((rangeval - this.min) / this.range)),
+            color = this.getRangeColors()[region - 2];
+        if (highlight) {
+            color = this.calcHighlightColor(color);
+        }
+        return this.canvas.drawRect(0, 0, rangewidth - 1, this.getHeight() - 1, color, color);
+    },
+
+<span id='Ext-sparkline-Bullet-method-renderPerformance'>    renderPerformance: function(highlight) {
+</span>        var perfval = this.values[1],
+            perfwidth = Math.round(this.getWidth() * ((perfval - this.min) / this.range)),
+            color = this.getPerformanceColor();
+        if (highlight) {
+            color = this.calcHighlightColor(color);
+        }
+        return this.canvas.drawRect(0, Math.round(this.getHeight() * 0.3), perfwidth - 1,
+            Math.round(this.getHeight() * 0.4) - 1, color, color);
+    },
+
+<span id='Ext-sparkline-Bullet-method-renderTarget'>    renderTarget: function(highlight) {
+</span>        var targetval = this.values[0],
+            targetWidth = this.getTargetWidth(),
+            x = Math.round(this.getWidth() * ((targetval - this.min) / this.range) - (targetWidth / 2)),
+            targettop = Math.round(this.getHeight() * 0.10),
+            targetheight = this.getHeight() - (targettop * 2),
+            color = this.getTargetColor();
+
+        if (highlight) {
+            color = this.calcHighlightColor(color);
+        }
+        return this.canvas.drawRect(x, targettop, targetWidth - 1, targetheight - 1, color, color);
+    },
+
+<span id='Ext-sparkline-Bullet-method-renderGraph'>    renderGraph: function () {
+</span>        var me = this,
+            vlen = me.values.length,
+            canvas = me.canvas,
+            i, shape,
+            shapes = me.shapes || (me.shapes = {}),
+            valueShapes = me.valueShapes || (me.valueShapes = {});
+
+        if (!me.callParent()) {
+            return;
+        }
+        for (i = 2; i &lt; vlen; i++) {
+            shape = me.renderRange(i).append();
+            shapes[shape.id] = 'r' + i;
+            valueShapes['r' + i] = shape.id;
+        }
+        if (me.values[1] !== null) {
+            shape = me.renderPerformance().append();
+            shapes[shape.id] = 'p1';
+            valueShapes.p1 = shape.id;
+        }
+        if (me.values[0] !== null) {
+            shape = this.renderTarget().append();
+            shapes[shape.id] = 't0';
+            valueShapes.t0 = shape.id;
+        }
+
+        // If mouse is over, apply the highlight
+        if (me.currentPageXY &amp;&amp; me.el.getRegion().contains(me.currentPageXY)) {
+            me.updateDisplay();
+        }
+        canvas.render();
+    }
+});</pre>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-layout-container-Form'>/**
+</span> * This is a layout that will render form Fields, one under the other all stretched to the Container width.
+ *
+ *     @example
+ *     Ext.create('Ext.Panel', {
+ *         width: 500,
+ *         height: 300,
+ *         title: &quot;FormLayout Panel&quot;,
+ *         layout: 'form',
+ *         renderTo: Ext.getBody(),
+ *         bodyPadding: 5,
+ *         defaultType: 'textfield',
+ *         items: [{
+ *            fieldLabel: 'First Name',
+ *             name: 'first',
+ *             allowBlank:false
+ *         },{
+ *             fieldLabel: 'Last Name',
+ *             name: 'last'
+ *         },{
+ *             fieldLabel: 'Company',
+ *             name: 'company'
+ *         }, {
+ *             fieldLabel: 'Email',
+ *             name: 'email',
+ *             vtype:'email'
+ *         }, {
+ *             fieldLabel: 'DOB',
+ *             name: 'dob',
+ *             xtype: 'datefield'
+ *         }, {
+ *             fieldLabel: 'Age',
+ *             name: 'age',
+ *             xtype: 'numberfield',
+ *             minValue: 0,
+ *             maxValue: 100
+ *         }, {
+ *             xtype: 'timefield',
+ *             fieldLabel: 'Time',
+ *             name: 'time',
+ *             minValue: '8:00am',
+ *             maxValue: '6:00pm'
+ *         }]
+ *     });
+ */
+Ext.define('Ext.layout.container.Form', {
+    extend: 'Ext.layout.container.Auto',
+    alternateClassName: 'Ext.layout.FormLayout',
+    alias: 'layout.form',
+<span id='Ext-layout-container-Form-property-type'>    type: 'form',
+</span>
+<span id='Ext-layout-container-Form-property-formWrapCls'>    formWrapCls: Ext.baseCSSPrefix + 'form-layout-wrap',
+</span><span id='Ext-layout-container-Form-property-formWrapAutoLabelCls'>    formWrapAutoLabelCls: Ext.baseCSSPrefix + 'form-layout-auto-label',
+</span><span id='Ext-layout-container-Form-property-formWrapSizedLabelCls'>    formWrapSizedLabelCls: Ext.baseCSSPrefix + 'form-layout-sized-label',
+</span><span id='Ext-layout-container-Form-property-formColGroupCls'>    formColGroupCls: Ext.baseCSSPrefix + 'form-layout-colgroup',
+</span><span id='Ext-layout-container-Form-property-formColumnCls'>    formColumnCls: Ext.baseCSSPrefix + 'form-layout-column',
+</span><span id='Ext-layout-container-Form-property-formLabelColumnCls'>    formLabelColumnCls: Ext.baseCSSPrefix + 'form-layout-label-column',
+</span>
+<span id='Ext-layout-container-Form-cfg-itemSpacing'>    /**
+</span>     * @cfg {Number} itemSpacing
+     * The amount of space, in pixels, to use between the items. Defaults to the value
+     * inherited from the theme's stylesheet as configured by
+     * {@link Ext.form.Labelable#$form-item-margin-bottom $form-item-margin-bottom}.
+     */
+
+<span id='Ext-layout-container-Form-cfg-labelWidth'>    /**
+</span>     * @cfg {Number/String} labelWidth
+     * The width of the labels. This can be either a number in pixels, or a valid CSS
+     * &quot;width&quot; style, e.g. `'100px'`, or `'30%'`.  When configured, all labels will assume
+     * this width, and any {@link Ext.form.Labelable#labelWidth labelWidth} specified
+     * on the items will be ignored.
+     *
+     * The default behavior of this layout when no no labelWidth is specified is to size
+     * the labels to the text-width of the label with the longest text.
+     */
+
+    childEls: ['formWrap', 'labelColumn'],
+
+<span id='Ext-layout-container-Form-property-beforeBodyTpl'>    beforeBodyTpl:
+</span>        '&lt;div id=&quot;{ownerId}-formWrap&quot; data-ref=&quot;formWrap&quot; class=&quot;{formWrapCls}&quot;' +
+            '&lt;tpl if=&quot;itemSpacing&quot;&gt; style=&quot;border-spacing:{itemSpacing}px&quot;&lt;/tpl&gt;&gt;' +
+            '&lt;div class=&quot;{formColGroupCls}&quot;&gt;' +
+                '&lt;div id=&quot;{ownerId}-labelColumn&quot; data-ref=&quot;labelColumn&quot; class=&quot;{formColumnCls} {formLabelColumnCls}&quot;' +
+                    '&lt;tpl if=&quot;labelWidth&quot;&gt; style=&quot;width:{labelWidth}&quot;&lt;/tpl&gt;&gt;' +
+                '&lt;/div&gt;' +
+                '&lt;div class=&quot;{formColumnCls}&quot;&gt;&lt;/div&gt;' +
+            '&lt;/div&gt;',
+
+<span id='Ext-layout-container-Form-property-afterBodyTpl'>    afterBodyTpl: '&lt;/div&gt;',
+</span>
+<span id='Ext-layout-container-Form-method-getRenderData'>    getRenderData: function() {
+</span>        var me = this,
+            labelWidth = me.labelWidth,
+            formWrapCls = me.formWrapCls,
+            data = me.callParent();
+
+        if (labelWidth) {
+            if (typeof labelWidth === 'number') {
+                labelWidth += 'px';
+            }
+            data.labelWidth = labelWidth;
+            formWrapCls += ' ' + me.formWrapSizedLabelCls;
+        } else {
+            formWrapCls += ' ' + me.formWrapAutoLabelCls;
+        }
+
+        data.formWrapCls = formWrapCls;
+        data.formColGroupCls = me.formColGroupCls;
+        data.formColumnCls = me.formColumnCls;
+        data.formLabelColumnCls = me.formLabelColumnCls;
+
+        return data;
+    },
+
+<span id='Ext-layout-container-Form-method-getRenderTarget'>    getRenderTarget: function() {
+</span>        return this.formWrap;
+    }
+});
+</pre>
+</body>
+</html>

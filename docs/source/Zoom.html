@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -133,7 +133,7 @@ Ext.define('GeoExt.slider.Zoom', {
             if(this.map instanceof GeoExt.MapPanel) {
                 this.map = this.map.map;
             }
-            this.bind(this.map);
+            this.bindMap(this.map);
         }
 
         if (this.aggressive === true) {
@@ -141,7 +141,7 @@ Ext.define('GeoExt.slider.Zoom', {
         } else {
             this.on('changecomplete', this.changeHandler, this);
         }
-        this.on(&quot;beforedestroy&quot;, this.unbind, this);
+        this.on(&quot;beforedestroy&quot;, this.unbindMap, this);
     },
 
 <span id='GeoExt-slider-Zoom-method-onRender'>    /**
@@ -181,18 +181,18 @@ Ext.define('GeoExt.slider.Zoom', {
              */
             afterrender: function(){
                 // bind the map to the slider
-                me.bind(panel.map);
+                me.bindMap(panel.map);
             }
         });
     },
 
-<span id='GeoExt-slider-Zoom-method-bind'>    /**
+<span id='GeoExt-slider-Zoom-method-bindMap'>    /**
 </span>     * Registers the relevant listeners on the #map to be in sync with it.
      *
      * @param {OpenLayers.Map} map
      * @private
      */
-    bind: function(map) {
+    bindMap: function(map) {
         this.map = map;
         this.map.events.on({
             zoomend: this.update,
@@ -205,7 +205,7 @@ Ext.define('GeoExt.slider.Zoom', {
         }
     },
 
-<span id='GeoExt-slider-Zoom-method-unbind'>    /**
+<span id='GeoExt-slider-Zoom-method-unbindMap'>    /**
 </span>     * Unregisters the bound listeners on the #map, e.g. when being destroyed.
      *
      * Will automatically be called from the inherited #removeFromMapPanel
@@ -213,7 +213,7 @@ Ext.define('GeoExt.slider.Zoom', {
      *
      * @private
      */
-    unbind: function() {
+    unbindMap: function() {
         if(this.map &amp;&amp; this.map.events) {
             this.map.events.un({
                 zoomend: this.update,
@@ -283,7 +283,7 @@ Ext.define('GeoExt.slider.Zoom', {
     },
 
 <span id='GeoExt-slider-Zoom-method-update'>    /**
-</span>     * Registered as a listener for map zoomend.Updates the value of the slider.
+</span>     * Registered as a listener for map zoomend. Updates the value of the slider.
      *
      * @private
      */

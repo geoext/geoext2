@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -37,7 +37,7 @@
  * the method #removeFromMapPanel, which take care of the dimensions of the
  * sliders DOM-elements and register/unregister appropriate eventlisteners.
  *
- * Subclasses may implement #unbind, which will be called when a slider is
+ * Subclasses may implement #unbindMap, which will be called when a slider is
  * being removed from the map panel.
  *
  * @class GeoExt.slider.MapPanelItem
@@ -120,13 +120,16 @@ Ext.define('GeoExt.slider.MapPanelItem', {
                 // This method takes some of the gathered values from above and
                 // ensures that we have an expected look.
                 resizeFunction = function(){
+                    var zIndex = (panel &amp;&amp; panel.map) ?
+                            panel.map.Z_INDEX_BASE.Control :
+                            undefined;
                     el.setStyle({
                         top: dim.top,
                         left: dim.left,
                         width: &quot;&quot; + dim.width + &quot;px&quot;,
                         position: &quot;absolute&quot;,
                         height: &quot;&quot; + dim.height + &quot;px&quot;,
-                        zIndex: panel.map.Z_INDEX_BASE.Control
+                        zIndex: zIndex
                     });
                     // This is tricky...
                     if (me.vertical) {
@@ -168,16 +171,16 @@ Ext.define('GeoExt.slider.MapPanelItem', {
             click: me.stopMouseEvents,
             scope: me
         });
-        me.unbind();
+        me.unbindMap();
     },
 
-<span id='GeoExt-slider-MapPanelItem-method-unbind'>    /**
+<span id='GeoExt-slider-MapPanelItem-method-unbindMap'>    /**
 </span>     * Will be called when the slider is being removed from the mappanel.
      * Subclasses may implement custom event unlistening logic in this method.
      *
      * @protected
      */
-    unbind: Ext.emptyFn,
+    unbindMap: Ext.emptyFn,
 
 <span id='GeoExt-slider-MapPanelItem-method-stopMouseEvents'>    /**
 </span>     * Stops the event from propagating.

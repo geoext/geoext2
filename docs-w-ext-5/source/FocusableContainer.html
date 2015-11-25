@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('Ext.rtl.util.FocusableContainer', {
+    override: 'Ext.util.FocusableContainer',
+    
+    privates: {
+        // Direction reversal here is necessary because right and left arrow
+        // are not reversed in RTL like Tab, so pressing left arrow would move
+        // focus to the right.
+        moveChildFocus: function(e, forward) {
+            var forward = this.getInherited().rtl ? !forward : forward;
+        
+            return this.callParent([e, forward]);
+        }
+    }
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-selection-DataViewModel'>/**
+</span> * @private
+ */
+Ext.define('Ext.selection.DataViewModel', {
+    extend: 'Ext.selection.Model',
+
+    alias: 'selection.dataviewmodel',
+
+    requires: ['Ext.util.KeyNav'],
+
+<span id='Ext-selection-DataViewModel-property-deselectOnContainerClick'>    deselectOnContainerClick: true,
+</span>
+<span id='Ext-selection-DataViewModel-cfg-enableKeyNav'>    /**
+</span>     * @cfg {Boolean} [enableKeyNav=true]
+     *
+     * @deprecated 5.1.0 Keyboard navigation is a function of the view's {@link Ext.view.NavigationModel navigation model},
+     * and is enabled for accessibilty purposes.
+     */
+
+<span id='Ext-selection-DataViewModel-event-beforedeselect'>    /**
+</span>     * @event beforedeselect
+     * Fired before a record is deselected. If any listener returns false, the
+     * deselection is cancelled.
+     * @param {Ext.selection.DataViewModel} this
+     * @param {Ext.data.Model} record The deselected record.
+     * @param {Number} The index within the store of the deselected record.
+     */
+
+<span id='Ext-selection-DataViewModel-event-beforeselect'>    /**
+</span>     * @event beforeselect
+     * Fired before a record is selected. If any listener returns false, the
+     * selection is cancelled.
+     * @param {Ext.selection.DataViewModel} this
+     * @param {Ext.data.Model} record The selected record.
+     * @param {Number} The index within the store of the selected record.
+     */
+
+<span id='Ext-selection-DataViewModel-event-deselect'>    /**
+</span>     * @event deselect
+     * Fired after a record is deselected
+     * @param {Ext.selection.DataViewModel} this
+     * @param  {Ext.data.Model} record The deselected record
+     */
+
+<span id='Ext-selection-DataViewModel-event-select'>    /**
+</span>     * @event select
+     * Fired after a record is selected
+     * @param {Ext.selection.DataViewModel} this
+     * @param  {Ext.data.Model} record The selected record.
+     * @param {Number} The index within the store of the selected record.
+     */
+
+    bindComponent: function(view) {
+        var me = this,
+            viewListeners;
+
+        if (me.view !== view) {
+            if (me.view) {
+                me.navigationModel = null;
+                Ext.destroy(me.viewListeners, me.navigationListeners);
+            }
+            me.view = view;
+            if (view) {
+                viewListeners = me.getViewListeners();
+                viewListeners.scope = me;
+                viewListeners.destroyable = true;
+                me.navigationModel = view.getNavigationModel();
+                me.viewListeners = view.on(viewListeners);
+                me.navigationListeners = me.navigationModel.on({
+                    navigate: me.onNavigate,
+                    scope: me,
+                    destroyable: true
+                });
+            }
+        }
+    },
+
+<span id='Ext-selection-DataViewModel-method-getViewListeners'>    getViewListeners: function() {
+</span>        var me = this,
+            eventListeners = {};
+
+        eventListeners[me.view.triggerCtEvent] = me.onContainerClick;
+        return eventListeners;
+    },
+    
+<span id='Ext-selection-DataViewModel-method-onUpdate'>    onUpdate: function(record){
+</span>        var view = this.view;
+        if (view &amp;&amp; this.isSelected(record)) {
+            view.onItemSelect(record);
+        }
+    },
+
+<span id='Ext-selection-DataViewModel-method-onContainerClick'>    onContainerClick: function() {
+</span>        if (this.deselectOnContainerClick) {
+            this.deselectAll();
+        }
+    },
+
+<span id='Ext-selection-DataViewModel-method-onSelectChange'>    // Allow the DataView to update the ui
+</span>    onSelectChange: function(record, isSelected, suppressEvent, commitFn) {
+        var me = this,
+            view = me.view,
+            eventName = isSelected ? 'select' : 'deselect',
+            recordIndex = me.store.indexOf(record);
+
+        if ((suppressEvent || me.fireEvent('before' + eventName, me, record, recordIndex)) !== false &amp;&amp;
+                commitFn() !== false) {
+
+            if (view) {
+                if (isSelected) {
+                    view.onItemSelect(record);
+                } else {
+                    view.onItemDeselect(record);
+                }
+            }
+
+            if (!suppressEvent) {
+                me.fireEvent(eventName, me, record, recordIndex);
+            }
+        }
+    },
+
+<span id='Ext-selection-DataViewModel-method-destroy'>    destroy: function() {
+</span>        this.bindComponent();
+        Ext.destroy(this.keyNav);
+        this.callParent();
+    }
+});
+</pre>
+</body>
+</html>

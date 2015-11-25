@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-panel-Bar'>/**
+</span> * Abstract base class for common functionality shared between {@link Ext.panel.Header}
+ * and {@link Ext.tab.Bar}
+ * @private
+ * @abstract
+ */
+Ext.define('Ext.panel.Bar', {
+    extend: 'Ext.container.Container',
+
+<span id='Ext-panel-Bar-property-vertical'>    vertical: false,
+</span>
+<span id='Ext-panel-Bar-property-_verticalSides'>    _verticalSides: {
+</span>        left: 1,
+        right: 1
+    },
+
+<span id='Ext-panel-Bar-method-initComponent'>    initComponent: function() {
+</span>        var me = this,
+            vertical = me.vertical;
+
+        me.dock = me.dock || (vertical ? 'left' : 'top');
+
+        me.layout = Ext.apply(vertical ? {
+            type: 'vbox',
+            align: 'middle',
+            alignRoundingMethod: 'ceil'
+        } : {
+            type: 'hbox',
+            align: 'middle',
+            alignRoundingMethod: 'floor'
+        }, me.layout);
+
+        this.callParent();
+    },
+
+<span id='Ext-panel-Bar-method-onAdded'>    onAdded: function(container, pos, instanced) {
+</span>        this.initOrientation();
+        this.callParent([container, pos, instanced]);
+    },
+
+<span id='Ext-panel-Bar-method-onRemoved'>    onRemoved: function(destroying) {
+</span>        this.removeClsWithUI(this.uiCls);
+        this.callParent([destroying]);
+    },
+
+<span id='Ext-panel-Bar-method-beforeRender'>    beforeRender: function() {
+</span>        if (!this.ownerCt) {
+            // allows bars to be rendered directly to body with no owner container
+            this.initOrientation();
+        }
+        this.callParent();
+    },
+
+<span id='Ext-panel-Bar-method-setDock'>    setDock: function(dock) {
+</span>        var me = this,
+            layout, vertical;
+
+        if (dock !== me.dock) {
+            Ext.suspendLayouts();
+
+            me.clearOrientation();
+
+            me.callParent([dock]);
+
+            me.initOrientation();
+            
+            vertical = me.vertical;
+            layout = me.layout;
+            layout.setVertical(vertical);
+            layout.setAlignRoundingMethod(vertical ? 'ceil' : 'floor');
+
+            Ext.resumeLayouts(true);
+        }
+    },
+
+<span id='Ext-panel-Bar-property-privates'>    privates: {
+</span>        clearOrientation: function() {
+            this.removeClsWithUI([
+                this.vertical ? 'vertical' : 'horizontal',
+                this.getDockName()
+            ]);
+        },
+
+        getDockName: function() {
+            return this.dock;
+        },
+
+        initOrientation: function() {
+            var me = this,
+                dock = me.dock,
+                vertical = me.vertical = (dock ? dock in me._verticalSides : me.vertical);
+
+            me.addClsWithUI([
+                this.vertical ? 'vertical' : 'horizontal',
+                me.getDockName()
+            ]);
+        }
+    }
+});
+</pre>
+</body>
+</html>

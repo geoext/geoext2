@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-form-trigger-Spinner'>/**
+</span> * A Trigger that contains 2 clickable elements inside in the form of a &quot;up&quot; and a &quot;down&quot;
+ * trigger.
+ */
+Ext.define('Ext.form.trigger.Spinner', {
+    extend: 'Ext.form.trigger.Trigger',
+    alias: 'trigger.spinner',
+
+<span id='Ext-form-trigger-Spinner-cfg-cls'>    cls: Ext.baseCSSPrefix + 'form-trigger-spinner',
+</span><span id='Ext-form-trigger-Spinner-property-spinnerCls'>    spinnerCls: Ext.baseCSSPrefix + 'form-spinner',
+</span><span id='Ext-form-trigger-Spinner-property-spinnerUpCls'>    spinnerUpCls: Ext.baseCSSPrefix + 'form-spinner-up',
+</span><span id='Ext-form-trigger-Spinner-property-spinnerDownCls'>    spinnerDownCls: Ext.baseCSSPrefix + 'form-spinner-down',
+</span><span id='Ext-form-trigger-Spinner-property-focusCls'>    focusCls: Ext.baseCSSPrefix + 'form-spinner-focus',
+</span><span id='Ext-form-trigger-Spinner-property-overCls'>    overCls: Ext.baseCSSPrefix + 'form-spinner-over',
+</span><span id='Ext-form-trigger-Spinner-property-clickCls'>    clickCls: Ext.baseCSSPrefix + 'form-spinner-click',
+</span>
+<span id='Ext-form-trigger-Spinner-property-focusFieldOnClick'>    // restore focus to the input element on spin end.
+</span>    focusFieldOnClick: true,
+
+<span id='Ext-form-trigger-Spinner-cfg-upHandler'>    /**
+</span>     * @cfg {Function/String} upHandler
+     * The handler for the 'up' button
+     */
+
+<span id='Ext-form-trigger-Spinner-cfg-downHandler'>    /**
+</span>     * @cfg {Function/String} downHandler
+     * The handler for the 'down' button
+     */
+
+<span id='Ext-form-trigger-Spinner-property-vertical'>    // private
+</span>    vertical: true,
+
+<span id='Ext-form-trigger-Spinner-property-bodyTpl'>    bodyTpl:
+</span>        '&lt;tpl if=&quot;vertical&quot;&gt;' +
+            '&lt;div class=&quot;{spinnerCls} {spinnerCls}-{ui} {spinnerUpCls} {spinnerUpCls}-{ui}' +
+                ' {childElCls} {upDisabledCls}&quot;&gt;&lt;/div&gt;' +
+        '&lt;/tpl&gt;' +
+        '&lt;div class=&quot;{spinnerCls} {spinnerCls}-{ui} {spinnerDownCls} {spinnerDownCls}-{ui}' +
+                ' {childElCls} {downDisabledCls}&quot;&gt;&lt;/div&gt;' +
+        '&lt;tpl if=&quot;!vertical&quot;&gt;' +
+            '&lt;div class=&quot;{spinnerCls} {spinnerCls}-{ui} {spinnerUpCls} {spinnerUpCls}-{ui}' +
+                ' {childElCls} {upDisabledCls}&quot;&gt;&lt;/div&gt;' +
+        '&lt;/tpl&gt;',
+
+<span id='Ext-form-trigger-Spinner-method-destroy'>    destroy: function() {
+</span>        var me = this;
+
+        if (me.spinnerEl) {
+            me.spinnerEl.destroy();
+            me.spinnerEl = me.upEl = me.downEl = null;
+        }
+
+        me.callParent();
+    },
+
+<span id='Ext-form-trigger-Spinner-method-getBodyRenderData'>    getBodyRenderData: function() {
+</span>        var me = this;
+
+        return {
+            vertical: me.vertical,
+            upDisabledCls: me.upEnabled ? '' : (me.spinnerUpCls + '-disabled'),
+            downDisabledCls: me.downEnabled ? '' : (me.spinnerDownCls + '-disabled'),
+            spinnerCls: me.spinnerCls,
+            spinnerUpCls: me.spinnerUpCls,
+            spinnerDownCls: me.spinnerDownCls
+        };
+    },
+
+<span id='Ext-form-trigger-Spinner-method-getStateEl'>    getStateEl: function() {
+</span>        return this.spinnerEl;
+    },
+
+<span id='Ext-form-trigger-Spinner-method-onClick'>    onClick: function(e) {
+</span>        var me = this,
+            args = arguments,
+            e = me.clickRepeater ? args[1] : args[0],
+            field = me.field;
+
+        if (!field.readOnly &amp;&amp; !field.disabled) {
+            if (me.upEl.contains(e.target)) {
+                Ext.callback(me.upHandler, me.scope, [field, me, e], 0, field);
+            } else if (me.downEl.contains(e.target)) {
+                Ext.callback(me.downHandler, me.scope, [field, me, e], 0, field);
+            }
+        }
+
+        field.inputEl.focus();
+    },
+
+<span id='Ext-form-trigger-Spinner-method-onFieldRender'>    onFieldRender: function() {
+</span>        var me = this,
+            vertical = me.vertical,
+            spinnerEl, elements;
+
+        me.callParent();
+
+<span id='Ext-form-trigger-Spinner-property-spinnerEl'>        /**
+</span>         * @property {Ext.dom.CompositeElement} spinnerEl
+         * @private
+         * The &quot;up&quot; spinner element
+         */
+        spinnerEl = me.spinnerEl = me.el.select('.' + me.spinnerCls, true);
+        elements = spinnerEl.elements;
+
+        me.upEl = vertical ? elements[0] : elements[1];
+        me.downEl = vertical ? elements[1] : elements[0];
+    },
+
+<span id='Ext-form-trigger-Spinner-method-setUpEnabled'>    // private
+</span>    setUpEnabled: function(enabled) {
+        this.upEl[enabled ? 'removeCls' : 'addCls'](this.spinnerUpCls + '-disabled');
+    },
+
+<span id='Ext-form-trigger-Spinner-method-setDownEnabled'>    // private
+</span>    setDownEnabled: function(enabled) {
+        this.downEl[enabled ? 'removeCls' : 'addCls'](this.spinnerDownCls + '-disabled');
+    }
+
+});
+</pre>
+</body>
+</html>

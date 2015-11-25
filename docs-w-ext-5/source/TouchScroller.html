@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('Ext.rtl.scroll.TouchScroller', {
+    override: 'Ext.scroll.TouchScroller',
+
+    _rtlCls: Ext.baseCSSPrefix + 'rtl',
+
+    updateRtl: function(rtl) {
+        var indicators, xIndicator, yIndicator, rtlCls;
+
+        if (rtl) {
+            indicators = this.getIndicators();
+
+            if (indicators) {
+                rtlCls = this._rtlCls;
+                xIndicator = indicators.x;
+                yIndicator = indicators.y;
+
+                if (xIndicator) {
+                    xIndicator.element.addCls(rtlCls);
+                }
+
+                if (yIndicator) {
+                    yIndicator.element.addCls(rtlCls);
+                }
+            }
+
+        }
+    },
+
+    privates: {
+        convertX: function(x) {
+            // rtl gets set by based on the owner component's inheritedState
+            if (x &amp;&amp; this.getRtl()) {
+                x = -x;
+            }
+            return x;
+        },
+
+        convertEasingConfig: function(config) {
+            var minMomentumValue = config.minMomentumValue,
+                maxMomentumValue = config.maxMomentumValue;
+
+            if (this.getRtl()) {
+                config.minMomentumValue = maxMomentumValue;
+                config.maxMomentumValue = -minMomentumValue;
+            }
+        }
+    }
+});
+</pre>
+</body>
+</html>

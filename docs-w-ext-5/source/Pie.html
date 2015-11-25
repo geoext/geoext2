@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-sparkline-Pie'>/**
+</span> * @class Ext.sparkline.Pie
+ *
+ * Plots a pie chart based upon the input {#values} array.
+ *
+ * See {@link Ext.sparkline.Base the base class} for a simple example.
+ */
+Ext.define('Ext.sparkline.Pie', {
+    extend: 'Ext.sparkline.Base',
+
+    alias: 'widget.sparklinepie',
+
+    config: {
+
+<span id='Ext-sparkline-Pie-cfg-offset'>        /**
+</span>         * @cfg {Number} [offset] Angle in degrees to offset the first slice.
+         */
+        offset: 0,
+        
+<span id='Ext-sparkline-Pie-cfg-sliceColors'>        /**
+</span>         * @cfg {String[]} [sliceColors] An array of CSS colro values to apply to the chart slices.
+         */
+        sliceColors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#66aa00', '#dd4477', '#0099c6', '#990099'],
+        
+<span id='Ext-sparkline-Pie-cfg-borderWidth'>        /**
+</span>         * @cfg {Number} [borderWidth=0] Border width in pixels of line round slices.
+         */
+        borderWidth: 0,
+        
+<span id='Ext-sparkline-Pie-cfg-borderColor'>        /**
+</span>         * @cfg {String} [borderColor=#000] Border color of line round slices.
+         */
+        borderColor: '#000',
+        
+<span id='Ext-sparkline-Pie-cfg-tipTpl'>        tipTpl: new Ext.XTemplate('&amp;#9679; {value} ({percent:number(&quot;0.0&quot;)}%)')
+</span>    },
+
+<span id='Ext-sparkline-Pie-method-applyValues'>    // Ensure values is an array of numbers
+</span>    applyValues: function(newValues) {
+        newValues = Ext.Array.map(Ext.Array.from(newValues), Number);
+        this.disabled = !(newValues &amp;&amp; newValues.length);
+        return newValues;
+    },
+
+<span id='Ext-sparkline-Pie-method-onUpdate'>    onUpdate: function () {
+</span>        var me = this,
+            values = me.values,
+            total = 0, i;
+
+        me.callParent(arguments);
+
+        me.shapes = {}; // map shape ids to value offsets
+        me.valueShapes = {}; // maps value offsets to shape ids
+
+        if (values.length &gt; 0) {
+            for (i = values.length; i--;) {
+                total += values[i];
+            }
+        }
+        me.total = total;
+        me.radius = Math.floor(Math.min(me.getWidth(), me.getHeight()) / 2);
+    },
+
+<span id='Ext-sparkline-Pie-method-getRegion'>    getRegion: function(x, y) {
+</span>        var shapeid = this.canvas.getShapeAt(x, y);
+        return (shapeid != null &amp;&amp; this.shapes[shapeid] != null) ? this.shapes[shapeid] : null;
+    },
+
+<span id='Ext-sparkline-Pie-method-getRegionFields'>    getRegionFields: function(region) {
+</span>        var sliceColors = this.getSliceColors();
+
+        return {
+            isNull: this.values[region] == null,
+            value: this.values[region],
+            percent: this.values[region] / this.total * 100,
+            color: sliceColors[region % sliceColors.length],
+            offset: region
+        };
+    },
+
+<span id='Ext-sparkline-Pie-method-renderHighlight'>    renderHighlight: function(region) {
+</span>        this.renderSlice(region, true).append();
+    },
+
+<span id='Ext-sparkline-Pie-method-renderSlice'>    renderSlice: function(valuenum, highlight) {
+</span>        var me = this,
+            canvas = me.canvas,
+            radius = me.radius,
+            borderWidth = me.getBorderWidth(),
+            offset = me.getOffset(),
+            circle = 2 * Math.PI,
+            values = me.values,
+            total = me.total,
+            next = offset ? (2*Math.PI)*(offset/360) : 0,
+            start, end, i, vlen, color,
+            sliceColors = this.getSliceColors();
+
+        vlen = values.length;
+        for (i = 0; i &lt; vlen; i++) {
+            start = next;
+            end = next;
+            if (total &gt; 0) {  // avoid divide by zero
+                end = next + (circle * (values[i] / total));
+            }
+            if (valuenum === i) {
+                color = sliceColors[i % sliceColors.length];
+                if (highlight) {
+                    color = me.calcHighlightColor(color);
+                }
+
+                return canvas.drawPieSlice(radius, radius, radius - borderWidth, start, end, null, color);
+            }
+            next = end;
+        }
+    },
+
+<span id='Ext-sparkline-Pie-method-renderGraph'>    renderGraph: function () {
+</span>        var me = this,
+            canvas = me.canvas,
+            values = me.values,
+            radius = me.radius,
+            borderWidth = me.getBorderWidth(),
+            shape, i,
+            shapes = me.shapes || (me.shapes = {}),
+            valueShapes = me.valueShapes || (me.valueShapes = {});
+
+        if (!me.callParent()) {
+            return;
+        }
+        if (borderWidth) {
+            canvas.drawCircle(radius, radius, Math.floor(radius - (borderWidth / 2)),
+                me.getBorderColor(), null, borderWidth).append();
+        }
+        for (i = values.length; i--;) {
+            if (values[i]) { // don't render zero values
+                shape = me.renderSlice(i).append();
+                valueShapes[i] = shape.id; // store just the shapeid
+                shapes[shape.id] = i;
+            }
+        }
+
+        // If mouse is over, re-apply the highlight
+        if (me.currentPageXY &amp;&amp; me.el.getRegion().contains(me.currentPageXY)) {
+            me.currentRegion = null;
+            me.updateDisplay();
+        }
+        canvas.render();
+    }
+});</pre>
+</body>
+</html>

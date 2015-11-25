@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-panel-Pinnable'>/**
+</span> * This mixin is applied to panels that want to manage a Pin state and corresponding tool.
+ */
+Ext.define('Ext.panel.Pinnable', {
+    extend: 'Ext.Mixin',
+
+<span id='Ext-panel-Pinnable-property-mixinId'>    mixinId: 'pinnable',
+</span>
+<span id='Ext-panel-Pinnable-property-pinnable'>    pinnable: true,
+</span>
+<span id='Ext-panel-Pinnable-property-pinnedTip'>    pinnedTip: 'Unpin this item',
+</span>
+<span id='Ext-panel-Pinnable-property-unpinnedTip'>    unpinnedTip: 'Pin this item',
+</span>
+<span id='Ext-panel-Pinnable-method-initPinnable'>    initPinnable: function () {
+</span>        var me = this,
+            pinned = me.isPinned();
+
+        me.addTool(me.pinTool = Ext.widget({
+            xtype: 'tool',
+            type: pinned ? 'unpin' : 'pin',
+            callback: 'togglePin',
+            scope: me,
+            tooltip: pinned ? me.pinnedTip : me.unpinnedTip
+        }));
+    },
+
+<span id='Ext-panel-Pinnable-method-isPinned'>    isPinned: function () {
+</span>        return !this.floating;
+    },
+
+<span id='Ext-panel-Pinnable-method-setPinned'>    setPinned: function (pinned) {
+</span>        var me = this,
+            args;
+
+        if (pinned !== me.isPinned()) {
+            args = [me, pinned];
+            if (me.fireEventArgs('beforepinchange', args) !== false) {
+                me.updatePinned(pinned);
+                me.fireEventArgs('pinchange', args);
+            }
+        }
+    },
+
+<span id='Ext-panel-Pinnable-method-togglePin'>    togglePin: function () {
+</span>        this.setPinned(!this.isPinned());
+    },
+
+<span id='Ext-panel-Pinnable-method-updatePinned'>    updatePinned: function (pinned) {
+</span>        var me = this,
+            tool = me.pinTool;
+
+        tool.setTooltip(pinned ? me.pinnedTip : me.unpinnedTip);
+        tool.setType(pinned ? 'unpin' : 'pin');
+    }
+});
+</pre>
+</body>
+</html>

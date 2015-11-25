@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-menu-Manager'>/**
+</span> * Provides a common registry groups of {@link Ext.menu.CheckItem}s.
+ *
+ * Since 5.1.0, this class no longer registers all menus in your applications.
+ * To access all menus, use {@link Ext.ComponentQuery ComponentQuery}.
+ * @singleton
+ */
+Ext.define('Ext.menu.Manager', {
+    singleton: true,
+
+    alternateClassName: 'Ext.menu.MenuMgr',
+
+    uses: ['Ext.menu.Menu'],
+    
+<span id='Ext-menu-Manager-property-groups'>    groups: {},
+</span>
+<span id='Ext-menu-Manager-method-hideAll'>    /**
+</span>     * Hides all menus that are currently visible
+     * @return {Boolean} success True if any active menus were hidden.
+     */
+    hideAll: function() {
+        var allMenus = Ext.ComponentQuery.query('menu[floating]:not([hidden])'),
+            len = allMenus.length,
+            i,
+            result = false;
+
+        for (i = 0; i &lt; len; i++) {
+            allMenus[i].hide();
+            result = true;
+        }
+        return result;
+    },
+
+<span id='Ext-menu-Manager-method-get'>    /**
+</span>     * Returns a {@link Ext.menu.Menu} object
+     * @param {String/Object} menu The string menu id, an existing menu object reference, or a Menu config that will
+     * be used to generate and return a new Menu this.
+     * @param {Object} [config] A configuration to use when creating the menu.
+     * @return {Ext.menu.Menu} The specified menu, or null if none are found
+     */
+    get: function(menu, config) {
+        var result;
+        
+        if (typeof menu === 'string') { // menu id
+            result = Ext.getCmp(menu);
+            if (result instanceof Ext.menu.Menu) {
+                menu = result;
+            }
+        } else if (Ext.isArray(menu)) { // array of menu items
+            config = Ext.apply({items:menu}, config);
+            menu = new Ext.menu.Menu(config);
+        } else if (!menu.isComponent) { // otherwise, must be a config
+            config = Ext.apply({}, menu, config);
+            menu = Ext.ComponentManager.create(config, 'menu');
+        }
+        return menu;
+    },
+
+<span id='Ext-menu-Manager-method-registerCheckable'>    // @private
+</span>    registerCheckable: function(menuItem) {
+        var groups  = this.groups,
+            groupId = menuItem.group;
+
+        if (groupId) {
+            if (!groups[groupId]) {
+                groups[groupId] = [];
+            }
+
+            groups[groupId].push(menuItem);
+        }
+    },
+
+<span id='Ext-menu-Manager-method-unregisterCheckable'>    // @private
+</span>    unregisterCheckable: function(menuItem) {
+        var groups  = this.groups,
+            groupId = menuItem.group;
+
+        if (groupId) {
+            Ext.Array.remove(groups[groupId], menuItem);
+        }
+    },
+
+<span id='Ext-menu-Manager-method-onCheckChange'>    onCheckChange: function(menuItem, state) {
+</span>        var groups  = this.groups,
+            groupId = menuItem.group,
+            i       = 0,
+            group, ln, curr;
+
+        if (groupId &amp;&amp; state) {
+            group = groups[groupId];
+            ln = group.length;
+            for (; i &lt; ln; i++) {
+                curr = group[i];
+                if (curr !== menuItem) {
+                    curr.setChecked(false);
+                }
+            }
+        }
+    }
+});</pre>
+</body>
+</html>

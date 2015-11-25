@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-tab-Tab'>/**
+</span> * Represents a single Tab in a {@link Ext.tab.Panel TabPanel}. A Tab is simply a slightly customized {@link Ext.button.Button Button},
+ * styled to look like a tab. Tabs are optionally closable, and can also be disabled. 99% of the time you will not
+ * need to create Tabs manually as the framework does so automatically when you use a {@link Ext.tab.Panel TabPanel}
+ */
+Ext.define('Ext.tab.Tab', {
+    extend: 'Ext.button.Button',
+    alias: 'widget.tab',
+
+    requires: [
+        'Ext.util.KeyNav'
+    ],
+
+<span id='Ext-tab-Tab-property-isTab'>    /**
+</span>     * @property {Boolean} isTab
+     * `true` in this class to identify an object as an instantiated Tab, or subclass thereof.
+     */
+    isTab: true,
+    
+<span id='Ext-tab-Tab-cfg-tabIndex'>    // Unlike Buttons, Tabs should not be focusable by default
+</span>    tabIndex: -1,
+
+<span id='Ext-tab-Tab-cfg-baseCls'>    baseCls: Ext.baseCSSPrefix + 'tab',
+</span><span id='Ext-tab-Tab-property-closeElOverCls'>    closeElOverCls: Ext.baseCSSPrefix + 'tab-close-btn-over',
+</span><span id='Ext-tab-Tab-property-closeElPressedCls'>    closeElPressedCls: Ext.baseCSSPrefix + 'tab-close-btn-pressed',
+</span>
+    config: {
+<span id='Ext-tab-Tab-cfg-rotation'>        /**
+</span>         * @cfg {'default'/0/1/2} rotation
+         * The rotation of the tab.  Can be one of the following values:
+         *
+         * - `null` - use the default rotation, depending on the dock position of the tabbar
+         * - `0` - no rotation
+         * - `1` - rotate 90deg clockwise
+         * - `2` - rotate 90deg counter-clockwise
+         *
+         * The default behavior of this config depends on the dock position of the tabbar:
+         *
+         * - `'top'` or `'bottom'` - `0`
+         * - `'right'` - `1`
+         * - `'left'` - `2`
+         */
+        rotation: 'default',
+
+<span id='Ext-tab-Tab-cfg-tabPosition'>        /**
+</span>         * @cfg {'top'/'right'/'bottom'/'left'} tabPosition
+         * The tab's position.  Users should not typically need to set this, as it is
+         * configured automatically by the tab bar
+         */
+        tabPosition: 'top'
+    },
+
+<span id='Ext-tab-Tab-cfg-closable'>    /**
+</span>     * @cfg {Boolean} closable
+     * True to make the Tab start closable (the close icon will be visible).
+     */
+    closable: true,
+
+    //&lt;locale&gt;
+<span id='Ext-tab-Tab-cfg-closeText'>    /**
+</span>     * @cfg {String} closeText
+     * The accessible text label for the close button link; only used when {@link #cfg-closable} = true.
+     */
+    closeText: 'Close Tab',
+    //&lt;/locale&gt;
+
+<span id='Ext-tab-Tab-property-active'>    /**
+</span>     * @property {Boolean} active
+     * Indicates that this tab is currently active. This is NOT a public configuration.
+     * @readonly
+     */
+    active: false,
+
+<span id='Ext-tab-Tab-property-closable'>    /**
+</span>     * @property {Boolean} closable
+     * True if the tab is currently closable
+     */
+
+    childEls: [
+        'closeEl'
+    ],
+
+<span id='Ext-tab-Tab-cfg-scale'>    scale: false,
+</span>
+<span id='Ext-tab-Tab-event-activate'>    /**
+</span>     * @event activate
+     * Fired when the tab is activated.
+     * @param {Ext.tab.Tab} this
+     */
+
+<span id='Ext-tab-Tab-event-deactivate'>    /**
+</span>     * @event deactivate
+     * Fired when the tab is deactivated.
+     * @param {Ext.tab.Tab} this
+     */
+
+<span id='Ext-tab-Tab-event-beforeclose'>    /**
+</span>     * @event beforeclose
+     * Fires if the user clicks on the Tab's close button, but before the {@link #close} event is fired. Return
+     * false from any listener to stop the close event being fired
+     * @param {Ext.tab.Tab} tab The Tab object
+     */
+
+<span id='Ext-tab-Tab-event-close'>    /**
+</span>     * @event close
+     * Fires to indicate that the tab is to be closed, usually because the user has clicked the close button.
+     * @param {Ext.tab.Tab} tab The Tab object
+     */
+
+    ariaRole: 'tab',
+
+<span id='Ext-tab-Tab-property-_btnWrapCls'>    _btnWrapCls: Ext.baseCSSPrefix + 'tab-wrap',
+</span><span id='Ext-tab-Tab-property-_btnCls'>    _btnCls: Ext.baseCSSPrefix + 'tab-button',
+</span><span id='Ext-tab-Tab-property-_baseIconCls'>    _baseIconCls: Ext.baseCSSPrefix + 'tab-icon-el',
+</span><span id='Ext-tab-Tab-property-_glyphCls'>    _glyphCls: Ext.baseCSSPrefix + 'tab-glyph',
+</span><span id='Ext-tab-Tab-property-_innerCls'>    _innerCls: Ext.baseCSSPrefix + 'tab-inner',
+</span><span id='Ext-tab-Tab-property-_textCls'>    _textCls: Ext.baseCSSPrefix + 'tab-text',
+</span><span id='Ext-tab-Tab-property-_noTextCls'>    _noTextCls: Ext.baseCSSPrefix + 'tab-no-text',
+</span><span id='Ext-tab-Tab-property-_hasIconCls'>    _hasIconCls: Ext.baseCSSPrefix + 'tab-icon',
+</span>
+<span id='Ext-tab-Tab-property-_activeCls'>    _activeCls: Ext.baseCSSPrefix + 'tab-active',
+</span><span id='Ext-tab-Tab-property-_closableCls'>    _closableCls: Ext.baseCSSPrefix + 'tab-closable',
+</span><span id='Ext-tab-Tab-cfg-overCls'>    overCls: Ext.baseCSSPrefix + 'tab-over',
+</span><span id='Ext-tab-Tab-property-_pressedCls'>    _pressedCls: Ext.baseCSSPrefix + 'tab-pressed',
+</span><span id='Ext-tab-Tab-property-_disabledCls'>    _disabledCls: Ext.baseCSSPrefix + 'tab-disabled',
+</span>
+<span id='Ext-tab-Tab-property-_rotateClasses'>    _rotateClasses: {
+</span>        1: Ext.baseCSSPrefix + 'tab-rotate-right',
+        2: Ext.baseCSSPrefix + 'tab-rotate-left'
+    },
+
+<span id='Ext-tab-Tab-property-_positions'>    // a mapping of the &quot;ui&quot; positions.  When &quot;rotation&quot; is anything other than 0, a ui
+</span>    // position other than the docked side must be used.
+    _positions: {
+        top: {
+            'default': 'top',
+            0: 'top',
+            1: 'left',
+            2: 'right'
+        },
+        right: {
+            'default': 'top',
+            0: 'right',
+            1: 'top',
+            2: 'bottom'
+        },
+        bottom: {
+            'default': 'bottom',
+            0: 'bottom',
+            1: 'right',
+            2: 'left'
+        },
+        left: {
+            'default': 'top',
+            0: 'left',
+            1: 'bottom',
+            2: 'top'
+        }
+    },
+
+<span id='Ext-tab-Tab-property-_defaultRotations'>    _defaultRotations: {
+</span>        top: 0,
+        right: 1,
+        bottom: 0,
+        left: 2
+    },
+
+<span id='Ext-tab-Tab-method-initComponent'>    initComponent: function() {
+</span>        var me = this;
+
+        if (me.card) {
+            me.setCard(me.card);
+        }
+
+        me.callParent(arguments);
+    },
+
+<span id='Ext-tab-Tab-method-getActualRotation'>    getActualRotation: function() {
+</span>        var rotation = this.getRotation();
+
+        return (rotation !== 'default') ? rotation :
+            this._defaultRotations[this.getTabPosition()];
+    },
+
+<span id='Ext-tab-Tab-method-updateRotation'>    updateRotation: function() {
+</span>        this.syncRotationAndPosition();
+    },
+
+<span id='Ext-tab-Tab-method-updateTabPosition'>    updateTabPosition: function() {
+</span>        this.syncRotationAndPosition();
+    },
+
+<span id='Ext-tab-Tab-method-syncRotationAndPosition'>    syncRotationAndPosition: function() {
+</span>        var me = this,
+            positions = me._positions,
+            rotateClasses = me._rotateClasses,
+            position = me.getTabPosition(),
+            rotation = me.getActualRotation(),
+            oldRotateCls = me._rotateCls,
+            rotateCls = me._rotateCls = rotateClasses[rotation],
+            oldPositionCls = me._positionCls,
+            positionCls = me._positionCls = me._positions[position][rotation];
+
+        if (oldRotateCls !== rotateCls) {
+            if (oldRotateCls) {
+                me.removeCls(oldRotateCls)
+            }
+            if (rotateCls) {
+                me.addCls(rotateCls);
+            }
+        }
+        if (oldPositionCls !== positionCls) {
+            if (oldPositionCls) {
+                me.removeClsWithUI(oldPositionCls);
+            }
+            if (positionCls) {
+                me.addClsWithUI(positionCls);
+            }
+            if (me.rendered) {
+                me.updateFrame();
+            }
+        }
+
+        if (me.rendered) {
+            me.setElOrientation();
+        }
+    },
+
+<span id='Ext-tab-Tab-method-onAdded'>    onAdded: function (container, pos, instanced) {
+</span>        this.callParent([container, pos, instanced]);
+        this.syncRotationAndPosition();
+    },
+
+<span id='Ext-tab-Tab-method-getTemplateArgs'>    getTemplateArgs: function() {
+</span>        var me = this,
+            result = me.callParent();
+
+        result.closable = me.closable;
+        result.closeText = me.closeText;
+
+        return result;
+    },
+
+<span id='Ext-tab-Tab-method-beforeRender'>    beforeRender: function() {
+</span>        var me = this,
+            tabBar = me.up('tabbar'),
+            tabPanel = me.up('tabpanel');
+
+        me.callParent();
+
+        if (me.active) {
+            me.addCls(me._activeCls);
+        }
+
+        me.syncClosableCls();
+
+        // Propagate minTabWidth and maxTabWidth settings from the owning TabBar then TabPanel
+        if (!me.minWidth) {
+            me.minWidth = (tabBar) ? tabBar.minTabWidth : me.minWidth;
+            if (!me.minWidth &amp;&amp; tabPanel) {
+                me.minWidth = tabPanel.minTabWidth;
+            }
+            if (me.minWidth &amp;&amp; me.iconCls) {
+                me.minWidth += 25;
+            }
+        }
+        if (!me.maxWidth) {
+            me.maxWidth = (tabBar) ? tabBar.maxTabWidth : me.maxWidth;
+            if (!me.maxWidth &amp;&amp; tabPanel) {
+                me.maxWidth = tabPanel.maxTabWidth;
+            }
+        }
+    },
+
+<span id='Ext-tab-Tab-method-onRender'>    onRender: function() {
+</span>        var me = this;
+
+        me.setElOrientation();
+
+        me.callParent(arguments);
+
+        if (me.closable) {
+            me.closeEl.addClsOnOver(me.closeElOverCls);
+            me.closeEl.addClsOnClick(me.closeElPressedCls);
+        }
+        
+        me.initKeyNav();
+    },
+    
+<span id='Ext-tab-Tab-method-initKeyNav'>    initKeyNav: function() {
+</span>        var me = this;
+
+        me.keyNav = new Ext.util.KeyNav(me.el, {
+            enter: me.onEnterKey,
+            del: me.onDeleteKey,
+            scope: me
+        });
+    },
+
+<span id='Ext-tab-Tab-method-setElOrientation'>    setElOrientation: function() {
+</span>        var me = this,
+            rotation = me.getActualRotation(),
+            el = me.el;
+
+        if (rotation) {
+            el.setVertical(rotation === 1 ? 90 : 270);
+        } else {
+            el.setHorizontal();
+        }
+    },
+
+<span id='Ext-tab-Tab-method-enable'>    // inherit docs
+</span>    enable: function(silent) {
+        var me = this;
+
+        me.callParent(arguments);
+
+        me.removeCls(me._disabledCls);
+
+        return me;
+    },
+
+<span id='Ext-tab-Tab-method-disable'>    // inherit docs
+</span>    disable: function(silent) {
+        var me = this;
+
+        me.callParent(arguments);
+
+        me.addCls(me._disabledCls);
+
+        return me;
+    },
+
+<span id='Ext-tab-Tab-method-onDestroy'>    onDestroy: function() {
+</span>        var me = this;
+
+        Ext.destroy(me.keyNav);
+        delete me.keyNav;
+
+        me.callParent(arguments);
+    },
+
+<span id='Ext-tab-Tab-method-setClosable'>    /**
+</span>     * Sets the tab as either closable or not.
+     * @param {Boolean} closable Pass false to make the tab not closable. Otherwise the tab will be made closable (eg a
+     * close button will appear on the tab)
+     */
+    setClosable: function(closable) {
+        var me = this;
+
+        // Closable must be true if no args
+        closable = (!arguments.length || !!closable);
+
+        if (me.closable != closable) {
+            me.closable = closable;
+
+            // set property on the user-facing item ('card'):
+            if (me.card) {
+                me.card.closable = closable;
+            }
+
+            me.syncClosableCls();
+
+            if (me.rendered) {
+                me.syncClosableElements();
+
+                // Tab will change width to accommodate close icon
+                me.updateLayout();
+            }
+        }
+    },
+
+<span id='Ext-tab-Tab-method-syncClosableElements'>    /**
+</span>     * This method ensures that the closeBtn element exists or not based on 'closable'.
+     * @private
+     */
+    syncClosableElements: function () {
+        var me = this,
+            closeEl = me.closeEl;
+
+        if (me.closable) {
+            if (!closeEl) {
+                closeEl = me.closeEl = me.btnWrap.insertSibling({
+                    tag: 'a',
+                    role: 'presentation',
+                    cls: me.baseCls + '-close-btn',
+                    href: '#',
+                    title: me.closeText
+                }, 'after');
+            }
+            closeEl.addClsOnOver(me.closeElOverCls);
+            closeEl.addClsOnClick(me.closeElPressedCls);
+        } else if (closeEl) {
+            closeEl.destroy();
+            delete me.closeEl;
+        }
+    },
+
+<span id='Ext-tab-Tab-method-syncClosableCls'>    /**
+</span>     * This method ensures that the closable cls are added or removed based on 'closable'.
+     * @private
+     */
+    syncClosableCls: function () {
+        var me = this,
+            closableCls = me._closableCls;
+
+        if (me.closable) {
+            me.addCls(closableCls);
+        } else {
+            me.removeCls(closableCls);
+        }
+    },
+
+<span id='Ext-tab-Tab-method-setCard'>    /**
+</span>     * Sets this tab's attached card. Usually this is handled automatically by the {@link Ext.tab.Panel} that this Tab
+     * belongs to and would not need to be done by the developer
+     * @param {Ext.Component} card The card to set
+     */
+    setCard: function(card) {
+        var me = this;
+
+        me.card = card;
+        if (card.iconAlign) {
+            me.setIconAlign(card.iconAlign);
+        }
+        if (card.textAlign) {
+            me.setTextAlign(card.textAlign);
+        }
+        me.setText(me.title || card.title);
+        me.setIconCls(me.iconCls || card.iconCls);
+        me.setIcon(me.icon || card.icon);
+        me.setGlyph(me.glyph || card.glyph);
+    },
+
+<span id='Ext-tab-Tab-method-onCloseClick'>    /**
+</span>     * @private
+     * Listener attached to click events on the Tab's close button
+     */
+    onCloseClick: function() {
+        var me = this;
+
+        if (me.fireEvent('beforeclose', me) !== false) {
+            if (me.tabBar) {
+                if (me.tabBar.closeTab(me) === false) {
+                    // beforeclose on the panel vetoed the event, stop here
+                    return;
+                }
+            } else {
+                // if there's no tabbar, fire the close event
+                me.fireClose();
+            }
+        }
+    },
+
+<span id='Ext-tab-Tab-method-fireClose'>    /**
+</span>     * Fires the close event on the tab.
+     * @private
+     */
+    fireClose: function(){
+        this.fireEvent('close', this);
+    },
+
+<span id='Ext-tab-Tab-method-onEnterKey'>    /**
+</span>     * @private
+     */
+    onEnterKey: function(e) {
+        var me = this;
+
+        if (me.tabBar) {
+            me.tabBar.onClick(e, me.el);
+        }
+    },
+
+<span id='Ext-tab-Tab-method-onDeleteKey'>    /**
+</span>     * @private
+     */
+    onDeleteKey: function(e) {
+        if (this.closable) {
+            this.onCloseClick();
+        }
+    },
+    
+<span id='Ext-tab-Tab-method-beforeClick'>    // @private
+</span>    beforeClick: function(isCloseClick) {
+        if (!isCloseClick) {
+            this.focus();
+        }
+    },
+
+<span id='Ext-tab-Tab-method-activate'>    // @private
+</span>    activate: function(supressEvent) {
+        var me = this;
+
+        me.active = true;
+        me.addCls(me._activeCls);
+
+        if (supressEvent !== true) {
+            me.fireEvent('activate', me);
+        }
+    },
+
+<span id='Ext-tab-Tab-method-deactivate'>    // @private
+</span>    deactivate: function(supressEvent) {
+        var me = this;
+
+        me.active = false;
+        me.removeCls(me._activeCls);
+
+        if (supressEvent !== true) {
+            me.fireEvent('deactivate', me);
+        }
+    },
+
+<span id='Ext-tab-Tab-property-privates'>    privates: {
+</span>        getFramingInfoCls: function(){
+            return this.baseCls + '-' + this.ui + '-' + this._positionCls;
+        },
+
+        wrapPrimaryEl: function(dom) {
+            // Tabs don't need the hacks in Ext.dom.ButtonElement
+            Ext.Button.superclass.wrapPrimaryEl.call(this, dom);
+        }
+    }
+});
+</pre>
+</body>
+</html>

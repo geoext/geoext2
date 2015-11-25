@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-form-field-Trigger'>/**
+</span> * @deprecated 5.0
+ * Provides a convenient wrapper for TextFields that adds a clickable trigger button.
+ * (looks like a combobox by default).
+ *
+ * As of Ext JS 5.0 this class has been deprecated.  It is recommended to use a
+ * {@link Ext.form.field.Text Text Field} with the {@link Ext.form.field.Text#triggers
+ * triggers} config instead.  This class is provided for compatibility reasons but is
+ * not used internally by the framework.
+ */
+Ext.define('Ext.form.field.Trigger', {
+    extend:'Ext.form.field.Text',
+    alias: ['widget.triggerfield', 'widget.trigger'],
+    requires: ['Ext.dom.Helper', 'Ext.util.ClickRepeater'],
+    alternateClassName: ['Ext.form.TriggerField', 'Ext.form.TwinTriggerField', 'Ext.form.Trigger'],
+
+<span id='Ext-form-field-Trigger-cfg-triggerCls'>    /**
+</span>     * @cfg {String} triggerCls
+     * An additional CSS class used to style the trigger button. The trigger will always get the {@link Ext.form.trigger.Trigger#baseCls}
+     * by default and triggerCls will be **appended** if specified.
+     */
+    triggerCls: Ext.baseCSSPrefix + 'form-arrow-trigger',
+
+    inheritableStatics: {
+<span id='Ext-form-field-Trigger-static-method-warnDeprecated'>        warnDeprecated: function() {
+</span>            //&lt;debug&gt;
+            // TODO: can we make this warning depend on compat level?
+            Ext.log.warn('Ext.form.field.Trigger is deprecated. Use Ext.form.field.Text instead.');
+            //&lt;/debug&gt;
+        }
+    },
+
+<span id='Ext-form-field-Trigger-method-onClassExtended'>    onClassExtended: function() {
+</span>        this.warnDeprecated();
+    },
+
+<span id='Ext-form-field-Trigger-method-constructor'>    constructor: function(config) {
+</span>        this.self.warnDeprecated();
+        this.callParent([config]);
+    }
+});
+</pre>
+</body>
+</html>

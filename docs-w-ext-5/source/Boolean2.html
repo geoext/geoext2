@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-grid-filters-filter-Boolean'>/**
+</span> * Boolean filters use unique radio group IDs (so you can have more than one!)
+ */
+Ext.define('Ext.grid.filters.filter.Boolean', {
+    extend: 'Ext.grid.filters.filter.SingleFilter',
+    alias: 'grid.filter.boolean',
+
+<span id='Ext-grid-filters-filter-Boolean-property-type'>    type: 'boolean',
+</span>
+<span id='Ext-grid-filters-filter-Boolean-property-operator'>    operator: '=',
+</span>
+<span id='Ext-grid-filters-filter-Boolean-cfg-defaultValue'>    /**
+</span>     * @cfg {Boolean} defaultValue
+     * Set this to null if you do not want either option to be checked by default. Defaults to false.
+     */
+    defaultValue: false,
+
+<span id='Ext-grid-filters-filter-Boolean-cfg-yesText'>    /**
+</span>     * @cfg {String} yesText
+     * Defaults to 'Yes'.
+     */
+    yesText: 'Yes',
+
+<span id='Ext-grid-filters-filter-Boolean-cfg-noText'>    /**
+</span>     * @cfg {String} noText
+     * Defaults to 'No'.
+     */
+    noText: 'No',
+
+<span id='Ext-grid-filters-filter-Boolean-cfg-updateBuffer'>    updateBuffer: 0,
+</span>
+<span id='Ext-grid-filters-filter-Boolean-method-createMenu'>    /**
+</span>     * @private
+     * Template method that is to initialize the filter and install required menu items.
+     */
+    createMenu: function (config) {
+        var me = this,
+            gId = Ext.id(),
+            listeners = {
+                scope: me,
+                click: me.onClick
+            },
+            itemDefaults = me.getItemDefaults();
+
+        me.callParent(arguments);
+
+        me.menu.add([Ext.apply({
+            text: me.yesText,
+            filterKey: 1,
+            group: gId,
+            checked: !!me.defaultValue,
+            listeners: listeners
+        }, itemDefaults), Ext.apply({
+            text: me.noText,
+            filterKey: 0,
+            group: gId,
+            checked: !me.defaultValue,
+            listeners: listeners
+        }, itemDefaults)]);
+    },
+
+<span id='Ext-grid-filters-filter-Boolean-method-onClick'>    /**
+</span>     * @private
+     */
+    onClick: function (field) {
+        this.setValue(!!field.filterKey);
+    },
+
+<span id='Ext-grid-filters-filter-Boolean-method-setValue'>    /**
+</span>     * @private
+     * Template method that is to set the value of the filter.
+     * @param {Object} value The value to set the filter.
+     */
+    setValue: function (value) {
+        var me = this;
+
+        me.filter.setValue(value);
+
+        if (value !== undefined &amp;&amp; me.active) {
+            me.value = value;
+            me.updateStoreFilter();
+        } else {
+            me.setActive(true);
+        }
+    },
+
+<span id='Ext-grid-filters-filter-Boolean-method-activateMenu'>    // This is supposed to be just a stub.
+</span>    activateMenu: Ext.emptyFn
+});
+</pre>
+</body>
+</html>

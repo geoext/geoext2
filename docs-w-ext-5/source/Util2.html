@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-app-bindinspector-Util'>/**
+</span> * @private
+ * @class Ext.app.bindinspector.Util
+ */
+Ext.define('Ext.app.bindinspector.Util', {
+    singleton: true,
+    
+<span id='Ext-app-bindinspector-Util-method-getChildStub'>    getChildStub: function (name, parent) {
+</span>        var val, children;
+        if (parent) {
+            children = parent.children;
+            if (children) {
+                val = children[name];
+            }
+        }
+        return val || null;
+    },
+
+<span id='Ext-app-bindinspector-Util-method-valueRenderer'>    valueRenderer: function(v) {
+</span>        var s;
+        
+        if (v === undefined) {
+            return 'undefined';
+        } else if (v === null) {
+            return 'null';
+        } else if (Ext.isString(v)) {
+            return v;
+        } else if (Ext.isDate(v)) {
+            return Ext.Date.format(v, 'c');
+        } else if (v &amp;&amp; v.isModel) {
+            s = v.entityName;
+            return Ext.String.format('Model({0}, {1})', s.replace('noconflict.', ''), v.getId());
+        } else if (v &amp;&amp; v.isStore) {
+            s = v.entityName || 'Anonymous';
+            return 'Store{' + s.replace('noconflict.', '') + '}';
+        }
+        return v;
+    },
+
+<span id='Ext-app-bindinspector-Util-method-buildBindData'>    buildBindData: function(bind) {
+</span>        var out = [],
+            key, o;
+        
+        for (key in bind) {
+            o = bind[key];
+            out.push({
+                key: key,
+                descriptor: o.descriptor,
+                tokens: o.tokens,
+                value: o.value,
+                binding: o
+            });
+        }
+        return out;
+    }
+});</pre>
+</body>
+</html>

@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -56,21 +56,19 @@ Ext.define('GeoExt.Lang', {
      */
     dict: null,
 
+<span id='GeoExt-Lang-event-localize'>    /**
+</span>     * Fires when localized strings are set.  Listeners will receive a
+     * single `locale` event with the language tag.
+     *
+     * @event localize
+     */
+
 <span id='GeoExt-Lang-method-constructor'>    /**
 </span>     * Construct the Lang singleton.
      *
      * @private
      */
     constructor: function() {
-        this.addEvents(
-<span id='GeoExt-Lang-event-localize'>            /**
-</span>             * Fires when localized strings are set.  Listeners will receive a
-             * single `locale` event with the language tag.
-             *
-             * @event
-             */
-            &quot;localize&quot;
-        );
         this.dict = {};
         this.callParent();
     },

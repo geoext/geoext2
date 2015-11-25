@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-selection-TreeModel'>/**
+</span> * This selection model is created by default for {@link Ext.tree.Panel}.
+ *
+ * It implements a row selection model.
+ */
+Ext.define('Ext.selection.TreeModel', {
+    extend: 'Ext.selection.RowModel',
+    alias: 'selection.treemodel',
+
+<span id='Ext-selection-TreeModel-cfg-pruneRemoved'>    /**
+</span>     * @cfg {Boolean} pruneRemoved @hide
+     */
+    
+<span id='Ext-selection-TreeModel-cfg-selectOnExpanderClick'>    /**
+</span>     * @cfg {Boolean} selectOnExpanderClick
+     * `true` to select the row when clicking on the icon to collapse or expand
+     * a tree node.
+     *
+     * @since 5.1.0
+     */
+    selectOnExpanderClick: false,
+
+<span id='Ext-selection-TreeModel-method-constructor'>    constructor: function(config) {
+</span>        var me = this;
+
+        me.callParent([config]);
+
+        // If pruneRemoved is required, we must listen to the the Store's bubbled noderemove event to know when nodes
+        // are added and removed from parentNodes.
+        // The Store's remove event will be fired during collapses.
+        if (me.pruneRemoved) {
+            me.pruneRemoved = false;
+            me.pruneRemovedNodes = true;
+        }
+    },
+
+<span id='Ext-selection-TreeModel-method-getStoreListeners'>    getStoreListeners: function() {
+</span>        var me = this,
+            result = me.callParent();
+
+        result.noderemove = me.onNodeRemove;
+        return result;
+    },
+
+<span id='Ext-selection-TreeModel-method-onNodeRemove'>    onNodeRemove: function(parent, node, isMove) {
+</span>        // deselection of deleted records done in base Model class
+        if (!isMove) {
+            var toDeselect = [];
+            this.gatherSelected(node, toDeselect);
+            if (toDeselect.length) {
+                this.deselect(toDeselect);
+            }
+        }
+    },
+
+<span id='Ext-selection-TreeModel-method-pruneRemovedOnRefresh'>    // onStoreRefresh asks if it should remove from the selection any selected records which are no
+</span>    // longer findable in the store after the refresh.
+    // TreeModel does not use the pruneRemoved flag because records are being added and removed
+    // from TreeStores on exand and collapse. It uses the pruneRemovedNodes flag.
+    pruneRemovedOnRefresh: function() {
+        return this.pruneRemovedNodes;
+    },
+
+<span id='Ext-selection-TreeModel-method-vetoSelection'>    vetoSelection: function(e) {
+</span>        var view = this.view,
+            select = this.selectOnExpanderClick,
+            veto = !select &amp;&amp; e.type === 'click' &amp;&amp; e.getTarget(view.expanderSelector || (view.lockingPartner &amp;&amp; view.lockingPartner.expanderSelector));
+
+        return veto || this.callParent([e]);
+    },
+
+<span id='Ext-selection-TreeModel-property-privates'>    privates: {
+</span>        gatherSelected: function(node, toDeselect) {
+            var childNodes = node.childNodes,
+                i, len, child;
+
+            if (this.selected.containsKey(node.id)) {
+                toDeselect.push(node);
+            }
+
+            if (childNodes) {
+                for (i = 0, len = childNodes.length; i &lt; len; ++i) {
+                    child = childNodes[i];
+                    this.gatherSelected(child, toDeselect);
+                }
+            }
+        }
+    }
+});
+</pre>
+</body>
+</html>

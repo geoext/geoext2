@@ -271,14 +271,17 @@
     // Include the examples tab
     "--examples": "examples.json",
 
-    "--title": "GeoExt 2.0.3 Documentation",
+    "--title": "GeoExt 2.1.0 Documentation",
     "-o": "docs",
-    // "--title": "GeoExt 2.0.1 Documentation (incl. ExtJS classes)",
+    // "--title": "GeoExt 2.1.0 Documentation (incl. ExtJS 4 classes)",
     // "-o": "docs-w-ext",
+    // "--title": "GeoExt 2.1.0 Documentation (incl. ExtJS 5 classes)",
+    // "-o": "docs-w-ext-5",
     "--": [
         "src"
         // Uncomment the following line and modify the path to match yours
         // if you wish to build with the ExtJS doc.
         // ,"path/to/ext-4.2.1.883/src/"
+        // ,"path/to/ext-5.1.0/src/"
     ]
 }

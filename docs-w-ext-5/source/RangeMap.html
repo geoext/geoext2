@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-sparkline-RangeMap'>/**
+</span> * Base class for Range Map
+ */
+Ext.define('Ext.sparkline.RangeMap', {
+<span id='Ext-sparkline-RangeMap-method-constructor'>    constructor: function (map) {
+</span>        var key,
+            range,
+            rangelist = [];
+
+        for (key in map) {
+            if (map.hasOwnProperty(key) &amp;&amp; typeof key === 'string' &amp;&amp; key.indexOf(':') &gt; -1) {
+                range = key.split(':');
+                range[0] = range[0].length === 0 ? -Infinity : parseFloat(range[0]);
+                range[1] = range[1].length === 0 ? Infinity : parseFloat(range[1]);
+                range[2] = map[key];
+                rangelist.push(range);
+            }
+        }
+        this.map = map;
+        this.rangelist = rangelist || false;
+    },
+
+<span id='Ext-sparkline-RangeMap-method-get'>    get: function (value) {
+</span>        var rangelist = this.rangelist,
+            i, range, result;
+
+        if ((result = this.map[value]) !== undefined) {
+            return result;
+        }
+        if (rangelist) {
+            for (i = rangelist.length; i--;) {
+                range = rangelist[i];
+                if (range[0] &lt;= value &amp;&amp; range[1] &gt;= value) {
+                    return range[2];
+                }
+            }
+        }
+    }
+});</pre>
+</body>
+</html>

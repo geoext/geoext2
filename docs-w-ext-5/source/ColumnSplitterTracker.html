@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-layout-container-ColumnSplitterTracker'>/**
+</span> */
+Ext.define('Ext.layout.container.ColumnSplitterTracker', {
+    extend: 'Ext.resizer.SplitterTracker',
+
+<span id='Ext-layout-container-ColumnSplitterTracker-method-onStart'>    // We move the splitter el. Add the proxy class.
+</span>    onStart: function(e) {
+        Ext.apply(this.getSplitter().el.dom.style, { top : 0, left : 0} );
+        this.callParent(arguments);
+    },
+
+<span id='Ext-layout-container-ColumnSplitterTracker-method-endDrag'>    endDrag: function () {
+</span>        var me = this;
+        me.callParent(arguments); // this calls onEnd
+        me.getSplitter().el.dom.style.left = 0;
+    },
+
+<span id='Ext-layout-container-ColumnSplitterTracker-method-performResize'>    performResize: function(e, offset) {
+</span>        var me        = this,
+            prevCmp   = me.getPrevCmp(),
+            nextCmp   = me.getNextCmp(),
+            splitter  = me.getSplitter(),
+            owner     = splitter.ownerCt,
+            delta     = offset[0],
+            prevWidth, nextWidth, ratio;
+
+        if (prevCmp &amp;&amp; nextCmp) {
+            prevCmp.width = prevWidth = me.prevBox.width + delta;
+            nextCmp.width = nextWidth = me.nextBox.width - delta;
+
+            ratio = (prevCmp.columnWidth + nextCmp.columnWidth) / (prevWidth + nextWidth);
+
+            prevCmp.columnWidth = prevWidth * ratio;
+            nextCmp.columnWidth = nextWidth * ratio;
+        }
+
+        owner.updateLayout();
+    }
+});
+</pre>
+</body>
+</html>

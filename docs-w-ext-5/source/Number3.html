@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-grid-filters-filter-Number'>/**
+</span> * Filter type for {@link Ext.grid.column.Number number columns}.
+ */
+Ext.define('Ext.grid.filters.filter.Number', {
+    extend: 'Ext.grid.filters.filter.TriFilter',
+    alias: ['grid.filter.number', 'grid.filter.numeric'],
+
+    uses: ['Ext.form.field.Number'],
+
+<span id='Ext-grid-filters-filter-Number-property-type'>    type: 'number',
+</span>
+    config: {
+<span id='Ext-grid-filters-filter-Number-cfg-fields'>        /**
+</span>         * @cfg {Object} [fields]
+         * Configures field items individually. These properties override those defined
+         * by `{@link #itemDefaults}`.
+         *
+         * Example usage:
+         *
+         *      fields: {
+         *          // Override itemDefaults for one field:
+         *          gt: {
+         *              width: 200
+         *          }
+         *
+         *          // &quot;lt&quot; and &quot;eq&quot; fields retain all itemDefaults
+         *      },
+         */
+        fields: {
+            gt: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-gt',
+                margin: '0 0 3px 0'
+            },
+            lt: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-lt',
+                margin: '0 0 3px 0'
+            },
+            eq: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-eq',
+                margin: 0
+            }
+        }
+    },
+
+<span id='Ext-grid-filters-filter-Number-cfg-emptyText'>    /**
+</span>     * @cfg {String} emptyText
+     * The empty text to show for each field.
+     */
+    emptyText: 'Enter Number...',
+
+<span id='Ext-grid-filters-filter-Number-cfg-itemDefaults'>    itemDefaults: {
+</span>        xtype: 'numberfield',
+        enableKeyEvents: true,
+        hideEmptyLabel: false,
+        labelSeparator: '',
+        labelWidth: 29,
+        selectOnFocus: false
+    },
+
+<span id='Ext-grid-filters-filter-Number-cfg-menuDefaults'>    menuDefaults: {
+</span>        // A menu with only form fields needs some body padding. Normally this padding
+        // is managed by the items, but we have no normal menu items.
+        bodyPadding: 3,
+        showSeparator: false
+    },
+
+<span id='Ext-grid-filters-filter-Number-method-createMenu'>    createMenu: function () {
+</span>        var me = this,
+            listeners = {
+                scope: me,
+                keyup: me.onValueChange,
+                spin: {
+                    fn: me.onInputSpin,
+                    buffer: 200
+                },
+                el: {
+                    click: me.stopFn
+                }
+            },
+            itemDefaults = me.getItemDefaults(),
+            menuItems = me.menuItems,
+            fields = me.getFields(),
+            field, i, len, key, item, cfg;
+
+        me.callParent();
+
+        me.fields = {};
+
+        for (i = 0, len = menuItems.length; i &lt; len; i++) {
+            key = menuItems[i];
+            if (key !== '-') {
+                field = fields[key];
+
+                cfg = {
+                    labelClsExtra: Ext.baseCSSPrefix + 'grid-filters-icon ' + field.iconCls
+                };
+
+                if (itemDefaults) {
+                    Ext.merge(cfg, itemDefaults);
+                }
+
+                Ext.merge(cfg, field);
+                cfg.emptyText = cfg.emptyText || me.emptyText;
+                delete cfg.iconCls;
+
+                me.fields[key] = item = me.menu.add(cfg);
+
+                item.filter = me.filter[key];
+                item.filterKey = key;
+                item.on(listeners);
+            } else {
+                me.menu.add(key);
+            }
+        }
+    },
+
+<span id='Ext-grid-filters-filter-Number-method-getValue'>    getValue: function (field) {
+</span>        var value = {};
+        value[field.filterKey] = field.getValue();
+        return value;
+    },
+
+<span id='Ext-grid-filters-filter-Number-method-onInputSpin'>    /**
+</span>     * @private
+     * Handler method called when there is a spin event on a NumberField
+     * item of this menu.
+     */
+    onInputSpin: function (field, direction) {
+        var value = {};
+
+        value[field.filterKey] = field.getValue();
+
+        this.setValue(value);
+    },
+
+<span id='Ext-grid-filters-filter-Number-method-stopFn'>    stopFn: function(e) {
+</span>        e.stopPropagation();
+    }
+});
+</pre>
+</body>
+</html>

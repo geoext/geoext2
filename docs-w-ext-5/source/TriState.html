@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-sparkline-TriState'>/**
+</span> * @class Ext.sparkline.TriState
+ *
+ * Plots bars based upon &quot;win&quot;/&quot;draw&quot; or &quot;lose&quot; status of the input {@link #values} array. Positive values mean
+ * a win, zero a draw, and negative a lose. 
+ *
+ * See {@link Ext.sparkline.Base the base class} for a simple example.
+ */
+Ext.define('Ext.sparkline.TriState', {
+    extend: 'Ext.sparkline.BarBase',
+    requires: [
+        'Ext.sparkline.RangeMap'
+    ],
+
+    alias: 'widget.sparklinetristate',
+
+    config: {
+
+<span id='Ext-sparkline-TriState-cfg-barWidth'>        /**
+</span>         * @cfg {Number} [barWidth=4] The pixel width of each bar.
+         */
+        barWidth: 4,
+        
+<span id='Ext-sparkline-TriState-cfg-barSpacing'>        /**
+</span>         * @cfg {Number} [barSpacing=1] The pixel spacing between each bar.
+         */
+        barSpacing: 1,
+        
+<span id='Ext-sparkline-TriState-cfg-posBarColor'>        /**
+</span>         * @cfg {String} [posBarColor=#6f6] The color for positive value bars.
+         */
+        posBarColor: '#6f6',
+        
+<span id='Ext-sparkline-TriState-cfg-negBarColor'>        /**
+</span>         * @cfg {String} [negBarColor=#f44] The color for negative value bars.
+         */
+        negBarColor: '#f44',
+        
+<span id='Ext-sparkline-TriState-cfg-zeroBarColor'>        /**
+</span>         * @cfg {String} [zeroBarColor=#999] The color for zero value bars.
+         */
+        zeroBarColor: '#999',
+        
+<span id='Ext-sparkline-TriState-cfg-colorMap'>        /**
+</span>         * @cfg {Object} [colorMap] An object which uses range specifiers as keys to indicate bar color values
+         * for range of values. A range specifier is of the form `[number]:[number]` indicating start and end range.
+         * Omitting aither means an open ended range. For example to render green bars on all values less than -1
+         * and red on values higher than 1 use:
+         *
+         *    {
+         *        // Open ended range, with max value -1
+         *        &quot;:-1&quot;: &quot;green&quot;,
+         *
+         *        // Open ended range, with min value 1
+         *        &quot;1:&quot;: &quot;red&quot;
+         *    }
+         */
+        colorMap: {},
+        
+<span id='Ext-sparkline-TriState-cfg-tipTpl'>        tipTpl: new Ext.XTemplate('&amp;#9679; {value:this.states}', {
+</span>            states: function(v) {
+                var value = Number(v);
+                if (value === -1) {
+                    return 'Loss';
+                }
+                if (value === 0) {
+                    return 'Draw';
+                }
+                if (value === 1) {
+                    return 'Win';
+                }
+                return v;
+            }
+        })
+    },
+
+<span id='Ext-sparkline-TriState-method-applyColorMap'>    applyColorMap: function(colorMap) {
+</span>        var me = this;
+
+        if (Ext.isArray(colorMap)) {
+            me.colorMapByIndex = colorMap;
+            me.colorMapByValue = null;
+        } else {
+            me.colorMapByIndex = null;
+            me.colorMapByValue = colorMap;
+            if (me.colorMapByValue &amp;&amp; me.colorMapByValue.get == null) {
+                me.colorMapByValue = new Ext.sparkline.RangeMap(colorMap);
+            }
+        }
+        return colorMap;
+    },
+
+<span id='Ext-sparkline-TriState-method-applyValues'>    // Ensure values is an array of numbers
+</span>    applyValues: function(newValues) {
+        newValues = Ext.Array.map(Ext.Array.from(newValues), Number);
+        this.disabled = !(newValues &amp;&amp; newValues.length);
+        return newValues;
+    },
+
+<span id='Ext-sparkline-TriState-method-onUpdate'>    onUpdate: function() {
+</span>        this.totalBarWidth = this.getBarWidth() + this.getBarSpacing();
+    },
+
+<span id='Ext-sparkline-TriState-method-getBarWidth'>    getBarWidth: function() {
+</span>        var values = this.values;
+
+        return this._barWidth || (this.getWidth() - (values.length - 1) * this.getBarSpacing()) / values.length;
+    },
+
+<span id='Ext-sparkline-TriState-method-getRegion'>    getRegion: function (x, y) {
+</span>        return Math.floor(x / this.totalBarWidth);
+    },
+
+<span id='Ext-sparkline-TriState-method-getRegionFields'>    getRegionFields: function (region) {
+</span>        return {
+            isNull: this.values[region] == null,
+            value: this.values[region],
+            color: this.calcColor(this.values[region], region),
+            offset: region
+        };
+    },
+
+<span id='Ext-sparkline-TriState-method-calcColor'>    calcColor: function (value, valuenum) {
+</span>        var me = this,
+            values = me.values,
+            colorMapByIndex = me.colorMapByIndex,
+            colorMapByValue = me.colorMapByValue,
+            color, newColor;
+
+        if (colorMapByValue &amp;&amp; (newColor = colorMapByValue.get(value))) {
+            color = newColor;
+        } else if (colorMapByIndex &amp;&amp; colorMapByIndex.length &gt; valuenum) {
+            color = colorMapByIndex[valuenum];
+        } else if (values[valuenum] &lt; 0) {
+            color = me.getNegBarColor();
+        } else if (values[valuenum] &gt; 0) {
+            color = me.getPosBarColor();
+        } else {
+            color = me.getZeroBarColor();
+        }
+        return color;
+    },
+
+<span id='Ext-sparkline-TriState-method-renderRegion'>    renderRegion: function (valuenum, highlight) {
+</span>        var me = this,
+            values = me.values,
+            canvas = me.canvas,
+            canvasHeight, height, halfHeight, x, y, color;
+
+        canvasHeight = canvas.pixelHeight;
+        halfHeight = Math.round(canvasHeight / 2);
+
+        x = valuenum * me.totalBarWidth;
+        if (values[valuenum] &lt; 0) {
+            y = halfHeight;
+            height = halfHeight - 1;
+        } else if (values[valuenum] &gt; 0) {
+            y = 0;
+            height = halfHeight - 1;
+        } else {
+            y = halfHeight - 1;
+            height = 2;
+        }
+        color = me.calcColor(values[valuenum], valuenum);
+        if (color == null) {
+            return;
+        }
+        if (highlight) {
+            color = me.calcHighlightColor(color);
+        }
+        canvas.drawRect(x, y, me.getBarWidth() - 1, height - 1, color, color).append();
+    }
+});</pre>
+</body>
+</html>

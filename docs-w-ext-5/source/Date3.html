@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-grid-filters-filter-Date'>/**
+</span> * Filter by a configurable Ext.picker.DatePicker menu
+ *
+ * Example Usage:
+ *
+ *     var grid = Ext.create('Ext.grid.Panel', {
+ *         ...
+ *         columns: [{
+ *             // required configs
+ *             text: 'Date Added',
+ *             dataIndex: 'dateAdded',
+ *
+ *             filter: {
+ *                 type: 'date',
+ *
+ *                 // optional configs
+ *                 dateFormat: 'm/d/Y',  // default
+ *                 pickerDefaults: {
+ *                     // any DatePicker configs
+ *                 },
+ *
+ *                 active: true // default is false
+ *             }
+ *         }],
+ *         ...
+ *     });
+ */
+Ext.define('Ext.grid.filters.filter.Date', {
+    extend: 'Ext.grid.filters.filter.TriFilter',
+    alias: 'grid.filter.date',
+    uses: ['Ext.picker.Date', 'Ext.menu.Menu'],
+
+<span id='Ext-grid-filters-filter-Date-property-type'>    type: 'date',
+</span>
+    config: {
+<span id='Ext-grid-filters-filter-Date-cfg-fields'>        /**
+</span>         * @cfg {Object} [fields]
+         * Configures field items individually. These properties override those defined
+         * by `{@link #itemDefaults}`.
+         *
+         * Example usage:
+         *      fields: {
+         *          gt: { // override fieldCfg options
+         *              width: 200
+         *          }
+         *      },
+         */
+        fields: {
+            lt: {text: 'Before'},
+            gt: {text: 'After'},
+            eq: {text: 'On'}
+        },
+
+<span id='Ext-grid-filters-filter-Date-cfg-pickerDefaults'>        /**
+</span>         * @cfg {Object} pickerDefaults
+         * Configuration options for the date picker associated with each field.
+         */
+        pickerDefaults: {
+            xtype: 'datepicker',
+            border: 0
+        },
+
+<span id='Ext-grid-filters-filter-Date-cfg-updateBuffer'>        updateBuffer: 0,
+</span>
+<span id='Ext-grid-filters-filter-Date-cfg-dateFormat'>        /**
+</span>        * @cfg {String} dateFormat
+        * The date format to return when using getValue.
+        * Defaults to {@link Ext.Date.defaultFormat}.
+        */
+        dateFormat: undefined
+    },
+
+<span id='Ext-grid-filters-filter-Date-cfg-itemDefaults'>    itemDefaults: {
+</span>        xtype: 'menucheckitem',
+        selectOnFocus: true,
+        width: 125,
+        menu: {
+            layout: 'auto',
+            plain: true
+        }
+    },
+
+<span id='Ext-grid-filters-filter-Date-cfg-maxDate'>    /**
+</span>     * @cfg {Date} maxDate
+     * Allowable date as passed to the Ext.DatePicker
+     * Defaults to undefined.
+     */
+
+<span id='Ext-grid-filters-filter-Date-cfg-minDate'>    /**
+</span>     * @cfg {Date} minDate
+     * Allowable date as passed to the Ext.DatePicker
+     * Defaults to undefined.
+     */
+
+    applyDateFormat: function(dateFormat) {
+        return dateFormat || Ext.Date.defaultFormat;
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-createMenu'>    /**
+</span>     * @private
+     * Template method that is to initialize the filter and install required menu items.
+     */
+    createMenu: function (config) {
+        var me = this,
+            listeners = {
+                scope: me,
+                checkchange: me.onCheckChange
+            },
+            menuItems = me.menuItems,
+            fields, itemDefaults, pickerCfg, i, len,
+            key, item, cfg, field;
+
+        me.callParent(arguments);
+
+        itemDefaults = me.getItemDefaults();
+        fields = me.getFields();
+
+        pickerCfg = Ext.apply({
+            minDate: me.minDate,
+            maxDate: me.maxDate,
+            format:  me.dateFormat,
+            listeners: {
+                scope: me,
+                select: me.onMenuSelect
+            }
+        }, me.getPickerDefaults());
+
+        me.fields = {};
+
+        for (i = 0, len = menuItems.length; i &lt; len; i++) {
+            key = menuItems[i];
+            if (key !== '-') {
+                cfg = {
+                    menu: {
+                        items: [
+                            Ext.apply({
+                                itemId: key
+                            }, pickerCfg)
+                        ]
+                    }
+                };
+
+                if (itemDefaults) {
+                    Ext.merge(cfg, itemDefaults);
+                }
+
+                if (fields) {
+                    Ext.merge(cfg, fields[key]);
+                }
+
+                item = me.menu.add(cfg);
+                // Date filter types need the field to be the datepicker in TriFilter.setValue().
+                field = me.fields[key] = item.down('datepicker');
+                field.filter = me.filter[key];
+                field.filterKey = key;
+
+                item.on(listeners);
+            } else {
+                me.menu.add(key);
+            }
+        }
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-getPicker'>    /**
+</span>     * Gets the menu picker associated with the passed field
+     * @param {String} item The field identifier ('lt', 'gt', 'eq')
+     * @return {Object} The menu picker
+     */
+    getPicker: function (item){
+        return this.fields[item];
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-onCheckChange'>    /**
+</span>     * @private
+     * Remove the filter from the store but don't update its value or the field UI.
+    */
+    onCheckChange: function (field, checked) {
+        // Only do something if unchecked.  If checked, it doesn't mean anything at this point since the column's store filter won't have
+        // any value (i.e., if a user checked this from an unchecked state, the corresponding field won't have a value for its filter).
+        var filter = field.down('datepicker').filter,
+            v;
+
+        // Only proceed if unchecked AND there's a filter value (i.e., there's something to do!).
+        if (!checked &amp;&amp; filter.getValue()) {
+            // Normally we just want to remove the filter from the store, not also to null out the filter value. But, we want to call setValue()
+            // which will take care of unchecking the top-level menu item if it's been determined that Date* doesn't have any filters.
+            v = {};
+            v[filter.getOperator()] = null;
+            this.setValue(v);
+        }
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-onFilterRemove'>    onFilterRemove: function (operator) {
+</span>        var v = {};
+
+        v[operator] = null;
+        this.setValue(v);
+        this.fields[operator].up('menuitem').setChecked(false, /*suppressEvents*/ true);
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-onStateRestore'>    onStateRestore: function(filter) {
+</span>        filter.setSerializer(this.getSerializer());
+        filter.setConvert(this.convertDateOnly);
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-getFilterConfig'>    getFilterConfig: function(config, key) {
+</span>        config = this.callParent([config, key]);
+        config.serializer = this.getSerializer();
+        config.convert = this.convertDateOnly;
+        return config;
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-convertDateOnly'>    convertDateOnly: function(v) {
+</span>        var result = null;
+        if (v) {
+            result = Ext.Date.clearTime(v, true).getTime();
+        }
+        return result;
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-getSerializer'>    getSerializer: function() {
+</span>        var me = this;
+        return function(data) {
+            var value = data.value;
+            if (value) {
+                data.value = Ext.Date.format(value, me.getDateFormat());
+            }
+        };
+    },
+
+<span id='Ext-grid-filters-filter-Date-method-onMenuSelect'>    /**
+</span>     * Handler for when the DatePicker for a field fires the 'select' event
+     * @param {Ext.picker.Date} picker
+     * @param {Object} date
+     */
+    onMenuSelect: function (picker, date) {
+        var fields = this.fields,
+            field = fields[picker.itemId],
+            gt = fields.gt,
+            lt = fields.lt,
+            eq = fields.eq,
+            v = {};
+
+        field.up('menuitem').setChecked(true, /*suppressEvents*/ true);
+
+        if (field === eq) {
+            lt.up('menuitem').setChecked(false, true);
+            gt.up('menuitem').setChecked(false, true);
+        } else {
+            eq.up('menuitem').setChecked(false, true);
+            if (field === gt &amp;&amp; (+lt.value &lt; +date)) {
+                lt.up('menuitem').setChecked(false, true);
+            } else if (field === lt &amp;&amp; (+gt.value &gt; +date)) {
+                gt.up('menuitem').setChecked(false, true);
+            }
+        }
+
+        v[field.filterKey] = date;
+        this.setValue(v);
+
+        picker.up('menu').hide();
+      }
+});
+</pre>
+</body>
+</html>

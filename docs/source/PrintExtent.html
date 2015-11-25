@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -59,9 +59,6 @@
  * @class GeoExt.plugins.PrintExtent
  */
 Ext.define('GeoExt.plugins.PrintExtent', {
-    mixins: {
-        observable: 'Ext.util.Observable'
-    },
     requires: ['GeoExt.data.PrintPage'],
     alias : 'widget.gx_printextent',
     alternateClassName : 'GeoExt.PrintExtent',
@@ -155,6 +152,13 @@ Ext.define('GeoExt.plugins.PrintExtent', {
     constructor: function(config) {
         config = config || {};
 
+        if(GeoExt.isExt4){
+            this.self.mixin('observable', Ext.util.Observable);
+        } else {
+            this.self.mixin('observable', Ext.mixin.Observable);
+            this.mixins.observable.constructor.call(this, config);
+        }
+
         Ext.apply(this, config);
         this.initialConfig = config;
 
@@ -199,7 +203,7 @@ Ext.define('GeoExt.plugins.PrintExtent', {
      */
     init: function(mapPanel) {
         this.map = mapPanel.map;
-        mapPanel.on(&quot;destroy&quot;, this.onMapPanelDestroy, this);
+        mapPanel.on(&quot;beforedestroy&quot;, this.beforeMapPanelDestroy, this);
 
         if (!this.layer) {
             this.layer = new OpenLayers.Layer.Vector(null, {
@@ -311,13 +315,12 @@ Ext.define('GeoExt.plugins.PrintExtent', {
         }
     },
 
-<span id='GeoExt-plugins-PrintExtent-method-onMapPanelDestroy'>    /**
+<span id='GeoExt-plugins-PrintExtent-method-beforeMapPanelDestroy'>    /**
 </span>     * When the mappanel is destroyed, we need to remove our pages etc.
      *
      * @private
      */
-    onMapPanelDestroy: function() {
-
+    beforeMapPanelDestroy: function() {
         var map = this.map;
 
         for(var len = this.pages.length - 1, i = len; i&gt;=0; i--) {

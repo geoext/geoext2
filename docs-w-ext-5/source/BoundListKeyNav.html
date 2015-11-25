@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-view-BoundListKeyNav'>/**
+</span> * A specialized {@link Ext.util.KeyNav} implementation for navigating a {@link Ext.view.BoundList} using
+ * the keyboard. The up, down, pageup, pagedown, home, and end keys move the active highlight
+ * through the list. The enter key invokes the selection model's select action using the highlighted item.
+ */
+Ext.define('Ext.view.BoundListKeyNav', {
+    extend: 'Ext.view.NavigationModel',
+
+    alias: 'view.navigation.boundlist',
+
+<span id='Ext-view-BoundListKeyNav-cfg-boundList'>    /**
+</span>     * @cfg {Ext.view.BoundList} boundList (required)
+     * The {@link Ext.view.BoundList} instance for which key navigation will be managed.
+     */
+    
+    navigateOnSpace: true,
+
+<span id='Ext-view-BoundListKeyNav-method-initKeyNav'>    initKeyNav: function(view) {
+</span>        var me = this,
+            field = view.pickerField;
+
+        // Add the regular KeyNav to the view.
+        // Unless it's already been done (we may have to defer a call until the field is rendered.
+        if (!me.keyNav) {
+            me.callParent([view]);
+        }
+
+        // BoundLists must be able to function standalone with no bound field
+        if (!field) {
+            return;
+        }
+
+        if (!field.rendered) {
+            field.on('render', Ext.Function.bind(me.initKeyNav, me, [view], 0), me, {single: true});
+            return;
+        }
+
+        // BoundListKeyNav also listens for key events from the field to which it is bound.
+        me.fieldKeyNav = new Ext.util.KeyNav({
+            disabled: true,
+            target: field.inputEl,
+            forceKeyDown: true,
+            up: me.onKeyUp,
+            down: me.onKeyDown,
+            right: me.onKeyRight,
+            left: me.onKeyLeft,
+            pageDown: me.onKeyPageDown,
+            pageUp: me.onKeyPageUp,
+            home: me.onKeyHome,
+            end: me.onKeyEnd,
+            tab: me.onKeyTab,
+            space: me.onKeySpace,
+            enter: me.onKeyEnter,
+            A: {
+                ctrl: true,
+                // Need a separate function because we don't want the key
+                // events passed on to selectAll (causes event suppression).
+                handler: me.onSelectAllKeyPress
+            },
+            scope: me
+        });
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-enable'>    enable: function() {
+</span>        this.fieldKeyNav.enable();
+        this.callParent();
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-disable'>    disable: function() {
+</span>        this.fieldKeyNav.disable();
+        this.callParent();
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-onItemMouseDown'>    onItemMouseDown: function(view, record, item, index, event) {
+</span>        this.callParent([view, record, item, index, event]);
+        
+        // Stop the mousedown from blurring the input field
+        event.preventDefault();
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-onKeyUp'>    onKeyUp: function() {
+</span>        var me = this,
+            boundList = me.view,
+            allItems = boundList.all,
+            oldItem = boundList.highlightedItem,
+            oldItemIdx = oldItem ? boundList.indexOf(oldItem) : -1,
+            newItemIdx = oldItemIdx &gt; 0 ? oldItemIdx - 1 : allItems.getCount() - 1; //wraps around
+
+        me.setPosition(newItemIdx);
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-onKeyDown'>    onKeyDown: function() {
+</span>        var me = this,
+            boundList = me.view,
+            allItems = boundList.all,
+            oldItem = boundList.highlightedItem,
+            oldItemIdx = oldItem ? boundList.indexOf(oldItem) : -1,
+            newItemIdx = oldItemIdx &lt; allItems.getCount() - 1 ? oldItemIdx + 1 : 0; //wraps around
+
+        me.setPosition(newItemIdx);
+    },
+
+<span id='Ext-view-BoundListKeyNav-property-onKeyLeft'>    onKeyLeft: Ext.returnTrue,
+</span>
+<span id='Ext-view-BoundListKeyNav-property-onKeyRight'>    onKeyRight: Ext.returnTrue,
+</span>
+<span id='Ext-view-BoundListKeyNav-method-onKeyTab'>    onKeyTab: function(e) {
+</span>        var view = this.view,
+            field = view.pickerField;
+
+        if (view.isVisible()) {
+            if (field.selectOnTab) {
+                this.selectHighlighted(e);
+            }
+            
+            if (field.collapse) {
+                field.collapse();
+            }
+        }
+
+        // Tab key event is allowed to propagate to field
+        return true;
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-onKeyEnter'>    onKeyEnter: function(e) {
+</span>        var view = this.view,
+            selModel = view.getSelectionModel(),
+            field = view.pickerField,
+            count = selModel.getCount();
+
+        // Stop the keydown event so that an ENTER keyup does not get delivered to
+        // any element which focus is transferred to in a select handler.
+        e.stopEvent();
+        this.selectHighlighted(e);
+
+        // Handle the case where the highlighted item is already selected
+        // In this case, the change event won't fire, so just collapse
+        if (!field.multiSelect &amp;&amp; count === selModel.getCount() &amp;&amp; field.collapse) {
+            field.collapse();
+        }
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-onKeySpace'>    onKeySpace: function() {
+</span>        if (this.navigateOnSpace) {
+            this.callParent(arguments);
+        }
+        // Allow to propagate to field
+        return true;
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-focusItem'>    /**
+</span>     * Highlights the item at the given index.
+     * @param {Number} index
+     */
+    focusItem: function(item) {
+        var me = this,
+            boundList = me.view;
+
+        if (typeof item === 'number') {
+            item = boundList.all.item(item);
+        }
+        if (item) {
+            item = item.dom;
+            boundList.highlightItem(item);
+            boundList.getOverflowEl().scrollChildIntoView(item, false);
+        }
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-selectHighlighted'>    /**
+</span>     * Triggers selection of the currently highlighted item according to the behavior of
+     * the configured SelectionModel.
+     */
+    selectHighlighted: function(e) {
+        var me = this,
+            boundList = me.view,
+            selModel = boundList.getSelectionModel(),
+            highlightedRec,
+            highlightedPosition = me.recordIndex;
+
+        // If all options have been filtered out, then do NOT add most recently highlighted.
+        if (boundList.all.getCount()) {
+            highlightedRec = me.getRecord();
+            if (highlightedRec) {
+
+                // Select if not already selected.
+                // If already selected, selecting with no CTRL flag will deselect the record.
+                if (e.getKey() === e.ENTER || !selModel.isSelected(highlightedRec)) {
+                    selModel.selectWithEvent(highlightedRec, e);
+
+                    // If the result of that selection is that the record is removed or filtered out,
+                    // jump to the next one.
+                    if (!boundList.store.data.contains(highlightedRec)) {
+                        me.setPosition(Math.min(highlightedPosition, boundList.store.getCount() - 1));
+                    }
+                }
+            }
+        }
+    },
+
+<span id='Ext-view-BoundListKeyNav-method-destroy'>    destroy: function() {
+</span>        Ext.destroy(this.fieldKeyNav);
+        this.callParent();
+    }
+});</pre>
+</body>
+</html>

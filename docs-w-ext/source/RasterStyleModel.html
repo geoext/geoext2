@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -42,29 +42,52 @@ Ext.define('GeoExt.data.RasterStyleModel',{
          'GeoExt.Version'
     ],
 <span id='GeoExt-data-RasterStyleModel-cfg-idProperty'>    idProperty: &quot;filter&quot;,
-</span><span id='GeoExt-data-RasterStyleModel-property-fields'>    fields: [
-</span>        {name: &quot;symbolizers&quot;, mapping: function(v) {
+</span><span id='GeoExt-data-RasterStyleModel-property-fields'>    fields: [{
+</span>        name: &quot;symbolizers&quot;,
+        mapping: function(v) {
             return {
                 fillColor: v.color,
                 fillOpacity: v.opacity,
                 stroke: false
             };
-        }, defaultValue: null},
-        {name: &quot;filter&quot;, mapping: &quot;quantity&quot;, type: &quot;float&quot;, sortType: 'asFloat', sortDir: 'ASC'},
-        {name: &quot;label&quot;, mapping: function(v) {
+        },
+        defaultValue: null
+    }, {
+        name: &quot;filter&quot;,
+        mapping: &quot;quantity&quot;,
+        type: &quot;float&quot;,
+        sortType: 'asFloat',
+        sortDir: 'ASC'
+    }, {
+        name: &quot;label&quot;,
+        mapping: function(v) {
             // fill label with quantity if empty
             return v.label || v.quantity;
-        }}
-    ],
-<span id='GeoExt-data-RasterStyleModel-cfg-proxy'>    proxy: {
-</span>        type: 'memory',
-        reader: {
-            type: 'json',
-            root: 'colorMap'
         }
+    }],
+<span id='GeoExt-data-RasterStyleModel-cfg-proxy'>    proxy: {
+</span>        type : 'memory',
+        // TODO GeoExt is not defined on construction so we're checking the
+        //      ExtJS-Version without GeoExt.isExt4. Maybe this can be
+        //      improved/beautified
+        reader: (function(){
+            if (Ext.versions.extjs.major &gt; 4) {
+                return {
+                    type: 'json',
+                    rootProperty: 'colorMap'
+                }
+            } else {
+                return {
+                    type: 'json',
+                    root: 'colorMap'
+                }
+            }
+        })()
     },
 <span id='GeoExt-data-RasterStyleModel-cfg-listeners'>    listeners:{
-</span>        idchanged:function(rec){
+</span>        // TODO cleanup when ExtJS4-Support is no longer needed
+        //      removed in ExtJS5
+        idchanged:function(rec){
             for(var i=0;i&lt;rec.stores.length;i++){
                 var store = rec.stores[i];
                 store.sort();

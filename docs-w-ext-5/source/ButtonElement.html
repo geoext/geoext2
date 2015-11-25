@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-dom-ButtonElement'>/**
+</span> * A special Ext.dom.Element used by Buttons.  Since buttons use `display:table` elements
+ * for their layout, some special adjustments are needed when the width switches from
+ * auto to fixed width and back.
+ *
+ * When the button has a width other than `auto`, and a right-aligned arrow, long button
+ * text will cause the arrow to disappear off the right edge of the button if the btnWrap
+ * element has table-layout:auto.  To prevent this, we need to set table-layout:fixed
+ * on the btnWrap when the button has a width, however, when the button is shrinkwrap
+ * width the btnWrap cannot have table-layout:fixed because its width:100% style will
+ * cause the button to expand outward.
+ *
+ * Additionally, in shrinkWrap height mode, the button css sets a height on the btnEl
+ * element, but if the height is being stretched, the btnEl's height will cause the contents
+ * to be incorrectly vertically centered, so we dynamically set the btnEl's height to
+ * &quot;auto&quot; in fixed-height mode.
+ *
+ * @private
+ */
+Ext.define('Ext.dom.ButtonElement', {
+    extend: 'Ext.dom.Element',
+
+<span id='Ext-dom-ButtonElement-method-setSize'>    setSize: function(width, height, animate) {
+</span>        var me = this,
+            component = me.component;
+
+        me.callParent([width, height, animate]);
+
+        component.btnWrap.setStyle(
+            'table-layout',
+            (!width || width === 'auto') ? '' : 'fixed'
+        );
+
+        component.btnEl.setStyle(
+            'height',
+            (!height || height === 'auto') ? '' : 'auto'
+        );
+
+        return me;
+    },
+
+<span id='Ext-dom-ButtonElement-method-setStyle'>    setStyle: function(prop, value) {
+</span>        var me = this,
+            component = me.component,
+            width, height;
+
+        me.callParent([prop, value]);
+
+        if (prop) {
+            if (prop === 'width' || (typeof prop !== 'string' &amp;&amp; 'width' in prop)) {
+                width = value || prop.width;
+                component.btnWrap.setStyle(
+                    'table-layout',
+                    (!width || width === 'auto') ? '' : 'fixed'
+                );
+            }
+
+            if (prop === 'height' || (typeof prop !== 'string' &amp;&amp; 'height' in prop)) {
+                height = value || prop.height;
+
+                component.btnEl.setStyle(
+                    'height',
+                    (!height || height === 'auto') ? '' : 'auto'
+                );
+            }
+        }
+        
+        return me;
+    },
+
+<span id='Ext-dom-ButtonElement-method-setHeight'>    setHeight: function(height, animate) {
+</span>        this.callParent([height, animate]);
+
+        this.component.btnEl.setStyle(
+            'height',
+            (!height || height === 'auto') ? '' : 'auto'
+        );
+
+        return this;
+    },
+
+<span id='Ext-dom-ButtonElement-method-setWidth'>    setWidth: function(width, animate) {
+</span>        this.callParent([width, animate]);
+
+        this.component.btnWrap.setStyle(
+            'table-layout',
+            (!width || width === 'auto') ? '' : 'fixed'
+        );
+
+        return this;
+    }
+});</pre>
+</body>
+</html>

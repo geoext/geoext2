@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-plugin-Responsive'>/**
+</span> * This plugin can be added to component instances to process a `responsiveConfig`. For
+ * example:
+ *
+ *      Ext.create({
+ *          xtype: 'viewport',
+ *          layout: 'border',
+ *
+ *          items: [{
+ *              title: 'Some Title',
+ *              plugins: 'responsive',
+ *
+ *              responsiveConfig: {
+ *                  'width &lt; 800': {
+ *                      region: 'north'
+ *                  },
+ *
+ *                  'width &gt;= 800': {
+ *                      region: 'west'
+ *                  }
+ *              }
+ *          }]
+ *      });
+ *
+ * For details see `{@link Ext.mixin.Responsive#responsiveConfig responsiveConfig}`.
+ */
+Ext.define('Ext.plugin.Responsive', {
+    extend: 'Ext.mixin.Responsive',
+
+    alias: 'plugin.responsive',
+<span id='Ext-plugin-Responsive-property-pluginId'>    pluginId: 'responsive',
+</span>
+<span id='Ext-plugin-Responsive-property-isPlugin'>    isPlugin: true,
+</span>
+<span id='Ext-plugin-Responsive-method-constructor'>    constructor: function (config) {
+</span>        var me = this,
+            cmp = config.cmp,
+            c = Ext.apply({
+                responsiveConfig: cmp.responsiveConfig,
+                responsiveFormulas: cmp.responsiveFormulas
+            }, config);
+
+        delete c.cmp;
+
+        me.cmp = cmp;
+        //&lt;debug&gt;
+        if (!cmp) {
+            Ext.Error.raise('Responsive plugin must be constructed by Component');
+        }
+        //&lt;/debug&gt;
+
+        me.initConfig(c);
+
+        // Push the evaluated responsiveConfig values back on to the component:
+        if (me.transformed) {
+            cmp.setConfig(me.transformed);
+            me.transformed = null;
+        }
+    },
+
+<span id='Ext-plugin-Responsive-method-init'>    init: Ext.emptyFn,
+</span>
+<span id='Ext-plugin-Responsive-property-privates'>    privates: {
+</span>        transformInstanceConfig: function (config) {
+            // Since the responsiveConfigs we manage are for the component and not for us,
+            // we set them aside here to be picked up by the constructor.
+            var transformed = this.callParent([config]);
+
+            // in case we are created from a config w/ptype
+            if (transformed.ptype) {
+                transformed = Ext.apply({}, transformed);
+                delete transformed.ptype;
+            }
+
+            this.transformed = transformed;
+
+            var ret = Ext.apply({}, config);
+            delete ret.ptype;
+            delete ret.responsiveConfig; // already processed
+            delete ret.responsiveFormulas;
+
+            return ret;
+        },
+
+        updateResponsiveState: function () {
+            var config = this.getResponsiveState();
+            // Push the dynamic stuff back on to our component:
+            this.cmp.setConfig(config);
+        }
+    }
+});
+</pre>
+</body>
+</html>

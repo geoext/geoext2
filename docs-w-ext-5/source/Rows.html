@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-grid-selection-Rows'>/**
+</span> * A class which encapsulates a range of rows defining a selection in a grid.
+ * @since 5.1.0
+ */
+Ext.define('Ext.grid.selection.Rows', {
+    extend: 'Ext.grid.selection.Selection',
+
+    requires: [
+        'Ext.util.Collection'
+    ],
+
+<span id='Ext-grid-selection-Rows-property-type'>    type: 'rows',
+</span>
+<span id='Ext-grid-selection-Rows-property-isRows'>    /**
+</span>     * @property {Boolean} isRows
+     * This property indicates the this selection represents selected rows.
+     * @readonly
+     */
+    isRows: true,
+
+<span id='Ext-grid-selection-Rows-method-clone'>    //-------------------------------------------------------------------------
+</span>    // Base Selection API
+
+    clone: function() {
+        var me = this,
+            result = new me.self(me.view);
+
+        // Clone our record collection
+        if (me.selectedRecords) {
+            result.selectedRecords = me.selectedRecords.clone();
+        }
+        // Clone the current drag range
+        if (me.rangeStart) {
+            result.setRangeStart(me.rangeStart);
+            result.setRangeEnd(me.rangeEnd);
+        }
+        return result;
+    },
+
+<span id='Ext-grid-selection-Rows-method-add'>    //-------------------------------------------------------------------------
+</span>    // Methods unique to this type of Selection
+
+    add: function(record) {
+        //&lt;debug&gt;
+        if (!(record.isModel)) {
+            Ext.Error.raise('Row selection must be passed a record');
+        }
+        //&lt;/debug&gt;
+
+        var selection = this.selectedRecords || (this.selectedRecords = this.createRecordCollection());
+
+        if (!selection.byInternalId.get(record.internalId)) {
+            selection.add(record);
+            this.view.onRowSelect(record);
+        }
+    },
+
+<span id='Ext-grid-selection-Rows-method-remove'>    remove: function(record) {
+</span>        //&lt;debug&gt;
+        if (!(record.isModel)) {
+            Ext.Error.raise('Row selection must be passed a record');
+        }
+        //&lt;/debug&gt;
+
+        var me = this;
+
+        if (me.selectedRecords &amp;&amp; me.selectedRecords.byInternalId.get(record.internalId)) {
+            me.selectedRecords.remove(record);
+            me.view.onRowDeselect(record);
+
+            // Flag when selectAll called.
+            // While this is set, a call to contains will add the record to the collection and return true
+            me.allSelected = false;
+            
+            return true;
+        }
+    },
+
+<span id='Ext-grid-selection-Rows-method-contains'>    /**
+</span>     * Returns `true` if the passed {@link Ext.data.Model record} is selected.
+     * @param {Ext.data.Model} record The record to test.
+     * @returns {Boolean} `true` if the passed {@link Ext.data.Model record} is selected.
+     */
+    contains: function (record) {
+        if (!record || !record.isModel) {
+            return false;
+        }
+
+        var me = this,
+            result = false,
+            selectedRecords = me.selectedRecords,
+            recIndex,
+            dragRange;
+
+        // Flag set when selectAll is called in th selModel.
+        // This allows buffered stores to treat all *rendered* records
+        // as selected, so that the selection model will always encompass
+        // What the user *sees* as selected
+        if (me.allSelected) {
+            me.add(record);
+            return true;
+        }
+
+        // First check if the record is in our collection
+        if (selectedRecords) {
+            result = !!selectedRecords.byInternalId.get(record.internalId);
+        }
+
+        // If not, check if it is within our drag range if we are in the middle of a drag select
+        if (!result &amp;&amp; me.rangeStart != null) {
+            dragRange = me.getRange();
+            recIndex = me.view.dataSource.indexOf(record);
+            result = recIndex &gt;= dragRange[0] &amp;&amp; recIndex &lt;= dragRange[1];
+        }
+
+        return result;
+    },
+
+<span id='Ext-grid-selection-Rows-method-getCount'>    /**
+</span>     * Returns the number of records selected
+     * @returns {Number} The number of records selected.
+     */
+    getCount: function() {
+        var me = this,
+            selectedRecords = me.selectedRecords,
+            result = selectedRecords ? selectedRecords.getCount() : 0,
+            range = me.getRange(),
+            i,
+            store = me.view.dataSource;
+
+        // If dragging, add all records in the drag that are *not* in the collection
+        for (i = range[0]; i &lt;= range[1]; i++) {
+            if (!selectedRecords || !selectedRecords.byInternalId.get(store.getAt(i).internalId)) {
+                result++;
+            }
+        }
+        return result;
+    },
+
+<span id='Ext-grid-selection-Rows-method-getRecords'>    /**
+</span>     * Returns the records selected.
+     * @returns {Ext.data.Model[]} The records selected.
+     */
+    getRecords: function() {
+        var selectedRecords = this.selectedRecords;
+        return selectedRecords ? selectedRecords.getRange() : [];
+    },
+
+<span id='Ext-grid-selection-Rows-method-selectAll'>    selectAll: function() {
+</span>        var me = this;
+
+        me.clear();
+        me.setRangeStart(0);
+        me.setRangeEnd(me.view.dataSource.getCount() - 1);
+
+        // Adds the records to the collection
+        me.addRange();
+
+        // While this is set, a call to contains will add the record to the collection and return true.
+        // This is so that buffer rendered stores can utulize row based selectAll
+        me.allSelected = true;
+    },
+
+<span id='Ext-grid-selection-Rows-method-eachRow'>    eachRow: function(fn, scope) {
+</span>        var selectedRecords = this.selectedRecords;
+
+        if (selectedRecords) {
+            selectedRecords.each(fn, scope || this);
+        }
+    },
+
+<span id='Ext-grid-selection-Rows-method-eachColumn'>    eachColumn: function(fn, scope) {
+</span>        var columns = this.view.getVisibleColumnManager().getColumns(),
+            len = columns.length,
+            i;
+
+        // If we have any records selected, then all visible columns are selected.
+        if (this.selectedRecords) {
+            for (i = 0; i &lt; len; i++) {
+                if (fn.call(this || scope, columns[i], i) === false) {
+                    return;
+                }
+            }
+        }
+    },
+
+<span id='Ext-grid-selection-Rows-method-eachCell'>    eachCell: function(fn, scope) {
+</span>        var me = this,
+            selection = me.selectedRecords,
+            view = me.view,
+            columns = view.ownerGrid.getVisibleColumnManager().getColumns(),
+            colCount,
+            i,
+            j,
+            context,
+            range,
+            recCount,
+            abort = false;
+
+        if (columns) {
+            colCount = columns.length;
+            context = new Ext.grid.CellContext(view);
+
+            // Use Collection#each instead of copying the entire dataset into an array and iterating that.
+            if (selection) {
+                selection.each(function(record) {
+                    context.setRow(record);
+                    for (i = 0; i &lt; colCount; i++) {
+                        context.setColumn(columns[i]);
+                        if (fn.call(scope || me, context, context.colIdx, context.rowIdx) === false) {
+                            abort = true;
+                            return false;
+                        }
+                    }
+                });
+            }
+            
+            // If called during a drag select, or SHIFT+arrow select, include the drag range
+            if (!abort &amp;&amp; me.rangeStart != null) {
+                range = me.getRange();
+                me.view.dataSource.getRange(range[0], range[1], {
+                    callback: function(records) {
+                        recCount = records.length;
+                        for (i = 0; !abort &amp;&amp; i &lt; recCount; i++) {
+                            context.setRow(records[i]);
+                            for (j = 0; !abort &amp;&amp; j &lt; colCount; j++) {
+                                context.setColumn(columns[j]);
+                                if (fn.call(scope || me, context, context.colIdx, context.rowIdx) === false) {
+                                    abort = true;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    },
+
+<span id='Ext-grid-selection-Rows-method-destroy'>    destroy: function() {
+</span>        this.selectedRecords = Ext.destroy(this.selectedRecords);
+    },
+
+<span id='Ext-grid-selection-Rows-property-privates'>    //-------------------------------------------------------------------------
+</span>
+    privates: {
+<span id='Ext-grid-selection-Rows-method-clear'>        /**
+</span>         * @private
+         */
+        clear: function() {
+            var me = this,
+                view = me.view;
+
+            // Flag when selectAll called.
+            // While this is set, a call to contains will add the record to the collection and return true
+            me.allSelected = false;
+
+            if (me.selectedRecords) {
+                me.eachRow(function(record) {
+                    view.onRowDeselect(record);
+                });
+                me.selectedRecords.clear();
+            }
+        },
+
+<span id='Ext-grid-selection-Rows-method-isAllSelected'>        /**
+</span>         * @return {Boolean}
+         * @private
+         */
+        isAllSelected: function() {
+            // This branch has a flag because it encompasses a possibly buffered store,
+            // where the full dataset might not be present, so a flag indicates that all
+            // records are selected even as they flow into or out of the buffered page cache.
+            return !!this.allSelected;
+        },
+
+<span id='Ext-grid-selection-Rows-method-setRangeStart'>        /**
+</span>         * Used during drag/shift+downarrow range selection on start.
+         * @param {Number} The start row index of the row drag selection.
+         * @private
+         */
+        setRangeStart: function(start) {
+
+            // Flag when selectAll called.
+            // While this is set, a call to contains will add the record to the collection and return true
+            this.allSelected = false;
+
+            this.rangeStart = this.rangeEnd = start;
+            this.view.onRowSelect(start);
+        },
+
+<span id='Ext-grid-selection-Rows-method-setRangeEnd'>        /**
+</span>         * Used during drag/shift+downarrow range selection on change of row.
+         * @param {Number} The end row index of the row drag selection.
+         * @private
+         */
+        setRangeEnd: function(end) {
+            var me = this,
+                range,
+                lastRange,
+                rowIdx,
+                row,
+                view = me.view,
+                store = view.dataSource,
+                rows = view.all,
+                selected = me.selectedRecords,
+                rec;
+
+            // Update the range as requested, then calculate the
+            // range in lowest index first form
+            me.rangeEnd = end;
+            range = me.getRange();
+            lastRange = me.lastRange || range;
+
+            // Loop through the union of last range and current range
+            for (rowIdx = Math.max(Math.min(range[0], lastRange[0]), rows.startIndex),
+                end = Math.min(Math.max(range[1], lastRange[1]), rows.endIndex); rowIdx &lt;= end; rowIdx++) {
+                row = rows.item(rowIdx);
+
+                // If we are outside the current range, deselect
+                if (rowIdx &lt; range[0] || rowIdx &gt; range[1]) {
+                    // If we are deselecting, also remove from collection
+                    if (selected &amp;&amp; (rec = selected.byInternalId.get(store.getAt(rowIdx).internalId))) {
+                        selected.remove(rec);
+                    }
+                    view.onRowDeselect(rowIdx);
+                } else {
+                    view.onRowSelect(rowIdx);
+                }
+            }
+
+            me.lastRange = range;
+        },
+
+<span id='Ext-grid-selection-Rows-method-getRange'>        /**
+</span>         * @return {Number[]}
+         * @private
+         */
+        getRange: function() {
+            var start = this.rangeStart,
+                end = this.rangeEnd;
+
+            if (start == null) {
+                return [0, -1];
+            } else if (start &lt;= end ){
+                return [start, end];
+            }
+            return [end, start];
+        },
+
+<span id='Ext-grid-selection-Rows-method-getRangeSize'>        /**
+</span>         * Returns the size of the mousedown+drag, or SHIFT+arrow selection range.
+         * @return {Number}
+         * @private
+         */
+        getRangeSize: function() {
+            var range = this.getRange();
+            return range[1] - range[0] + 1;
+        },
+
+<span id='Ext-grid-selection-Rows-method-createRecordCollection'>        /**
+</span>         * @return {Ext.util.Collection}
+         * @private
+         */
+        createRecordCollection: function() {
+            var result = new Ext.util.Collection({
+                    rootProperty: 'data',
+                    extraKeys: {
+                        byInternalId: {
+                            rootProperty: false,
+                            property: 'internalId'
+                        }
+                    }
+                });
+
+            return result;
+        },
+
+<span id='Ext-grid-selection-Rows-method-addRange'>        /**
+</span>         * Called at the end of a drag, or shift+downarrow row range select.
+         * The record range delineated by the start and end row indices is added to the selected Collection.
+         * @private
+         */
+        addRange: function() {
+            var me = this,
+                range,
+                selection;
+
+            if (me.rangeStart != null) {
+                range = me.getRange();
+                selection = me.selectedRecords || (me.selectedRecords = me.createRecordCollection());
+                me.view.dataSource.getRange(range[0], range[1], {
+                    callback: function(range) {
+                        selection.add.apply(selection, range);
+                    }
+                });
+
+                // Clear the drag range
+                me.setRangeStart(me.lastRange = null);
+            }
+        }
+    }
+});
+</pre>
+</body>
+</html>

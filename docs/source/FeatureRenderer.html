@@ -16,7 +16,7 @@
 </head>
 <body onload="prettyPrint(); highlight();">
   <pre class="prettyprint lang-js">/*
- * Copyright (c) 2008-2014 The Open Source Geospatial Foundation
+ * Copyright (c) 2008-2015 The Open Source Geospatial Foundation
  *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
@@ -152,8 +152,21 @@ Ext.define('GeoExt.FeatureRenderer', {
      */
     renderer: null,
 
-<span id='GeoExt-FeatureRenderer-method-initComponent'>    initComponent: function(){
-</span>        var me = this;
+<span id='GeoExt-FeatureRenderer-event-click'>    /**
+</span>     * Fires when the feature is clicked on.
+     *
+     * Listener arguments:
+     *
+     *  * renderer - GeoExt.FeatureRenderer This feature renderer.
+     *
+     * @event click
+     */
+
+<span id='GeoExt-FeatureRenderer-method-initComponent'>    /**
+</span>     *
+     */
+    initComponent: function(){
+        var me = this;
 
         this.autoEl = {
             tag: &quot;div&quot;,
@@ -197,18 +210,6 @@ Ext.define('GeoExt.FeatureRenderer', {
                 draw: false
             });
         }
-        this.addEvents(
-<span id='GeoExt-FeatureRenderer-event-click'>            /**
-</span>             * Fires when the feature is clicked on.
-             *
-             * Listener arguments:
-             *
-             *  * renderer - GeoExt.FeatureRenderer This feature renderer.
-             *
-             * @event
-             */
-            &quot;click&quot;
-        );
     },
 
 <span id='GeoExt-FeatureRenderer-method-initCustomEvents'>    /**
@@ -228,8 +229,8 @@ Ext.define('GeoExt.FeatureRenderer', {
      * @private
      */
     clearCustomEvents: function() {
-        if (this.el &amp;&amp; this.el.removeAllListeners) {
-            this.el.removeAllListeners();
+        if (this.el &amp;&amp; this.el.clearListeners) {
+            this.el.clearListeners();
         }
     },
 

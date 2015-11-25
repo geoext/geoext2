@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-state-LocalStorageProvider'>/**
+</span> * A Provider implementation which saves and retrieves state via the HTML5 localStorage API
+ * or IE `userData` storage. For details see `Ext.util.LocalStorage`.
+ * 
+ * If the browser does not support local storage, there will be no attempt to read the state.
+ * Before creating this class, check {@link Ext.util.LocalStorage#supported}.
+ */
+Ext.define('Ext.state.LocalStorageProvider', {
+    extend: 'Ext.state.Provider',
+    requires: [
+        'Ext.util.LocalStorage'
+    ],
+    
+    alias: 'state.localstorage',
+   
+<span id='Ext-state-LocalStorageProvider-method-constructor'>    constructor: function () {
+</span>        var me = this;
+
+        me.callParent(arguments);
+
+        me.store = me.getStorageObject();
+        if (me.store) {
+            me.state = me.readLocalStorage();
+        } else {
+            me.state = {};
+        }
+    },
+    
+<span id='Ext-state-LocalStorageProvider-method-readLocalStorage'>    readLocalStorage: function () {
+</span>        var store = this.store,
+            data = {},
+            keys = store.getKeys(),
+            i = keys.length,
+            key;
+            
+        while (i--) {
+            key = keys[i];
+            data[key] = this.decodeValue(store.getItem(key));
+        }
+
+        return data;
+    },
+    
+<span id='Ext-state-LocalStorageProvider-method-set'>    set: function (name, value) {
+</span>        var me = this;
+        
+        me.clear(name);
+        if (value != null) { // !== undefined &amp;&amp; !== null
+            me.store.setItem(name, me.encodeValue(value));
+            me.callParent(arguments);
+        }
+    },
+
+<span id='Ext-state-LocalStorageProvider-method-clear'>    // private
+</span>    clear: function (name) {
+        this.store.removeItem(name);
+        this.callParent(arguments);
+    },
+    
+<span id='Ext-state-LocalStorageProvider-method-getStorageObject'>    getStorageObject: function () {
+</span>        var prefix = this.prefix,
+            id = prefix,
+            n = id.length - 1;
+
+        if (id.charAt(n) === '-') {
+            id = id.substring(0, n);
+        }
+
+        return new Ext.util.LocalStorage({
+            id: id,
+            prefix: prefix
+        });
+    }    
+});
+</pre>
+</body>
+</html>

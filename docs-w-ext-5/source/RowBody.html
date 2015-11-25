@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Ext-grid-feature-RowBody'>/**
+</span> * The rowbody feature enhances the grid's markup to have an additional
+ * tr -&gt; td -&gt; div which spans the entire width of the original row.
+ *
+ * This is useful to to associate additional information with a particular
+ * record in a grid.
+ *
+ * Rowbodies are initially hidden unless you override setupRowData.
+ *
+ * Will expose additional events on the gridview with the prefix of 'rowbody'.
+ * For example: 'rowbodyclick', 'rowbodydblclick', 'rowbodycontextmenu'.
+ *
+ * # Example
+ *
+ *     @example
+ *     Ext.define('Animal', {
+ *         extend: 'Ext.data.Model',
+ *         fields: ['name', 'latin', 'desc']
+ *     });
+ *
+ *     Ext.create('Ext.grid.Panel', {
+ *         width: 400,
+ *         height: 300,
+ *         renderTo: Ext.getBody(),
+ *         store: {
+ *             model: 'Animal',
+ *             data: [
+ *                 {name: 'Tiger', latin: 'Panthera tigris',
+ *                  desc: 'The largest cat species, weighing up to 306 kg (670 lb).'},
+ *                 {name: 'Roman snail', latin: 'Helix pomatia',
+ *                  desc: 'A species of large, edible, air-breathing land snail.'},
+ *                 {name: 'Yellow-winged darter', latin: 'Sympetrum flaveolum',
+ *                  desc: 'A dragonfly found in Europe and mid and Northern China.'},
+ *                 {name: 'Superb Fairy-wren', latin: 'Malurus cyaneus',
+ *                  desc: 'Common and familiar across south-eastern Australia.'}
+ *             ]
+ *         },
+ *         columns: [{
+ *             dataIndex: 'name',
+ *             text: 'Common name',
+ *             width: 125
+ *         }, {
+ *             dataIndex: 'latin',
+ *             text: 'Scientific name',
+ *             flex: 1
+ *         }],
+ *         features: [{
+ *             ftype: 'rowbody',
+ *             setupRowData: function(record, rowIndex, rowValues) {
+ *                 var headerCt = this.view.headerCt,
+ *                     colspan = headerCt.getColumnCount();
+ *
+ *                 // Usually you would style the my-body-class in CSS file
+ *                 Ext.apply(rowValues, {
+ *                     rowBody: '&lt;div style=&quot;padding: 1em&quot;&gt;'+record.get(&quot;desc&quot;)+'&lt;/div&gt;',
+ *                     rowBodyCls: &quot;my-body-class&quot;,
+ *                     rowBodyColspan: colspan
+ *                 });
+ *             }
+ *         }]
+ *     });
+ *
+ *  # Cell Editing and Cell Selection Model
+ *
+ * Note that if {@link Ext.grid.plugin.CellEditing cell editing} or the {@link Ext.selection.CellModel cell selection model} are going
+ * to be used, then the {@link Ext.grid.feature.RowWrap RowWrap} feature, or {@link Ext.grid.plugin.RowExpander RowExpander} plugin MUST
+ * be used for intra-cell navigation to be correct.
+ *
+ */
+Ext.define('Ext.grid.feature.RowBody', {
+    extend: 'Ext.grid.feature.Feature',
+    alias: 'feature.rowbody',
+
+<span id='Ext-grid-feature-RowBody-property-rowBodyCls'>    rowBodyCls: Ext.baseCSSPrefix + 'grid-row-body',
+</span><span id='Ext-grid-feature-RowBody-property-rowBodyHiddenCls'>    rowBodyHiddenCls: Ext.baseCSSPrefix + 'grid-row-body-hidden',
+</span><span id='Ext-grid-feature-RowBody-property-rowBodyTdSelector'>    rowBodyTdSelector: 'td.' + Ext.baseCSSPrefix + 'grid-cell-rowbody',
+</span><span id='Ext-grid-feature-RowBody-property-eventPrefix'>    eventPrefix: 'rowbody',
+</span><span id='Ext-grid-feature-RowBody-property-eventSelector'>    eventSelector: 'tr.' + Ext.baseCSSPrefix + 'grid-rowbody-tr',
+</span>
+<span id='Ext-grid-feature-RowBody-property-colSpanDecrement'>    colSpanDecrement: 0,
+</span>
+<span id='Ext-grid-feature-RowBody-cfg-bodyBefore'>    /**
+</span>     * @cfg {Boolean} [bodyBefore=false]
+     * Configure as `true` to put the row expander body *before* the data row.
+     * 
+     */
+    bodyBefore: false,
+
+<span id='Ext-grid-feature-RowBody-property-outerTpl'>    outerTpl: {
+</span>        fn: function(out, values, parent) {
+            var view = values.view,
+                rowValues = view.rowValues;
+
+            this.rowBody.setup(values.rows, rowValues);
+            this.nextTpl.applyOut(values, out, parent);
+            this.rowBody.cleanup(values.rows, rowValues);
+        },
+        priority: 100
+    },
+
+<span id='Ext-grid-feature-RowBody-property-extraRowTpl'>    extraRowTpl: [
+</span>        '{%',
+            'if(this.rowBody.bodyBefore) {',
+                // MUST output column sizing elements because the first row in this table
+                // contains one colspanning TD, and that overrides subsequent column width settings.
+                'values.view.renderColumnSizer(values, out);',
+            '} else {',
+                'this.nextTpl.applyOut(values, out, parent);',
+            '}',
+            'values.view.rowBodyFeature.setupRowData(values.record, values.recordIndex, values);',
+        '%}',
+        '&lt;tr class=&quot;' + Ext.baseCSSPrefix + 'grid-rowbody-tr {rowBodyCls}&quot; {ariaRowAttr}&gt;',
+            '&lt;td class=&quot;' + Ext.baseCSSPrefix + 'grid-td ' + Ext.baseCSSPrefix + 'grid-cell-rowbody&quot; colspan=&quot;{rowBodyColspan}&quot; {ariaCellAttr}&gt;',
+                '&lt;div class=&quot;' + Ext.baseCSSPrefix + 'grid-rowbody {rowBodyDivCls}&quot; {ariaCellInnerAttr}&gt;{rowBody}&lt;/div&gt;',
+            '&lt;/td&gt;',
+        '&lt;/tr&gt;',
+        '{%',
+            'if(this.rowBody.bodyBefore) {',
+                'this.nextTpl.applyOut(values, out, parent);',
+            '}',
+        '%}', {
+            priority: 100,
+
+            beginRowSync: function (rowSync) {
+                rowSync.add('rowBody', this.owner.eventSelector);
+            },
+
+            syncContent: function(destRow, sourceRow, columnsToUpdate) {
+                var owner = this.owner,
+                    destRowBody = Ext.fly(destRow).down(owner.eventSelector, true),
+                    sourceRowBody;
+
+                // Sync the heights of row body elements in each row if they need it.
+                if (destRowBody &amp;&amp; (sourceRowBody = Ext.fly(sourceRow).down(owner.eventSelector, true))) {
+                    Ext.fly(destRowBody).syncContent(sourceRowBody);
+                }
+            }
+        }
+    ],
+
+<span id='Ext-grid-feature-RowBody-method-init'>    init: function(grid) {
+</span>        var me = this,
+            view = me.view = grid.getView();
+
+        // The extra data means variableRowHeight
+        grid.variableRowHeight = view.variableRowHeight = true;
+        view.rowBodyFeature = me;
+
+        grid.mon(view, {
+            element: 'el',
+            click: me.onClick,
+            scope: me
+        });
+
+        view.headerCt.on({
+            columnschanged: me.onColumnsChanged,
+            scope: me
+        });
+        view.addTpl(me.outerTpl).rowBody = me;
+        view.addRowTpl(Ext.XTemplate.getTpl(this, 'extraRowTpl')).rowBody = me;
+        me.callParent(arguments);
+    },
+
+<span id='Ext-grid-feature-RowBody-method-onClick'>    // Needed to select the data row when clicked on the body row.
+</span>    onClick: function(e) {
+        var me = this,
+            tableRow = e.getTarget(me.eventSelector);
+
+        // If we have clicked on a row body TR and its previous (or next - we can put the body first) sibling is a grid row,
+        // pass that onto the view for processing
+        if (tableRow &amp;&amp; Ext.fly(tableRow = (tableRow.previousSibling || tableRow.nextSibling)).is(me.view.rowSelector)) {
+            e.target = tableRow;
+            me.view.handleEvent(e);
+        }
+    },
+
+<span id='Ext-grid-feature-RowBody-method-getSelectedRow'>    getSelectedRow: function(view, rowIndex) {
+</span>        var selectedRow = view.getNode(rowIndex);
+        if (selectedRow) {
+            return Ext.fly(selectedRow).down(this.eventSelector);
+        }
+        return null;
+    },
+
+<span id='Ext-grid-feature-RowBody-method-onColumnsChanged'>    // When columns added/removed, keep row body colspan in sync with number of columns.
+</span>    onColumnsChanged: function(headerCt) {
+        var items = this.view.el.query(this.rowBodyTdSelector),
+            colspan = headerCt.getVisibleGridColumns().length,
+            len = items.length,
+            i;
+
+        for (i = 0; i &lt; len; ++i) {
+            items[i].setAttribute('colSpan', colspan);
+        }
+    },
+
+<span id='Ext-grid-feature-RowBody-method-getAdditionalData'>    /**
+</span>     * @method getAdditionalData
+     * Provides additional data to the prepareData call within the grid view.
+     * The rowbody feature adds 3 additional variables into the grid view's template.
+     * These are rowBodyCls, rowBodyColspan, and rowBody.
+     * @param {Object} data The data for this particular record.
+     * @param {Number} idx The row index for this record.
+     * @param {Ext.data.Model} record The record instance
+     * @param {Object} orig The original result from the prepareData call to massage.
+     */
+    setupRowData: function(record, rowIndex, rowValues) {
+        if (this.getAdditionalData) {
+            Ext.apply(rowValues, this.getAdditionalData(record.data, rowIndex, record, rowValues));
+        }
+    },
+
+<span id='Ext-grid-feature-RowBody-method-setup'>    setup: function(rows, rowValues) {
+</span>        rowValues.rowBodyCls = this.rowBodyCls;
+        rowValues.rowBodyColspan = this.view.headerCt.visibleColumnManager.getColumns().length - this.colSpanDecrement;
+    },
+
+<span id='Ext-grid-feature-RowBody-method-cleanup'>    cleanup: function(rows, rowValues) {
+</span>        rowValues.rowBodyCls = rowValues.rowBodyColspan = rowValues.rowBody = null;
+    }
+});
+</pre>
+</body>
+</html>
