@@ -98,6 +98,8 @@ Ext.onReady(function() {
             xtype: "gx_mappanel",
             border: false,
             region: "center",
+            center: [-45, 5],
+            zoom: 3,
             layers: [
                 new OpenLayers.Layer.WMS(
                     "OpenStreetMap WMS",
