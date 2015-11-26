@@ -39,10 +39,11 @@ Ext.application({
             tbar: [{
                 xtype: "gx_geocodercombo",
                 layer: locationLayer,
+                url: "https://nominatim.openstreetmap.org/search?format=json",
                 // To restrict the search to a bounding box, uncomment the following
                 // line and change the viewboxlbrt parameter to a left,bottom,right,top
                 // bounds in EPSG:4326:
-                //url: "http://nominatim.openstreetmap.org/search?format=json&viewboxlbrt=15,47,17,49",
+                //url: "https://nominatim.openstreetmap.org/search?format=json&viewboxlbrt=15,47,17,49",
                 width: 200
             }]
         });
