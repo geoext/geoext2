@@ -8,7 +8,7 @@ Ext.define('GeoExt.tree.Util', {
          * @param {boolean} checked the new checked state.
          */
         updateLayerVisibilityByNode: function(node, checked) {
-            if(checked != node.get('layer').getVisibility()) {
+            if(node.get('layer') && checked != node.get('layer').getVisibility()) {
                 node._visibilityChanging = true;
                 var layer = node.get('layer');
                 if(checked && layer.isBaseLayer && layer.map) {
