@@ -8,9 +8,9 @@ Ext.define('GeoExt.tree.Util', {
          * @param {boolean} checked the new checked state.
          */
         updateLayerVisibilityByNode: function(node, checked) {
-            if(checked != node.get('layer').getVisibility()) {
+            var layer = node.get('layer');
+            if(layer && checked != layer.getVisibility()) {
                 node._visibilityChanging = true;
-                var layer = node.get('layer');
                 if(checked && layer.isBaseLayer && layer.map) {
                     layer.map.setBaseLayer(layer);
                 } else if(!checked && layer.isBaseLayer && layer.map &&
@@ -52,7 +52,7 @@ Ext.define('GeoExt.tree.Util', {
                     }
                 });
                 // enforce "at least one visible"
-                if(checkedCount === 0 && attributes.checked == false) {
+                if(checkedCount === 0 && attributes.checked === false) {
                     layer.setVisibility(true);
                 }
             }
