@@ -31,8 +31,8 @@ Ext.application({
             region: "center",
             // we do not want all overlays, to try the OverlayLayerContainer
             map: {allOverlays: false},
-            center: [14, 37.5],
-            zoom: 7,
+            center: [14.15, 52.85],
+            zoom: 13,
             layers: [
                 new OpenLayers.Layer.WMS("Global Imagery",
                     "http://maps.opengeo.org/geowebcache/service/wms", {
@@ -81,7 +81,15 @@ Ext.application({
                         format: "image/png"
                     }, {
                         isBaseLayer: false,
-                        buffer: 0
+                        resolutions: [
+                            0.000171661376953125,
+                            0.0000858306884765625,
+                            0.00004291534423828125
+                        ],
+                        buffer: 0,
+                        metadata: {
+                            hideSpinnerInLayerTree: true
+                        }
                     }
                 ),
                 new OpenLayers.Layer.WMS("Bus Stops",
@@ -92,62 +100,20 @@ Ext.application({
                         transparent: true
                     },
                     {
-                        singleTile: true,
-                        visibility: false
-                    }
-                ),
-                // create a group layer (with several layers in the "layers" param)
-                // to show how the LayerParamLoader works
-                new OpenLayers.Layer.WMS("Tasmania (Group Layer)",
-                    "http://demo.opengeo.org/geoserver/wms", {
-                        layers: [
-                            "topp:tasmania_state_boundaries",
-                            "topp:tasmania_water_bodies",
-                            "topp:tasmania_cities",
-                            "topp:tasmania_roads"
-                        ],
-                        transparent: true,
-                        format: "image/gif"
-                    }, {
                         isBaseLayer: false,
-                        buffer: 0,
-                        // exclude this layer from layer container nodes
-                        displayInLayerSwitcher: false,
-                        visibility: false
+                        resolutions: [
+                            0.0000858306884765625,
+                            0.00004291534423828125
+                        ],
+                        singleTile: true,
+                        visibility: false,
+                        metadata: {
+                            hideSpinnerInLayerTree: true
+                        }
                     }
                 )
             ]
         });
-
-        // create our own layer node UI class, using the TreeNodeUIEventMixin
-        //var LayerNodeUI = Ext.extend(GeoExt.tree.LayerNodeUI, new GeoExt.tree.TreeNodeUIEventMixin());
-
-        /*var treeConfig = [
-            {nodeType: 'gx_layercontainer', layerStore: map.layers}
-        {
-            nodeType: "gx_baselayercontainer"
-        }, {
-            nodeType: "gx_overlaylayercontainer",
-            expanded: true,
-            // render the nodes inside this container with a radio button,
-            // and assign them the group "foo".
-            loader: {
-                baseAttrs: {
-                    radioGroup: "foo",
-                    uiProvider: "layernodeui"
-                }
-            }
-        }, {
-            nodeType: "gx_layer",
-            layer: "Tasmania (Group Layer)",
-            isLeaf: false,
-            // create subnodes for the layers in the LAYERS param. If we assign
-            // a loader to a LayerNode and do not provide a loader class, a
-            // LayerParamLoader will be assumed.
-            loader: {
-                param: "LAYERS"
-            }
-        }];*/
 
         var store = Ext.create('Ext.data.TreeStore', {
             model: 'GeoExt.data.LayerTreeModel',
