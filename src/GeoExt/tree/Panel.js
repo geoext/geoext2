@@ -41,7 +41,6 @@ Ext.define('GeoExt.tree.Panel', {
             me.columns = [{
                 xtype    : 'gx_treecolumn',
                 text     : 'Name',
-                width    : Ext.isIE6 ? null : 10000,
                 dataIndex: me.displayField         
             }];
         }
