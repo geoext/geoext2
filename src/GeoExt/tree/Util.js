@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2008-present The Open Source Geospatial Foundation
+ *
+ * Published under the BSD license.
+ * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
+ * text of the license.
+ */
 Ext.define('GeoExt.tree.Util', {
     statics: {
         /**
