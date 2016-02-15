@@ -23,7 +23,7 @@
     "ExtJS",
     "OpenLayers"
   ],
-  "author": "The GeoExt community, © 2008-2015 The Open Source Geospatial Foundation",
+  "author": "The GeoExt community, © 2008-present The Open Source Geospatial Foundation",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/geoext/geoext2/issues"
