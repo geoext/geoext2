@@ -192,8 +192,9 @@ Ext.define('GeoExt.data.proxy.Protocol', {
             } else {
                 operation.setRecords(result.records);
             }
-            operation.setCompleted();
+
             operation.setSuccessful();
+            operation.setCompleted();
         } else {
             me.setException(operation, response);
             me.fireEvent('exception', this, response, operation);
