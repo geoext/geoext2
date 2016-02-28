@@ -1,10 +1,26 @@
 @import "popup.css";
 
-
-.gx-popup-anc {
-    background: transparent url(../images/default/anchor-access.png) no-repeat 0 0;
+.gx-popup-anc-top:before {
+    top: -33px;
+    border-bottom-color: #282828;
 }
-
-.gx-popup-anc.top {
-    background: transparent url(../images/default/anchor-top-access.png) no-repeat 0 0;
+.gx-popup-anc-top:after {
+    top: -31px;
+    border-bottom-color: #3f4757;
+}
+.gx-popup-anc-bottom:before {
+    bottom: -33px;
+    border-top-color: #282828;
+}
+.gx-popup-anc-bottom:after {
+    bottom: -31px;
+    border-top-color: #3f4757;
+}
+.gx-popup-anc-left:before,
+.gx-popup-anc-left:after {
+    left: 4px;
+}
+.gx-popup-anc-right:before,
+.gx-popup-anc-right:after {
+    right: 4px;
 }

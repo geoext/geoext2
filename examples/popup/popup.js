@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2008-present The Open Source Geospatial Foundation
- * 
+ *
  * Published under the BSD license.
  * See https://github.com/geoext/geoext2/blob/master/license.txt for the full
  * text of the license.
@@ -44,7 +44,7 @@ Ext.onReady(function() {
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. " +
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit." +
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.";
-    
+
     function createPopup(feature) {
         var DomQuery = GeoExt.isExt4 ? Ext.DomQuery : Ext.dom.Query,
             checkConstrOpt = DomQuery.select('input[name="constrainOpt"]:checked')[0].value,
@@ -57,6 +57,7 @@ Ext.onReady(function() {
                 title: 'My Popup',
                 location: feature,
                 width:200,
+                padding: 3,
                 html: bogusMarkup,
                 maximizable: true,
                 collapsible: true,
@@ -99,7 +100,7 @@ Ext.onReady(function() {
             border: false,
             region: "center",
             layers: [
-                new OpenLayers.Layer.WMS( 
+                new OpenLayers.Layer.WMS(
                     "OpenStreetMap WMS",
                     "http://ows.terrestris.de/osm/service?",
                     {layers: 'OSM-WMS'},

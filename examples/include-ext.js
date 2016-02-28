@@ -67,6 +67,7 @@
 
     rtl = rtl && rtl.toString() === 'true';
 
+    themeName = theme;
     theme = 'ext-theme-' + theme;
     packagePath = path + '/packages/' + theme + '/build/';
     themePath = packagePath + 'resources/' + theme + (rtl ? '-all-rtl' : '-all');
@@ -74,6 +75,8 @@
     if (includeCSS) {
         document.write('<link rel="stylesheet" type="text/css" href="' +
                             themePath + '-debug.css"/>');
+        document.write('<link rel="stylesheet" type="text/css" href="' +
+                            '/resources/css/popup-' + themeName + '.css" />');
     }
 
     document.write('<script type="text/javascript" src="' + path + '/ext-all' +
