@@ -43,7 +43,10 @@
  */
 Ext.define('GeoExt.selection.FeatureModel', {
     extend: 'Ext.selection.RowModel',
-    alias: 'selection.featuremodel',
+    alias: [
+        'selection.gx_featuremodel',
+        'selection.featuremodel'
+    ],
     requires: [
         'GeoExt.Version'
     ],

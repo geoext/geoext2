@@ -18,7 +18,10 @@
  */
 Ext.define('GeoExt.data.reader.Feature', {
     extend: 'Ext.data.reader.Json',
-    alias : 'reader.feature',
+    alias : [
+        'reader.gx_feature',
+        'reader.feature'
+    ],
     requires: [
         'GeoExt.Version'
     ],
