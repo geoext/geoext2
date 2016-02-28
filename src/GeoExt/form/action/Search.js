@@ -75,7 +75,10 @@
 Ext.define('GeoExt.form.action.Search', {
     extend: 'Ext.form.Action',
     alternateClassName: 'GeoExt.form.SearchAction',
-    alias: 'formaction.search',
+    alias: [
+        'formaction.gx_search',
+        'formaction.search'
+    ],
     requires: ['GeoExt.Form'],
 
     /**
