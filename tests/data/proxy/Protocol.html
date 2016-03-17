@@ -90,6 +90,29 @@
 
         }
 
+        function test_loadViaHttp(t) {
+            t.plan(2);
+            // create feature store with ProtocolProxy loading a document
+            // by HTTP
+            var store = Ext.create('GeoExt.data.FeatureStore', {
+                fields: [
+                    {name: 'name', type: 'string'}
+                ],
+                autoLoad: true,
+                proxy: Ext.create('GeoExt.data.proxy.Protocol', {
+                    reader: Ext.create('GeoExt.data.reader.Feature', {root: 'features'}),
+                    protocol: new OpenLayers.Protocol.HTTP({
+                        url: "../../busstops.geojson",
+                        format: new OpenLayers.Format.GeoJSON({})
+                    })
+                })
+            });
+            t.delay_call(1, function() {
+                t.eq(store.getCount(), 2, "proxy loaded the the correct amount of records");
+                t.eq(store.getAt(0).get('name'), 'Salomonsborn', "feature attributes are mapped correctly to the record");
+            });
+        }
+
         function test_readFeatures(t) {
             t.plan(1);
             var response = new OpenLayers.Protocol.Response({
