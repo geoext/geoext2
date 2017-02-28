@@ -359,14 +359,15 @@ Ext.define('GeoExt.selection.FeatureModel', {
     recenterToSelectionExtent: function() {
         var map = this.selectControl.map;
         var selectionExtent = this.getSelectionExtent();
-        if (selectionExtent !== null) {
-            var selectionExtentZoom = map.getZoomForExtent(selectionExtent, false);
-            if (selectionExtentZoom > map.getZoom()) {
-                map.setCenter(selectionExtent.getCenterLonLat());
-            }
-            else {
-                map.zoomToExtent(selectionExtent);
-            }
+        if (selectionExtent === null) {
+            return;
+        }
+        var selectionExtentZoom = map.getZoomForExtent(selectionExtent, false);
+        if (selectionExtentZoom > map.getZoom()) {
+            map.setCenter(selectionExtent.getCenterLonLat());
+        }
+        else {
+            map.zoomToExtent(selectionExtent);
         }
     },
 
